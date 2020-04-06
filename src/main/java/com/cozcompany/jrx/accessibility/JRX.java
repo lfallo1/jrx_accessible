@@ -114,7 +114,7 @@ final public class JRX extends javax.swing.JFrame {
     Socket hamlibSocket = null;
     InputStream hamlib_is = null;
     OutputStream hamlib_os = null;
-    String hamlibExecPath = "rigctld";
+    String hamlibExecPath = "/usr/local/bin/rigctld";
     String radioData = null;
     Process hamlibDaemon = null;
     ConfigManager config = null;
