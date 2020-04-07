@@ -19,27 +19,15 @@
 // ***************************************************************************
 package com.cozcompany.jrx.accessibility;
 
-import java.awt.CardLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Desktop;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.HeadlessException;
-import java.awt.Toolkit;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.StringSelection;
-import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.UnsupportedFlavorException;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.PrintWriter;
+import com.cozcompany.jrx.accessibility.utilities.FileHelpers;
+
+import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import java.awt.datatransfer.*;
+import java.io.*;
 import java.net.Socket;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -48,31 +36,12 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.GregorianCalendar;
-import java.util.Iterator;
+import java.util.*;
 import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
-import java.util.Scanner;
 import java.util.Timer;
-import java.util.TimerTask;
-import java.util.TreeMap;
 import java.util.regex.Pattern;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.ListSelectionModel;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.table.DefaultTableModel;
 
 /**
- *
  * @author lutusp
  */
 final public class JRX extends javax.swing.JFrame {
@@ -114,7 +83,7 @@ final public class JRX extends javax.swing.JFrame {
     Socket hamlibSocket = null;
     InputStream hamlib_is = null;
     OutputStream hamlib_os = null;
-    String hamlibExecPath = "/usr/local/bin/rigctld";
+    String hamlibExecPath = "rigctld";
     String radioData = null;
     Process hamlibDaemon = null;
     ConfigManager config = null;
@@ -158,10 +127,16 @@ final public class JRX extends javax.swing.JFrame {
     int comError = 0;
     long oldTime = 0; // debugging
 
+    //dependencies
+    FileHelpers fileHelpers;
+
     /**
      * Creates new form JRX
      */
     public JRX(String[] args) {
+
+        fileHelpers = new FileHelpers();
+
         comArgs = new ParseComLine(this, args);
         inhibit = true;
         oldTime = System.currentTimeMillis();
@@ -462,23 +437,23 @@ final public class JRX extends javax.swing.JFrame {
     private void setControlList() {
         controlList = new ArrayList<>();
         Component[] list = new Component[]{
-            sv_squelchSlider,
-            sv_volumeSlider,
-            sv_rfGainComboBox,
-            sv_ifShiftComboBox,
-            sv_dspComboBox,
-            sv_dspCheckBox,
-            sv_modesComboBox,
-            sv_filtersComboBox,
-            sv_antennaComboBox,
-            sv_attenuatorComboBox,
-            sv_agcComboBox,
-            sv_preampComboBox,
-            sv_ctcssComboBox,
-            sv_ctcssCheckBox,
-            sv_blankerCheckBox,
-            sv_apfCheckBox,
-            sv_anfCheckBox
+                sv_squelchSlider,
+                sv_volumeSlider,
+                sv_rfGainComboBox,
+                sv_ifShiftComboBox,
+                sv_dspComboBox,
+                sv_dspCheckBox,
+                sv_modesComboBox,
+                sv_filtersComboBox,
+                sv_antennaComboBox,
+                sv_attenuatorComboBox,
+                sv_agcComboBox,
+                sv_preampComboBox,
+                sv_ctcssComboBox,
+                sv_ctcssCheckBox,
+                sv_blankerCheckBox,
+                sv_apfCheckBox,
+                sv_anfCheckBox
         };
         for (Component comp : list) {
             controlList.add((ControlInterface) comp);
@@ -588,14 +563,16 @@ final public class JRX extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(
                         this,
                         String.format(
-                        "Error: Cannot find hamlib executable \"%s\"\nCannot continue. "
-                        + "Please visit http://arachnoid.com/JRX for help.", hamlibExecPath));
+                                "Error: Cannot find hamlib executable \"%s\"\nCannot continue. "
+                                        + "Please visit http://arachnoid.com/JRX for help.", hamlibExecPath));
                 System.exit(0);
             }
             hamlibExecPath = "\"" + hamlibExecPath + "\"";
             if (comArgs.debug >= 0) {
                 p("have windows exec: " + hamlibExecPath);
             }
+        } else {
+            hamlibExecPath = fileHelpers.findAbsolutePath(hamlibExecPath);
         }
         setComboBoxContent((RWComboBox) sv_rfGainComboBox, "RF", 0, 100, 5, 0, 100, 0, 1, 100);
         // yhigh intentionally = ylow to allow the rig to set the range
@@ -1128,23 +1105,23 @@ final public class JRX extends javax.swing.JFrame {
                 String[] com;
                 if (sv_hamrigUseCustomSettings) {
                     com = new String[]{
-                        hamlibExecPath,
-                        String.format("--set-conf=write_delay=%d", sv_hamrigWriteDelay),
-                        String.format("--set-conf=post_write_delay=%d", sv_hamrigPostWriteDelay),
-                        String.format("--set-conf=retry=%d", sv_hamrigRetries),
-                        String.format("--set-conf=timeout=%d", sv_hamrigTimeout),
-                        "-m",
-                        "" + rigCode,
-                        "-r",
-                        interfaceName
+                            hamlibExecPath,
+                            String.format("--set-conf=write_delay=%d", sv_hamrigWriteDelay),
+                            String.format("--set-conf=post_write_delay=%d", sv_hamrigPostWriteDelay),
+                            String.format("--set-conf=retry=%d", sv_hamrigRetries),
+                            String.format("--set-conf=timeout=%d", sv_hamrigTimeout),
+                            "-m",
+                            "" + rigCode,
+                            "-r",
+                            interfaceName
                     };
                 } else {
                     com = new String[]{
-                        hamlibExecPath,
-                        "-m",
-                        "" + rigCode,
-                        "-r",
-                        interfaceName
+                            hamlibExecPath,
+                            "-m",
+                            "" + rigCode,
+                            "-r",
+                            interfaceName
                     };
                 }
 
@@ -1508,20 +1485,20 @@ final public class JRX extends javax.swing.JFrame {
         dcdIconLabel = new javax.swing.JLabel();
         buttonPanel4 = new javax.swing.JPanel();
         sv_interfacesComboBox = new javax.swing.JComboBox<>();
-        sv_antennaComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,"Y","");
-        sv_synthSquelchCheckBox = new RWCheckBox(this,null,null);
+        sv_antennaComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this, "Y", "");
+        sv_synthSquelchCheckBox = new RWCheckBox(this, null, null);
         buttonPanel1 = new javax.swing.JPanel();
-        sv_filtersComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,"F","");
-        sv_ctcssComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,"ctcss","");
-        sv_attenuatorComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,"L","ATT");
+        sv_filtersComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this, "F", "");
+        sv_ctcssComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this, "ctcss", "");
+        sv_attenuatorComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this, "L", "ATT");
         buttonPanel3 = new javax.swing.JPanel();
-        sv_modesComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,"M","");
-        sv_agcComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,"L","AGC");
-        sv_dspComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,"L","NR");
+        sv_modesComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this, "M", "");
+        sv_agcComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this, "L", "AGC");
+        sv_dspComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this, "L", "NR");
         buttonPanel6 = new javax.swing.JPanel();
-        sv_rfGainComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,"L","RF");
-        sv_ifShiftComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,"L","IF");
-        sv_preampComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,"L","PREAMP");
+        sv_rfGainComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this, "L", "RF");
+        sv_ifShiftComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this, "L", "IF");
+        sv_preampComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this, "L", "PREAMP");
         buttonPanel2 = new javax.swing.JPanel();
         copyMemButton = new javax.swing.JButton();
         pasteMemButton = new javax.swing.JButton();
@@ -1530,29 +1507,29 @@ final public class JRX extends javax.swing.JFrame {
         quitButton = new javax.swing.JButton();
         tuneComsButton = new javax.swing.JButton();
         verticalListPanel = new javax.swing.JPanel();
-        sv_rawSigCheckBox = new RWCheckBox(this,null,null);
-        sv_blankerCheckBox = new RWCheckBox(this,"U","NB");
-        sv_apfCheckBox = new RWCheckBox(this,"U","APF");
-        sv_anfCheckBox = new RWCheckBox(this,"U","ANF");
-        sv_ctcssCheckBox = new RWCheckBox(this,"U","TSQL");
-        sv_dspCheckBox = new RWCheckBox(this,"U","NR");
+        sv_rawSigCheckBox = new RWCheckBox(this, null, null);
+        sv_blankerCheckBox = new RWCheckBox(this, "U", "NB");
+        sv_apfCheckBox = new RWCheckBox(this, "U", "APF");
+        sv_anfCheckBox = new RWCheckBox(this, "U", "ANF");
+        sv_ctcssCheckBox = new RWCheckBox(this, "U", "TSQL");
+        sv_dspCheckBox = new RWCheckBox(this, "U", "NR");
         signalPanel = new javax.swing.JPanel();
         signalProgressBar = new javax.swing.JProgressBar();
         digitsParent = new javax.swing.JPanel();
         digitsPanel = new javax.swing.JPanel();
         scannerPanel = new javax.swing.JPanel();
-        sv_scanStepComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,null,null);
-        sv_scanSpeedComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,null,null);
-        sv_dwellTimeComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,null,null);
+        sv_scanStepComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this, null, null);
+        sv_scanSpeedComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this, null, null);
+        sv_dwellTimeComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this, null, null);
         scanDownButton = new javax.swing.JButton();
         scanStopButton = new javax.swing.JButton();
         scanUpButton = new javax.swing.JButton();
-        sv_squelchCheckBox = new RWCheckBox(this,null,null);
+        sv_squelchCheckBox = new RWCheckBox(this, null, null);
         scanTypeLabel = new javax.swing.JLabel();
         scanIconLabel = new javax.swing.JLabel();
         sliderPanel = new javax.swing.JPanel();
-        sv_volumeSlider = new com.cozcompany.jrx.accessibility.RWSlider(this,"L","AF",20);
-        sv_squelchSlider = new com.cozcompany.jrx.accessibility.RWSlider(this,"L","SQL",0);
+        sv_volumeSlider = new com.cozcompany.jrx.accessibility.RWSlider(this, "L", "AF", 20);
+        sv_squelchSlider = new com.cozcompany.jrx.accessibility.RWSlider(this, "L", "SQL", 0);
         memoryPanel = new javax.swing.JPanel();
         memoryScrollPane = new javax.swing.JScrollPane();
         memoryButtonsPanel = new javax.swing.JPanel();
@@ -1562,8 +1539,8 @@ final public class JRX extends javax.swing.JFrame {
         scopeDisplayPanel = new SweepScope(this);
         scopeControlPanel = new javax.swing.JPanel();
         scopeControlLeftPanel = new javax.swing.JPanel();
-        sv_scopeStepComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,null,null);
-        sv_scopeSpeedComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,null,null);
+        sv_scopeStepComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this, null, null);
+        sv_scopeSpeedComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this, null, null);
         scopeStartStopButton = new javax.swing.JButton();
         sv_scopeDotsCheckBox = new javax.swing.JCheckBox();
         scopeScaleButton = new javax.swing.JButton();
@@ -1575,7 +1552,7 @@ final public class JRX extends javax.swing.JFrame {
         sv_jrxToRadioButton = new javax.swing.JRadioButton();
         sv_radioToJrxButton = new javax.swing.JRadioButton();
         sv_syncCheckBox = new javax.swing.JCheckBox();
-        sv_timerIntervalComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,null,null);
+        sv_timerIntervalComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this, null, null);
         jLabel2 = new javax.swing.JLabel();
         sv_volumeExitCheckBox = new javax.swing.JCheckBox();
         button_bar = new javax.swing.JPanel();
@@ -1599,7 +1576,7 @@ final public class JRX extends javax.swing.JFrame {
         buttonPanel5.setOpaque(false);
         buttonPanel5.setLayout(new java.awt.GridBagLayout());
 
-        sv_radioNamesComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        sv_radioNamesComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Item 1", "Item 2", "Item 3", "Item 4"}));
         sv_radioNamesComboBox.setToolTipText("Available radio manufacturers and models");
         sv_radioNamesComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1645,7 +1622,7 @@ final public class JRX extends javax.swing.JFrame {
         buttonPanel4.setOpaque(false);
         buttonPanel4.setLayout(new java.awt.GridBagLayout());
 
-        sv_interfacesComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        sv_interfacesComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Item 1", "Item 2", "Item 3", "Item 4"}));
         sv_interfacesComboBox.setToolTipText("Available communication interfaces");
         sv_interfacesComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1661,7 +1638,7 @@ final public class JRX extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 1, 0, 1);
         buttonPanel4.add(sv_interfacesComboBox, gridBagConstraints);
 
-        sv_antennaComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        sv_antennaComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[]{"Item 1", "Item 2", "Item 3", "Item 4"}));
         sv_antennaComboBox.setToolTipText("Available antennas (❃)");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -1694,7 +1671,7 @@ final public class JRX extends javax.swing.JFrame {
         buttonPanel1.setOpaque(false);
         buttonPanel1.setLayout(new java.awt.GridBagLayout());
 
-        sv_filtersComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        sv_filtersComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Item 1", "Item 2", "Item 3", "Item 4"}));
         sv_filtersComboBox.setToolTipText("Bandwidth filters (❃)\n");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1705,7 +1682,7 @@ final public class JRX extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 1, 0, 1);
         buttonPanel1.add(sv_filtersComboBox, gridBagConstraints);
 
-        sv_ctcssComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        sv_ctcssComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[]{"Item 1", "Item 2", "Item 3", "Item 4"}));
         sv_ctcssComboBox.setToolTipText("CTCSS tone squelch frequencies (❃)");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
@@ -1716,7 +1693,7 @@ final public class JRX extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 1, 0, 1);
         buttonPanel1.add(sv_ctcssComboBox, gridBagConstraints);
 
-        sv_attenuatorComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        sv_attenuatorComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[]{"Item 1", "Item 2", "Item 3", "Item 4"}));
         sv_attenuatorComboBox.setToolTipText("Input attenuator (❃)");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -1736,7 +1713,7 @@ final public class JRX extends javax.swing.JFrame {
         buttonPanel3.setOpaque(false);
         buttonPanel3.setLayout(new java.awt.GridBagLayout());
 
-        sv_modesComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        sv_modesComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Item 1", "Item 2", "Item 3", "Item 4"}));
         sv_modesComboBox.setToolTipText("Operating modes (❃)");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1746,7 +1723,7 @@ final public class JRX extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 1, 0, 1);
         buttonPanel3.add(sv_modesComboBox, gridBagConstraints);
 
-        sv_agcComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        sv_agcComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[]{"Item 1", "Item 2", "Item 3", "Item 4"}));
         sv_agcComboBox.setToolTipText("AGC setting (❃)");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -1756,7 +1733,7 @@ final public class JRX extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 1, 0, 1);
         buttonPanel3.add(sv_agcComboBox, gridBagConstraints);
 
-        sv_dspComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        sv_dspComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[]{"Item 1", "Item 2", "Item 3", "Item 4"}));
         sv_dspComboBox.setToolTipText("DSP Noise Reduction (❃)");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
@@ -1775,7 +1752,7 @@ final public class JRX extends javax.swing.JFrame {
         buttonPanel6.setOpaque(false);
         buttonPanel6.setLayout(new java.awt.GridBagLayout());
 
-        sv_rfGainComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        sv_rfGainComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[]{"Item 1", "Item 2", "Item 3", "Item 4"}));
         sv_rfGainComboBox.setToolTipText("RF Gain (❃)");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1785,7 +1762,7 @@ final public class JRX extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 1, 0, 1);
         buttonPanel6.add(sv_rfGainComboBox, gridBagConstraints);
 
-        sv_ifShiftComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        sv_ifShiftComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[]{"Item 1", "Item 2", "Item 3", "Item 4"}));
         sv_ifShiftComboBox.setToolTipText("IF Shift (❃)");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -1795,7 +1772,7 @@ final public class JRX extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 1, 0, 1);
         buttonPanel6.add(sv_ifShiftComboBox, gridBagConstraints);
 
-        sv_preampComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        sv_preampComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[]{"Item 1", "Item 2", "Item 3", "Item 4"}));
         sv_preampComboBox.setToolTipText("Preamp setting (❃)");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
@@ -2021,6 +1998,7 @@ final public class JRX extends javax.swing.JFrame {
         digitsPanel.addHierarchyBoundsListener(new java.awt.event.HierarchyBoundsListener() {
             public void ancestorMoved(java.awt.event.HierarchyEvent evt) {
             }
+
             public void ancestorResized(java.awt.event.HierarchyEvent evt) {
                 digitsPanelAncestorResized(evt);
             }
@@ -2041,21 +2019,21 @@ final public class JRX extends javax.swing.JFrame {
 
         scannerPanel.setLayout(new java.awt.GridBagLayout());
 
-        sv_scanStepComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        sv_scanStepComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Item 1", "Item 2", "Item 3", "Item 4"}));
         sv_scanStepComboBox.setToolTipText("Scan frequency step size (❃)");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         scannerPanel.add(sv_scanStepComboBox, gridBagConstraints);
 
-        sv_scanSpeedComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        sv_scanSpeedComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Item 1", "Item 2", "Item 3", "Item 4"}));
         sv_scanSpeedComboBox.setToolTipText("Scan delay (❃)");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         scannerPanel.add(sv_scanSpeedComboBox, gridBagConstraints);
 
-        sv_dwellTimeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        sv_dwellTimeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Item 1", "Item 2", "Item 3", "Item 4"}));
         sv_dwellTimeComboBox.setToolTipText("Pause dwell time (❃)");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
@@ -2182,15 +2160,15 @@ final public class JRX extends javax.swing.JFrame {
         memoryPanel.add(memoryScrollPane, "memoryCard");
 
         freqTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
+                new Object[][]{
+                        {null, null, null, null},
+                        {null, null, null, null},
+                        {null, null, null, null},
+                        {null, null, null, null}
+                },
+                new String[]{
+                        "Title 1", "Title 2", "Title 3", "Title 4"
+                }
         ));
         tableScrollPane.setViewportView(freqTable);
 
@@ -2215,7 +2193,7 @@ final public class JRX extends javax.swing.JFrame {
 
         scopeControlLeftPanel.setLayout(new java.awt.GridBagLayout());
 
-        sv_scopeStepComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        sv_scopeStepComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Item 1", "Item 2", "Item 3", "Item 4"}));
         sv_scopeStepComboBox.setToolTipText("Sweep frequency step size (❃)");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -2225,7 +2203,7 @@ final public class JRX extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 1, 0, 1);
         scopeControlLeftPanel.add(sv_scopeStepComboBox, gridBagConstraints);
 
-        sv_scopeSpeedComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        sv_scopeSpeedComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Item 1", "Item 2", "Item 3", "Item 4"}));
         sv_scopeSpeedComboBox.setToolTipText("Sweep delay (❃)");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -2377,7 +2355,7 @@ final public class JRX extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         scopeControlRightPanel.add(sv_syncCheckBox, gridBagConstraints);
 
-        sv_timerIntervalComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        sv_timerIntervalComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Item 1", "Item 2", "Item 3", "Item 4"}));
         sv_timerIntervalComboBox.setToolTipText("Control/event update timer interval (❃)");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -2587,15 +2565,13 @@ final public class JRX extends javax.swing.JFrame {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
-
-
 
 
                 }
@@ -2614,6 +2590,7 @@ final public class JRX extends javax.swing.JFrame {
             }
         });
     }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel buttonPanel1;
     private javax.swing.JPanel buttonPanel2;
