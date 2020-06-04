@@ -12,7 +12,7 @@ import javax.swing.JDialog;
  */
 public class ConfigComsDialog extends javax.swing.JDialog implements Configurable {
 
-    JRX parent;
+    JRX_TX parent;
     boolean accept;
     String speech = "If you aren't having any communication speed difficulties,"+
             "then there's no reason to change these settings.\n\n"+
@@ -25,7 +25,7 @@ public class ConfigComsDialog extends javax.swing.JDialog implements Configurabl
             "Your settings are preserved between program runs.";
 
             
-    public ConfigComsDialog(JRX p, boolean modal,int wd,int pwd,int re,int ti,boolean useCustom) {
+    public ConfigComsDialog(JRX_TX p, boolean modal,int wd,int pwd,int re,int ti,boolean useCustom) {
         super(p, modal);
         parent = p;
         initComponents();

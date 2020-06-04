@@ -33,10 +33,10 @@ import javax.swing.JPanel;
  */
 final public class MemoryFunctions {
 
-    JRX parent;
+    JRX_TX parent;
     String header;
 
-    public MemoryFunctions(JRX p) {
+    public MemoryFunctions(JRX_TX p) {
         parent = p;
         header = "Mnnn = Freq,Mode,Bandwidth,AGC,CTCSS,StepIndex,NB,Preamp,Antenna,Attenuator,Skip";
     }

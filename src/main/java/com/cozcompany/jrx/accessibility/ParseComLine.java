@@ -31,14 +31,14 @@ final public class ParseComLine {
     String rigName = null;
     boolean reset = false;
     boolean runTimer = true;
-    JRX parent;
+    JRX_TX parent;
 
     @Override
     public String toString() {
         return String.format("%d,%d,%s,%s,%s,%s", debug, rigCode,interfaceName, rigName, reset, runTimer);
     }
 
-    public ParseComLine(JRX p, String[] args) {
+    public ParseComLine(JRX_TX p, String[] args) {
         parent = p;
         int state = 0;
         try {

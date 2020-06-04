@@ -29,13 +29,13 @@ import javax.swing.JCheckBox;
  */
 public class RWCheckBox extends JCheckBox implements ActionListener, ControlInterface {
 
-    JRX parent;
+    JRX_TX parent;
     String token;
     String prefix;
     boolean state, oldState;
     boolean localInhibit = false;
 
-    public RWCheckBox(JRX p, String pre, String t) {
+    public RWCheckBox(JRX_TX p, String pre, String t) {
         super();
         parent = p;
         prefix = pre;

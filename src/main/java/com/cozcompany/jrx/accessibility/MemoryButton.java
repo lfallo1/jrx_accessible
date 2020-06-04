@@ -35,7 +35,7 @@ import javax.swing.JSlider;
  */
 final public class MemoryButton extends JButton implements MouseListener {
 
-    JRX parent;
+    JRX_TX parent;
     String label;
     Timer defineButtonTimer = null;
     MouseEvent mouseEvent = null;
@@ -54,7 +54,7 @@ final public class MemoryButton extends JButton implements MouseListener {
     int preamp;
     int attenuator;
 
-    public MemoryButton(String lbl, JRX p) {
+    public MemoryButton(String lbl, JRX_TX p) {
         super(lbl);
         label = lbl;
         parent = p;
@@ -181,7 +181,7 @@ final public class MemoryButton extends JButton implements MouseListener {
             // always set mode before frequency
             updateIfNeeded(parent.sv_modesComboBox, mode);
             //if (frequency != parent.sv_freq) {
-            parent.frequencyToDigits(frequency);
+            parent.vfoDisplay.frequencyToDigits(frequency);
             //}
             updateIfNeeded(parent.sv_ctcssComboBox, ctcss);
             updateIfNeeded(parent.sv_agcComboBox, agc);
@@ -205,7 +205,7 @@ final public class MemoryButton extends JButton implements MouseListener {
         parent.sv_mostRecentButton = label;
         filter = parent.sv_filtersComboBox.getSelectedIndex();
         mode = parent.sv_modesComboBox.getSelectedIndex();
-        frequency = parent.sv_freq;
+        frequency = parent.vfoDisplay.sv_freq;
         ctcss = parent.sv_ctcssComboBox.getSelectedIndex();
         agc = parent.sv_agcComboBox.getSelectedIndex();
         preamp = parent.sv_preampComboBox.getSelectedIndex();

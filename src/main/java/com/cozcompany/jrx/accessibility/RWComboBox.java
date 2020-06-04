@@ -35,7 +35,7 @@ import javax.swing.JComboBox;
  */
 final public class RWComboBox extends JComboBox<String> implements MouseWheelListener, ActionListener, ControlInterface {
 
-    JRX parent;
+    JRX_TX parent;
     String prefix;
     String token;
     TreeMap<String, Integer> displayMap;
@@ -60,7 +60,7 @@ final public class RWComboBox extends JComboBox<String> implements MouseWheelLis
     boolean enabled = false;
     boolean commOK = true;
 
-    public RWComboBox(JRX p, String pre, String t) {
+    public RWComboBox(JRX_TX p, String pre, String t) {
         super();
         parent = p;
         prefix = pre;

@@ -33,14 +33,14 @@ import javax.swing.JLabel;
  */
 final public class FreqDigit extends JLabel implements MouseWheelListener, MouseListener {
 
-    JRX parent;
+    JRX_TX parent;
     float fontScale;
     FreqDigit carry = null;
     private long value = 0;
     Color nonZeroColor = new Color(0,192,0);
     Color zeroColor = new Color(0,64,0);
 
-    public FreqDigit(JRX p, int dflt,float fs) {
+    public FreqDigit(JRX_TX p, int dflt,float fs) {
         super();
         parent = p;
         fontScale = fs;
@@ -87,7 +87,7 @@ final public class FreqDigit extends JLabel implements MouseWheelListener, Mouse
             }
             // if this is the high digit of the number
             if (!carried) {
-                parent.digitsToFrequency();
+                parent.vfoDisplay.digitsToFrequency();
             }
         }
     }

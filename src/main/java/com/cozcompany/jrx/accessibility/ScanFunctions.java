@@ -14,8 +14,10 @@ import java.util.TimerTask;
  * @author lutusp
  */
 final public class ScanFunctions {
+    
 
-    JRX parent;
+    JRX_TX parent;
+    FreqDisplay vfoDisplayS;
     long scanStartFreq = 0;
     long scanEndFreq = 0;
     int scanStartIndex = 0;
@@ -31,7 +33,8 @@ final public class ScanFunctions {
     ArrayList<TuneData> tableScanList = null;
     boolean buttonScanMode = false;
 
-    public ScanFunctions(JRX p) {
+    public ScanFunctions(JRX_TX p) {
+        vfoDisplayS = p.vfoDisplay;
         parent = p;
     }
 
@@ -73,14 +76,15 @@ final public class ScanFunctions {
                             }
                         }
                     } else {
-                        if (direction < 0) {
-                            if (parent.sv_freq > scanEndFreq || parent.sv_freq < scanStartFreq) {
-                                parent.sv_freq = scanEndFreq;
+                        long freq = vfoDisplayS.getFreq();
+                        if (direction < 0) {                           
+                            if (freq > scanEndFreq || freq < scanStartFreq) {
+                                vfoDisplayS.frequencyToDigits(scanEndFreq);
                             }
                             scanStep = -Math.abs(scanStep);
                         } else {
-                            if (parent.sv_freq > scanEndFreq || parent.sv_freq < scanStartFreq) {
-                                parent.sv_freq = scanStartFreq;
+                            if (freq > scanEndFreq || freq < scanStartFreq) {
+                                vfoDisplayS.frequencyToDigits(scanStartFreq);
                             }
                             scanStep = Math.abs(scanStep);
                         }
@@ -95,10 +99,10 @@ final public class ScanFunctions {
                     scanStep = Math.abs(scanStep) * scanDirection;
                 }
                 if (programScan) {
-                    parent.sv_freq = getNextScanFrequency();
+                    vfoDisplayS.frequencyToDigits(getNextScanFrequency());
                 } else {
                     //parent.p("increm scan");
-                    parent.sv_freq += scanStep;
+                    vfoDisplayS.frequencyToDigits(vfoDisplayS.getFreq() + (long)scanStep);
                 }
             }
         }
@@ -241,16 +245,17 @@ final public class ScanFunctions {
             double now = System.currentTimeMillis();
             if (now >= dwellTime && !sqopen && scanTimer != null) {
                 if (programScan) {
-                    parent.sv_freq = getNextScanFrequency();
+                    vfoDisplayS.frequencyToDigits(getNextScanFrequency());
                 } else {
-                    parent.sv_freq += scanStep;
+                    vfoDisplayS.frequencyToDigits(vfoDisplayS.getFreq() + (long)scanStep);
+                    long freq = vfoDisplayS.getFreq();
                     if (scanDirection < 0) {
-                        if (parent.sv_freq < scanStartFreq) {
-                            parent.sv_freq = scanEndFreq;
+                        if (freq < scanStartFreq) {
+                            vfoDisplayS.frequencyToDigits(scanEndFreq);
                         }
                     } else {
-                        if (parent.sv_freq > scanEndFreq) {
-                            parent.sv_freq = scanStartFreq;
+                        if (freq > scanEndFreq) {
+                            vfoDisplayS.frequencyToDigits(scanStartFreq);
                         }
                     }
                 }
@@ -258,11 +263,11 @@ final public class ScanFunctions {
             //oldf = sv_freq;
             long t1 = System.currentTimeMillis();
             // set receiver frequency
-            parent.frequencyToDigits(parent.sv_freq);
+            vfoDisplayS.frequencyToDigits(vfoDisplayS.getFreq());
             long t2 = System.currentTimeMillis();
             double dt = (t2 - t1) / 1000.0;
             if (parent.comArgs.debug >= 1) {
-                parent.p(String.format("scan operation: frequency %d, latency: %f", parent.sv_freq, dt));
+                parent.p(String.format("scan operation: frequency %d, latency: %f", vfoDisplayS.getFreq(), dt));
             }
             
         }

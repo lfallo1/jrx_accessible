@@ -38,7 +38,7 @@ import javax.swing.JPanel;
  */
 final public class SweepScope extends JPanel implements MouseMotionListener {
 
-    JRX parent;
+    JRX_TX parent;
     final ArrayList<Pair<Double>> scopeData;
     ArrayList<MemoryButton> scanLimits;
     double xgmin, xgmax;
@@ -58,7 +58,7 @@ final public class SweepScope extends JPanel implements MouseMotionListener {
     String toolTip = "";
     String help = "\n(To set a sweep range, click the upper or lower button\nof a pair of memory buttons)";
 
-    public SweepScope(JRX p) {
+    public SweepScope(JRX_TX p) {
         parent = p;
         scopeData = new ArrayList<>();
         bgColor = Color.black;

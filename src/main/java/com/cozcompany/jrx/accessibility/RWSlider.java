@@ -31,7 +31,7 @@ import javax.swing.event.ChangeListener;
  */
 final public class RWSlider extends JSlider implements MouseWheelListener, ChangeListener, ControlInterface {
 
-    JRX parent;
+    JRX_TX parent;
     String token;
     String prefix;
     int initial = 0;
@@ -45,7 +45,7 @@ final public class RWSlider extends JSlider implements MouseWheelListener, Chang
     boolean localInhibit = false;
     boolean commOK = true;
 
-    public RWSlider(JRX p, String pre, String t, int initial) {
+    public RWSlider(JRX_TX p, String pre, String t, int initial) {
         super();
         parent = p;
         this.prefix = pre;
