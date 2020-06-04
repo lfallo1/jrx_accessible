@@ -14,7 +14,15 @@ public class ConfigComsDialog extends javax.swing.JDialog implements Configurabl
 
     JRX parent;
     boolean accept;
-    String speech = "If you aren't having any communication speed difficulties, then there's no reason to change these settings.\n\nBut to optimize communications between JRX, the Hamlib library and your radio, you may want to adjust the settings below.\n\nTo use the Hamlib defaults, deselect \"Make and use custom settings\" below and exit this dialog.\n\nTo customize the settings, select \"Make and use custom settings\", enter your settings, then exit and re-enter JRX to let the settings take effect.\n\nYour settings are preserved between program runs.";
+    String speech = "If you aren't having any communication speed difficulties,"+
+            "then there's no reason to change these settings.\n\n"+
+            "But to optimize communications between JRX, the Hamlib library "+
+            "and your radio, you may want to adjust the settings below.\n\n" +
+            "To use the Hamlib defaults, deselect \"Make and use custom settings\" "+
+            "below and exit this dialog.\n\nTo customize the settings,"+
+            "select \"Make and use custom settings\", enter your settings, "+
+            "then exit and re-enter JRX to let the settings take effect.\n\n"+
+            "Your settings are preserved between program runs.";
 
             
     public ConfigComsDialog(JRX p, boolean modal,int wd,int pwd,int re,int ti,boolean useCustom) {
