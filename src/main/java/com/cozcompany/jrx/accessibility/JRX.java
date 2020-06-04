@@ -1008,12 +1008,17 @@ final public class JRX extends javax.swing.JFrame {
         radioCodes = new TreeMap<>();
         String a, b, s="";
         //p("trying to read rig specs...");
-        if (hamlibExecPath != null) {
+        if (hamlibExecPath == null) {
+            JOptionPane.showMessageDialog(this,"MISSING HAMLIB", 
+                    "Missing Hamlib path.",
+                    JOptionPane.WARNING_MESSAGE);
+        } else {
+        
             s = runSysCommand(new String[]{hamlibExecPath, "-l"}, true);
             if (comArgs.debug >= 1) {
                 p("dump from rigctld -l: [" + s + "]");
             }
-        }
+        } 
         for (String item : s.split(lineSep)) {
             // the try ... catch is only to filter the table header
             if (item.length() > 30) {
