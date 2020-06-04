@@ -56,12 +56,12 @@ final public class Beep extends Thread {
             }
 
             AudioFormat af = new AudioFormat(sampleRate, 16, 1, true, false);
-            SourceDataLine sdl = AudioSystem.getSourceDataLine(af);
-            sdl.open(af);
-            sdl.start();
-            sdl.write(buf, 0, buf.length);
-            sdl.drain();
-            sdl.close();
+            try (SourceDataLine sdl = AudioSystem.getSourceDataLine(af)) {
+                sdl.open(af);
+                sdl.start();
+                sdl.write(buf, 0, buf.length);
+                sdl.drain();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

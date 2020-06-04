@@ -196,7 +196,8 @@ final public class JRX extends javax.swing.JFrame {
         mcl.show(memoryPanel, (sv_displayState == 0) ? "memoryCard" : "tableCard");
         int i = 0;
         for (JButton b : stateButtons) {
-            b.setText((i == sv_displayState) ? String.format("<html><b>%s</b>", buttonLabels[i]) : buttonLabels[i]);
+            b.setText((i == sv_displayState) ? String.format("<html><b>%s</b>", 
+                    buttonLabels[i]) : buttonLabels[i]);
             i++;
         }
     }
@@ -643,7 +644,8 @@ final public class JRX extends javax.swing.JFrame {
         //((RWSlider) sv_volumeSlider).commOK = stateFlag;
         setRadioSquelch();
         dcdIconLabel.setIcon(dcdCapable ? greenLed : useJRXSquelch ? yellowLed : redLed);
-        dcdIconLabel.setToolTipText((stateFlag) ? "Radio provides squelch scheme" : useJRXSquelch ? "JRX provides squelch scheme" : "No squelch scheme enabled");
+        dcdIconLabel.setToolTipText((stateFlag) ? "Radio provides squelch scheme" : 
+                useJRXSquelch ? "JRX provides squelch scheme" : "No squelch scheme enabled");
         if (comArgs.debug >= 0) {
             p("DCD capable: " + dcdCapable);
         }
@@ -722,7 +724,8 @@ final public class JRX extends javax.swing.JFrame {
                 array = new ArrayList<>();
                 n = 0;
                 // search in reverse
-                ArrayList<MemoryButton> revList = new ArrayList<>(buttonMap.headMap(sv_mostRecentButton, true).values());
+                ArrayList<MemoryButton> revList = 
+                        new ArrayList<>(buttonMap.headMap(sv_mostRecentButton, true).values());
                 Collections.reverse(revList);
                 //revmap.;
                 ss = revList.iterator();
@@ -998,14 +1001,18 @@ final public class JRX extends javax.swing.JFrame {
         ((RWComboBox) sv_modesComboBox).setGenericComboBoxScale("Mode", "(?ism).*^Mode list:\\s*(.*?)\\s*$.*", false, false);
         ((RWComboBox) sv_ctcssComboBox).setGenericComboBoxScale("CTCSS", "(?ism).*^CTCSS:\\s*(.*?)\\s*$.*", false, true);
     }
-
+    /**
+     * Read rig specs from hamlib.
+     */
     private void initRigSpecs() {
         radioCodes = new TreeMap<>();
-        String a, b;
+        String a, b, s="";
         //p("trying to read rig specs...");
-        String s = runSysCommand(new String[]{hamlibExecPath, "-l"}, true);
-        if (comArgs.debug >= 1) {
-            p("dump from rigctld -l: [" + s + "]");
+        if (hamlibExecPath != null) {
+            s = runSysCommand(new String[]{hamlibExecPath, "-l"}, true);
+            if (comArgs.debug >= 1) {
+                p("dump from rigctld -l: [" + s + "]");
+            }
         }
         for (String item : s.split(lineSep)) {
             // the try ... catch is only to filter the table header
@@ -1041,8 +1048,9 @@ final public class JRX extends javax.swing.JFrame {
         }
     }
 
-    // this is function get a list of radios and their codes
-    // before the socket has been set up
+    /**
+     * Get a list of radios and their codes before the socket has been set up.
+     */ 
     private String runSysCommand(String[] array, boolean read) {
         String result = "";
         try {
@@ -1050,8 +1058,17 @@ final public class JRX extends javax.swing.JFrame {
             if (read) {
                 result = new Scanner(p.getInputStream()).useDelimiter("\\Z").next();
             }
-        } catch (Exception e) {
-            e.printStackTrace(System.out);
+        } 
+        catch  (NullPointerException e) {
+                System.out.print("runSysCommand() Failed to start process for command : ");
+                for (int iii = 0; iii<array.length; iii++) {
+                    System.out.print(array[iii]);
+                    System.out.println();
+                }
+                e.printStackTrace(System.out);
+        } 
+        catch (Exception e) {
+            e.printStackTrace(System.out);           
         }
         return result;
     }
@@ -2568,7 +2585,8 @@ final public class JRX extends javax.swing.JFrame {
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+            for (javax.swing.UIManager.LookAndFeelInfo info : 
+                    javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
@@ -2576,7 +2594,9 @@ final public class JRX extends javax.swing.JFrame {
 
                 }
             }
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | 
+                 IllegalAccessException | 
+                 javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(JRX.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
