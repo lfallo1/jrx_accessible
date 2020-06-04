@@ -56,7 +56,8 @@ public class FreqDisplay extends JPanel implements HierarchyBoundsListener {
         freqDigits = new ArrayList<>(DIGITS_QTY);
         arrayIndex = DIGITS_QTY-1;
         FreqDigit fd, ofd;
-        ofd = setupDigits( 4, null, 1);       
+        ofd = setupDigits( 4, null, 1); 
+        add(new FreqDigit(appFrame, -1 , 1));
         ofd = setupDigits( 3, ofd, 1);
         setupDigits( 3, ofd, 0.7f);       
         GridBagConstraints gridBagConstraints;
