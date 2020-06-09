@@ -31,22 +31,25 @@ import javax.swing.JLabel;
  *
  * @author lutusp
  */
-final public class FreqDigit extends JLabel implements MouseWheelListener, MouseListener {
+final public class FreqDigit extends JLabel implements MouseWheelListener, 
+        MouseListener {
 
     JRX_TX parent;
     float fontScale;
     FreqDigit carry = null;
     private long value = 0;
+    private int digitDecade = 0; // This is only used for test routines.
     Color nonZeroColor = new Color(0,192,0);
     Color zeroColor = new Color(0,64,0);
 
-    public FreqDigit(JRX_TX p, int dflt,float fs) {
+    public FreqDigit(JRX_TX p, int decade, float fs) {
         super();
         parent = p;
         fontScale = fs;
-        value = dflt;
-        if (dflt >= 0 && dflt <= 9) {
-            setDigit(dflt);
+        value = decade;
+        digitDecade = decade;
+        if (decade >= 0 && decade <= 9) {
+            setDigit(decade);
             setForeground(zeroColor);
         } else {
             setText(".");

@@ -39,7 +39,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
 /**
- *
+ * 
  * @author lutusp
  */
 final public class ConfigManager {

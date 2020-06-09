@@ -22,34 +22,31 @@ package com.cozcompany.jrx.accessibility;
 import com.cozcompany.jrx.accessibility.utilities.FileHelpers;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.table.DefaultTableModel;
+
 import java.awt.*;
 import java.awt.datatransfer.*;
 import java.io.*;
 import java.net.Socket;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+
 import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.List;
 import java.util.Timer;
 import java.util.regex.Pattern;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 /**
  * @author lutusp
  */
-final public class JRX_TX extends javax.swing.JFrame {
+final public class JRX_TX extends javax.swing.JFrame implements 
+        ListSelectionListener {
 
-    final String appVersion = "5.0.0";
+    final String appVersion = "5.0.1";
     final String appName;
     final String programName;
-    String fileSep;
     String lineSep;
     String userDir;
     String userPath;
@@ -60,6 +57,7 @@ final public class JRX_TX extends javax.swing.JFrame {
     ScanFunctions scanFunctions;
     ControlInterface[] settableControls;
     ArrayList<String> interfaceNames = null;
+    ChannelChart chart;
    
     Map<String, Integer> radioCodes = null;
     Map<String, Double> filters = null;
@@ -94,9 +92,7 @@ final public class JRX_TX extends javax.swing.JFrame {
     boolean inhibit;
     Font digitsFont;
     Font baseFont;
-    File defaultFreqFile;
-    File freqDirectory;
-    String[][] freqData = null;
+    final String FILE_SEP = System.getProperty("file.separator");
     TreeMap<String, MemoryButton> buttonMap;
     int MODE_CW = 0;
     int MODE_LSB = 1;
@@ -151,10 +147,10 @@ final public class JRX_TX extends javax.swing.JFrame {
         blueLed = new ImageIcon(getClass().getClassLoader().getResource("icons/blue-on-16.png"));
         yellowLed = new ImageIcon(getClass().getClassLoader().getResource("icons/yellow-on-16.png"));
         lineSep = System.getProperty("line.separator");
-        fileSep = System.getProperty("file.separator");
+
         userDir = System.getProperty("user.home");
-        userPath = userDir + fileSep + "." + appName;
-        buttonFilePath = userPath + fileSep + "memoryButtons.ini";
+        userPath = userDir + FILE_SEP + "." + appName;
+        buttonFilePath = userPath + FILE_SEP + "memoryButtons.ini";
         new File(userPath).mkdirs();
         digitsFont = new Font(Font.MONOSPACED, Font.PLAIN, 30);
         initComponents();
@@ -162,6 +158,11 @@ final public class JRX_TX extends javax.swing.JFrame {
         buttonLabels = new String[]{"Radio:Buttons", "Radio:List", "Scope/Setup"};
         baseFont = new Font(Font.MONOSPACED, Font.PLAIN, getFont().getSize());
         setFont(baseFont);
+        // Must create/initialize vfoDisplay before scan functions.
+        Rectangle displaySpace = new Rectangle(0,19,276,45);
+        vfoDisplay = new FreqDisplay(this, digitsParent, displaySpace);
+        vfoDisplay.initDigits();
+
         scanFunctions = new ScanFunctions(this);
         // default app size
         setSize(defWidth, defHeight);
@@ -172,13 +173,9 @@ final public class JRX_TX extends javax.swing.JFrame {
         if (!comArgs.reset) {
             config.read();
         }
-        freqDirectory = new File(config.userPath + fileSep + "frequencies");
-        if (!freqDirectory.exists()) {
-            freqDirectory.mkdirs();
-        }
-        defaultFreqFile = new File(freqDirectory + fileSep + "default.tsv");
-        writeFreqTable();
-        populateFreqTable();
+        chart = new ChannelChart(this);
+        chart.init();
+        
         inhibit = false;
         initialize();
     }
@@ -201,100 +198,7 @@ final public class JRX_TX extends javax.swing.JFrame {
         }
     }
 
-    private void writeFreqTable() {
-        try {
-            if (!defaultFreqFile.exists()) {
-                try (InputStream is = getClass().getClassLoader().getResourceAsStream("frequencies/default.tsv")) {
-                    InputStreamReader isr = new InputStreamReader(is);
-                    BufferedReader br = new BufferedReader(isr);
-                    String line;
-                    try (FileWriter fw = new FileWriter(defaultFreqFile)) {
-                        while ((line = br.readLine()) != null) {
-                            fw.write(line + "\n");
-                        }
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace(System.out);
-        }
-    }
 
-    private void populateFreqTable() {
-        int row = 0;
-        String[] header = null;
-        ArrayList<ArrayList<String>> freqList = new ArrayList<>();
-        ArrayList<String> fields;
-        try {
-            File[] list = freqDirectory.listFiles();
-            Arrays.sort(list);
-            for (File fn : list) {
-                String name = fn.getName();
-                if (name.matches("(?i).*\\.tsv$")) {
-                    name = name.replaceFirst("(?i)\\.tsv$", "");
-                    List<String> records = Files.readAllLines(Paths.get(fn.toString()), Charset.forName("UTF-8"));
-                    int frow = 0;
-                    for (String record : records) {
-                        fields = new ArrayList<>(Arrays.asList(record.split("\t")));
-                        if (fields.size() > 2) {
-                            if (frow == 0 && row == 0) {
-                                fields.add(0, "File");
-                                header = (String[]) fields.toArray(new String[]{});
-                            } else {
-                                if (frow != 0) {
-                                    fields.add(0, name);
-                                    freqList.add(fields);
-                                }
-                            }
-                            frow++;
-                            row++;
-                        }
-                    }
-                }
-            }
-            int i = 0;
-            freqData = new String[row][];
-            for (ArrayList<String> ao : freqList) {
-                freqData[i] = (String[]) ao.toArray(new String[]{});
-                i++;
-            }
-            DefaultTableModel dtm = new DefaultTableModel(freqData, header) {
-                @Override
-                public boolean isCellEditable(int row, int column) {
-                    return false;
-                }
-            };
-            freqTable.setModel(dtm);
-            MyTableCellRenderer mr = new MyTableCellRenderer();
-            freqTable.setDefaultRenderer(Object.class, mr);
-            freqTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-            ListSelectionModel rowSM = freqTable.getSelectionModel();
-            rowSM.addListSelectionListener(new ListSelectionListener() {
-                @Override
-                public void valueChanged(ListSelectionEvent e) {
-                    if (e.getValueIsAdjusting()) {
-                        return;
-                    }
-                    try {
-                        ListSelectionModel lsm = (ListSelectionModel) e.getSource();
-                        if (!lsm.isSelectionEmpty()) {
-                            scanFunctions.stopScan(false);
-                            int row = lsm.getMinSelectionIndex();
-                            String mode = freqData[row][2];
-                            double freq = Double.parseDouble(freqData[row][3]);
-                            vfoDisplay.frequencyToDigits((long) (freq * 1e6 + 0.5));
-                            RWComboBox box = (RWComboBox) sv_modesComboBox;
-                            mode = "Mode " + mode.toUpperCase();
-                            sv_modesComboBox.setSelectedIndex(box.displayMap.get(mode));
-                        }
-                    } catch (Exception ex) {
-                    }
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace(System.out);
-        }
-    }
 
     private void startCyclicalTimer() {
         if (comArgs.runTimer) {
@@ -311,6 +215,27 @@ final public class JRX_TX extends javax.swing.JFrame {
         //p("delay: " + delay);
         if (delay > 0 && periodicTimer != null) {
             periodicTimer.schedule(new PeriodicEvents(), delay);
+        }
+    }
+
+    @Override
+    public void valueChanged(ListSelectionEvent e) {
+        if (e.getValueIsAdjusting()) {
+            return;
+        }
+        try {
+            ListSelectionModel lsm = (ListSelectionModel) e.getSource();
+            if (!lsm.isSelectionEmpty()) {
+                scanFunctions.stopScan(false);
+                int row = lsm.getMinSelectionIndex();
+                String mode = chart.getValue(row, 2);
+                double freq = Double.parseDouble(chart.getValue(row, 3));
+                vfoDisplay.frequencyToDigits((long) (freq * 1e6 + 0.5));
+                RWComboBox box = (RWComboBox) sv_modesComboBox;
+                mode = "Mode " + mode.toUpperCase();
+                sv_modesComboBox.setSelectedIndex(box.displayMap.get(mode));
+            }
+        } catch (Exception ex) {
         }
     }
 
@@ -582,9 +507,6 @@ final public class JRX_TX extends javax.swing.JFrame {
         setComboBoxContent((RWComboBox) sv_antennaComboBox, "Ant", 0, 4, 1, 0, 1, 0, 1, 1);
         initInterfaceList();
         initRigSpecs();
-        Rectangle displaySpace = new Rectangle(0,19,276,45);
-        vfoDisplay = new FreqDisplay(this, digitsParent, displaySpace);
-        vfoDisplay.initDigits();
         readMemoryButtons();
         initTimeValues((RWComboBox) sv_timerIntervalComboBox);
 
@@ -2560,7 +2482,7 @@ final public class JRX_TX extends javax.swing.JFrame {
     private javax.swing.ButtonGroup jrxRadioButtonGroup;
     private javax.swing.JPanel listPanel;
     private javax.swing.JPanel memoryButtonsPanel;
-    private javax.swing.JPanel memoryPanel;
+    protected javax.swing.JPanel memoryPanel;
     private javax.swing.JScrollPane memoryScrollPane;
     private javax.swing.JButton pasteMemButton;
     private javax.swing.JButton quitButton;

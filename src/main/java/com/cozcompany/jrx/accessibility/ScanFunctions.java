@@ -137,11 +137,11 @@ final public class ScanFunctions {
             for (int i : rowindices) {
                 long f = 0;
                 try {
-                    double df = Double.parseDouble(parent.freqData[i][3]);
+                    double df = Double.parseDouble(parent.chart.getValue(i,3));
                     f = (long) (df * 1e6 + 0.5);
                 } catch (Exception e) {
                 }
-                tableScanList.add(new TuneData(parent.freqData[i][2], f));
+                tableScanList.add(new TuneData(parent.chart.getValue(i,2), f));
             }
             scanStartIndex = 0;
             scanEndIndex = tableScanList.size();
@@ -263,7 +263,8 @@ final public class ScanFunctions {
             //oldf = sv_freq;
             long t1 = System.currentTimeMillis();
             // set receiver frequency
-            vfoDisplayS.frequencyToDigits(vfoDisplayS.getFreq());
+            long freq = vfoDisplayS.getFreq();
+            vfoDisplayS.frequencyToDigits(freq);
             long t2 = System.currentTimeMillis();
             double dt = (t2 - t1) / 1000.0;
             if (parent.comArgs.debug >= 1) {
