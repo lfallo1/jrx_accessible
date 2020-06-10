@@ -54,7 +54,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
     Timer periodicTimer;
     ParseComLine comArgs = null;
     ImageIcon redLed, greenLed, blueLed, yellowLed;
-    ScanFunctions scanFunctions;
+    ScanStateMachine scanFunctions;
     ControlInterface[] settableControls;
     ArrayList<String> interfaceNames = null;
     ChannelChart chart;
@@ -62,8 +62,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
     Map<String, Integer> radioCodes = null;
     Map<String, Double> filters = null;
     Map<String, Double> ctcss = null;
-    Map<String, Double> scanSteps = null;
-    Map<String, Integer> timeSteps = null;
     ArrayList<ControlInterface> controlList;
     int iErrorValue = -100;
     long defaultFrequency = 145000000;
@@ -121,6 +119,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
     int comError = 0;
     long oldTime = 0; // debugging
     FreqDisplay vfoDisplay;
+    ScanController scanDude;
 
     //dependencies
     FileHelpers fileHelpers;
@@ -163,7 +162,8 @@ final public class JRX_TX extends javax.swing.JFrame implements
         vfoDisplay = new FreqDisplay(this, digitsParent, displaySpace);
         vfoDisplay.initDigits();
 
-        scanFunctions = new ScanFunctions(this);
+        scanFunctions = new ScanStateMachine(this);
+        scanDude = new ScanController(this);
         // default app size
         setSize(defWidth, defHeight);
         setControlList();
@@ -269,21 +269,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
         }
     }
 
-    protected void updateScanControls() {
-        this.sv_scanStepComboBox.setEnabled(scanFunctions.scanTimer == null);
-        this.sv_scanSpeedComboBox.setEnabled(scanFunctions.scanTimer == null);
-        String label = "Scan";
-        String toolTip = "No active scan";
-        if (scanFunctions.scanTimer != null) {
-            label = (scanFunctions.programScan) ? "Pscan" : "Mscan";
-            toolTip = (scanFunctions.programScan) ? "Program scan: scans memory locations" : "Memory scan: scans between two defined frequencies";
-        } else {
-            memoryFunctions.resetButtonColors();
-        }
-        this.scanTypeLabel.setText(label);
-        scannerPanel.setToolTipText(toolTip);
-        scanIconLabel.setIcon((scanFunctions.validState()) ? greenLed : redLed);
-    }
 
     private void initialize() {
         if (!inhibit) {
@@ -433,45 +418,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
         timebox.setSelectedIndex(5);
     }
 
-    private void initScanValues(JComboBox<String> stepbox, int initstep, JComboBox<String> speedbox, int initspeed) {
-        double bv;
-        double[] msteps = new double[]{1, 2, 5};
-        String sl;
-        if (stepbox != null) {
-            stepbox.removeAllItems();
-            scanSteps = new TreeMap<>();
-            bv = 1;
-            for (int p = 0; p <= 7; p++) {
-                for (double lv : msteps) {
-                    double v = bv * lv;
-                    sl = stepLabel(v);
-                    scanSteps.put(sl, v);
-                    stepbox.addItem(sl);
-                }
-                bv *= 10;
-            }
-            setComboBoxIndex(stepbox, initstep);
-        }
-        if (speedbox != null) {
-            speedbox.removeAllItems();
-            timeSteps = new TreeMap<>();
-            bv = 1;
-            for (int p = 0; p <= 4; p++) {
-                for (double lv : msteps) {
-                    double v = bv * lv;
-                    if (v >= 1000) {
-                        sl = String.format("%d s", (int) (v / 1000));
-                    } else {
-                        sl = String.format("%d ms", (int) v);
-                    }
-                    timeSteps.put(sl, (int) v);
-                    speedbox.addItem(sl);
-                }
-                bv *= 10;
-            }
-            setComboBoxIndex(speedbox, initspeed);
-        }
-    }
 
     private void setupControls() {
         sv_frameDims = this;
@@ -511,9 +457,9 @@ final public class JRX_TX extends javax.swing.JFrame implements
         readMemoryButtons();
         initTimeValues((RWComboBox) sv_timerIntervalComboBox);
 
-        initScanValues(sv_scanStepComboBox, 12, sv_scanSpeedComboBox, 5);
-        initScanValues(null, 0, sv_dwellTimeComboBox, 10);
-        initScanValues(sv_scopeStepComboBox, 12, sv_scopeSpeedComboBox, 0);
+        scanDude.initScanValues(sv_scanStepComboBox, 12, sv_scanSpeedComboBox, 5);
+        scanDude.initScanValues(null, 0, sv_dwellTimeComboBox, 10);
+        scanDude.initScanValues(sv_scopeStepComboBox, 12, sv_scopeSpeedComboBox, 0);
         memoryButtonsPanel.setBackground(new Color(128, 200, 220));
         sliderPanel.setBackground(new Color(192, 200, 192));
         listPanel.setBackground(new Color(200, 220, 240));
@@ -523,7 +469,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         receiverPanel.setBackground(Color.black);
         memoryPanel.setBackground(Color.black);
         digitsParent.setToolTipText("<html>Tune each digit:<ul><li>Mouse wheel (❃): up, down</li><li>Mouse click top: up</li><li>Mouse click bottom: down</li></ul></html>");
-        updateScanControls();
+        scanDude.updateScanControls();
     }
 
     // force DSP on if auxiiliary DSP functions are activated
@@ -576,7 +522,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         ((RWSlider) sv_squelchSlider).writeValue(false);
         ((RWSlider) sv_volumeSlider).writeValue(false);
         getSquelch(true);
-        updateScanControls();
+        scanDude.updateScanControls();
     }
 
     private void setRadioSquelch() {
@@ -597,27 +543,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         memoryFunctions.writeButtonsToFile(buttonFilePath, buttonMap);
     }
 
-    protected String stepLabel(double v) {
-        String[] labels = new String[]{"Hz", "kHz", "MHz"};
-        double tv = 1;
-        int i;
-        for (i = 0; i < labels.length; i++) {
-            if (v < tv * 1000) {
-                break;
-            }
-            tv *= 1000;
-        }
-        String s = String.format("%.0f %s", v / tv, labels[i]);
-        return s;
-    }
 
-    protected double getScanStep(JComboBox box) {
-        return scanSteps.get((String) box.getSelectedItem());
-    }
-
-    protected double getTimeStep(JComboBox box) {
-        return timeSteps.get((String) box.getSelectedItem());
-    }
 
     protected ArrayList<MemoryButton> getScanButtons(int max) {
         ArrayList<MemoryButton> array = null;
@@ -685,9 +611,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
         tellUser("<html>No valid memory buttons in range<br/>or all set to <span color=\"blue\">\"skip in memory scan\"</span>");
     }
 
-    protected double getComboBoxTimeStep(JComboBox box) {
-        return timeSteps.get((String) box.getSelectedItem());
-    }
 
     protected void waitMS(int ms) {
         try {
@@ -697,10 +620,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
         }
     }
 
-    protected void sleep(JComboBox box) {
-        double v = getComboBoxTimeStep(box);
-        waitMS((int) v);
-    }
 
     protected double ntrp(double xa, double xb, double ya, double yb, double x) {
         return ((x - xa) * (yb - ya) / (xb - xa)) + ya;
@@ -1168,11 +1087,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
         }
     }
 
-    private void setComboBoxIndex(JComboBox box, int index) {
-        index = Math.max(0, index);
-        index = Math.min(index, box.getItemCount() - 1);
-        box.setSelectedIndex(index);
-    }
 
     protected SweepScope getScopePanel() {
         return (SweepScope) scopeDisplayPanel;
@@ -2476,11 +2390,11 @@ final public class JRX_TX extends javax.swing.JFrame implements
     private javax.swing.JPanel receiverPanel;
     private javax.swing.JButton scanDownButton;
     private javax.swing.JButton scanHelpButton;
-    private javax.swing.JLabel scanIconLabel;
+    protected javax.swing.JLabel scanIconLabel;
     private javax.swing.JButton scanStopButton;
-    private javax.swing.JLabel scanTypeLabel;
+    protected javax.swing.JLabel scanTypeLabel;
     private javax.swing.JButton scanUpButton;
-    private javax.swing.JPanel scannerPanel;
+    protected javax.swing.JPanel scannerPanel;
     private javax.swing.JPanel scopeControlLeftPanel;
     private javax.swing.JPanel scopeControlPanel;
     private javax.swing.JPanel scopeControlRightPanel;

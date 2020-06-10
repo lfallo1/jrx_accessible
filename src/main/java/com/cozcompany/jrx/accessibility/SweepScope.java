@@ -192,9 +192,9 @@ final public class SweepScope extends JPanel implements MouseMotionListener {
         scopeData.clear();
         if (parent.validSetup()) {
             String ss = (String) parent.sv_scopeStepComboBox.getSelectedItem();
-            scanStep = parent.scanSteps.get(ss);
+            scanStep = parent.scanDude.scanSteps.get(ss);
             String ts = (String) parent.sv_scopeSpeedComboBox.getSelectedItem();
-            scanSpeedMs = parent.timeSteps.get(ts);
+            scanSpeedMs = parent.scanDude.timeSteps.get(ts);
         }
     }
 
