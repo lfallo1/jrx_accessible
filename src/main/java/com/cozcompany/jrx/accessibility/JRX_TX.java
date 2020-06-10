@@ -44,17 +44,17 @@ import javax.swing.event.ListSelectionListener;
 final public class JRX_TX extends javax.swing.JFrame implements 
         ListSelectionListener {
 
-    final String appVersion = "5.0.1";
+    final String appVersion = "5.0.2";
     final String appName;
     final String programName;
     String lineSep;
     String userDir;
     String userPath;
-    String buttonFilePath;
+    
     Timer periodicTimer;
     ParseComLine comArgs = null;
     ImageIcon redLed, greenLed, blueLed, yellowLed;
-    ScanStateMachine scanFunctions;
+    ScanStateMachine scanStateMachine;
     ControlInterface[] settableControls;
     ArrayList<String> interfaceNames = null;
     ChannelChart chart;
@@ -91,7 +91,8 @@ final public class JRX_TX extends javax.swing.JFrame implements
     Font digitsFont;
     Font baseFont;
     final String FILE_SEP = System.getProperty("file.separator");
-    TreeMap<String, MemoryButton> buttonMap;
+    String buttonFilePath;
+   
     int MODE_CW = 0;
     int MODE_LSB = 1;
     int MODE_USB = 2;
@@ -100,8 +101,8 @@ final public class JRX_TX extends javax.swing.JFrame implements
     int MODE_WFM = 5;
     int defWidth = 800;
     int defHeight = 400;
-    String sv_mostRecentButton = "";
-    MemoryFunctions memoryFunctions;
+    
+    MemoryCollection memoryCollection;
     long digitFrequency = -1;
     boolean slowRadio = false;
     int readBufferLen = 2048;
@@ -136,7 +137,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         oldTime = System.currentTimeMillis();
        
         readBuffer = new byte[readBufferLen];
-        memoryFunctions = new MemoryFunctions(this);
+        memoryCollection = new MemoryCollection(this);
         appName = getClass().getSimpleName();
         programName = appName + " " + appVersion;
         setTitle(programName);
@@ -150,6 +151,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         userDir = System.getProperty("user.home");
         userPath = userDir + FILE_SEP + "." + appName;
         buttonFilePath = userPath + FILE_SEP + "memoryButtons.ini";
+        memoryCollection.setFilePath(buttonFilePath);
         new File(userPath).mkdirs();
         digitsFont = new Font(Font.MONOSPACED, Font.PLAIN, 30);
         initComponents();
@@ -162,7 +164,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         vfoDisplay = new FreqDisplay(this, digitsParent, displaySpace);
         vfoDisplay.initDigits();
 
-        scanFunctions = new ScanStateMachine(this);
+        scanStateMachine = new ScanStateMachine(this);
         scanDude = new ScanController(this);
         // default app size
         setSize(defWidth, defHeight);
@@ -220,38 +222,43 @@ final public class JRX_TX extends javax.swing.JFrame implements
 /////////////////////////////////////////////////////////////////////////////////
     @Override
     public void valueChanged(ListSelectionEvent e) {
-//        if (e.getValueIsAdjusting()) {
-//            return;
-//        }
+        if (e.getValueIsAdjusting()) {
+            return;
+        }
         try {
             ListSelectionModel lsm = (ListSelectionModel) e.getSource();
             if (!lsm.isSelectionEmpty()) {
-                scanFunctions.stopScan(false);
+                scanStateMachine.stopScan(false);
                 int row = lsm.getMinSelectionIndex();
                 String mode = chart.getValue(row, 2);
                 double freq = Double.parseDouble(chart.getValue(row, 3));
                 vfoDisplay.frequencyToDigits((long) (freq * 1e6 + 0.5));
                 RWComboBox box = (RWComboBox) sv_modesComboBox;
                 mode = "Mode " + mode.toUpperCase();
-                sv_modesComboBox.setSelectedIndex(box.displayMap.get(mode));
+                Integer index = box.displayMap.get(mode);
+                if (index != null) sv_modesComboBox.setSelectedIndex(index);
             }
         } catch (Exception ex) {
             System.out.println(ex);
         }
     }
-
+/////////////////////////////////////////////////////////////////////////////////
+    
+    /**
+     * The control loop for dynamic behavior.
+     */
     class PeriodicEvents extends TimerTask {
 
         @Override
         public void run() {
-            if (!getScopePanel().isRunning() && scanFunctions.scanTimer == null) {
+            if (!getScopePanel().isRunning() && scanStateMachine.scanTimer == null) {
                 getSignalStrength();
                 setSMeter();
                 getSquelch(false);
                 setComErrorIcon();
                 readRadioControls(false);
             }
-            if (slowRadio || scanFunctions.scanTimer != null) {
+            if (slowRadio || scanStateMachine.scanTimer != null) {
                 vfoDisplay.timerUpdateFreq();
                 //timerSetSliders();
             }
@@ -313,6 +320,13 @@ final public class JRX_TX extends javax.swing.JFrame implements
         }
     }
 
+    /**
+     * Query the Mode comboBox to get the modulation mode of item n.  Validates
+     * input parameter n.
+     * 
+     * @param n
+     * @return modulation mode name string or ""
+     */
     protected String getMode(int n) {
         String s = "";
         RWComboBox box = (RWComboBox) sv_modesComboBox;
@@ -454,7 +468,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         setComboBoxContent((RWComboBox) sv_antennaComboBox, "Ant", 0, 4, 1, 0, 1, 0, 1, 1);
         initInterfaceList();
         initRigSpecs();
-        readMemoryButtons();
+        memoryCollection.readMemoryButtons();
         initTimeValues((RWComboBox) sv_timerIntervalComboBox);
 
         scanDude.initScanValues(sv_scanStepComboBox, 12, sv_scanSpeedComboBox, 5);
@@ -534,82 +548,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
         squelchOpen = -1;
     }
 
-    private void readMemoryButtons() {
-        memoryFunctions.layoutButtons(memoryButtonsPanel);
-        memoryFunctions.readButtonsFromFile(buttonFilePath, buttonMap);
-    }
-
-    private void writeMemoryButtons() {
-        memoryFunctions.writeButtonsToFile(buttonFilePath, buttonMap);
-    }
-
-
-
-    protected ArrayList<MemoryButton> getScanButtons(int max) {
-        ArrayList<MemoryButton> array = null;
-        boolean validFreqs = false;
-        try {
-            if (sv_mostRecentButton == null || !sv_mostRecentButton.matches("(?i)^m.*")) {
-                sv_mostRecentButton = "M001";
-            }
-            array = new ArrayList<>();
-            int n = 0;
-            Iterator<MemoryButton> ss = buttonMap.tailMap(sv_mostRecentButton).values().iterator();
-            while (ss.hasNext() && n < max) {
-                MemoryButton button = ss.next();
-                if (button.frequency >= 0) {
-                    array.add(button);
-                    boolean skip = (button.skipDuringScan != 0);
-                    button.updateState(darkGreen);
-                    if (!skip) {
-                        validFreqs = true;
-                    }
-                } else {
-                    break;
-                }
-                n++;
-            }
-            if (n < 2) {
-                validFreqs = false;
-                array = new ArrayList<>();
-                n = 0;
-                // search in reverse
-                ArrayList<MemoryButton> revList = 
-                        new ArrayList<>(buttonMap.headMap(sv_mostRecentButton, true).values());
-                Collections.reverse(revList);
-                //revmap.;
-                ss = revList.iterator();
-                while (ss.hasNext() && n < max) {
-                    MemoryButton button = ss.next();
-                    if (button.frequency >= 0) {
-                        array.add(button);
-                        boolean skip = (button.skipDuringScan != 0);
-                        button.updateState(darkGreen);
-                        if (!skip) {
-                            validFreqs = true;
-                        }
-                    } else {
-                        break;
-                    }
-                    n++;
-                }
-                // now reverse the result
-                Collections.reverse(array);
-            }
-        } catch (Exception e) {
-            e.printStackTrace(System.out);
-        }
-        if (!validFreqs) {
-            noValidFrequenciesPrompt();
-            return null;
-        } else {
-            return array;
-        }
-    }
-
-    protected void noValidFrequenciesPrompt() {
-        tellUser("<html>No valid memory buttons in range<br/>or all set to <span color=\"blue\">\"skip in memory scan\"</span>");
-    }
 
 
     protected void waitMS(int ms) {
@@ -631,7 +569,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
 
     protected boolean testSquelch() {
         boolean so = (squelchOpen == 1) && this.sv_squelchCheckBox.isSelected();
-        scanIconLabel.setIcon((so && scanFunctions.scanTimer != null) ? redLed : greenLed);
+        scanIconLabel.setIcon((so && scanStateMachine.scanTimer != null) ? redLed : greenLed);
         return so;
     }
 
@@ -721,7 +659,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
      * @return true when radio is actually updated.
      */
     public boolean requestSetRadioFrequency(long v) {
-        if (!slowRadio && scanFunctions.scanTimer == null) {
+        if (!slowRadio && scanStateMachine.scanTimer == null) {
             
             setRadioFrequency(vfoDisplay.getFreq());
             return true;
@@ -785,6 +723,8 @@ final public class JRX_TX extends javax.swing.JFrame implements
     }
 
     private void setComboBoxScales() {
+        if (hamlibExecPath == null) return;
+
         ((RWComboBox) sv_preampComboBox).setGenericComboBoxScale("Pre", "(?ism).*^Preamp:\\s*(.*?)\\s*$.*", true, true);
         ((RWComboBox) sv_attenuatorComboBox).setGenericComboBoxScale("Att", "(?ism).*^Attenuator:\\s*(.*?)\\s*$.*", true, true);
         ((RWComboBox) sv_filtersComboBox).setGenericComboBoxScale("", "", true, true);
@@ -1228,17 +1168,17 @@ final public class JRX_TX extends javax.swing.JFrame implements
 
     private void closeApp() {
         getScopePanel().stopSweep(false);
-        scanFunctions.stopScan(false);
+        scanStateMachine.stopScan(false);
         if (periodicTimer != null) {
             periodicTimer.cancel();
             periodicTimer = null;
         }
-        if (scanFunctions.scanTimer != null) {
-            scanFunctions.scanTimer.cancel();
-            scanFunctions.scanTimer = null;
+        if (scanStateMachine.scanTimer != null) {
+            scanStateMachine.scanTimer.cancel();
+            scanStateMachine.scanTimer = null;
         }
         config.write();
-        writeMemoryButtons();
+        memoryCollection.writeMemoryButtons();
         closeConnection();
         System.exit(0);
     }
@@ -1511,6 +1451,11 @@ final public class JRX_TX extends javax.swing.JFrame implements
 
         sv_modesComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         sv_modesComboBox.setToolTipText("Operating modes (❃)");
+        sv_modesComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sv_modesComboBoxActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -2232,17 +2177,17 @@ final public class JRX_TX extends javax.swing.JFrame implements
 
     private void scanUpButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_scanUpButtonMouseClicked
         // TODO add your handling code here:
-        scanFunctions.startScan(1);
+        scanStateMachine.startScan(1);
     }//GEN-LAST:event_scanUpButtonMouseClicked
 
     private void scanStopButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_scanStopButtonMouseClicked
         // TODO add your handling code here:
-        scanFunctions.stopScan(true);
+        scanStateMachine.stopScan(true);
     }//GEN-LAST:event_scanStopButtonMouseClicked
 
     private void scanDownButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_scanDownButtonMouseClicked
         // TODO add your handling code here:
-        scanFunctions.startScan(-1);
+        scanStateMachine.startScan(-1);
     }//GEN-LAST:event_scanDownButtonMouseClicked
 
     private void sv_anfCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sv_anfCheckBoxActionPerformed
@@ -2277,17 +2222,17 @@ final public class JRX_TX extends javax.swing.JFrame implements
 
     private void eraseMemButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_eraseMemButtonMouseClicked
         // TODO add your handling code here:
-        memoryFunctions.dispatch(evt);
+        memoryCollection.dispatch(evt);
     }//GEN-LAST:event_eraseMemButtonMouseClicked
 
     private void pasteMemButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pasteMemButtonMouseClicked
         // TODO add your handling code here:
-        memoryFunctions.dispatch(evt);
+        memoryCollection.dispatch(evt);
     }//GEN-LAST:event_pasteMemButtonMouseClicked
 
     private void copyMemButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_copyMemButtonMouseClicked
         // TODO add your handling code here:
-        memoryFunctions.dispatch(evt);
+        memoryCollection.dispatch(evt);
     }//GEN-LAST:event_copyMemButtonMouseClicked
 
     private void sv_synthSquelchCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sv_synthSquelchCheckBoxActionPerformed
@@ -2319,6 +2264,10 @@ final public class JRX_TX extends javax.swing.JFrame implements
         // TODO add your handling code here:
         setDisplayState(2);
     }//GEN-LAST:event_radioScannerButtonMouseClicked
+
+    private void sv_modesComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sv_modesComboBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_sv_modesComboBoxActionPerformed
 
     /**
      * @param args the command line arguments
@@ -2378,7 +2327,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
     private javax.swing.JLabel jLabel2;
     private javax.swing.ButtonGroup jrxRadioButtonGroup;
     private javax.swing.JPanel listPanel;
-    private javax.swing.JPanel memoryButtonsPanel;
+    protected javax.swing.JPanel memoryButtonsPanel;
     protected javax.swing.JPanel memoryPanel;
     private javax.swing.JScrollPane memoryScrollPane;
     private javax.swing.JButton pasteMemButton;
