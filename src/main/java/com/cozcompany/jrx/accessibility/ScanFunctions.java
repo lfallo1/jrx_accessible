@@ -130,10 +130,16 @@ final public class ScanFunctions {
         }
     }
 
+    /**
+     * A Scanner method using selected rows of the ChannelChart, scan the 
+     * channels listed there.
+     * 
+     * @return Boolean success
+     */
     protected boolean setTableScanParams() {
         if (parent.validSetup()) {
             tableScanList = new ArrayList<>();
-            int[] rowindices = parent.freqTable.getSelectedRows();
+            int[] rowindices = parent.chart.getSelectRows();
             for (int i : rowindices) {
                 long f = 0;
                 try {

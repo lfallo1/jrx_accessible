@@ -41,7 +41,6 @@ public class ChannelChart {
     
     public ChannelChart(JRX_TX frame) {
         appFrame = frame;
-
         freqTable = new javax.swing.JTable();
         model = new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -122,6 +121,7 @@ public class ChannelChart {
             freqTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
             ListSelectionModel rowSM = freqTable.getSelectionModel();
             rowSM.addListSelectionListener(appFrame);
+            System.out.println("Value at row 4, col 2 :"+ getValue(4,2));
                     
                     
         } catch (Exception e) {
@@ -129,9 +129,20 @@ public class ChannelChart {
         }
     }
     
-    public String getValue(int row, int col) {   
-        return (String)model.getValueAt(row,col);
-}
+    public String getValue(int row, int col) {
+        String value = freqData[row][col];
+        return (value);
+    }
+    
+    public int[] getSelectRows() {
+        int[] selection = freqTable.getSelectedRows();
+        for (int i = 0; i < selection.length; i++) {
+            selection[i] = freqTable.convertRowIndexToModel(selection[i]);
+        }
+        // selection is now in terms of the underlying TableModel
+        return selection;
+    }
+    
     /**
      * Write the default channel chart to file: "frequencies/default.tsv" when
      * that file does not exist.

@@ -217,12 +217,12 @@ final public class JRX_TX extends javax.swing.JFrame implements
             periodicTimer.schedule(new PeriodicEvents(), delay);
         }
     }
-
+/////////////////////////////////////////////////////////////////////////////////
     @Override
     public void valueChanged(ListSelectionEvent e) {
-        if (e.getValueIsAdjusting()) {
-            return;
-        }
+//        if (e.getValueIsAdjusting()) {
+//            return;
+//        }
         try {
             ListSelectionModel lsm = (ListSelectionModel) e.getSource();
             if (!lsm.isSelectionEmpty()) {
@@ -236,6 +236,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 sv_modesComboBox.setSelectedIndex(box.displayMap.get(mode));
             }
         } catch (Exception ex) {
+            System.out.println(ex);
         }
     }
 
@@ -1416,8 +1417,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
         memoryPanel = new javax.swing.JPanel();
         memoryScrollPane = new javax.swing.JScrollPane();
         memoryButtonsPanel = new javax.swing.JPanel();
-        tableScrollPane = new javax.swing.JScrollPane();
-        freqTable = new javax.swing.JTable();
         scopePanel = new javax.swing.JPanel();
         scopeDisplayPanel = new SweepScope(this);
         scopeControlPanel = new javax.swing.JPanel();
@@ -2028,21 +2027,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
 
         memoryPanel.add(memoryScrollPane, "memoryCard");
 
-        freqTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        tableScrollPane.setViewportView(freqTable);
-
-        memoryPanel.add(tableScrollPane, "tableCard");
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -2475,7 +2459,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
     private javax.swing.JLabel dcdIconLabel;
     private javax.swing.JPanel digitsParent;
     private javax.swing.JButton eraseMemButton;
-    protected javax.swing.JTable freqTable;
     private javax.swing.JButton helpButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -2543,7 +2526,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
     protected javax.swing.JComboBox<String> sv_timerIntervalComboBox;
     protected javax.swing.JCheckBox sv_volumeExitCheckBox;
     protected javax.swing.JSlider sv_volumeSlider;
-    private javax.swing.JScrollPane tableScrollPane;
     private javax.swing.JButton tuneComsButton;
     private javax.swing.JPanel verticalListPanel;
     // End of variables declaration//GEN-END:variables
