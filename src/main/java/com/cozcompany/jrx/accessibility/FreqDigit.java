@@ -89,10 +89,11 @@ final public class FreqDigit extends JLabel implements MouseWheelListener,
                 }
             }
             // if this is the high digit of the number
-            if (!carried) {
-                parent.vfoDisplay.digitsToFrequency();
-            }
+//            if (!carried) {
+//                parent.vfoDisplay.digitsToFrequency();
+//            }
         }
+        parent.vfoDisplay.digitsToFrequency();  // Coz add this.  No matter what need to update radio.
     }
 
     public long getValue() {

@@ -44,7 +44,7 @@ import javax.swing.event.ListSelectionListener;
 final public class JRX_TX extends javax.swing.JFrame implements 
         ListSelectionListener {
 
-    final String appVersion = "5.0.2";
+    final String appVersion = "5.0.3";
     final String appName;
     final String programName;
     String lineSep;
@@ -653,9 +653,9 @@ final public class JRX_TX extends javax.swing.JFrame implements
             String sf = sendRadioCom("f", 0, false);
             long v = Long.parseLong(sf);
             System.out.println("readFrequency from radio : "+ v );
-            sf = sendRadioCom("f", 0, false);
-            v = Long.parseLong(sf);
-            System.out.println("extra readFrequency from radio : "+ v );
+//            sf = sendRadioCom("f", 0, false);
+//            v = Long.parseLong(sf);
+//            System.out.println("extra readFrequency from radio : "+ v );
 
             vfoDisplay.frequencyToDigits(v);
         } catch (Exception e) {
@@ -670,9 +670,9 @@ final public class JRX_TX extends javax.swing.JFrame implements
      * @return true when radio is actually updated.
      */
     public boolean requestSetRadioFrequency(long v) {
-        if (!slowRadio && scanStateMachine.scanTimer == null) {
-            
-            setRadioFrequency(vfoDisplay.getFreq());
+        if (!slowRadio && scanStateMachine.scanTimer == null) {            
+            setRadioFrequency(v);    // Coz changed to use parameter v instead of vfoGetFreq().  Not really sure how this happened......
+            //System.out.println("requestSetRadioFrequency : " + v);
             return true;
         } else {
             return false;
@@ -690,6 +690,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 if (oldRadioFrequency != v) {
                     String com = String.format("F %d", v);
                     sendRadioCom(com, 0, true);
+                    System.out.println("setRadioFrequency() : "+ com);
                     oldRadioFrequency = v;
                 }
             }

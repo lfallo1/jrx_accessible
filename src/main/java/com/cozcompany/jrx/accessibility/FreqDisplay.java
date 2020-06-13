@@ -102,6 +102,7 @@ public class FreqDisplay extends JPanel implements HierarchyBoundsListener {
         digitFrequency = sv_freq;
         ListIterator<FreqDigit> revIter = freqDigits.listIterator(freqDigits.size());
         while (revIter.hasPrevious()) {
+            System.out.println("frequencyToDigits v : "+ v);
             FreqDigit fd = revIter.previous();
             fd.setDigit(v % 10);
             fd.setBright(v != 0);
@@ -125,14 +126,25 @@ public class FreqDisplay extends JPanel implements HierarchyBoundsListener {
         }
         // set the system frequency to the result
         // as soon as it's been assembled.  Check this comment as possible out of date...
-        if (appFrame.requestSetRadioFrequency(sv_freq)) {
+        if (appFrame.requestSetRadioFrequency(digitFrequency)) {
             sv_freq = digitFrequency;
+            //System.out.println("requestSetFrequency : " + digitFrequency );
+        } else {
+            System.out.println("requestSetFrequency denied." + sv_freq + "artificial retry.");
+            if (appFrame.requestSetRadioFrequency(digitFrequency)) {
+                sv_freq = digitFrequency;
+                System.out.println("requestSetFrequency  on retry : " + digitFrequency );
+            } else {
+                System.out.println("requestSetFrequency retry denied.");
+            }
+            
         }
     }
         
     protected void timerUpdateFreq() {
         if (digitFrequency >= 0 && digitFrequency != sv_freq) {
             frequencyToDigits(digitFrequency);
+            //System.out.println("timerUpdateFreq() : " + digitFrequency );  // Coz debug hack
         }
     }
 
