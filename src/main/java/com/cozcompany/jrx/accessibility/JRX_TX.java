@@ -648,15 +648,9 @@ final public class JRX_TX extends javax.swing.JFrame implements
 
 
     protected void readFrequency() {
-        try {
-            
+        try {           
             String sf = sendRadioCom("f", 0, false);
             long v = Long.parseLong(sf);
-            System.out.println("readFrequency from radio : "+ v );
-//            sf = sendRadioCom("f", 0, false);
-//            v = Long.parseLong(sf);
-//            System.out.println("extra readFrequency from radio : "+ v );
-
             vfoDisplay.frequencyToDigits(v);
         } catch (Exception e) {
             //e.printStackTrace(System.out);
@@ -671,8 +665,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
      */
     public boolean requestSetRadioFrequency(long v) {
         if (!slowRadio && scanStateMachine.scanTimer == null) {            
-            setRadioFrequency(v);    // Coz changed to use parameter v instead of vfoGetFreq().  Not really sure how this happened......
-            //System.out.println("requestSetRadioFrequency : " + v);
+            setRadioFrequency(v);    
             return true;
         } else {
             return false;
@@ -690,7 +683,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 if (oldRadioFrequency != v) {
                     String com = String.format("F %d", v);
                     sendRadioCom(com, 0, true);
-                    System.out.println("setRadioFrequency() : "+ com);
+                    //System.out.println("setRadioFrequency() : "+ com);
                     oldRadioFrequency = v;
                 }
             }
