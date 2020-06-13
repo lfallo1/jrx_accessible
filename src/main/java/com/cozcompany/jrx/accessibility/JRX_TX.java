@@ -104,7 +104,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
     int defHeight = 400;
     
     MemoryCollection memoryCollection;
-    long digitFrequency = -1;
     boolean slowRadio = false;
     int readBufferLen = 2048;
     byte[] readBuffer;
@@ -297,13 +296,14 @@ final public class JRX_TX extends javax.swing.JFrame implements
             if (sv_jrxToRadioButton.isSelected()) {
                 vfoDisplay.setFrequency();
                 writeRadioControls();
+            } else {
+                vfoDisplay.frequencyToDigits(defaultFrequency); // Coz moved this.
             }
             setRadioSquelch();
-            readRadioControls(true);
+            readRadioControls(true);  // Reads frequency from radio
             startCyclicalTimer();
             measureSpeed();
-            setComErrorIcon();
-            vfoDisplay.frequencyToDigits(defaultFrequency);
+            setComErrorIcon();            
             memoryScrollPane.getVerticalScrollBar().setUnitIncrement(8);
             getActiveTab();
         }
@@ -649,8 +649,14 @@ final public class JRX_TX extends javax.swing.JFrame implements
 
     protected void readFrequency() {
         try {
+            
             String sf = sendRadioCom("f", 0, false);
             long v = Long.parseLong(sf);
+            System.out.println("readFrequency from radio : "+ v );
+            sf = sendRadioCom("f", 0, false);
+            v = Long.parseLong(sf);
+            System.out.println("extra readFrequency from radio : "+ v );
+
             vfoDisplay.frequencyToDigits(v);
         } catch (Exception e) {
             //e.printStackTrace(System.out);
