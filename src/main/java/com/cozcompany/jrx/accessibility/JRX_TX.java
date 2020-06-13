@@ -87,6 +87,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
     int squelchLow = -100;
     int squelchHigh = 100;
     boolean isWindows;
+    boolean isMacOs;
     boolean inhibit;
     Font digitsFont;
     Font baseFont;
@@ -182,9 +183,12 @@ final public class JRX_TX extends javax.swing.JFrame implements
         initialize();
     }
 
-    private void setDisplayState(int v) {
-        sv_displayState = v;
-        configureDisplayState();
+    private void setDisplayState(int v) {       
+        if (sv_displayState != v) {
+            sv_displayState = v;   
+            configureDisplayState();
+        }
+         
     }
 
     private void configureDisplayState() {
@@ -441,8 +445,9 @@ final public class JRX_TX extends javax.swing.JFrame implements
         darkGreen = new Color(0, 128, 0);
         darkBlue = new Color(0, 0, 128);
         darkRed = new Color(128, 0, 0);
-        String os = System.getProperty("os.name").toLowerCase();
-        isWindows = (os.indexOf("win") >= 0);
+        String osName = System.getProperty("os.name").toLowerCase();
+        isWindows = (osName.indexOf("win") >= 0);
+        isMacOs = osName.startsWith("mac os x");
         if (isWindows) {
             hamlibExecPath = findHamlibOnWindows();
             if (hamlibExecPath == null) {
@@ -708,8 +713,14 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 sv_interfacesComboBox.addItem(String.format("COM%d", i));
             }
         } else {
-            // list all serial interfaces using device nodes
-            String data = runSysCommand(new String[]{"bash", "-c", "echo /dev/ttyS* /dev/ttyUSB* /dev/video*"}, true);
+            String data;
+            if (isMacOs) {
+                // List all usb interfaces using MacOs.
+                data = runSysCommand(new String[]{"bash", "-c", "echo  /dev/tty.* /dev/video.*"}, true);
+            } else {           
+                // List all serial interfaces using Linux.
+                data = runSysCommand(new String[]{"bash", "-c", "echo /dev/ttyS* /dev/ttyUSB* /dev/video*"}, true);
+            }
             if (comArgs.debug >= 1) {
                 p("serial list output: [" + data + "]");
             }
@@ -717,6 +728,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 // don't add unexpanded arguments
                 if (!s.matches(".*\\*.*")) {
                     sv_interfacesComboBox.addItem(s);
+                    System.out.println("Found mac usb serial device :"+s);
                 }
             }
         }
@@ -790,6 +802,16 @@ final public class JRX_TX extends javax.swing.JFrame implements
         String result = "";
         try {
             Process p = new ProcessBuilder(array).redirectErrorStream(true).start();
+//            //////////////////////////////////////HACK
+//            //////HACK BELOW
+//            ProcessBuilder pb = new ProcessBuilder(array).redirectErrorStream(true);
+//            Map<String, String> env = pb.environment();
+//            String path = env.get("PATH");
+//            env.remove("PATH");
+//            env.put("PATH", "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin");
+//            path = env.get("PATH"); 
+//            Process p = pb.start();
+//            ////////////////////////////////////////END HACK
             if (read) {
                 result = new Scanner(p.getInputStream()).useDelimiter("\\Z").next();
             }
@@ -853,6 +875,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 rigName = (String) sv_radioNamesComboBox.getSelectedItem();
                 rigCode = radioCodes.get(rigName);
             }
+            p("setupHamlibDaemon rigCode :" +rigCode+ " interfaceName : "+ interfaceName);
             if (rigCode >= 0 && interfaceName != null) {
                 String[] com;
                 if (sv_hamrigUseCustomSettings) {
@@ -881,7 +904,19 @@ final public class JRX_TX extends javax.swing.JFrame implements
                     p("setup daemon with: " + rigName + "," + rigCode + "," + interfaceName);
                 }
                 try {
+//                    //////////////////////////////////////////////////////////
+//                    // HACK
+//                    hamlibExecPath = "/usr/local/bin/rigctld";
+//                    ProcessBuilder pb = new ProcessBuilder(com).redirectErrorStream(true);
+//                    Map<String, String> env = pb.environment();
+//                    String path = env.get("PATH");
+//                    env.remove("PATH");
+//                    env.put("PATH", "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin");
+//                    path = env.get("PATH");                                            
+//                    hamlibDaemon = pb.start();
+//                    //////////////////////////////////////////////////////////
                     hamlibDaemon = new ProcessBuilder(com).redirectErrorStream(true).start();
+                    
                     boolean connected = false;
                     int n = 5;
                     while (!connected && n >= 0) {

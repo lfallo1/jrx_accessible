@@ -38,6 +38,10 @@ final public class ScanStateMachine {
         parent = p;
     }
 
+    protected void noValidFrequenciesPrompt() {
+        parent.tellUser("<html>No valid memory buttons in range<br/>or all set to <span color=\"blue\">\"skip in memory scan\"</span>");
+    }
+
     protected long getScanFrequency() {
         if (buttonScanMode) {
             MemoryButton mb = buttonScanList.get(scanMemoryIndex);
@@ -176,11 +180,11 @@ final public class ScanStateMachine {
         /**
          * A Scanner method using a range of memory buttons as scan channels.
          * 
-         * @return boolean success
+         * @return Boolean success
          */
     protected boolean setMemoryScanParams() {
         if (parent.validSetup()) {
-            buttonScanList = parent.getScanButtons(parent.memoryButtonTotal);
+            buttonScanList = parent.memoryCollection.getScanButtons(parent.memoryButtonTotal);
             if (buttonScanList != null) {
                 int sz = buttonScanList.size();
                 if (sz >= 2) {
@@ -229,7 +233,7 @@ final public class ScanStateMachine {
             freq = getScanFrequency();
         }
         if (count < 0) {
-            parent.noValidFrequenciesPrompt();
+            noValidFrequenciesPrompt();
             stopScan(false);
             return parent.defaultFrequency;
         }

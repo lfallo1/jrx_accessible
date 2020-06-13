@@ -5,6 +5,9 @@
  */
 package com.cozcompany.jrx.accessibility;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
 import javax.swing.JComboBox;
@@ -24,19 +27,19 @@ public class ScanController {
         
     }
     protected void updateScanControls() {
-        appFrame.sv_scanStepComboBox.setEnabled(appFrame.scanFunctions.scanTimer == null);
-        appFrame.sv_scanSpeedComboBox.setEnabled(appFrame.scanFunctions.scanTimer == null);
+        appFrame.sv_scanStepComboBox.setEnabled(appFrame.scanStateMachine.scanTimer == null);
+        appFrame.sv_scanSpeedComboBox.setEnabled(appFrame.scanStateMachine.scanTimer == null);
         String label = "Scan";
         String toolTip = "No active scan";
-        if (appFrame.scanFunctions.scanTimer != null) {
-            label = (appFrame.scanFunctions.programScan) ? "Pscan" : "Mscan";
-            toolTip = (appFrame.scanFunctions.programScan) ? "Program scan: scans memory locations" : "Memory scan: scans between two defined frequencies";
+        if (appFrame.scanStateMachine.scanTimer != null) {
+            label = (appFrame.scanStateMachine.programScan) ? "Pscan" : "Mscan";
+            toolTip = (appFrame.scanStateMachine.programScan) ? "Program scan: scans memory locations" : "Memory scan: scans between two defined frequencies";
         } else {
-            appFrame.memoryFunctions.resetButtonColors();
+            appFrame.memoryCollection.resetButtonColors();
         }
         appFrame.scanTypeLabel.setText(label);
         appFrame.scannerPanel.setToolTipText(toolTip);
-        appFrame.scanIconLabel.setIcon((appFrame.scanFunctions.validState()) ? appFrame.greenLed : appFrame.redLed);
+        appFrame.scanIconLabel.setIcon((appFrame.scanStateMachine.validState()) ? appFrame.greenLed : appFrame.redLed);
     }
 
     protected void initScanValues(JComboBox<String> stepbox, int initstep, JComboBox<String> speedbox, int initspeed) {
@@ -78,7 +81,6 @@ public class ScanController {
             setComboBoxIndex(speedbox, initspeed);
         }
     }
-
 
 
     

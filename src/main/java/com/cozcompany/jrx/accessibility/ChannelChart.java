@@ -24,7 +24,9 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 /**
- *
+ * Keep a list of popular frequencies that most people would use with a scanner,
+ * and on selection of a range, implement a scan of those frequencies.
+ * 
  * @author Coz
  */
 public class ChannelChart {
@@ -120,10 +122,7 @@ public class ChannelChart {
             freqTable.setDefaultRenderer(Object.class, mr);
             freqTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
             ListSelectionModel rowSM = freqTable.getSelectionModel();
-            rowSM.addListSelectionListener(appFrame);
-            System.out.println("Value at row 4, col 2 :"+ getValue(4,2));
-                    
-                    
+            rowSM.addListSelectionListener(appFrame);                   
         } catch (Exception e) {
             e.printStackTrace(System.out);
         }

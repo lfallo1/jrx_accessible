@@ -93,7 +93,7 @@ final public class SweepScope extends JPanel implements MouseMotionListener {
 
     public void startSweep() {
         setDefaults();
-        parent.scanFunctions.stopScan(false);
+        parent.scanStateMachine.stopScan(false);
         if (!isRunning()) {
             setupRunSweep();
         } else {
@@ -103,7 +103,7 @@ final public class SweepScope extends JPanel implements MouseMotionListener {
     }
 
     private void setupRunSweep() {
-        scanLimits = parent.getScanButtons(2);
+        scanLimits = parent.memoryCollection.getScanButtons(2);
         if (scanLimits != null && scanLimits.size() >= 2) {
 
             MemoryButton low = scanLimits.get(0);

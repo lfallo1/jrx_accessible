@@ -30,7 +30,9 @@ import javax.swing.JComboBox;
 import javax.swing.JSlider;
 
 /**
- *
+ * Each memory item is represented by a MemoryButton which has an internal state 
+ * indicated by its color.
+ * 
  * @author lutusp
  */
 final public class MemoryButton extends JButton implements MouseListener {
@@ -42,7 +44,10 @@ final public class MemoryButton extends JButton implements MouseListener {
     int timeout = 1000;
     boolean defineButton = false;
     int skipDuringScan = 0;
-    String tt = "<span color=\"green\">Click: read</span><br/><span color=\"blue\">Right-click: toggle skip in memory scan</span><br/><span color=\"red\">Click and hold 1 sec.: write</span><br/><span color=\"purple\">Right-click and hold 1 sec: erase</span>";
+    String tt = "<span color=\"green\">Click: read</span><br/>"+
+            "<span color=\"blue\">Right-click: toggle skip in memory scan</span>"+
+            "<br/><span color=\"red\">Click and hold 1 sec.: write</span>"+
+            "<br/><span color=\"purple\">Right-click and hold 1 sec: erase</span>";
     long frequency = -1;
     int mode;
     int filter;
@@ -174,8 +179,8 @@ final public class MemoryButton extends JButton implements MouseListener {
 
     protected boolean readButton() {
         if (frequency >= 0) {
-             parent.scanFunctions.stopScan(false);
-            parent.sv_mostRecentButton = label;
+             parent.scanStateMachine.stopScan(false);
+            parent.memoryCollection.sv_mostRecentButton = label;
             // always set bandwidth before mode
             updateIfNeeded(parent.sv_filtersComboBox, filter);
             // always set mode before frequency
@@ -196,13 +201,14 @@ final public class MemoryButton extends JButton implements MouseListener {
             return true;
         } else {
             Beep.beep();
-            parent.tellUser("This memory button is undefined. To define it,\npress it for more than one second.");
+            parent.tellUser("This memory button is undefined. To define it,\n"+
+                            "press and hold for more than one second.");
             return false;
         }
     }
 
     private void writeButton() {
-        parent.sv_mostRecentButton = label;
+        parent.memoryCollection.sv_mostRecentButton = label;
         filter = parent.sv_filtersComboBox.getSelectedIndex();
         mode = parent.sv_modesComboBox.getSelectedIndex();
         frequency = parent.vfoDisplay.sv_freq;
