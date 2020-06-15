@@ -58,6 +58,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
     ControlInterface[] settableControls;
     ArrayList<String> interfaceNames = null;
     ChannelChart chart;
+    SquelchScheme squelchScheme;
    
     Map<String, Integer> radioCodes = null;
     Map<String, Double> filters = null;
@@ -108,11 +109,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
     int readBufferLen = 2048;
     byte[] readBuffer;
     boolean dcdCapable = false;
-    boolean useJRXSquelch = false;
-    // this was a boolean but it needs to
-    // have three states: -1, never set
-    // 0 = false, 1 = true
-    int squelchOpen = -1;
     double signalStrength = 0;
     double oldVolume = -1;
     long oldRadioFrequency = -1;
@@ -163,21 +159,20 @@ final public class JRX_TX extends javax.swing.JFrame implements
         Rectangle displaySpace = new Rectangle(0,19,276,45);
         vfoDisplay = new FreqDisplay(this, digitsParent, displaySpace);
         vfoDisplay.initDigits();
-
-        scanStateMachine = new ScanStateMachine(this);
+        scanStateMachine = new ScanStateMachine(this);       
         scanDude = new ScanController(this);
         // default app size
         setSize(defWidth, defHeight);
         setControlList();
+        squelchScheme = new SquelchScheme(this);               
         setupControls();
-        setDefaultComboContent();
+        setDefaultComboContent(); 
         config = new ConfigManager(this);
         if (!comArgs.reset) {
             config.read();
         }
         chart = new ChannelChart(this);
-        chart.init();
-        
+        chart.init();        
         inhibit = false;
         initialize();
     }
@@ -257,7 +252,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
             if (!getScopePanel().isRunning() && scanStateMachine.scanTimer == null) {
                 getSignalStrength();
                 setSMeter();
-                getSquelch(false);
+                squelchScheme.getSquelch(false);
                 setComErrorIcon();
                 readRadioControls(false);
             }
@@ -299,7 +294,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
             } else {
                 vfoDisplay.frequencyToDigits(defaultFrequency); // Coz moved this.
             }
-            setRadioSquelch();
+            squelchScheme.setRadioSquelch();
             readRadioControls(true);  // Reads frequency from radio
             startCyclicalTimer();
             measureSpeed();
@@ -351,7 +346,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         speedIconLabel.setIcon(slowRadio ? redLed : greenLed);
         speedIconLabel.setToolTipText(slowRadio ? "Slow radio coms" : "Fast radio coms");
         if (comArgs.debug >= 0) {
-            p("radio com ms delay: " + dt);
+            pout("radio com ms delay: " + dt);
         }
     }
 
@@ -460,7 +455,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
             }
             hamlibExecPath = "\"" + hamlibExecPath + "\"";
             if (comArgs.debug >= 0) {
-                p("have windows exec: " + hamlibExecPath);
+                pout("have windows exec: " + hamlibExecPath);
             }
         } else {
             hamlibExecPath = fileHelpers.findAbsolutePath(hamlibExecPath);
@@ -497,9 +492,16 @@ final public class JRX_TX extends javax.swing.JFrame implements
         ((RWCheckBox) sv_dspCheckBox).actionPerformed(null);
     }
 
+    /**
+     *  Get radio capability data from Hamlib backend and set up drop-down lists.
+     *  If a capability is not present in the replay to the "\dump_caps" command,
+     *  then the UI Component is not enabled (grayed out);
+     */
     private void getRigCaps() {
         String com = "\\dump_caps";
         radioData = sendRadioCom(com, 3, false);
+        System.out.println(" Reply to \\dump_caps "+ radioData);
+
         enableControlCap(sv_ctcssComboBox, radioData, "(?ism).*^Can set CTCSS Squelch:\\s+Y$", false);
         enableControlCap(sv_agcComboBox, radioData, "(?ism).*^Set level:.*?AGC\\(", true);
         enableControlCap(sv_antennaComboBox, radioData, "(?ism).*^Can set Ant:\\s+Y$", false);
@@ -514,44 +516,10 @@ final public class JRX_TX extends javax.swing.JFrame implements
         enableControlCap(sv_dspComboBox, radioData, "(?ism).*^Set level:.*?NR\\(", true);
         String s = sendRadioCom("\\get_dcd", 0, false);
         dcdCapable = (s != null && s.matches("\\d+"));
-        setSquelchScheme();
+        squelchScheme.setSquelchScheme();
     }
 
-    private void setSquelchScheme() {
-        // sv_synthSquelchCheckBox.setEnabled(!dcdCapable);
-        sv_synthSquelchCheckBox.setEnabled(true);
-        useJRXSquelch = sv_synthSquelchCheckBox.isSelected();// && !dcdCapable;
-        // reset squelch state to default
-        enableControlCap(sv_squelchSlider, radioData, "(?ism).*^Set level:.*?SQL\\(", true);
-        if (useJRXSquelch) {
-            sv_squelchSlider.setEnabled(true);
-        }
-        // was: boolean stateFlag = dcdCapable && !useJRXSquelch;
-        boolean stateFlag = !useJRXSquelch;
-        //p("dcd: " + dcdCapable + ",useJR: " + useJRXSquelch);
-        ((RWSlider) sv_squelchSlider).commOK = stateFlag;
-        //((RWSlider) sv_volumeSlider).commOK = stateFlag;
-        setRadioSquelch();
-        dcdIconLabel.setIcon(dcdCapable ? greenLed : useJRXSquelch ? yellowLed : redLed);
-        dcdIconLabel.setToolTipText((stateFlag) ? "Radio provides squelch scheme" : 
-                useJRXSquelch ? "JRX provides squelch scheme" : "No squelch scheme enabled");
-        if (comArgs.debug >= 0) {
-            p("DCD capable: " + dcdCapable);
-        }
-        ((RWSlider) sv_squelchSlider).writeValue(false);
-        ((RWSlider) sv_volumeSlider).writeValue(false);
-        getSquelch(true);
-        scanDude.updateScanControls();
-    }
 
-    private void setRadioSquelch() {
-        if (useJRXSquelch) {
-            String com = String.format("L SQL 0");
-            sendRadioCom(com, 0, false);
-        }
-        oldVolume = -1;
-        squelchOpen = -1;
-    }
 
 
 
@@ -572,35 +540,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
         return (int) ntrp(xa, xb, ya, yb, x);
     }
 
-    protected boolean testSquelch() {
-        boolean so = (squelchOpen == 1) && this.sv_squelchCheckBox.isSelected();
-        scanIconLabel.setIcon((so && scanStateMachine.scanTimer != null) ? redLed : greenLed);
-        return so;
-    }
-
-    protected void getSquelch(boolean force) {
-        int sqOpen = iErrorValue;
-        if (dcdCapable && !useJRXSquelch) {
-            if (comArgs.debug < 2) {
-                String s = sendRadioCom("\\get_dcd", 1, false);
-                if (s != null) {
-                    sqOpen = s.trim().equals("1") ? 1 : 0;
-                }
-            }
-        } else if (!useJRXSquelch) {
-            sqOpen = 1;
-        } else {
-            double sv = ((ControlInterface) sv_squelchSlider).getConvertedValue();
-            sv = ntrp(0, 1, squelchLow, squelchHigh, sv);
-            sqOpen = (signalStrength > sv) ? 1 : 0;
-        }
-        //p("sqOpen " + sqOpen + "," + squelchOpen);
-        if ((sqOpen != iErrorValue && sqOpen != squelchOpen) || force) {
-            //p("sqOpen2 " + sqOpen);
-            squelchOpen = sqOpen;
-            setVolume(squelchOpen == 1);
-        }
-    }
 
     protected double freqStrength(long v) {
         if (v > 0) {
@@ -612,7 +551,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
             long t2 = System.currentTimeMillis();
             double dt = (t2 - t1) / 1000.0;
             if (comArgs.debug >= 1) {
-                p(String.format("scope sample delay: %f", dt));
+                pout(String.format("scope sample delay: %f", dt));
             }
         }
         return signalStrength;
@@ -722,7 +661,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 data = runSysCommand(new String[]{"bash", "-c", "echo /dev/ttyS* /dev/ttyUSB* /dev/video*"}, true);
             }
             if (comArgs.debug >= 1) {
-                p("serial list output: [" + data + "]");
+                pout("serial list output: [" + data + "]");
             }
             for (String s : data.split("\\s+")) {
                 // don't add unexpanded arguments
@@ -758,7 +697,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         
             s = runSysCommand(new String[]{hamlibExecPath, "-l"}, true);
             if (comArgs.debug >= 1) {
-                p("dump from rigctld -l: [" + s + "]");
+                pout("dump from rigctld -l: [" + s + "]");
             }
         } 
         for (String item : s.split(lineSep)) {
@@ -766,7 +705,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
             if (item.length() > 30) {
                 try {
                     if (comArgs.debug >= 1) {
-                        p("rigctl radio description line: [" + item + "]");
+                        pout("rigctl radio description line: [" + item + "]");
                     }
                     String parse = item.replaceFirst("^\\s*(\\S+)\\s*(.*)$", "$1\t$2");
                     String[] fields = parse.split("\t");
@@ -777,7 +716,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
                             b = b.replaceAll("\\s+", " ");
                             int v = Integer.parseInt(a);
                             if (comArgs.debug >= 1) {
-                                p("radio record: " + b + " = " + v);
+                                pout("radio record: " + b + " = " + v);
                             }
                             radioCodes.put(b, v);
                         }
@@ -810,7 +749,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
 //            env.remove("PATH");
 //            env.put("PATH", "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin");
 //            path = env.get("PATH"); 
-//            Process p = pb.start();
+//            Process pout = pb.start();
 //            ////////////////////////////////////////END HACK
             if (read) {
                 result = new Scanner(p.getInputStream()).useDelimiter("\\Z").next();
@@ -875,7 +814,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 rigName = (String) sv_radioNamesComboBox.getSelectedItem();
                 rigCode = radioCodes.get(rigName);
             }
-            p("setupHamlibDaemon rigCode :" +rigCode+ " interfaceName : "+ interfaceName);
+            pout("setupHamlibDaemon rigCode :" +rigCode+ " interfaceName : "+ interfaceName);
             if (rigCode >= 0 && interfaceName != null) {
                 String[] com;
                 if (sv_hamrigUseCustomSettings) {
@@ -901,7 +840,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 }
 
                 if (comArgs.debug >= 0) {
-                    p("setup daemon with: " + rigName + "," + rigCode + "," + interfaceName);
+                    pout("setup daemon with: " + rigName + "," + rigCode + "," + interfaceName);
                 }
                 try {
 //                    //////////////////////////////////////////////////////////
@@ -928,11 +867,11 @@ final public class JRX_TX extends javax.swing.JFrame implements
                             hamlib_os = hamlibSocket.getOutputStream();
                             connected = true;// hamlibSocket.isConnected();
                             if (comArgs.debug >= 0) {
-                                p("socket connected: " + connected);
+                                pout("socket connected: " + connected);
                             }
                         } catch (Exception e) {
                             if (comArgs.debug >= 0) {
-                                p("fail connect " + e.getMessage());
+                                pout("fail connect " + e.getMessage());
                             }
                             waitMS(500);
                             if (n-- <= 0) {
@@ -940,7 +879,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
                             }
                         }
                     }
-                    // now get radio data and set up drop-down lists
+                    // Now get radio capability data and set up drop-down lists.
                     getRigCaps();
                 } catch (Exception e) {
                     e.printStackTrace(System.out);
@@ -948,8 +887,19 @@ final public class JRX_TX extends javax.swing.JFrame implements
             }
         }
     }
-
-    private void enableControlCap(Component cc, String source, String search, boolean level) {
+    /**
+     * Given a swing Component (created by the Swing Gui designer), the reply
+     * text "source" from a rigctl capabilities command "\dump_Caps", a general
+     * expression string "search" for searching the reply text, and a boolean which is
+     * true to set value range.  The Component is enabled if it is found
+     * in the reply by the search genex string.
+     * 
+     * @param cc
+     * @param source
+     * @param search
+     * @param level 
+     */
+    protected void enableControlCap(Component cc, String source, String search, boolean level) {
         boolean enabled = (source != null && source.matches(search + ".*"));
         cc.setEnabled(enabled);
         if (enabled && level) {
@@ -998,11 +948,11 @@ final public class JRX_TX extends javax.swing.JFrame implements
                     hamlib_os.write((s + lineSep).getBytes());
                     hamlib_os.flush();
                     if (comArgs.debug >= localDebug) {
-                        p("sendradiocom   emit: [" + s + "]");
+                        pout("sendradiocom   emit: [" + s + "]");
                     }
                     result = readInputStream(hamlib_is);
                     if (comArgs.debug >= localDebug) {
-                        p("sendradiocom result: [" + result.replaceAll("[\r\n]", " ") + "]");
+                        pout("sendradiocom result: [" + result.replaceAll("[\r\n]", " ") + "]");
                         //p("sendradiocom result: [" + result + "]");
                     }
                     if (result.matches("(?i).*RPRT -.*")) {
@@ -1230,7 +1180,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
     }
 
     // a shorthand function for debugging
-    public void p(String s) {
+    public void pout(String s) {
         long t = System.currentTimeMillis();
         Time et = new Time(t);
         double dt = (t - oldTime) / 1000.0;
@@ -2272,7 +2222,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
 
     private void sv_synthSquelchCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sv_synthSquelchCheckBoxActionPerformed
         // TODO add your handling code here:
-        setSquelchScheme();
+        squelchScheme.setSquelchScheme();
     }//GEN-LAST:event_sv_synthSquelchCheckBoxActionPerformed
 
     private void sv_interfacesComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sv_interfacesComboBoxActionPerformed
@@ -2351,10 +2301,10 @@ final public class JRX_TX extends javax.swing.JFrame implements
     private javax.swing.JPanel buttonPanel5;
     private javax.swing.JPanel buttonPanel6;
     private javax.swing.JPanel button_bar;
-    private javax.swing.JLabel comErrorIconLabel;
+    protected javax.swing.JLabel comErrorIconLabel;
     private javax.swing.JButton copyButton;
     private javax.swing.JButton copyMemButton;
-    private javax.swing.JLabel dcdIconLabel;
+    protected javax.swing.JLabel dcdIconLabel;
     private javax.swing.JPanel digitsParent;
     private javax.swing.JButton eraseMemButton;
     private javax.swing.JButton helpButton;

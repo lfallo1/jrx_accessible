@@ -20,7 +20,8 @@
 package com.cozcompany.jrx.accessibility;
 
 /**
- *
+ * Parse the command line arguments.
+ * 
  * @author lutusp
  */
 final public class ParseComLine {

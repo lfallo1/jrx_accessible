@@ -126,7 +126,7 @@ final public class MemoryButton extends JButton implements MouseListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        //parent.p("mouse pressed");
+        //parent.pout("mouse pressed");
         mouseEvent = e;
         setForeground(Color.red);
         defineButton = false;
@@ -137,7 +137,7 @@ final public class MemoryButton extends JButton implements MouseListener {
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        //parent.p("mouse released");
+        //parent.pout("mouse released");
         if (defineButtonTimer != null) {
             defineButtonTimer.cancel();
             defineButtonTimer = null;

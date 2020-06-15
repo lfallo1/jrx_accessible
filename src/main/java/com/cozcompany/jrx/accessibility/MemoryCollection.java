@@ -186,7 +186,7 @@ final public class MemoryCollection {
             int mem = 0;
             for (MemoryButton mb : buttonMap.values()) {
                 parent.waitMS(200);
-                parent.p(mb.label);
+                parent.pout(mb.label);
                 String com = String.format("E %d",mem);
                 parent.sendRadioCom(com,0,true);
                 parent.waitMS(200);
@@ -205,7 +205,7 @@ final public class MemoryCollection {
     
     // a shorthand function for debugging
     public void p(String s) {
-        parent.p(s);
+        parent.pout(s);
     }
     
     

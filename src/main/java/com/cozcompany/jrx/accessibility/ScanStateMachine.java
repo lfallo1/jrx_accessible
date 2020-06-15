@@ -57,7 +57,7 @@ final public class ScanStateMachine {
     }
 
     protected boolean validState() {
-        return parent.dcdCapable || parent.useJRXSquelch;
+        return parent.dcdCapable || parent.squelchScheme.useJRXSquelch;
     }
 
     protected void startScan(int direction) {
@@ -105,7 +105,7 @@ final public class ScanStateMachine {
                 if (programScan) {
                     vfoDisplayS.frequencyToDigits(getNextScanFrequency());
                 } else {
-                    //parent.p("increm scan");
+                    //parent.pout("increm scan");
                     vfoDisplayS.frequencyToDigits(vfoDisplayS.getFreq() + (long)scanStep);
                 }
             }
@@ -250,8 +250,8 @@ final public class ScanStateMachine {
             parent.getSignalStrength();
             parent.setSMeter();
             // open/close squelch
-            parent.getSquelch(false);
-            boolean sqopen = parent.testSquelch();
+            parent.squelchScheme.getSquelch(false);
+            boolean sqopen = parent.squelchScheme.testSquelch();
             if (sqopen) {
                 lastOpenSquelchTime = System.currentTimeMillis();
             }
@@ -283,7 +283,7 @@ final public class ScanStateMachine {
             long t2 = System.currentTimeMillis();
             double dt = (t2 - t1) / 1000.0;
             if (parent.comArgs.debug >= 1) {
-                parent.p(String.format("scan operation: frequency %d, latency: %f", vfoDisplayS.getFreq(), dt));
+                parent.pout(String.format("scan operation: frequency %d, latency: %f", vfoDisplayS.getFreq(), dt));
             }            
         }
     }

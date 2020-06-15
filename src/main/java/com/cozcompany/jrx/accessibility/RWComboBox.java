@@ -116,7 +116,7 @@ final public class RWComboBox extends JComboBox<String> implements MouseWheelLis
                 try {
                     String s = parent.radioData.replaceFirst(search, "$1");
                     if (parent.comArgs.debug >= 1) {
-                        parent.p("combo box content: [" + s + "]");
+                        parent.pout("combo box content: [" + s + "]");
                     }
                     String[] array = s.split("\\s+");
                     String is;
@@ -146,7 +146,7 @@ final public class RWComboBox extends JComboBox<String> implements MouseWheelLis
                                 ss = String.format("%.0f", v * 10);
                             }
                             //addListItem(is, ss);
-                            //parent.p("combobox argument: " + is);
+                            //parent.pout("combobox argument: " + is);
                             double v = 0;
                             try {
                                 v = Double.parseDouble(ss);
@@ -199,7 +199,7 @@ final public class RWComboBox extends JComboBox<String> implements MouseWheelLis
                 //addListItem(valToKey.get(dv), "" + dv);
                 addListItem(valToKey.get(dv), dv, "" + dv);
                 if (parent.comArgs.debug >= 1) {
-                    parent.p("key to filter : [" + dv + "]");
+                    parent.pout("key to filter : [" + dv + "]");
                 }
             }
         }
@@ -282,7 +282,7 @@ final public class RWComboBox extends JComboBox<String> implements MouseWheelLis
             numSelection = getConvertedValue();
             if (numSelection != errorValue) {
                 String com;
-                //parent.p("numselection: " + numSelection);
+                //parent.pout("numselection: " + numSelection);
                 if (needMode) {
                     ((RWComboBox) parent.sv_modesComboBox).writeValueStr();
                 } else {
@@ -357,7 +357,7 @@ final public class RWComboBox extends JComboBox<String> implements MouseWheelLis
                         setSelectedIndex(me.getValue());
                     }
                 }
-                //parent.p("read converted value: " + sn + ", index " + getSelectedIndex());
+                //parent.pout("read converted value: " + sn + ", index " + getSelectedIndex());
 
             } catch (Exception e) {
                 e.printStackTrace(System.out);
@@ -377,7 +377,7 @@ final public class RWComboBox extends JComboBox<String> implements MouseWheelLis
                 if (needFilter) {
                     String[] array = strSelection.split("(?sm)\\s+");
                     if (array.length >= 2) {
-                        //parent.p("selection: " + array[0] + "," + array[1]);
+                        //parent.pout("selection: " + array[0] + "," + array[1]);
                         inhibitSetItem(array[0]);
                         ((RWComboBox) parent.sv_filtersComboBox).inhibitSetItem(array[1]);
                     }

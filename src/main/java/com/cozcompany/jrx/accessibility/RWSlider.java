@@ -82,8 +82,8 @@ final public class RWSlider extends JSlider implements MouseWheelListener, Chang
         if (commOK  || force) {
             if (!parent.inhibit && !localInhibit && isEnabled()) {
                 level = getConvertedValue();
-                if(parent.useJRXSquelch && token.equals("AF")) {
-                    level = (parent.squelchOpen == 1)?level:0;
+                if(parent.squelchScheme.useJRXSquelch && token.equals("AF")) {
+                    level = (parent.squelchScheme.squelchOpen == 1)?level:0;
                 }
                 if (force || level != oldLevel) {
                     String com = String.format("%s %s %.2f", prefix.toUpperCase(), token, level);

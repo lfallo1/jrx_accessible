@@ -404,7 +404,7 @@ final public class SweepScope extends JPanel implements MouseMotionListener {
         double qy = parent.ntrp(0, h, ymin, ymax, h - my);
         String sx = convertx(qx);
         toolTip = String.format("x = %s, y = %.4f", sx, qy);
-        //parent.p(tt);
+        //parent.pout(tt);
     }
 
     @Override
