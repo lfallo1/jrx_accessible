@@ -263,7 +263,11 @@ final public class JRX_TX extends javax.swing.JFrame implements
             resetTimer();
         }
     }
-
+    /**
+     * On detecting an error in reply text, comError is set to 2 which is checked
+     * by this method and decremented on each check.
+     * 
+     */
     private void setComErrorIcon() {
         if (comError > 0) {
             if ((comError -= 1) > 0) {
@@ -364,12 +368,12 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 sv_squelchSlider,
                 sv_volumeSlider,
                 sv_rfGainComboBox,
-                sv_ifShiftComboBox,
+                //sv_ifShiftComboBox,
                 sv_dspComboBox,
                 sv_dspCheckBox,
                 sv_modesComboBox,
                 sv_filtersComboBox,
-                sv_antennaComboBox,
+                //sv_antennaComboBox,
                 sv_attenuatorComboBox,
                 sv_agcComboBox,
                 sv_preampComboBox,
@@ -462,10 +466,10 @@ final public class JRX_TX extends javax.swing.JFrame implements
         }
         setComboBoxContent((RWComboBox) sv_rfGainComboBox, "RF", 0, 100, 5, 0, 100, 0, 1, 100);
         // yhigh intentionally = ylow to allow the rig to set the range
-        setComboBoxContent((RWComboBox) sv_ifShiftComboBox, "IF", -50, 50, 5, -50, 50, 0, 0, 0);
+        //setComboBoxContent((RWComboBox) sv_ifShiftComboBox, "IF", -50, 50, 5, -50, 50, 0, 0, 0);
         setComboBoxContent((RWComboBox) sv_dspComboBox, "DSP", 0, 100, 5, 0, 100, 0, 1, 0);
         setComboBoxContent((RWComboBox) sv_agcComboBox, "AGC", 0, 10, 1, 0, 1, 0, 10, 1);
-        setComboBoxContent((RWComboBox) sv_antennaComboBox, "Ant", 0, 4, 1, 0, 1, 0, 1, 1);
+        //setComboBoxContent((RWComboBox) sv_antennaComboBox, "Ant", 0, 4, 1, 0, 1, 0, 1, 1);
         initInterfaceList();
         initRigSpecs();
         memoryCollection.readMemoryButtons();
@@ -503,13 +507,13 @@ final public class JRX_TX extends javax.swing.JFrame implements
         System.out.println(" Reply to \\dump_caps "+ radioData);
 
         enableControlCap(sv_ctcssComboBox, radioData, "(?ism).*^Can set CTCSS Squelch:\\s+Y$", false);
-        enableControlCap(sv_agcComboBox, radioData, "(?ism).*^Set level:.*?AGC\\(", true);
-        enableControlCap(sv_antennaComboBox, radioData, "(?ism).*^Can set Ant:\\s+Y$", false);
+        //(sv_agcComboBox, radioData, "(?ism).*^Set level:.*?AGC\\(", true);
+        //enableControlCap(sv_antennaComboBox, radioData, "(?ism).*^Can set Ant:\\s+Y$", false);
         enableControlCap(sv_preampComboBox, radioData, "(?ism).*^Set level:.*?PREAMP\\(", true);
         enableControlCap(sv_volumeSlider, radioData, "(?ism).*^Set level:.*?AF\\(", true);
         enableControlCap(sv_rfGainComboBox, radioData, "(?ism).*^Set level:.*?RF\\(", true);
         enableControlCap(sv_squelchSlider, radioData, "(?ism).*^Set level:.*?SQL\\(", true);
-        enableControlCap(sv_ifShiftComboBox, radioData, "(?ism).*^Set level:.*?IF\\(", true);
+        //enableControlCap(sv_ifShiftComboBox, radioData, "(?ism).*^Set level:.*?IF\\(", true);
         enableControlCap(sv_blankerCheckBox, radioData, "(?ism).*^Set functions:.*?\\sNB\\s", false);
         enableControlCap(sv_anfCheckBox, radioData, "(?ism).*^Set functions:.*?\\sANF\\s", false);
         enableControlCap(sv_apfCheckBox, radioData, "(?ism).*^Set functions:.*?\\sAPF\\s", false);
@@ -741,16 +745,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
         String result = "";
         try {
             Process p = new ProcessBuilder(array).redirectErrorStream(true).start();
-//            //////////////////////////////////////HACK
-//            //////HACK BELOW
-//            ProcessBuilder pb = new ProcessBuilder(array).redirectErrorStream(true);
-//            Map<String, String> env = pb.environment();
-//            String path = env.get("PATH");
-//            env.remove("PATH");
-//            env.put("PATH", "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin");
-//            path = env.get("PATH"); 
-//            Process pout = pb.start();
-//            ////////////////////////////////////////END HACK
             if (read) {
                 result = new Scanner(p.getInputStream()).useDelimiter("\\Z").next();
             }
@@ -843,17 +837,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
                     pout("setup daemon with: " + rigName + "," + rigCode + "," + interfaceName);
                 }
                 try {
-//                    //////////////////////////////////////////////////////////
-//                    // HACK
-//                    hamlibExecPath = "/usr/local/bin/rigctld";
-//                    ProcessBuilder pb = new ProcessBuilder(com).redirectErrorStream(true);
-//                    Map<String, String> env = pb.environment();
-//                    String path = env.get("PATH");
-//                    env.remove("PATH");
-//                    env.put("PATH", "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin");
-//                    path = env.get("PATH");                                            
-//                    hamlibDaemon = pb.start();
-//                    //////////////////////////////////////////////////////////
                     hamlibDaemon = new ProcessBuilder(com).redirectErrorStream(true).start();
                     
                     boolean connected = false;
@@ -889,10 +872,10 @@ final public class JRX_TX extends javax.swing.JFrame implements
     }
     /**
      * Given a swing Component (created by the Swing Gui designer), the reply
-     * text "source" from a rigctl capabilities command "\dump_Caps", a general
+     * text "source" from a rigctl capabilities command "\dump_Caps", a regular
      * expression string "search" for searching the reply text, and a boolean which is
      * true to set value range.  The Component is enabled if it is found
-     * in the reply by the search genex string.
+     * in the reply by the search regex string.
      * 
      * @param cc
      * @param source
