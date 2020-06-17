@@ -182,11 +182,16 @@ final public class JRX_TX extends javax.swing.JFrame implements
             if (periodicTimer != null) {
                 periodicTimer.cancel();
             }
+            // This is not a java swing Timer.
             periodicTimer = new java.util.Timer();
             resetTimer();
         }
     }
-
+    /**
+     * Get a delay interval from the sv_timerIntervalComboBox and schedule a
+     * TimerTask (PeriodicEvents) after the given interval; technically this
+     * method RESTARTS the timer (as opposed to resetting the timer).
+     */
     private void resetTimer() {
         long delay = (long) ((RWComboBox) sv_timerIntervalComboBox).getConvertedValue();
         //p("delay: " + delay);
@@ -388,7 +393,11 @@ final public class JRX_TX extends javax.swing.JFrame implements
         Pattern p = Pattern.compile("(?i).*?" + hamlibExecPath + "\\.exe.*");
         return recurseSearch(f, p);
     }
-
+    /**
+     * Initialize the sv_timerIntervalComboBox with ingenius algorithm to make
+     * steps { 10ms,20ms,50ms,100ms,.....5s,10s,50s,OFF }.
+     * @param timebox 
+     */
     private void initTimeValues(RWComboBox timebox) {
         timebox.removeAllItems();
         double[] msteps = new double[]{1, 2, 5};
@@ -2027,7 +2036,21 @@ final public class JRX_TX extends javax.swing.JFrame implements
         scanPanel.getAccessibleContext().setAccessibleDescription("Software driven channel or increment receive scanner");
 
         scopePanel.setLayout(new java.awt.BorderLayout());
+
+        javax.swing.GroupLayout scopeDisplayPanelLayout = new javax.swing.GroupLayout(scopeDisplayPanel);
+        scopeDisplayPanel.setLayout(scopeDisplayPanelLayout);
+        scopeDisplayPanelLayout.setHorizontalGroup(
+            scopeDisplayPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 644, Short.MAX_VALUE)
+        );
+        scopeDisplayPanelLayout.setVerticalGroup(
+            scopeDisplayPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 371, Short.MAX_VALUE)
+        );
+
         scopePanel.add(scopeDisplayPanel, java.awt.BorderLayout.CENTER);
+        scopeDisplayPanel.getAccessibleContext().setAccessibleName("Scope Panel");
+        scopeDisplayPanel.getAccessibleContext().setAccessibleDescription("Visual band oscilloscope sweep");
 
         scopeControlPanel.setBackground(new java.awt.Color(0, 0, 0));
         scopeControlPanel.setLayout(new java.awt.GridBagLayout());
