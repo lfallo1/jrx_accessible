@@ -125,7 +125,8 @@ final public class ScanStateMachine {
     }
 
     protected boolean setScanParams() {
-        int index = parent.getActiveTab();
+        //int index = parent.getActiveTab();
+        int index = 0; // Coz fix this later.
         buttonScanMode = (index == 0);
         if (buttonScanMode) {
             return setMemoryScanParams();

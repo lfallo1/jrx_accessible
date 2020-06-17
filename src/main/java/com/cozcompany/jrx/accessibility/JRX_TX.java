@@ -66,9 +66,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
     ArrayList<ControlInterface> controlList;
     int iErrorValue = -100;
     long defaultFrequency = 145000000;
-    int sv_displayState = 0;
-    JButton[] stateButtons;
-    String[] buttonLabels;
+
     int sv_hamrigWriteDelay = 12;
     int sv_hamrigPostWriteDelay = 2;
     int sv_hamrigRetries = 3;
@@ -151,8 +149,8 @@ final public class JRX_TX extends javax.swing.JFrame implements
         new File(userPath).mkdirs();
         digitsFont = new Font(Font.MONOSPACED, Font.PLAIN, 30);
         initComponents();
-        stateButtons = new JButton[]{radioMemoryButton, radioListButton, radioScannerButton};
-        buttonLabels = new String[]{"Radio:Buttons", "Radio:List", "Scope/Setup"};
+        
+
         baseFont = new Font(Font.MONOSPACED, Font.PLAIN, getFont().getSize());
         setFont(baseFont);
         // Must create/initialize vfoDisplay before scan functions.
@@ -177,26 +175,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
         initialize();
     }
 
-    private void setDisplayState(int v) {       
-        if (sv_displayState != v) {
-            sv_displayState = v;   
-            configureDisplayState();
-        }
-         
-    }
-
-    private void configureDisplayState() {
-        CardLayout rcl = (CardLayout) radioPanel.getLayout();
-        rcl.show(radioPanel, (sv_displayState < 2) ? "receiverCard" : "scopeCard");
-        CardLayout mcl = (CardLayout) memoryPanel.getLayout();
-        mcl.show(memoryPanel, (sv_displayState == 0) ? "memoryCard" : "tableCard");
-        int i = 0;
-        for (JButton b : stateButtons) {
-            b.setText((i == sv_displayState) ? String.format("<html><b>%s</b>", 
-                    buttonLabels[i]) : buttonLabels[i]);
-            i++;
-        }
-    }
 
 
 
@@ -281,7 +259,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
 
     private void initialize() {
         if (!inhibit) {
-            configureDisplayState();
             oldRadioFrequency = -1;
             dcdIconLabel.setText("");
             dcdIconLabel.setIcon(greenLed);
@@ -304,7 +281,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
             measureSpeed();
             setComErrorIcon();            
             memoryScrollPane.getVerticalScrollBar().setUnitIncrement(8);
-            getActiveTab();
         }
     }
 
@@ -367,7 +343,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
         Component[] list = new Component[]{
                 sv_squelchSlider,
                 sv_volumeSlider,
-                sv_rfGainComboBox,
                 //sv_ifShiftComboBox,
                 sv_dspComboBox,
                 sv_dspCheckBox,
@@ -464,7 +439,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         } else {
             hamlibExecPath = fileHelpers.findAbsolutePath(hamlibExecPath);
         }
-        setComboBoxContent((RWComboBox) sv_rfGainComboBox, "RF", 0, 100, 5, 0, 100, 0, 1, 100);
+        
         // yhigh intentionally = ylow to allow the rig to set the range
         //setComboBoxContent((RWComboBox) sv_ifShiftComboBox, "IF", -50, 50, 5, -50, 50, 0, 0, 0);
         setComboBoxContent((RWComboBox) sv_dspComboBox, "DSP", 0, 100, 5, 0, 100, 0, 1, 0);
@@ -479,13 +454,10 @@ final public class JRX_TX extends javax.swing.JFrame implements
         scanDude.initScanValues(null, 0, sv_dwellTimeComboBox, 10);
         scanDude.initScanValues(sv_scopeStepComboBox, 12, sv_scopeSpeedComboBox, 0);
         memoryButtonsPanel.setBackground(new Color(128, 200, 220));
-        sliderPanel.setBackground(new Color(192, 200, 192));
-        listPanel.setBackground(new Color(200, 220, 240));
+        
         scannerPanel.setBackground(new Color(240, 240, 220));
         scopeControlLeftPanel.setBackground(new Color(240, 240, 220));
         scopeControlRightPanel.setBackground(new Color(200, 220, 240));
-        receiverPanel.setBackground(Color.black);
-        memoryPanel.setBackground(Color.black);
         digitsParent.setToolTipText("<html>Tune each digit:<ul><li>Mouse wheel (❃): up, down</li><li>Mouse click top: up</li><li>Mouse click bottom: down</li></ul></html>");
         scanDude.updateScanControls();
     }
@@ -511,7 +483,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         //enableControlCap(sv_antennaComboBox, radioData, "(?ism).*^Can set Ant:\\s+Y$", false);
         enableControlCap(sv_preampComboBox, radioData, "(?ism).*^Set level:.*?PREAMP\\(", true);
         enableControlCap(sv_volumeSlider, radioData, "(?ism).*^Set level:.*?AF\\(", true);
-        enableControlCap(sv_rfGainComboBox, radioData, "(?ism).*^Set level:.*?RF\\(", true);
+        
         enableControlCap(sv_squelchSlider, radioData, "(?ism).*^Set level:.*?SQL\\(", true);
         //enableControlCap(sv_ifShiftComboBox, radioData, "(?ism).*^Set level:.*?IF\\(", true);
         enableControlCap(sv_blankerCheckBox, radioData, "(?ism).*^Set functions:.*?\\sNB\\s", false);
@@ -1057,18 +1029,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
     }
 
 
-    private void checkMainTabState() {
-        //int index = this.sv_mainTabbedPane.getSelectedIndex();
-        if (sv_displayState < 2) {
-            this.getScopePanel().stopSweep(true);
-        }
-    }
 
-    protected int getActiveTab() {
-        //int index = this.sv_freqListTabbedPane.getSelectedIndex();
-        //scannerPanel.setVisible(index == 0);
-        return sv_displayState;
-    }
 
     public String readTextFile(String path, String lineSep) {
         String result = "";
@@ -1182,26 +1143,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
         java.awt.GridBagConstraints gridBagConstraints;
 
         jrxRadioButtonGroup = new javax.swing.ButtonGroup();
-        jPanel1 = new javax.swing.JPanel();
-        receiverPanel = new javax.swing.JPanel();
-        signalPanel = new javax.swing.JPanel();
-        digitsParent = new javax.swing.JPanel();
-        sliderPanel = new javax.swing.JPanel();
-        memoryPanel = new javax.swing.JPanel();
-        buttonPanel2 = new javax.swing.JPanel();
-        copyMemButton = new javax.swing.JButton();
-        pasteMemButton = new javax.swing.JButton();
-        eraseMemButton = new javax.swing.JButton();
-        helpButton = new javax.swing.JButton();
-        quitButton = new javax.swing.JButton();
-        tuneComsButton = new javax.swing.JButton();
-        sv_antennaComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,"Y","");
-        sv_filtersComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,"F","");
-        sv_attenuatorComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,"L","ATT");
-        sv_dspComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,"L","NR");
-        sv_rfGainComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,"L","RF");
-        sv_ifShiftComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,"L","IF");
-        sv_preampComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,"L","PREAMP");
         radioPanel = new javax.swing.JPanel();
         overallTabbedPane = new javax.swing.JTabbedPane();
         operateTransceiverPanel = new javax.swing.JPanel();
@@ -1235,7 +1176,10 @@ final public class JRX_TX extends javax.swing.JFrame implements
         jLabel12 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        sv_antennaComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,"Y","");
+        jLabel18 = new javax.swing.JLabel();
         ifControlsPanel = new javax.swing.JPanel();
+        sv_filtersComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,"F","");
         verticalListPanel = new javax.swing.JPanel();
         sv_rawSigCheckBox = new RWCheckBox(this,null,null);
         sv_blankerCheckBox = new RWCheckBox(this,"U","NB");
@@ -1243,6 +1187,15 @@ final public class JRX_TX extends javax.swing.JFrame implements
         sv_anfCheckBox = new RWCheckBox(this,"U","ANF");
         sv_ctcssCheckBox = new RWCheckBox(this,"U","TSQL");
         sv_dspCheckBox = new RWCheckBox(this,"U","NR");
+        jLabel13 = new javax.swing.JLabel();
+        sv_dspComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,"L","NR");
+        jLabel14 = new javax.swing.JLabel();
+        sv_ifShiftComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,"L","IF");
+        jLabel15 = new javax.swing.JLabel();
+        sv_preampComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,"L","PREAMP");
+        jLabel16 = new javax.swing.JLabel();
+        sv_attenuatorComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,"L","ATT");
+        jLabel17 = new javax.swing.JLabel();
         noiseReductionPanel = new javax.swing.JPanel();
         keyerPanel = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
@@ -1261,6 +1214,13 @@ final public class JRX_TX extends javax.swing.JFrame implements
         memoryStoragePanel = new javax.swing.JPanel();
         memoryScrollPane = new javax.swing.JScrollPane();
         memoryButtonsPanel = new javax.swing.JPanel();
+        buttonPanel2 = new javax.swing.JPanel();
+        copyMemButton = new javax.swing.JButton();
+        pasteMemButton = new javax.swing.JButton();
+        eraseMemButton = new javax.swing.JButton();
+        helpButton = new javax.swing.JButton();
+        quitButton = new javax.swing.JButton();
+        tuneComsButton = new javax.swing.JButton();
         favoriteSWLChannels = new javax.swing.JPanel();
         jrxScopePanel = new javax.swing.JPanel();
         scopePanel = new javax.swing.JPanel();
@@ -1293,162 +1253,9 @@ final public class JRX_TX extends javax.swing.JFrame implements
         sv_interfacesComboBox = new javax.swing.JComboBox<>();
         vfoTabbedPane = new javax.swing.JTabbedPane();
         rxVfoPane = new javax.swing.JPanel();
-        jPanel3 = new javax.swing.JPanel();
-
-        signalPanel.setLayout(new java.awt.GridBagLayout());
-
-        digitsParent.setLayout(new java.awt.GridBagLayout());
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        signalPanel.add(digitsParent, gridBagConstraints);
-
-        sliderPanel.setLayout(new java.awt.GridBagLayout());
-
-        memoryPanel.setLayout(new java.awt.CardLayout());
-
-        javax.swing.GroupLayout receiverPanelLayout = new javax.swing.GroupLayout(receiverPanel);
-        receiverPanel.setLayout(receiverPanelLayout);
-        receiverPanelLayout.setHorizontalGroup(
-            receiverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(receiverPanelLayout.createSequentialGroup()
-                .addGap(920, 920, 920)
-                .addComponent(memoryPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(842, 842, 842)
-                .addGroup(receiverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(signalPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 779, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(receiverPanelLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(sliderPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 778, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))))
-        );
-        receiverPanelLayout.setVerticalGroup(
-            receiverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(receiverPanelLayout.createSequentialGroup()
-                .addGap(2, 2, 2)
-                .addComponent(signalPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26)
-                .addComponent(sliderPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(receiverPanelLayout.createSequentialGroup()
-                .addComponent(memoryPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
-
-        buttonPanel2.setOpaque(false);
-        buttonPanel2.setLayout(new java.awt.GridBagLayout());
-
-        copyMemButton.setText("CM");
-        copyMemButton.setToolTipText("Copy JRX memory buttons to clipboard");
-        copyMemButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                copyMemButtonMouseClicked(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 1, 0, 1);
-        buttonPanel2.add(copyMemButton, gridBagConstraints);
-
-        pasteMemButton.setText("PM");
-        pasteMemButton.setToolTipText("Paste JRX memory buttons from clipboard");
-        pasteMemButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                pasteMemButtonMouseClicked(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 1, 0, 1);
-        buttonPanel2.add(pasteMemButton, gridBagConstraints);
-
-        eraseMemButton.setText("EM");
-        eraseMemButton.setToolTipText("Erase all JRX memory buttons");
-        eraseMemButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                eraseMemButtonMouseClicked(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 1, 0, 1);
-        buttonPanel2.add(eraseMemButton, gridBagConstraints);
-
-        helpButton.setText("HELP");
-        helpButton.setToolTipText("Visit the JRX Home Page");
-        helpButton.setActionCommand("Help");
-        helpButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                helpButtonMouseClicked(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 1, 0, 1);
-        buttonPanel2.add(helpButton, gridBagConstraints);
-
-        quitButton.setText("Quit");
-        quitButton.setToolTipText("Exit JRX");
-        quitButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                quitButtonMouseClicked(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 1, 0, 1);
-        buttonPanel2.add(quitButton, gridBagConstraints);
-
-        tuneComsButton.setText("Conf");
-        tuneComsButton.setToolTipText("Configure Hamlib communications");
-        tuneComsButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tuneComsButtonMouseClicked(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 1, 0, 1);
-        buttonPanel2.add(tuneComsButton, gridBagConstraints);
-
-        sv_antennaComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        sv_antennaComboBox.setToolTipText("Available antennas (❃)");
-
-        sv_filtersComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        sv_filtersComboBox.setToolTipText("Bandwidth filters (❃)\n");
-
-        sv_attenuatorComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        sv_attenuatorComboBox.setToolTipText("Input attenuator (❃)");
-
-        sv_dspComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        sv_dspComboBox.setToolTipText("DSP Noise Reduction (❃)");
-
-        sv_rfGainComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        sv_rfGainComboBox.setToolTipText("RF Gain (❃)");
-
-        sv_ifShiftComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        sv_ifShiftComboBox.setToolTipText("IF Shift (❃)");
-
-        sv_preampComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        sv_preampComboBox.setToolTipText("Preamp setting (❃)");
+        signalPanel = new javax.swing.JPanel();
+        digitsParent = new javax.swing.JPanel();
+        txVfoPanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -1488,7 +1295,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
         ctcssLabel.setLabelFor(sv_ctcssComboBox);
         ctcssLabel.setText("CTCSS");
 
-        jLabel4.setLabelFor(sv_rfGainComboBox);
         jLabel4.setText("RF Gain");
 
         svRfGainSlider.setMajorTickSpacing(10);
@@ -1564,6 +1370,11 @@ final public class JRX_TX extends javax.swing.JFrame implements
         jButton2.setMnemonic('S');
         jButton2.setText("SWAP RX and TX");
 
+        sv_antennaComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        sv_antennaComboBox.setToolTipText("Available antennas (❃)");
+
+        jLabel18.setText("Antenna");
+
         javax.swing.GroupLayout transmitterPanelLayout = new javax.swing.GroupLayout(transmitterPanel);
         transmitterPanel.setLayout(transmitterPanelLayout);
         transmitterPanelLayout.setHorizontalGroup(
@@ -1599,9 +1410,16 @@ final public class JRX_TX extends javax.swing.JFrame implements
                         .addComponent(jLabel8)))
                 .addGap(212, 212, 212))
             .addGroup(transmitterPanelLayout.createSequentialGroup()
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(transmitterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(transmitterPanelLayout.createSequentialGroup()
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(transmitterPanelLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(sv_antennaComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel18)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         transmitterPanelLayout.setVerticalGroup(
@@ -1629,7 +1447,11 @@ final public class JRX_TX extends javax.swing.JFrame implements
                     .addComponent(voxSlider, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel11)
                     .addComponent(jCheckBox3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 104, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(transmitterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(sv_antennaComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel18))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
                 .addGroup(transmitterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton2))
@@ -1647,6 +1469,9 @@ final public class JRX_TX extends javax.swing.JFrame implements
         transmitterPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jButton1, jButton2});
 
         operationDetailsTabbedPane.addTab("Transmitter", transmitterPanel);
+
+        sv_filtersComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        sv_filtersComboBox.setToolTipText("Bandwidth filters (❃)\n");
 
         verticalListPanel.setOpaque(false);
 
@@ -1716,7 +1541,95 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 .addComponent(sv_anfCheckBox))
         );
 
-        ifControlsPanel.add(verticalListPanel);
+        jLabel13.setLabelFor(sv_filtersComboBox);
+        jLabel13.setText("I F Width");
+
+        sv_dspComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        sv_dspComboBox.setToolTipText("DSP Noise Reduction (❃)");
+
+        jLabel14.setLabelFor(sv_dspComboBox);
+        jLabel14.setText("DSP Level");
+
+        sv_ifShiftComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        sv_ifShiftComboBox.setToolTipText("IF Shift (❃)");
+
+        jLabel15.setLabelFor(sv_ifShiftComboBox);
+        jLabel15.setText("IF Shift");
+
+        sv_preampComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        sv_preampComboBox.setToolTipText("Preamp setting (❃)");
+
+        jLabel16.setLabelFor(sv_preampComboBox);
+        jLabel16.setText("Preamp");
+
+        sv_attenuatorComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        sv_attenuatorComboBox.setToolTipText("Input attenuator (❃)");
+
+        jLabel17.setLabelFor(sv_attenuatorComboBox);
+        jLabel17.setText("Attenuator");
+
+        javax.swing.GroupLayout ifControlsPanelLayout = new javax.swing.GroupLayout(ifControlsPanel);
+        ifControlsPanel.setLayout(ifControlsPanelLayout);
+        ifControlsPanelLayout.setHorizontalGroup(
+            ifControlsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ifControlsPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(ifControlsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(ifControlsPanelLayout.createSequentialGroup()
+                        .addGroup(ifControlsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(ifControlsPanelLayout.createSequentialGroup()
+                                .addComponent(sv_filtersComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(12, 12, 12)
+                                .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(ifControlsPanelLayout.createSequentialGroup()
+                                .addComponent(sv_dspComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel14))
+                            .addGroup(ifControlsPanelLayout.createSequentialGroup()
+                                .addComponent(sv_ifShiftComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel15))
+                            .addGroup(ifControlsPanelLayout.createSequentialGroup()
+                                .addComponent(sv_preampComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel16)))
+                        .addGap(129, 129, 129)
+                        .addComponent(verticalListPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(ifControlsPanelLayout.createSequentialGroup()
+                        .addComponent(sv_attenuatorComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel17))))
+        );
+        ifControlsPanelLayout.setVerticalGroup(
+            ifControlsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ifControlsPanelLayout.createSequentialGroup()
+                .addGap(5, 5, 5)
+                .addGroup(ifControlsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(verticalListPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(ifControlsPanelLayout.createSequentialGroup()
+                        .addGroup(ifControlsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                            .addComponent(sv_filtersComboBox)
+                            .addComponent(jLabel13))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(ifControlsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(sv_dspComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel14))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(ifControlsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(sv_ifShiftComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel15))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(ifControlsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(sv_preampComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel16))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(ifControlsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(sv_attenuatorComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel17))
+                .addContainerGap())
+        );
+
+        ifControlsPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel13, sv_filtersComboBox});
 
         operationDetailsTabbedPane.addTab("I F Controls", ifControlsPanel);
         operationDetailsTabbedPane.addTab("Noise Reduction", noiseReductionPanel);
@@ -1898,18 +1811,112 @@ final public class JRX_TX extends javax.swing.JFrame implements
         memoryButtonsPanel.setLayout(new java.awt.GridLayout(1, 0));
         memoryScrollPane.setViewportView(memoryButtonsPanel);
 
+        buttonPanel2.setOpaque(false);
+        buttonPanel2.setLayout(new java.awt.GridBagLayout());
+
+        copyMemButton.setText("CM");
+        copyMemButton.setToolTipText("Copy JRX memory buttons to clipboard");
+        copyMemButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                copyMemButtonMouseClicked(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 1, 0, 1);
+        buttonPanel2.add(copyMemButton, gridBagConstraints);
+
+        pasteMemButton.setText("PM");
+        pasteMemButton.setToolTipText("Paste JRX memory buttons from clipboard");
+        pasteMemButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pasteMemButtonMouseClicked(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 1, 0, 1);
+        buttonPanel2.add(pasteMemButton, gridBagConstraints);
+
+        eraseMemButton.setText("EM");
+        eraseMemButton.setToolTipText("Erase all JRX memory buttons");
+        eraseMemButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                eraseMemButtonMouseClicked(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 1, 0, 1);
+        buttonPanel2.add(eraseMemButton, gridBagConstraints);
+
+        helpButton.setText("HELP");
+        helpButton.setToolTipText("Visit the JRX Home Page");
+        helpButton.setActionCommand("Help");
+        helpButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                helpButtonMouseClicked(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 1, 0, 1);
+        buttonPanel2.add(helpButton, gridBagConstraints);
+
+        quitButton.setText("Quit");
+        quitButton.setToolTipText("Exit JRX");
+        quitButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                quitButtonMouseClicked(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 1, 0, 1);
+        buttonPanel2.add(quitButton, gridBagConstraints);
+
+        tuneComsButton.setText("Conf");
+        tuneComsButton.setToolTipText("Configure Hamlib communications");
+        tuneComsButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tuneComsButtonMouseClicked(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 1, 0, 1);
+        buttonPanel2.add(tuneComsButton, gridBagConstraints);
+
         javax.swing.GroupLayout memoryStoragePanelLayout = new javax.swing.GroupLayout(memoryStoragePanel);
         memoryStoragePanel.setLayout(memoryStoragePanelLayout);
         memoryStoragePanelLayout.setHorizontalGroup(
             memoryStoragePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(memoryStoragePanelLayout.createSequentialGroup()
-                .addComponent(memoryScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 654, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGap(90, 90, 90)
+                .addComponent(buttonPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(108, Short.MAX_VALUE))
+            .addComponent(memoryScrollPane)
         );
         memoryStoragePanelLayout.setVerticalGroup(
             memoryStoragePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(memoryStoragePanelLayout.createSequentialGroup()
-                .addComponent(memoryScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE)
+                .addComponent(memoryScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 410, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(buttonPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -2239,8 +2246,34 @@ final public class JRX_TX extends javax.swing.JFrame implements
 
         radioPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {ledPanel, radioNamesLabel, sv_radioNamesComboBox});
 
+        signalPanel.setLayout(new java.awt.GridBagLayout());
+
+        digitsParent.setLayout(new java.awt.GridBagLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        signalPanel.add(digitsParent, gridBagConstraints);
+
+        rxVfoPane.add(signalPanel);
+
         vfoTabbedPane.addTab("RX VFO  146.670 Mhz", rxVfoPane);
-        vfoTabbedPane.addTab("TX VFO 146.070 Mhz", jPanel3);
+
+        javax.swing.GroupLayout txVfoPanelLayout = new javax.swing.GroupLayout(txVfoPanel);
+        txVfoPanel.setLayout(txVfoPanelLayout);
+        txVfoPanelLayout.setHorizontalGroup(
+            txVfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 671, Short.MAX_VALUE)
+        );
+        txVfoPanelLayout.setVerticalGroup(
+            txVfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 145, Short.MAX_VALUE)
+        );
+
+        vfoTabbedPane.addTab("TX VFO 146.070 Mhz", txVfoPanel);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -2254,7 +2287,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
             .addGroup(layout.createSequentialGroup()
                 .addComponent(radioPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(vfoTabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 191, Short.MAX_VALUE)
+                .addComponent(vfoTabbedPane)
                 .addContainerGap())
         );
 
@@ -2441,6 +2474,12 @@ final public class JRX_TX extends javax.swing.JFrame implements
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -2449,15 +2488,12 @@ final public class JRX_TX extends javax.swing.JFrame implements
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.ButtonGroup jrxRadioButtonGroup;
     private javax.swing.JPanel jrxScopePanel;
     private javax.swing.JPanel keyerPanel;
     private javax.swing.JPanel ledPanel;
     protected javax.swing.JPanel memoryButtonsPanel;
-    protected javax.swing.JPanel memoryPanel;
     private javax.swing.JScrollPane memoryScrollPane;
     private javax.swing.JPanel memoryStoragePanel;
     private javax.swing.JSlider micGainSlider;
@@ -2469,7 +2505,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
     private javax.swing.JButton quitButton;
     private javax.swing.JLabel radioNamesLabel;
     private javax.swing.JPanel radioPanel;
-    private javax.swing.JPanel receiverPanel;
     private javax.swing.JSlider rfPowerOutputSlider;
     private javax.swing.JPanel rxVfoPane;
     private javax.swing.JButton scanDownButton;
@@ -2490,7 +2525,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
     protected javax.swing.JButton scopeStartStopButton;
     private javax.swing.JPanel signalPanel;
     private javax.swing.JProgressBar signalProgressBar;
-    private javax.swing.JPanel sliderPanel;
     private javax.swing.JLabel speedIconLabel;
     private javax.swing.JSlider svRfGainSlider;
     protected javax.swing.JComboBox sv_agcComboBox;
@@ -2513,7 +2547,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
     protected javax.swing.JComboBox<String> sv_radioNamesComboBox;
     protected javax.swing.JRadioButton sv_radioToJrxButton;
     protected javax.swing.JCheckBox sv_rawSigCheckBox;
-    protected javax.swing.JComboBox sv_rfGainComboBox;
     protected javax.swing.JComboBox<String> sv_scanSpeedComboBox;
     protected javax.swing.JComboBox<String> sv_scanStepComboBox;
     protected javax.swing.JCheckBox sv_scopeDotsCheckBox;
@@ -2529,6 +2562,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
     private javax.swing.JComboBox<String> toneSelectionComboBox;
     private javax.swing.JPanel transmitterPanel;
     private javax.swing.JButton tuneComsButton;
+    private javax.swing.JPanel txVfoPanel;
     private javax.swing.JPanel verticalListPanel;
     private javax.swing.JTabbedPane vfoTabbedPane;
     private javax.swing.JSlider voxSlider;

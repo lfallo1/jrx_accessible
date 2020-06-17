@@ -58,7 +58,7 @@ public class ChannelChart {
         freqTable.setModel(model);
         tableScrollPane = new javax.swing.JScrollPane();
         tableScrollPane.setViewportView(freqTable);
-        appFrame.memoryPanel.add(tableScrollPane, "tableCard");
+        //appFrame.memoryPanel.add(tableScrollPane, "tableCard"); // COZ no longer exists.
         
     }
 
