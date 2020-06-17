@@ -54,7 +54,7 @@ final public class RWSlider extends JSlider implements MouseWheelListener, Chang
         setMajorTickSpacing(10);
         setMinorTickSpacing(5);
         setPaintTicks(true);
-        setPaintLabels(true);
+        //setPaintLabels(true); //Coz do not need value labels on a squelch or af gain control.
         setup(true);
 
     }

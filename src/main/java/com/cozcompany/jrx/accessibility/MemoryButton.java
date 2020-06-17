@@ -211,7 +211,7 @@ final public class MemoryButton extends JButton implements MouseListener {
         parent.memoryCollection.sv_mostRecentButton = label;
         filter = parent.sv_filtersComboBox.getSelectedIndex();
         mode = parent.sv_modesComboBox.getSelectedIndex();
-        frequency = parent.vfoDisplay.sv_freq;
+        frequency = parent.vfoDisplay.getFreq();
         ctcss = parent.sv_ctcssComboBox.getSelectedIndex();
         agc = parent.sv_agcComboBox.getSelectedIndex();
         preamp = parent.sv_preampComboBox.getSelectedIndex();
