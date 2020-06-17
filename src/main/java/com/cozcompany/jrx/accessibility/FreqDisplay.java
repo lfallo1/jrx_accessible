@@ -35,11 +35,11 @@ public class FreqDisplay extends JPanel implements HierarchyBoundsListener {
     
     
     
-    public FreqDisplay(JRX_TX aFrame, JPanel parent, Rectangle displaySpace ) {
+    public FreqDisplay(JRX_TX aFrame, JPanel parent) {
         digitsParent = parent;
         appFrame = aFrame;
-        space = displaySpace;
-        setBounds(displaySpace);
+        space = parent.getBounds();
+        setBounds(space);
     }
     
     public long getFreq() {
@@ -141,7 +141,7 @@ public class FreqDisplay extends JPanel implements HierarchyBoundsListener {
 
     
     private void adjustSize() {
-        int fontSize = (int) (digitsParent.getWidth() / 4.5);
+        int fontSize = (int) (digitsParent.getWidth() / 6.5);
         for (Component c : getComponents()) {
             float fs = ((FreqDigit) c).fontScale;
             Font font = new Font("Monospace", Font.PLAIN, (int) (fontSize * fs));
