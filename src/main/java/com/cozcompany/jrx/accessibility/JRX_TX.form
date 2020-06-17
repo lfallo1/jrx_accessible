@@ -39,7 +39,7 @@
           <Group type="102" alignment="0" attributes="0">
               <Component id="radioPanel" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="vfoTabbedPane" max="32767" attributes="0"/>
+              <Component id="vfoTabbedPane" min="-2" pref="161" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -113,6 +113,10 @@
                   <Rectangle value="[0, 0, 100, 100]"/>
                 </Property>
               </Properties>
+              <AccessibilityProperties>
+                <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="Operations Tab"/>
+                <Property name="AccessibleContext.accessibleDescription" type="java.lang.String" value="Vital transceiver controls"/>
+              </AccessibilityProperties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
                   <JTabbedPaneConstraints tabName="Operate Transceiver">
@@ -296,7 +300,7 @@
                 <Component class="javax.swing.JLabel" name="jLabel4">
                   <Properties>
                     <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
-                      <ComponentRef name="default"/>
+                      <ComponentRef name="svRfGainSlider"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="RF Gain"/>
                   </Properties>
@@ -380,10 +384,15 @@
                   <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
                   <SubComponents>
                     <Container class="javax.swing.JPanel" name="transmitterPanel">
+                      <AccessibilityProperties>
+                        <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="Transmitter "/>
+                        <Property name="AccessibleContext.accessibleDescription" type="java.lang.String" value="Set output power and mic gain"/>
+                      </AccessibilityProperties>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-                          <JTabbedPaneConstraints tabName="Transmitter">
+                          <JTabbedPaneConstraints tabName="Transmitter" toolTip="Important xmit controls and details.">
                             <Property name="tabTitle" type="java.lang.String" value="Transmitter"/>
+                            <Property name="tabToolTip" type="java.lang.String" value="Important xmit controls and details."/>
                           </JTabbedPaneConstraints>
                         </Constraint>
                       </Constraints>
@@ -554,6 +563,9 @@
                         </Component>
                         <Component class="javax.swing.JLabel" name="jLabel11">
                           <Properties>
+                            <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+                              <ComponentRef name="voxSlider"/>
+                            </Property>
                             <Property name="text" type="java.lang.String" value="VOX Level"/>
                           </Properties>
                         </Component>
@@ -624,6 +636,10 @@
                       </SubComponents>
                     </Container>
                     <Container class="javax.swing.JPanel" name="ifControlsPanel">
+                      <AccessibilityProperties>
+                        <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="I F Controls"/>
+                        <Property name="AccessibleContext.accessibleDescription" type="java.lang.String" value="Various dsp and receiver controls."/>
+                      </AccessibilityProperties>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
                           <JTabbedPaneConstraints tabName="I F Controls">
@@ -956,6 +972,10 @@
                       </SubComponents>
                     </Container>
                     <Container class="javax.swing.JPanel" name="noiseReductionPanel">
+                      <AccessibilityProperties>
+                        <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="Noise Reduction"/>
+                        <Property name="AccessibleContext.accessibleDescription" type="java.lang.String" value="R X Controls to reduce interference"/>
+                      </AccessibilityProperties>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
                           <JTabbedPaneConstraints tabName="Noise Reduction">
@@ -967,6 +987,10 @@
                       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout"/>
                     </Container>
                     <Container class="javax.swing.JPanel" name="keyerPanel">
+                      <AccessibilityProperties>
+                        <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="Keyer panel"/>
+                        <Property name="AccessibleContext.accessibleDescription" type="java.lang.String" value="Choose CW key parameters."/>
+                      </AccessibilityProperties>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
                           <JTabbedPaneConstraints tabName="Keyer">
@@ -977,7 +1001,11 @@
 
                       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout"/>
                     </Container>
-                    <Container class="javax.swing.JPanel" name="jPanel2">
+                    <Container class="javax.swing.JPanel" name="rttyPanel">
+                      <AccessibilityProperties>
+                        <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="RTTY"/>
+                        <Property name="AccessibleContext.accessibleDescription" type="java.lang.String" value="Radio Teletype settings and decode window."/>
+                      </AccessibilityProperties>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
                           <JTabbedPaneConstraints tabName="RTTY">
@@ -993,6 +1021,10 @@
               </SubComponents>
             </Container>
             <Container class="javax.swing.JPanel" name="scanPanel">
+              <AccessibilityProperties>
+                <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="Scan "/>
+                <Property name="AccessibleContext.accessibleDescription" type="java.lang.String" value="Software driven channel or increment receive scanner"/>
+              </AccessibilityProperties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
                   <JTabbedPaneConstraints tabName="Scan">
@@ -1069,6 +1101,10 @@
                         </Property>
                         <Property name="toolTipText" type="java.lang.String" value="Scan delay (&#x2743;)"/>
                       </Properties>
+                      <AccessibilityProperties>
+                        <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="Scan delay before restart scan"/>
+                        <Property name="AccessibleContext.accessibleDescription" type="java.lang.String" value="Scan delay when squelch opens"/>
+                      </AccessibilityProperties>
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new com.cozcompany.jrx.accessibility.RWComboBox(this,null,null);"/>
                         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
@@ -1092,6 +1128,9 @@
                         </Property>
                         <Property name="toolTipText" type="java.lang.String" value="Pause dwell time (&#x2743;)"/>
                       </Properties>
+                      <AccessibilityProperties>
+                        <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="Dwell time in seconds"/>
+                      </AccessibilityProperties>
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new com.cozcompany.jrx.accessibility.RWComboBox(this,null,null);"/>
                         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
@@ -1194,10 +1233,15 @@
                   <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
                   <SubComponents>
                     <Container class="javax.swing.JPanel" name="memoryStoragePanel">
+                      <AccessibilityProperties>
+                        <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="Memory Storage Tab"/>
+                        <Property name="AccessibleContext.accessibleDescription" type="java.lang.String" value="Settings are stored on the host computer."/>
+                      </AccessibilityProperties>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-                          <JTabbedPaneConstraints tabName="Memory ">
+                          <JTabbedPaneConstraints tabName="Memory " toolTip="Memory Storage ">
                             <Property name="tabTitle" type="java.lang.String" value="Memory "/>
+                            <Property name="tabToolTip" type="java.lang.String" value="Memory Storage "/>
                           </JTabbedPaneConstraints>
                         </Constraint>
                       </Constraints>
@@ -1208,7 +1252,7 @@
                               <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace min="-2" pref="90" max="-2" attributes="0"/>
                                   <Component id="buttonPanel2" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace pref="108" max="32767" attributes="0"/>
+                                  <EmptySpace pref="185" max="32767" attributes="0"/>
                               </Group>
                               <Component id="memoryScrollPane" alignment="0" max="32767" attributes="0"/>
                           </Group>
@@ -1315,20 +1359,6 @@
                                 </Constraint>
                               </Constraints>
                             </Component>
-                            <Component class="javax.swing.JButton" name="quitButton">
-                              <Properties>
-                                <Property name="text" type="java.lang.String" value="Quit"/>
-                                <Property name="toolTipText" type="java.lang.String" value="Exit JRX"/>
-                              </Properties>
-                              <Events>
-                                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="quitButtonMouseClicked"/>
-                              </Events>
-                              <Constraints>
-                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="5" gridY="0" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="1" insetsBottom="0" insetsRight="1" anchor="10" weightX="0.0" weightY="0.0"/>
-                                </Constraint>
-                              </Constraints>
-                            </Component>
                             <Component class="javax.swing.JButton" name="tuneComsButton">
                               <Properties>
                                 <Property name="text" type="java.lang.String" value="Conf"/>
@@ -1348,10 +1378,15 @@
                       </SubComponents>
                     </Container>
                     <Container class="javax.swing.JPanel" name="favoriteSWLChannels">
+                      <AccessibilityProperties>
+                        <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="Favorite SWL Channels"/>
+                        <Property name="AccessibleContext.accessibleDescription" type="java.lang.String" value="List selection can be used with scanner"/>
+                      </AccessibilityProperties>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-                          <JTabbedPaneConstraints tabName="Favorite SWL Channels">
+                          <JTabbedPaneConstraints tabName="Favorite SWL Channels" toolTip="A list of popular SWL frequencies">
                             <Property name="tabTitle" type="java.lang.String" value="Favorite SWL Channels"/>
+                            <Property name="tabToolTip" type="java.lang.String" value="A list of popular SWL frequencies"/>
                           </JTabbedPaneConstraints>
                         </Constraint>
                       </Constraints>
@@ -1363,6 +1398,10 @@
               </SubComponents>
             </Container>
             <Container class="javax.swing.JPanel" name="jrxScopePanel">
+              <AccessibilityProperties>
+                <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="Band scope "/>
+                <Property name="AccessibleContext.accessibleDescription" type="java.lang.String" value="Visual sweep display of selected band."/>
+              </AccessibilityProperties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
                   <JTabbedPaneConstraints tabName="Scope">
@@ -1785,34 +1824,52 @@
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
       <SubComponents>
         <Container class="javax.swing.JPanel" name="rxVfoPane">
+          <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="0" green="0" red="0" type="rgb"/>
+            </Property>
+          </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-              <JTabbedPaneConstraints tabName="RX VFO  146.670 Mhz">
+              <JTabbedPaneConstraints tabName="RX VFO  146.670 Mhz" toolTip="Receiver VFO control and display.  Use arrow keys to change values and traverse digits.">
                 <Property name="tabTitle" type="java.lang.String" value="RX VFO  146.670 Mhz"/>
+                <Property name="tabToolTip" type="java.lang.String" value="Receiver VFO control and display.  Use arrow keys to change values and traverse digits."/>
               </JTabbedPaneConstraints>
             </Constraint>
           </Constraints>
 
-          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout"/>
+          <Layout>
+            <DimensionLayout dim="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="digitsParent" min="-2" pref="659" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+            <DimensionLayout dim="1">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="digitsParent" min="-2" pref="101" max="-2" attributes="0"/>
+                      <EmptySpace pref="8" max="32767" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+          </Layout>
           <SubComponents>
-            <Container class="javax.swing.JPanel" name="signalPanel">
+            <Container class="javax.swing.JPanel" name="digitsParent">
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout"/>
-              <SubComponents>
-                <Container class="javax.swing.JPanel" name="digitsParent">
-                  <Constraints>
-                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                      <GridBagConstraints gridX="0" gridY="1" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="11" weightX="1.0" weightY="1.0"/>
-                    </Constraint>
-                  </Constraints>
-
-                  <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout"/>
-                </Container>
-              </SubComponents>
             </Container>
           </SubComponents>
         </Container>
         <Container class="javax.swing.JPanel" name="txVfoPanel">
+          <AccessibilityProperties>
+            <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="TX V F O display and control"/>
+            <Property name="AccessibleContext.accessibleDescription" type="java.lang.String" value="Use arrow keys to change value or traverse digits."/>
+          </AccessibilityProperties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
               <JTabbedPaneConstraints tabName="TX VFO 146.070 Mhz">
@@ -1829,7 +1886,7 @@
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="145" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="115" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
