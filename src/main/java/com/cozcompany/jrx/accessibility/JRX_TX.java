@@ -1182,63 +1182,13 @@ final public class JRX_TX extends javax.swing.JFrame implements
         java.awt.GridBagConstraints gridBagConstraints;
 
         jrxRadioButtonGroup = new javax.swing.ButtonGroup();
-        radioPanel = new javax.swing.JPanel();
-        receiverPanel = new javax.swing.JPanel();
-        listPanel = new javax.swing.JPanel();
-        buttonPanel5 = new javax.swing.JPanel();
-        sv_radioNamesComboBox = new javax.swing.JComboBox<>();
-        speedIconLabel = new javax.swing.JLabel();
-        comErrorIconLabel = new javax.swing.JLabel();
-        dcdIconLabel = new javax.swing.JLabel();
-        buttonPanel4 = new javax.swing.JPanel();
-        sv_interfacesComboBox = new javax.swing.JComboBox<>();
-        sv_antennaComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,"Y","");
-        sv_synthSquelchCheckBox = new RWCheckBox(this,null,null);
-        buttonPanel1 = new javax.swing.JPanel();
-        sv_filtersComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,"F","");
-        sv_ctcssComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,"ctcss","");
-        sv_attenuatorComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,"L","ATT");
-        buttonPanel3 = new javax.swing.JPanel();
-        sv_modesComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,"M","");
-        sv_agcComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,"L","AGC");
-        sv_dspComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,"L","NR");
-        buttonPanel6 = new javax.swing.JPanel();
-        sv_rfGainComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,"L","RF");
-        sv_ifShiftComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,"L","IF");
-        sv_preampComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,"L","PREAMP");
-        buttonPanel2 = new javax.swing.JPanel();
-        copyMemButton = new javax.swing.JButton();
-        pasteMemButton = new javax.swing.JButton();
-        eraseMemButton = new javax.swing.JButton();
-        helpButton = new javax.swing.JButton();
-        quitButton = new javax.swing.JButton();
-        tuneComsButton = new javax.swing.JButton();
-        verticalListPanel = new javax.swing.JPanel();
-        sv_rawSigCheckBox = new RWCheckBox(this,null,null);
-        sv_blankerCheckBox = new RWCheckBox(this,"U","NB");
-        sv_apfCheckBox = new RWCheckBox(this,"U","APF");
-        sv_anfCheckBox = new RWCheckBox(this,"U","ANF");
-        sv_ctcssCheckBox = new RWCheckBox(this,"U","TSQL");
-        sv_dspCheckBox = new RWCheckBox(this,"U","NR");
-        signalPanel = new javax.swing.JPanel();
-        signalProgressBar = new javax.swing.JProgressBar();
-        digitsParent = new javax.swing.JPanel();
-        scannerPanel = new javax.swing.JPanel();
-        sv_scanStepComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,null,null);
-        sv_scanSpeedComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,null,null);
-        sv_dwellTimeComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,null,null);
-        scanDownButton = new javax.swing.JButton();
-        scanStopButton = new javax.swing.JButton();
-        scanUpButton = new javax.swing.JButton();
-        sv_squelchCheckBox = new RWCheckBox(this,null,null);
-        scanTypeLabel = new javax.swing.JLabel();
-        scanIconLabel = new javax.swing.JLabel();
-        sliderPanel = new javax.swing.JPanel();
-        sv_volumeSlider = new com.cozcompany.jrx.accessibility.RWSlider(this,"L","AF",20);
-        sv_squelchSlider = new com.cozcompany.jrx.accessibility.RWSlider(this,"L","SQL",0);
-        memoryPanel = new javax.swing.JPanel();
+        button_bar = new javax.swing.JPanel();
+        radioMemoryButton = new javax.swing.JButton();
+        radioListButton = new javax.swing.JButton();
         memoryScrollPane = new javax.swing.JScrollPane();
         memoryButtonsPanel = new javax.swing.JPanel();
+        radioScannerButton = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
         scopePanel = new javax.swing.JPanel();
         scopeDisplayPanel = new SweepScope(this);
         scopeControlPanel = new javax.swing.JPanel();
@@ -1259,611 +1209,123 @@ final public class JRX_TX extends javax.swing.JFrame implements
         sv_timerIntervalComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,null,null);
         jLabel2 = new javax.swing.JLabel();
         sv_volumeExitCheckBox = new javax.swing.JCheckBox();
-        button_bar = new javax.swing.JPanel();
-        radioMemoryButton = new javax.swing.JButton();
-        radioListButton = new javax.swing.JButton();
-        radioScannerButton = new javax.swing.JButton();
+        receiverPanel = new javax.swing.JPanel();
+        signalPanel = new javax.swing.JPanel();
+        digitsParent = new javax.swing.JPanel();
+        sliderPanel = new javax.swing.JPanel();
+        memoryPanel = new javax.swing.JPanel();
+        buttonPanel2 = new javax.swing.JPanel();
+        copyMemButton = new javax.swing.JButton();
+        pasteMemButton = new javax.swing.JButton();
+        eraseMemButton = new javax.swing.JButton();
+        helpButton = new javax.swing.JButton();
+        quitButton = new javax.swing.JButton();
+        tuneComsButton = new javax.swing.JButton();
+        sv_interfacesComboBox = new javax.swing.JComboBox<>();
+        sv_antennaComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,"Y","");
+        sv_filtersComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,"F","");
+        sv_attenuatorComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,"L","ATT");
+        sv_dspComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,"L","NR");
+        sv_rfGainComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,"L","RF");
+        sv_ifShiftComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,"L","IF");
+        sv_preampComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,"L","PREAMP");
+        radioPanel = new javax.swing.JPanel();
+        overallTabbedPane = new javax.swing.JTabbedPane();
+        operateTransceiverPanel = new javax.swing.JPanel();
+        sv_squelchSlider = new com.cozcompany.jrx.accessibility.RWSlider(this,"L","SQL",0);
+        sv_volumeSlider = new com.cozcompany.jrx.accessibility.RWSlider(this,"L","AF",20);
+        sv_ctcssComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,"ctcss","");
+        sv_synthSquelchCheckBox = new RWCheckBox(this,null,null);
+        jLabel3 = new javax.swing.JLabel();
+        ctcssLabel = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        svRfGainSlider = new javax.swing.JSlider();
+        jLabel5 = new javax.swing.JLabel();
+        sv_modesComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,"M","");
+        jLabel6 = new javax.swing.JLabel();
+        sv_agcComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,"L","AGC");
+        jLabel7 = new javax.swing.JLabel();
+        jCheckBox1 = new javax.swing.JCheckBox();
+        operationDetailsTabbedPane = new javax.swing.JTabbedPane();
+        transmitterPanel = new javax.swing.JPanel();
+        rfPowerOutputSlider = new javax.swing.JSlider();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        micGainSlider = new javax.swing.JSlider();
+        compressionSlider = new javax.swing.JSlider();
+        jLabel10 = new javax.swing.JLabel();
+        voxSlider = new javax.swing.JSlider();
+        jLabel11 = new javax.swing.JLabel();
+        jCheckBox2 = new javax.swing.JCheckBox();
+        jCheckBox3 = new javax.swing.JCheckBox();
+        toneSelectionComboBox = new javax.swing.JComboBox<>();
+        jLabel12 = new javax.swing.JLabel();
+        ifControlsPanel = new javax.swing.JPanel();
+        verticalListPanel = new javax.swing.JPanel();
+        sv_rawSigCheckBox = new RWCheckBox(this,null,null);
+        sv_blankerCheckBox = new RWCheckBox(this,"U","NB");
+        sv_apfCheckBox = new RWCheckBox(this,"U","APF");
+        sv_anfCheckBox = new RWCheckBox(this,"U","ANF");
+        sv_ctcssCheckBox = new RWCheckBox(this,"U","TSQL");
+        sv_dspCheckBox = new RWCheckBox(this,"U","NR");
+        noiseReductionPanel = new javax.swing.JPanel();
+        keyerPanel = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        scanPanel = new javax.swing.JPanel();
+        scannerPanel = new javax.swing.JPanel();
+        sv_scanStepComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,null,null);
+        sv_scanSpeedComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,null,null);
+        sv_dwellTimeComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,null,null);
+        scanDownButton = new javax.swing.JButton();
+        scanStopButton = new javax.swing.JButton();
+        scanUpButton = new javax.swing.JButton();
+        sv_squelchCheckBox = new RWCheckBox(this,null,null);
+        scanTypeLabel = new javax.swing.JLabel();
+        scanIconLabel = new javax.swing.JLabel();
+        jrxScopePanel = new javax.swing.JPanel();
+        sv_radioNamesComboBox = new javax.swing.JComboBox<>();
+        ledPanel = new javax.swing.JPanel();
+        speedIconLabel = new javax.swing.JLabel();
+        comErrorIconLabel = new javax.swing.JLabel();
+        dcdIconLabel = new javax.swing.JLabel();
+        radioNamesLabel = new javax.swing.JLabel();
+        signalProgressBar = new javax.swing.JProgressBar();
+        vfoTabbedPane = new javax.swing.JTabbedPane();
+        rxVfoPane = new javax.swing.JPanel();
+        jPanel3 = new javax.swing.JPanel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosing(java.awt.event.WindowEvent evt) {
-                formWindowClosing(evt);
-            }
-        });
-
-        radioPanel.setLayout(new java.awt.CardLayout());
-
-        receiverPanel.setLayout(new java.awt.GridBagLayout());
-
-        listPanel.setLayout(new java.awt.GridBagLayout());
-
-        buttonPanel5.setOpaque(false);
-        buttonPanel5.setLayout(new java.awt.GridBagLayout());
-
-        sv_radioNamesComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        sv_radioNamesComboBox.setToolTipText("Available radio manufacturers and models");
-        sv_radioNamesComboBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                sv_radioNamesComboBoxActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 1, 0, 1);
-        buttonPanel5.add(sv_radioNamesComboBox, gridBagConstraints);
-
-        speedIconLabel.setText("Speed Icon");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 2);
-        buttonPanel5.add(speedIconLabel, gridBagConstraints);
-
-        comErrorIconLabel.setText("Error Icon");
-        comErrorIconLabel.setToolTipText("Red indicates communications error");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 2);
-        buttonPanel5.add(comErrorIconLabel, gridBagConstraints);
-
-        dcdIconLabel.setText("DCD Icon");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 2);
-        buttonPanel5.add(dcdIconLabel, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        listPanel.add(buttonPanel5, gridBagConstraints);
-
-        buttonPanel4.setOpaque(false);
-        buttonPanel4.setLayout(new java.awt.GridBagLayout());
-
-        sv_interfacesComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        sv_interfacesComboBox.setToolTipText("Available communication interfaces");
-        sv_interfacesComboBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                sv_interfacesComboBoxActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 1, 0, 1);
-        buttonPanel4.add(sv_interfacesComboBox, gridBagConstraints);
-
-        sv_antennaComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        sv_antennaComboBox.setToolTipText("Available antennas (❃)");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 1, 0, 1);
-        buttonPanel4.add(sv_antennaComboBox, gridBagConstraints);
-
-        sv_synthSquelchCheckBox.setText("Squelch");
-        sv_synthSquelchCheckBox.setToolTipText("Use JRX squelch scheme");
-        sv_synthSquelchCheckBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                sv_synthSquelchCheckBoxActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 2);
-        buttonPanel4.add(sv_synthSquelchCheckBox, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        listPanel.add(buttonPanel4, gridBagConstraints);
-
-        buttonPanel1.setOpaque(false);
-        buttonPanel1.setLayout(new java.awt.GridBagLayout());
-
-        sv_filtersComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        sv_filtersComboBox.setToolTipText("Bandwidth filters (❃)\n");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 1, 0, 1);
-        buttonPanel1.add(sv_filtersComboBox, gridBagConstraints);
-
-        sv_ctcssComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        sv_ctcssComboBox.setToolTipText("CTCSS tone squelch frequencies (❃)");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 1, 0, 1);
-        buttonPanel1.add(sv_ctcssComboBox, gridBagConstraints);
-
-        sv_attenuatorComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        sv_attenuatorComboBox.setToolTipText("Input attenuator (❃)");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 1, 0, 1);
-        buttonPanel1.add(sv_attenuatorComboBox, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        listPanel.add(buttonPanel1, gridBagConstraints);
-
-        buttonPanel3.setOpaque(false);
-        buttonPanel3.setLayout(new java.awt.GridBagLayout());
-
-        sv_modesComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        sv_modesComboBox.setToolTipText("Operating modes (❃)");
-        sv_modesComboBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                sv_modesComboBoxActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 1, 0, 1);
-        buttonPanel3.add(sv_modesComboBox, gridBagConstraints);
-
-        sv_agcComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        sv_agcComboBox.setToolTipText("AGC setting (❃)");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 1, 0, 1);
-        buttonPanel3.add(sv_agcComboBox, gridBagConstraints);
-
-        sv_dspComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        sv_dspComboBox.setToolTipText("DSP Noise Reduction (❃)");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 1, 0, 1);
-        buttonPanel3.add(sv_dspComboBox, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        listPanel.add(buttonPanel3, gridBagConstraints);
-
-        buttonPanel6.setOpaque(false);
-        buttonPanel6.setLayout(new java.awt.GridBagLayout());
-
-        sv_rfGainComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        sv_rfGainComboBox.setToolTipText("RF Gain (❃)");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 1, 0, 1);
-        buttonPanel6.add(sv_rfGainComboBox, gridBagConstraints);
-
-        sv_ifShiftComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        sv_ifShiftComboBox.setToolTipText("IF Shift (❃)");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 1, 0, 1);
-        buttonPanel6.add(sv_ifShiftComboBox, gridBagConstraints);
-
-        sv_preampComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        sv_preampComboBox.setToolTipText("Preamp setting (❃)");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 1, 0, 1);
-        buttonPanel6.add(sv_preampComboBox, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        listPanel.add(buttonPanel6, gridBagConstraints);
-
-        buttonPanel2.setOpaque(false);
-        buttonPanel2.setLayout(new java.awt.GridBagLayout());
-
-        copyMemButton.setText("CM");
-        copyMemButton.setToolTipText("Copy JRX memory buttons to clipboard");
-        copyMemButton.addMouseListener(new java.awt.event.MouseAdapter() {
+        radioMemoryButton.setText("Radio:Buttons");
+        radioMemoryButton.setToolTipText("Show memory buttons");
+        radioMemoryButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                copyMemButtonMouseClicked(evt);
+                radioMemoryButtonMouseClicked(evt);
             }
         });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 1, 0, 1);
-        buttonPanel2.add(copyMemButton, gridBagConstraints);
+        button_bar.add(radioMemoryButton);
 
-        pasteMemButton.setText("PM");
-        pasteMemButton.setToolTipText("Paste JRX memory buttons from clipboard");
-        pasteMemButton.addMouseListener(new java.awt.event.MouseAdapter() {
+        radioListButton.setText("Radio:List");
+        radioListButton.setToolTipText("Show frequency list");
+        radioListButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                pasteMemButtonMouseClicked(evt);
+                radioListButtonMouseClicked(evt);
             }
         });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 1, 0, 1);
-        buttonPanel2.add(pasteMemButton, gridBagConstraints);
-
-        eraseMemButton.setText("EM");
-        eraseMemButton.setToolTipText("Erase all JRX memory buttons");
-        eraseMemButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                eraseMemButtonMouseClicked(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 1, 0, 1);
-        buttonPanel2.add(eraseMemButton, gridBagConstraints);
-
-        helpButton.setText("HELP");
-        helpButton.setToolTipText("Visit the JRX Home Page");
-        helpButton.setActionCommand("Help");
-        helpButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                helpButtonMouseClicked(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 1, 0, 1);
-        buttonPanel2.add(helpButton, gridBagConstraints);
-
-        quitButton.setText("Quit");
-        quitButton.setToolTipText("Exit JRX");
-        quitButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                quitButtonMouseClicked(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 1, 0, 1);
-        buttonPanel2.add(quitButton, gridBagConstraints);
-
-        tuneComsButton.setText("Conf");
-        tuneComsButton.setToolTipText("Configure Hamlib communications");
-        tuneComsButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tuneComsButtonMouseClicked(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 1, 0, 1);
-        buttonPanel2.add(tuneComsButton, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        listPanel.add(buttonPanel2, gridBagConstraints);
-
-        verticalListPanel.setOpaque(false);
-        verticalListPanel.setLayout(new java.awt.GridBagLayout());
-
-        sv_rawSigCheckBox.setText("Raw");
-        sv_rawSigCheckBox.setToolTipText("<html>Use unconverted signal<br/>strength readings");
-        sv_rawSigCheckBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                sv_rawSigCheckBoxActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 2);
-        verticalListPanel.add(sv_rawSigCheckBox, gridBagConstraints);
-
-        sv_blankerCheckBox.setText("NB");
-        sv_blankerCheckBox.setToolTipText("<html>Noise Blanker -- reduces<br/>some kinds of noise");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 1, 0, 1);
-        verticalListPanel.add(sv_blankerCheckBox, gridBagConstraints);
-
-        sv_apfCheckBox.setText("APF");
-        sv_apfCheckBox.setToolTipText("Automatic Peak Filter");
-        sv_apfCheckBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                sv_apfCheckBoxActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        verticalListPanel.add(sv_apfCheckBox, gridBagConstraints);
-
-        sv_anfCheckBox.setText("ANF");
-        sv_anfCheckBox.setToolTipText("Automatic Notch Filter");
-        sv_anfCheckBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                sv_anfCheckBoxActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        verticalListPanel.add(sv_anfCheckBox, gridBagConstraints);
-
-        sv_ctcssCheckBox.setText("CTCSS");
-        sv_ctcssCheckBox.setToolTipText("Tone squelch control");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 1, 0, 1);
-        verticalListPanel.add(sv_ctcssCheckBox, gridBagConstraints);
-
-        sv_dspCheckBox.setText("DSP");
-        sv_dspCheckBox.setToolTipText("Digital signal processing");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        verticalListPanel.add(sv_dspCheckBox, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridheight = 6;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
-        listPanel.add(verticalListPanel, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 0, 1);
-        receiverPanel.add(listPanel, gridBagConstraints);
-
-        signalPanel.setLayout(new java.awt.GridBagLayout());
-
-        signalProgressBar.setMaximum(20);
-        signalProgressBar.setMinimum(-50);
-        signalProgressBar.setValue(-50);
-        signalProgressBar.setStringPainted(true);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-        gridBagConstraints.weightx = 1.0;
-        signalPanel.add(signalProgressBar, gridBagConstraints);
-
-        digitsParent.setLayout(new java.awt.GridBagLayout());
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        signalPanel.add(digitsParent, gridBagConstraints);
-
-        scannerPanel.setLayout(new java.awt.GridBagLayout());
-
-        sv_scanStepComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        sv_scanStepComboBox.setToolTipText("Scan frequency step size (❃)");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        scannerPanel.add(sv_scanStepComboBox, gridBagConstraints);
-
-        sv_scanSpeedComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        sv_scanSpeedComboBox.setToolTipText("Scan delay (❃)");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        scannerPanel.add(sv_scanSpeedComboBox, gridBagConstraints);
-
-        sv_dwellTimeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        sv_dwellTimeComboBox.setToolTipText("Pause dwell time (❃)");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        scannerPanel.add(sv_dwellTimeComboBox, gridBagConstraints);
-
-        scanDownButton.setText("<-");
-        scanDownButton.setToolTipText("Scan down");
-        scanDownButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                scanDownButtonMouseClicked(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        scannerPanel.add(scanDownButton, gridBagConstraints);
-
-        scanStopButton.setText("Stop");
-        scanStopButton.setToolTipText("Halt scan");
-        scanStopButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                scanStopButtonMouseClicked(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        scannerPanel.add(scanStopButton, gridBagConstraints);
-
-        scanUpButton.setText("->");
-        scanUpButton.setToolTipText("Scan up");
-        scanUpButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                scanUpButtonMouseClicked(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 1;
-        scannerPanel.add(scanUpButton, gridBagConstraints);
-
-        sv_squelchCheckBox.setSelected(true);
-        sv_squelchCheckBox.setText("Squelch");
-        sv_squelchCheckBox.setToolTipText("Pause on squelch active");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 2;
-        scannerPanel.add(sv_squelchCheckBox, gridBagConstraints);
-
-        scanTypeLabel.setText("Scan");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 4);
-        scannerPanel.add(scanTypeLabel, gridBagConstraints);
-
-        scanIconLabel.setText("x");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 4);
-        scannerPanel.add(scanIconLabel, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        signalPanel.add(scannerPanel, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 0, 0);
-        receiverPanel.add(signalPanel, gridBagConstraints);
-
-        sliderPanel.setLayout(new java.awt.GridBagLayout());
-
-        sv_volumeSlider.setToolTipText("Audio Gain (❃)");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 4);
-        sliderPanel.add(sv_volumeSlider, gridBagConstraints);
-
-        sv_squelchSlider.setToolTipText("Squelch (❃)\n");
-        sv_squelchSlider.setValue(0);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 4);
-        sliderPanel.add(sv_squelchSlider, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 8;
-        gridBagConstraints.ipady = 8;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 0, 1);
-        receiverPanel.add(sliderPanel, gridBagConstraints);
-
-        memoryPanel.setLayout(new java.awt.CardLayout());
+        button_bar.add(radioListButton);
 
         memoryButtonsPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
         memoryButtonsPanel.setLayout(new java.awt.GridLayout(1, 0));
         memoryScrollPane.setViewportView(memoryButtonsPanel);
 
-        memoryPanel.add(memoryScrollPane, "memoryCard");
+        button_bar.add(memoryScrollPane);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 0.1;
-        receiverPanel.add(memoryPanel, gridBagConstraints);
-
-        radioPanel.add(receiverPanel, "receiverCard");
+        radioScannerButton.setText("Scope/Setup");
+        radioScannerButton.setToolTipText("Show spectrum scope and setup controls");
+        radioScannerButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                radioScannerButtonMouseClicked(evt);
+            }
+        });
+        button_bar.add(radioScannerButton);
 
         scopePanel.setLayout(new java.awt.BorderLayout());
         scopePanel.add(scopeDisplayPanel, java.awt.BorderLayout.CENTER);
@@ -2072,38 +1534,705 @@ final public class JRX_TX extends javax.swing.JFrame implements
 
         scopePanel.add(scopeControlPanel, java.awt.BorderLayout.SOUTH);
 
-        radioPanel.add(scopePanel, "scopeCard");
+        signalPanel.setLayout(new java.awt.GridBagLayout());
 
-        getContentPane().add(radioPanel, java.awt.BorderLayout.CENTER);
+        digitsParent.setLayout(new java.awt.GridBagLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        signalPanel.add(digitsParent, gridBagConstraints);
 
-        radioMemoryButton.setText("Radio:Buttons");
-        radioMemoryButton.setToolTipText("Show memory buttons");
-        radioMemoryButton.addMouseListener(new java.awt.event.MouseAdapter() {
+        sliderPanel.setLayout(new java.awt.GridBagLayout());
+
+        memoryPanel.setLayout(new java.awt.CardLayout());
+
+        javax.swing.GroupLayout receiverPanelLayout = new javax.swing.GroupLayout(receiverPanel);
+        receiverPanel.setLayout(receiverPanelLayout);
+        receiverPanelLayout.setHorizontalGroup(
+            receiverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(receiverPanelLayout.createSequentialGroup()
+                .addGap(920, 920, 920)
+                .addComponent(memoryPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(842, 842, 842)
+                .addGroup(receiverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(signalPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 779, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(receiverPanelLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(sliderPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 778, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))))
+        );
+        receiverPanelLayout.setVerticalGroup(
+            receiverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(receiverPanelLayout.createSequentialGroup()
+                .addGap(2, 2, 2)
+                .addComponent(signalPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26)
+                .addComponent(sliderPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(receiverPanelLayout.createSequentialGroup()
+                .addComponent(memoryPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+
+        buttonPanel2.setOpaque(false);
+        buttonPanel2.setLayout(new java.awt.GridBagLayout());
+
+        copyMemButton.setText("CM");
+        copyMemButton.setToolTipText("Copy JRX memory buttons to clipboard");
+        copyMemButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                radioMemoryButtonMouseClicked(evt);
+                copyMemButtonMouseClicked(evt);
             }
         });
-        button_bar.add(radioMemoryButton);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 1, 0, 1);
+        buttonPanel2.add(copyMemButton, gridBagConstraints);
 
-        radioListButton.setText("Radio:List");
-        radioListButton.setToolTipText("Show frequency list");
-        radioListButton.addMouseListener(new java.awt.event.MouseAdapter() {
+        pasteMemButton.setText("PM");
+        pasteMemButton.setToolTipText("Paste JRX memory buttons from clipboard");
+        pasteMemButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                radioListButtonMouseClicked(evt);
+                pasteMemButtonMouseClicked(evt);
             }
         });
-        button_bar.add(radioListButton);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 1, 0, 1);
+        buttonPanel2.add(pasteMemButton, gridBagConstraints);
 
-        radioScannerButton.setText("Scope/Setup");
-        radioScannerButton.setToolTipText("Show spectrum scope and setup controls");
-        radioScannerButton.addMouseListener(new java.awt.event.MouseAdapter() {
+        eraseMemButton.setText("EM");
+        eraseMemButton.setToolTipText("Erase all JRX memory buttons");
+        eraseMemButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                radioScannerButtonMouseClicked(evt);
+                eraseMemButtonMouseClicked(evt);
             }
         });
-        button_bar.add(radioScannerButton);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 1, 0, 1);
+        buttonPanel2.add(eraseMemButton, gridBagConstraints);
 
-        getContentPane().add(button_bar, java.awt.BorderLayout.PAGE_END);
+        helpButton.setText("HELP");
+        helpButton.setToolTipText("Visit the JRX Home Page");
+        helpButton.setActionCommand("Help");
+        helpButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                helpButtonMouseClicked(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 1, 0, 1);
+        buttonPanel2.add(helpButton, gridBagConstraints);
+
+        quitButton.setText("Quit");
+        quitButton.setToolTipText("Exit JRX");
+        quitButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                quitButtonMouseClicked(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 1, 0, 1);
+        buttonPanel2.add(quitButton, gridBagConstraints);
+
+        tuneComsButton.setText("Conf");
+        tuneComsButton.setToolTipText("Configure Hamlib communications");
+        tuneComsButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tuneComsButtonMouseClicked(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 1, 0, 1);
+        buttonPanel2.add(tuneComsButton, gridBagConstraints);
+
+        sv_interfacesComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        sv_interfacesComboBox.setToolTipText("Available communication interfaces");
+        sv_interfacesComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sv_interfacesComboBoxActionPerformed(evt);
+            }
+        });
+
+        sv_antennaComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        sv_antennaComboBox.setToolTipText("Available antennas (❃)");
+
+        sv_filtersComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        sv_filtersComboBox.setToolTipText("Bandwidth filters (❃)\n");
+
+        sv_attenuatorComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        sv_attenuatorComboBox.setToolTipText("Input attenuator (❃)");
+
+        sv_dspComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        sv_dspComboBox.setToolTipText("DSP Noise Reduction (❃)");
+
+        sv_rfGainComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        sv_rfGainComboBox.setToolTipText("RF Gain (❃)");
+
+        sv_ifShiftComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        sv_ifShiftComboBox.setToolTipText("IF Shift (❃)");
+
+        sv_preampComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        sv_preampComboBox.setToolTipText("Preamp setting (❃)");
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
+
+        overallTabbedPane.setMinimumSize(new java.awt.Dimension(100, 400));
+
+        operateTransceiverPanel.setBounds(new java.awt.Rectangle(0, 0, 100, 100));
+
+        sv_squelchSlider.setMajorTickSpacing(10);
+        sv_squelchSlider.setMinorTickSpacing(5);
+        sv_squelchSlider.setPaintTicks(true);
+        sv_squelchSlider.setToolTipText("Squelch (❃)\n");
+        sv_squelchSlider.setValue(0);
+
+        sv_volumeSlider.setMajorTickSpacing(10);
+        sv_volumeSlider.setMinorTickSpacing(5);
+        sv_volumeSlider.setPaintTicks(true);
+        sv_volumeSlider.setToolTipText("Audio Gain (❃)");
+
+        sv_ctcssComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        sv_ctcssComboBox.setToolTipText("CTCSS tone squelch frequencies (❃)");
+
+        sv_synthSquelchCheckBox.setText("Squelch");
+        sv_synthSquelchCheckBox.setToolTipText("Use JRX squelch scheme");
+        sv_synthSquelchCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sv_synthSquelchCheckBoxActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("AF Gain");
+
+        ctcssLabel.setLabelFor(sv_ctcssComboBox);
+        ctcssLabel.setText("CTCSS");
+
+        jLabel4.setLabelFor(sv_rfGainComboBox);
+        jLabel4.setText("RF Gain");
+
+        svRfGainSlider.setMajorTickSpacing(10);
+        svRfGainSlider.setMinorTickSpacing(5);
+        svRfGainSlider.setPaintTicks(true);
+
+        jLabel5.setText("Squelch");
+
+        sv_modesComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        sv_modesComboBox.setToolTipText("Operating modes (❃)");
+        sv_modesComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sv_modesComboBoxActionPerformed(evt);
+            }
+        });
+
+        jLabel6.setLabelFor(sv_modesComboBox);
+        jLabel6.setText("MODE");
+
+        sv_agcComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        sv_agcComboBox.setToolTipText("AGC setting (❃)");
+        sv_agcComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sv_agcComboBoxActionPerformed(evt);
+            }
+        });
+
+        jLabel7.setLabelFor(sv_agcComboBox);
+        jLabel7.setText("AGC");
+
+        jCheckBox1.setText("Mute");
+
+        rfPowerOutputSlider.setMajorTickSpacing(10);
+        rfPowerOutputSlider.setMinorTickSpacing(5);
+        rfPowerOutputSlider.setPaintLabels(true);
+        rfPowerOutputSlider.setPaintTicks(true);
+
+        jLabel8.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
+        jLabel8.setLabelFor(rfPowerOutputSlider);
+        jLabel8.setText("RF Power Output");
+
+        jLabel9.setLabelFor(micGainSlider);
+        jLabel9.setText("MIC GAIN");
+
+        micGainSlider.setMajorTickSpacing(10);
+        micGainSlider.setMinorTickSpacing(5);
+        micGainSlider.setPaintTicks(true);
+
+        compressionSlider.setMajorTickSpacing(10);
+        compressionSlider.setMinorTickSpacing(5);
+        compressionSlider.setPaintTicks(true);
+
+        jLabel10.setLabelFor(compressionSlider);
+        jLabel10.setText("Compression");
+
+        voxSlider.setMajorTickSpacing(10);
+        voxSlider.setMinorTickSpacing(5);
+        voxSlider.setPaintTicks(true);
+
+        jLabel11.setText("VOX Level");
+
+        jCheckBox2.setText("Enable Compressor");
+
+        jCheckBox3.setText("Enable VOX");
+
+        toneSelectionComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        jLabel12.setText("Tone Selection");
+
+        javax.swing.GroupLayout transmitterPanelLayout = new javax.swing.GroupLayout(transmitterPanel);
+        transmitterPanel.setLayout(transmitterPanelLayout);
+        transmitterPanelLayout.setHorizontalGroup(
+            transmitterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(transmitterPanelLayout.createSequentialGroup()
+                .addGroup(transmitterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(transmitterPanelLayout.createSequentialGroup()
+                        .addGroup(transmitterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(micGainSlider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(compressionSlider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(voxSlider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addGroup(transmitterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(transmitterPanelLayout.createSequentialGroup()
+                                .addGroup(transmitterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel10)
+                                    .addComponent(jLabel11))
+                                .addGap(18, 18, 18)
+                                .addGroup(transmitterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jCheckBox3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jCheckBox2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addGroup(transmitterPanelLayout.createSequentialGroup()
+                                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(66, 66, 66)
+                                .addComponent(toneSelectionComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))))
+                    .addGroup(transmitterPanelLayout.createSequentialGroup()
+                        .addGap(145, 145, 145)
+                        .addComponent(rfPowerOutputSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(5, 5, 5)
+                        .addComponent(jLabel8)))
+                .addGap(212, 212, 212))
+        );
+        transmitterPanelLayout.setVerticalGroup(
+            transmitterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(transmitterPanelLayout.createSequentialGroup()
+                .addGap(5, 5, 5)
+                .addGroup(transmitterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(rfPowerOutputSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8))
+                .addGap(16, 16, 16)
+                .addGroup(transmitterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(transmitterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE)
+                        .addComponent(toneSelectionComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel12))
+                    .addComponent(micGainSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(transmitterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(compressionSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(transmitterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel10)
+                        .addComponent(jCheckBox2)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(transmitterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(voxSlider, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel11)
+                    .addComponent(jCheckBox3))
+                .addContainerGap(168, Short.MAX_VALUE))
+        );
+
+        transmitterPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel8, rfPowerOutputSlider});
+
+        transmitterPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {compressionSlider, jCheckBox2, jLabel10});
+
+        transmitterPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jCheckBox3, jLabel11, voxSlider});
+
+        transmitterPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel12, jLabel9, toneSelectionComboBox});
+
+        operationDetailsTabbedPane.addTab("Transmitter", transmitterPanel);
+
+        verticalListPanel.setOpaque(false);
+
+        sv_rawSigCheckBox.setText("Raw");
+        sv_rawSigCheckBox.setToolTipText("<html>Use unconverted signal<br/>strength readings");
+        sv_rawSigCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sv_rawSigCheckBoxActionPerformed(evt);
+            }
+        });
+
+        sv_blankerCheckBox.setText("NB");
+        sv_blankerCheckBox.setToolTipText("<html>Noise Blanker -- reduces<br/>some kinds of noise");
+
+        sv_apfCheckBox.setText("APF");
+        sv_apfCheckBox.setToolTipText("Automatic Peak Filter");
+        sv_apfCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sv_apfCheckBoxActionPerformed(evt);
+            }
+        });
+
+        sv_anfCheckBox.setText("ANF");
+        sv_anfCheckBox.setToolTipText("Automatic Notch Filter");
+        sv_anfCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sv_anfCheckBoxActionPerformed(evt);
+            }
+        });
+
+        sv_ctcssCheckBox.setText("CTCSS");
+        sv_ctcssCheckBox.setToolTipText("Tone squelch control");
+
+        sv_dspCheckBox.setText("DSP");
+        sv_dspCheckBox.setToolTipText("Digital signal processing");
+
+        javax.swing.GroupLayout verticalListPanelLayout = new javax.swing.GroupLayout(verticalListPanel);
+        verticalListPanel.setLayout(verticalListPanelLayout);
+        verticalListPanelLayout.setHorizontalGroup(
+            verticalListPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(verticalListPanelLayout.createSequentialGroup()
+                .addGap(2, 2, 2)
+                .addComponent(sv_rawSigCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(verticalListPanelLayout.createSequentialGroup()
+                .addGap(1, 1, 1)
+                .addComponent(sv_blankerCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(verticalListPanelLayout.createSequentialGroup()
+                .addGap(1, 1, 1)
+                .addComponent(sv_ctcssCheckBox))
+            .addComponent(sv_dspCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(sv_apfCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(sv_anfCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+        verticalListPanelLayout.setVerticalGroup(
+            verticalListPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(verticalListPanelLayout.createSequentialGroup()
+                .addComponent(sv_rawSigCheckBox)
+                .addGap(0, 0, 0)
+                .addComponent(sv_blankerCheckBox)
+                .addGap(0, 0, 0)
+                .addComponent(sv_ctcssCheckBox)
+                .addGap(0, 0, 0)
+                .addComponent(sv_dspCheckBox)
+                .addGap(0, 0, 0)
+                .addComponent(sv_apfCheckBox)
+                .addGap(0, 0, 0)
+                .addComponent(sv_anfCheckBox))
+        );
+
+        ifControlsPanel.add(verticalListPanel);
+
+        operationDetailsTabbedPane.addTab("I F Controls", ifControlsPanel);
+        operationDetailsTabbedPane.addTab("Noise Reduction", noiseReductionPanel);
+        operationDetailsTabbedPane.addTab("Keyer", keyerPanel);
+        operationDetailsTabbedPane.addTab("RTTY", jPanel2);
+
+        javax.swing.GroupLayout operateTransceiverPanelLayout = new javax.swing.GroupLayout(operateTransceiverPanel);
+        operateTransceiverPanel.setLayout(operateTransceiverPanelLayout);
+        operateTransceiverPanelLayout.setHorizontalGroup(
+            operateTransceiverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(operateTransceiverPanelLayout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addGroup(operateTransceiverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(sv_volumeSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(sv_squelchSlider, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE)
+                    .addComponent(svRfGainSlider, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(operateTransceiverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel5))
+                .addGap(46, 46, 46)
+                .addGroup(operateTransceiverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(operateTransceiverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(sv_ctcssComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(sv_modesComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(sv_agcComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(operateTransceiverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(operateTransceiverPanelLayout.createSequentialGroup()
+                        .addGroup(operateTransceiverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(ctcssLabel))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(operateTransceiverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jCheckBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(sv_synthSquelchCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(233, 233, 233))
+            .addGroup(operateTransceiverPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(operationDetailsTabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 677, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        operateTransceiverPanelLayout.setVerticalGroup(
+            operateTransceiverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(operateTransceiverPanelLayout.createSequentialGroup()
+                .addGroup(operateTransceiverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(operateTransceiverPanelLayout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(operateTransceiverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                            .addComponent(sv_volumeSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3)
+                            .addComponent(sv_ctcssComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(ctcssLabel)
+                            .addComponent(jCheckBox1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(operateTransceiverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, operateTransceiverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(sv_modesComboBox)
+                                .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(svRfGainSlider, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(operateTransceiverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(operateTransceiverPanelLayout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addGroup(operateTransceiverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                                    .addComponent(sv_agcComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel7)
+                                    .addComponent(sv_synthSquelchCheckBox)))
+                            .addGroup(operateTransceiverPanelLayout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(jLabel5))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, operateTransceiverPanelLayout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(sv_squelchSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(operationDetailsTabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        operateTransceiverPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel3, sv_volumeSlider});
+
+        operateTransceiverPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {ctcssLabel, jCheckBox1, sv_ctcssComboBox});
+
+        operateTransceiverPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel5, sv_squelchSlider});
+
+        operateTransceiverPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel7, sv_agcComboBox, sv_synthSquelchCheckBox});
+
+        overallTabbedPane.addTab("Operate Transceiver", operateTransceiverPanel);
+
+        scannerPanel.setLayout(new java.awt.GridBagLayout());
+
+        sv_scanStepComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        sv_scanStepComboBox.setToolTipText("Scan frequency step size (❃)");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        scannerPanel.add(sv_scanStepComboBox, gridBagConstraints);
+
+        sv_scanSpeedComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        sv_scanSpeedComboBox.setToolTipText("Scan delay (❃)");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        scannerPanel.add(sv_scanSpeedComboBox, gridBagConstraints);
+
+        sv_dwellTimeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        sv_dwellTimeComboBox.setToolTipText("Pause dwell time (❃)");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        scannerPanel.add(sv_dwellTimeComboBox, gridBagConstraints);
+
+        scanDownButton.setText("<-");
+        scanDownButton.setToolTipText("Scan down");
+        scanDownButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                scanDownButtonMouseClicked(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        scannerPanel.add(scanDownButton, gridBagConstraints);
+
+        scanStopButton.setText("Stop");
+        scanStopButton.setToolTipText("Halt scan");
+        scanStopButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                scanStopButtonMouseClicked(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        scannerPanel.add(scanStopButton, gridBagConstraints);
+
+        scanUpButton.setText("->");
+        scanUpButton.setToolTipText("Scan up");
+        scanUpButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                scanUpButtonMouseClicked(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        scannerPanel.add(scanUpButton, gridBagConstraints);
+
+        sv_squelchCheckBox.setSelected(true);
+        sv_squelchCheckBox.setText("Squelch");
+        sv_squelchCheckBox.setToolTipText("Pause on squelch active");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        scannerPanel.add(sv_squelchCheckBox, gridBagConstraints);
+
+        scanTypeLabel.setText("Scan");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 4);
+        scannerPanel.add(scanTypeLabel, gridBagConstraints);
+
+        scanIconLabel.setText("x");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 4);
+        scannerPanel.add(scanIconLabel, gridBagConstraints);
+
+        javax.swing.GroupLayout scanPanelLayout = new javax.swing.GroupLayout(scanPanel);
+        scanPanel.setLayout(scanPanelLayout);
+        scanPanelLayout.setHorizontalGroup(
+            scanPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(scanPanelLayout.createSequentialGroup()
+                .addGap(253, 253, 253)
+                .addComponent(scannerPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        scanPanelLayout.setVerticalGroup(
+            scanPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(scanPanelLayout.createSequentialGroup()
+                .addGap(5, 5, 5)
+                .addComponent(scannerPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        overallTabbedPane.addTab("Scan", scanPanel);
+        overallTabbedPane.addTab("Scope", jrxScopePanel);
+
+        sv_radioNamesComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        sv_radioNamesComboBox.setToolTipText("Available radio manufacturers and models");
+        sv_radioNamesComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sv_radioNamesComboBoxActionPerformed(evt);
+            }
+        });
+
+        ledPanel.setOpaque(false);
+        ledPanel.setLayout(new java.awt.GridBagLayout());
+
+        speedIconLabel.setText("Speed Icon");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 2);
+        ledPanel.add(speedIconLabel, gridBagConstraints);
+
+        comErrorIconLabel.setText("Error Icon");
+        comErrorIconLabel.setToolTipText("Red indicates communications error");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 2);
+        ledPanel.add(comErrorIconLabel, gridBagConstraints);
+
+        dcdIconLabel.setText("DCD Icon");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 2);
+        ledPanel.add(dcdIconLabel, gridBagConstraints);
+
+        radioNamesLabel.setLabelFor(sv_radioNamesComboBox);
+        radioNamesLabel.setText("Radio Name");
+
+        signalProgressBar.setMaximum(20);
+        signalProgressBar.setMinimum(-50);
+        signalProgressBar.setValue(-50);
+        signalProgressBar.setStringPainted(true);
+
+        javax.swing.GroupLayout radioPanelLayout = new javax.swing.GroupLayout(radioPanel);
+        radioPanel.setLayout(radioPanelLayout);
+        radioPanelLayout.setHorizontalGroup(
+            radioPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(radioPanelLayout.createSequentialGroup()
+                .addGroup(radioPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(signalProgressBar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(radioPanelLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(radioPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(overallTabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 708, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(radioPanelLayout.createSequentialGroup()
+                                .addComponent(ledPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(99, 99, 99)
+                                .addComponent(sv_radioNamesComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(radioNamesLabel)))
+                        .addGap(203, 203, 203)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        radioPanelLayout.setVerticalGroup(
+            radioPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(radioPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(signalProgressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(radioPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(ledPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(sv_radioNamesComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE)
+                    .addComponent(radioNamesLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(overallTabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        radioPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {ledPanel, radioNamesLabel, sv_radioNamesComboBox});
+
+        vfoTabbedPane.addTab("RX VFO  146.670 Mhz", rxVfoPane);
+        vfoTabbedPane.addTab("TX VFO 146.070 Mhz", jPanel3);
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(vfoTabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 692, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(radioPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 717, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(radioPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(vfoTabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE)
+                .addContainerGap())
+        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -2237,6 +2366,10 @@ final public class JRX_TX extends javax.swing.JFrame implements
         // TODO add your handling code here:
     }//GEN-LAST:event_sv_modesComboBoxActionPerformed
 
+    private void sv_agcComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sv_agcComboBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_sv_agcComboBoxActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -2277,37 +2410,62 @@ final public class JRX_TX extends javax.swing.JFrame implements
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel buttonPanel1;
     private javax.swing.JPanel buttonPanel2;
-    private javax.swing.JPanel buttonPanel3;
-    private javax.swing.JPanel buttonPanel4;
-    private javax.swing.JPanel buttonPanel5;
-    private javax.swing.JPanel buttonPanel6;
     private javax.swing.JPanel button_bar;
     protected javax.swing.JLabel comErrorIconLabel;
+    private javax.swing.JSlider compressionSlider;
     private javax.swing.JButton copyButton;
     private javax.swing.JButton copyMemButton;
+    private javax.swing.JLabel ctcssLabel;
     protected javax.swing.JLabel dcdIconLabel;
     private javax.swing.JPanel digitsParent;
     private javax.swing.JButton eraseMemButton;
     private javax.swing.JButton helpButton;
+    private javax.swing.JPanel ifControlsPanel;
+    private javax.swing.JCheckBox jCheckBox1;
+    private javax.swing.JCheckBox jCheckBox2;
+    private javax.swing.JCheckBox jCheckBox3;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.ButtonGroup jrxRadioButtonGroup;
-    private javax.swing.JPanel listPanel;
+    private javax.swing.JPanel jrxScopePanel;
+    private javax.swing.JPanel keyerPanel;
+    private javax.swing.JPanel ledPanel;
     protected javax.swing.JPanel memoryButtonsPanel;
     protected javax.swing.JPanel memoryPanel;
     private javax.swing.JScrollPane memoryScrollPane;
+    private javax.swing.JSlider micGainSlider;
+    private javax.swing.JPanel noiseReductionPanel;
+    private javax.swing.JPanel operateTransceiverPanel;
+    private javax.swing.JTabbedPane operationDetailsTabbedPane;
+    private javax.swing.JTabbedPane overallTabbedPane;
     private javax.swing.JButton pasteMemButton;
     private javax.swing.JButton quitButton;
     private javax.swing.JButton radioListButton;
     private javax.swing.JButton radioMemoryButton;
+    private javax.swing.JLabel radioNamesLabel;
     private javax.swing.JPanel radioPanel;
     private javax.swing.JButton radioScannerButton;
     private javax.swing.JPanel receiverPanel;
+    private javax.swing.JSlider rfPowerOutputSlider;
+    private javax.swing.JPanel rxVfoPane;
     private javax.swing.JButton scanDownButton;
     private javax.swing.JButton scanHelpButton;
     protected javax.swing.JLabel scanIconLabel;
+    private javax.swing.JPanel scanPanel;
     private javax.swing.JButton scanStopButton;
     protected javax.swing.JLabel scanTypeLabel;
     private javax.swing.JButton scanUpButton;
@@ -2324,6 +2482,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
     private javax.swing.JProgressBar signalProgressBar;
     private javax.swing.JPanel sliderPanel;
     private javax.swing.JLabel speedIconLabel;
+    private javax.swing.JSlider svRfGainSlider;
     protected javax.swing.JComboBox sv_agcComboBox;
     protected javax.swing.JCheckBox sv_anfCheckBox;
     protected javax.swing.JComboBox sv_antennaComboBox;
@@ -2357,7 +2516,11 @@ final public class JRX_TX extends javax.swing.JFrame implements
     protected javax.swing.JComboBox<String> sv_timerIntervalComboBox;
     protected javax.swing.JCheckBox sv_volumeExitCheckBox;
     protected javax.swing.JSlider sv_volumeSlider;
+    private javax.swing.JComboBox<String> toneSelectionComboBox;
+    private javax.swing.JPanel transmitterPanel;
     private javax.swing.JButton tuneComsButton;
     private javax.swing.JPanel verticalListPanel;
+    private javax.swing.JTabbedPane vfoTabbedPane;
+    private javax.swing.JSlider voxSlider;
     // End of variables declaration//GEN-END:variables
 }
