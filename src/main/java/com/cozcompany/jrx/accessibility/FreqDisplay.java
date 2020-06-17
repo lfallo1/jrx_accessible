@@ -28,7 +28,7 @@ public class FreqDisplay extends JPanel implements HierarchyBoundsListener {
     JRX_TX appFrame;
     Rectangle space;
 
-    long sv_freq = 145000000l; 
+    private long sv_freq = 145000000l; 
     long digitFrequency;
     int  arrayIndex;
     final int  DIGITS_QTY = 10;

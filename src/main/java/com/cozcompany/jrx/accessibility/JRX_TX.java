@@ -1235,6 +1235,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         helpButton = new javax.swing.JButton();
         tuneComsButton = new javax.swing.JButton();
         favoriteSWLChannels = new javax.swing.JPanel();
+        memoryPanel = new javax.swing.JPanel();
         jrxScopePanel = new javax.swing.JPanel();
         scopePanel = new javax.swing.JPanel();
         scopeDisplayPanel = new SweepScope(this);
@@ -2006,6 +2007,25 @@ final public class JRX_TX extends javax.swing.JFrame implements
         memoryStoragePanel.getAccessibleContext().setAccessibleName("Memory Storage Tab");
         memoryStoragePanel.getAccessibleContext().setAccessibleDescription("Settings are stored on the host computer.");
 
+        memoryPanel.setPreferredSize(new java.awt.Dimension(648, 330));
+
+        javax.swing.GroupLayout favoriteSWLChannelsLayout = new javax.swing.GroupLayout(favoriteSWLChannels);
+        favoriteSWLChannels.setLayout(favoriteSWLChannelsLayout);
+        favoriteSWLChannelsLayout.setHorizontalGroup(
+            favoriteSWLChannelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, favoriteSWLChannelsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(memoryPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        favoriteSWLChannelsLayout.setVerticalGroup(
+            favoriteSWLChannelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(memoryPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        memoryPanel.getAccessibleContext().setAccessibleName("Favorite Channels Table");
+        memoryPanel.getAccessibleContext().setAccessibleDescription("Select a row to set V F O.");
+
         channelsTabbedPane.addTab("Favorite SWL Channels", null, favoriteSWLChannels, "A list of popular SWL frequencies");
         favoriteSWLChannels.getAccessibleContext().setAccessibleName("Favorite SWL Channels");
         favoriteSWLChannels.getAccessibleContext().setAccessibleDescription("List selection can be used with scanner");
@@ -2610,6 +2630,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
     private javax.swing.JPanel keyerPanel;
     private javax.swing.JPanel ledPanel;
     protected javax.swing.JPanel memoryButtonsPanel;
+    protected javax.swing.JPanel memoryPanel;
     private javax.swing.JScrollPane memoryScrollPane;
     private javax.swing.JPanel memoryStoragePanel;
     private javax.swing.JSlider micGainSlider;
