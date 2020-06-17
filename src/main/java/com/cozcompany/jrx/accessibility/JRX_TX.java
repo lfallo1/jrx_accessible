@@ -1405,14 +1405,14 @@ final public class JRX_TX extends javax.swing.JFrame implements
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jRadioButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(4, 4, 4)
-                        .addComponent(jRadioButton3))
-                    .addComponent(jRadioButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 25, Short.MAX_VALUE))
+                    .addComponent(jRadioButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jRadioButton3))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(6, 6, 6)
+                .addComponent(jRadioButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jRadioButton1, jRadioButton3});
@@ -2643,7 +2643,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
     protected javax.swing.JComboBox<String> sv_radioNamesComboBox;
     protected javax.swing.JRadioButton sv_radioToJrxButton;
     protected javax.swing.JCheckBox sv_rawSigCheckBox;
-    private javax.swing.JSlider sv_rfGainSlider;
+    protected javax.swing.JSlider sv_rfGainSlider;
     protected javax.swing.JComboBox<String> sv_scanSpeedComboBox;
     protected javax.swing.JComboBox<String> sv_scanStepComboBox;
     protected javax.swing.JCheckBox sv_scopeDotsCheckBox;
