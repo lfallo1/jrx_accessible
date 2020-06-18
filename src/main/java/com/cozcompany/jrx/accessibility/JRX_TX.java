@@ -628,7 +628,11 @@ final public class JRX_TX extends javax.swing.JFrame implements
         }
         return s;
     }
-
+    
+    /**
+     * Initialize comm device (interface) comboBox by searching /dev/tty for
+     * possible serial ports or USB ports.
+     */
     private void initInterfaceList() {
         sv_interfacesComboBox.removeAllItems();
         sv_interfacesComboBox.addItem("-- Interfaces --");
@@ -668,7 +672,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         ((RWComboBox) sv_ctcssComboBox).setGenericComboBoxScale("CTCSS", "(?ism).*^CTCSS:\\s*(.*?)\\s*$.*", false, true);
     }
     /**
-     * Read rig specs from hamlib.
+     * Read rig specs from hamlib and insert into radioCodes TreeMap.
      */
     private void initRigSpecs() {
         radioCodes = new TreeMap<>();
@@ -936,7 +940,12 @@ final public class JRX_TX extends javax.swing.JFrame implements
         double volume = ((ControlInterface) this.sv_volumeSlider).getConvertedValue();
         volume = (squelchOpen) ? volume : 0;
         if (volume != oldVolume) {
-            setVolumeDirect(volume);
+            // Coz - for now, while I am working in the middle of the night,
+            // set volume to zero... Need to read volume setting from rig,
+            // then set the slider then you can set the volume to the same
+            // setting.  This way was brain jarring.
+            //setVolumeDirect(volume);
+            setVolumeDirect(0.0);
             oldVolume = volume;
         }
     }
@@ -2324,7 +2333,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         signalProgressBar.setValue(-50);
         signalProgressBar.setStringPainted(true);
 
-        sv_interfacesComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "/dev/tty.SLABusbToUart1", "Item 2", "Item 3", "Item 4" }));
+        sv_interfacesComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "/dev/tty.SLABusbToUart2", "Item 2", "Item 3", "Item 4" }));
         sv_interfacesComboBox.setToolTipText("Available communication interfaces");
         sv_interfacesComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
