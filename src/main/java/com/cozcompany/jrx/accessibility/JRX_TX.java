@@ -55,7 +55,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
     ParseComLine comArgs = null;
     ImageIcon redLed, greenLed, blueLed, yellowLed;
     ScanStateMachine scanStateMachine;
-    ControlInterface[] settableControls;
     ArrayList<String> interfaceNames = null;
     ChannelChart chart;
     SquelchScheme squelchScheme;
@@ -160,7 +159,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         scanDude = new ScanController(this);
         // default app size
         setSize(defWidth, defHeight);
-        setControlList();
+        createControlList();
         squelchScheme = new SquelchScheme(this);               
         setupControls();
         setDefaultComboContent(); 
@@ -307,6 +306,8 @@ final public class JRX_TX extends javax.swing.JFrame implements
      * Query the Mode comboBox to get the modulation mode of item n.  Validates
      * input parameter n.
      * 
+     * @todo Move this to the ModeComboBox class.
+     * 
      * @param n
      * @return modulation mode name string or ""
      */
@@ -341,8 +342,17 @@ final public class JRX_TX extends javax.swing.JFrame implements
         ((RWComboBox) sv_attenuatorComboBox).comboPlaceholderData();
         ((RWComboBox) sv_modesComboBox).comboPlaceholderData();
     }
-
-    private void setControlList() {
+    /**
+     * Create an array of controls which reflect and adjust the rig settings.
+     * 
+     * The list of availible controls for the current rig model are read from
+     * rigctld and may not actually be accurate.  
+     * 
+     * We need a way to override the list provided by rigctl when we find that
+     * the capability is incorrect.   For example, IC-7100 does not support
+     * antenna selection or if shift adjustment by remote control.  
+     */
+    private void createControlList() {
         controlList = new ArrayList<>();
         Component[] list = new Component[]{
                 sv_squelchSlider,
@@ -489,7 +499,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
 
         enableControlCap(sv_ctcssComboBox, radioData, "(?ism).*^Can set CTCSS Squelch:\\s+Y$", false);
         //(sv_agcComboBox, radioData, "(?ism).*^Set level:.*?AGC\\(", true);
-        //enableControlCap(sv_antennaComboBox, radioData, "(?ism).*^Can set Ant:\\s+Y$", false);
+        //enableControlCap(sv_antennaComboBox, radioData, "(?ism).*^Can set Ant:\\rigSpecs+Y$", false);
         enableControlCap(sv_preampComboBox, radioData, "(?ism).*^Set level:.*?PREAMP\\(", true);
         enableControlCap(sv_volumeSlider, radioData, "(?ism).*^Set level:.*?AF\\(", true);
         enableControlCap(sv_rfGainSlider, radioData, "(?ism).*^Set level:.*?RF\\(", true);
@@ -505,7 +515,15 @@ final public class JRX_TX extends javax.swing.JFrame implements
     }
 
 
-
+    protected String getRadioModel() {
+        RWComboBox box = (RWComboBox)sv_radioNamesComboBox;
+        
+        
+        
+        
+        
+        return box.readValueStr();
+    }
 
 
     protected void waitMS(int ms) {
@@ -556,7 +574,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         box.removeAllItems();
         for (int i = start; i <= end; i += step) {
             String s = String.format("%s %d", label, i);
-            //box.addListItem(s, "" + i);
+            //box.addListItem(rigSpecs, "" + i);
             box.addListItem(s, i, "" + i);
         }
         box.setXLow(xlow);
@@ -672,11 +690,22 @@ final public class JRX_TX extends javax.swing.JFrame implements
         ((RWComboBox) sv_ctcssComboBox).setGenericComboBoxScale("CTCSS", "(?ism).*^CTCSS:\\s*(.*?)\\s*$.*", false, true);
     }
     /**
-     * Read rig specs from hamlib and insert into radioCodes TreeMap.
+     * Read rig specs from hamlib backend and insert into radioCodes TreeMap; then
+     * populate sv_radioNamesComboBox with the radio names.  The hamlib daemon
+     * runs for the sole purpose of handling the -l command and then exits. The
+     * rig specs are one rig per line and formatted in 5 columns using spaces 
+     * instead of tabs.  So information in a column always starts at the same
+     * character position from the start of the line.  That makes it easier to
+     * check the parsing by position.  The rig numbers are increasing from top to
+     * bottom of the list, but are not always consecutive.  It would be good to
+     * display the rig spec "Version" that is listed for each rig so that bad
+     * behavior could be tracked to a particular rig version.
+     * 
+     * @todo Move this to RadioNamesComboBox class.
      */
     private void initRigSpecs() {
         radioCodes = new TreeMap<>();
-        String a, b, s="";
+        String a, b, rigSpecs="";
         //p("trying to read rig specs...");
         if (hamlibExecPath == null) {
             JOptionPane.showMessageDialog(this,"MISSING HAMLIB", 
@@ -684,24 +713,29 @@ final public class JRX_TX extends javax.swing.JFrame implements
                     JOptionPane.WARNING_MESSAGE);
         } else {
         
-            s = runSysCommand(new String[]{hamlibExecPath, "-l"}, true);
+            rigSpecs = runSysCommand(new String[]{hamlibExecPath, "-l"}, true);
             if (comArgs.debug >= 1) {
-                pout("dump from rigctld -l: [" + s + "]");
+                pout("dump from rigctld -l: [" + rigSpecs + "]");
             }
         } 
-        for (String item : s.split(lineSep)) {
+        for (String item : rigSpecs.split(lineSep)) {
             // the try ... catch is only to filter the table header
             if (item.length() > 30) {
                 try {
                     if (comArgs.debug >= 1) {
                         pout("rigctl radio description line: [" + item + "]");
                     }
+                    // Remove the extra white space and place a tab between the 
+                    // first two fields on the line.
                     String parse = item.replaceFirst("^\\s*(\\S+)\\s*(.*)$", "$1\t$2");
                     String[] fields = parse.split("\t");
                     if (fields != null && fields.length > 1) {
                         a = fields[0].trim();
                         if (a.matches("[0-9]+") && fields[1].length() > 47) {
                             b = fields[1].substring(0, 47).trim();
+                            // Replace whiteSpace between Mfg and Model with one 
+                            // space.  String b looks like "Yeasu FT-847" when it
+                            // is put into the radioCodes tree as a key.
                             b = b.replaceAll("\\s+", " ");
                             int v = Integer.parseInt(a);
                             if (comArgs.debug >= 1) {
@@ -718,11 +752,41 @@ final public class JRX_TX extends javax.swing.JFrame implements
         sv_radioNamesComboBox.removeAllItems();
         sv_radioNamesComboBox.addItem("-- Radios --");
         for (String key : radioCodes.keySet()) {
-            int val = radioCodes.get(key);
+            int val = radioCodes.get(key);  // Coz - val is not used.
             sv_radioNamesComboBox.addItem(key);
         }
     }
 
+    /**
+     * Return the key String for the given value.  
+     * @todo Coz Inefficient - sort the map by value and binary search.  Once the
+     * sorted map is created (on the first use) then the search is quick.  What
+     * happens when rigctl is updated?  How do you know when that happens? Yuck.
+     * 
+     * @param value
+     * @return 
+     */
+    public String getNameKeyForRadioCodeValue(int value) {
+        int maxIndex = sv_radioNamesComboBox.getItemCount() - 1;
+        // The zeroth entry in comboBox is ---Radio---;
+        int index=1;
+        String rigName;
+        for (String key : radioCodes.keySet()) {
+            int radioCode = radioCodes.get(key);
+            rigName = sv_radioNamesComboBox.getItemAt(index);
+            if (radioCode == value) {
+                assert(rigName.equals(key));
+                sv_radioNamesComboBox.setSelectedIndex(index);
+                return rigName;           
+            }
+            if (index == maxIndex) break;
+            index++;    
+        }
+        return "Radio Unknown" ;          
+    }
+    
+    
+    
     /**
      * Get a list of radios and their codes before the socket has been set up.
      */ 
@@ -759,6 +823,17 @@ final public class JRX_TX extends javax.swing.JFrame implements
         JOptionPane.showMessageDialog(this, prompt);
     }
 
+    
+    /**
+     * Start up the Hamlib daemon to run for the duration of the app waiting for
+     * text commands from this app via Tcp connection.
+     * 
+     * Requirement: Determine the rigName and set the radioNamesComboBox to
+     * the correct rigName.  It is displayed prominently on the top of the UI
+     * even if it is disabled.
+     * 
+     * Note: Prerequesite for this routine is the creation of the radioCodes.
+     */
     private void setupHamlibDaemon() {
         if (!inhibit) {
             closeConnection();
@@ -778,7 +853,9 @@ final public class JRX_TX extends javax.swing.JFrame implements
             }
             if (comArgs.rigCode >= 0 && rigCode == -1) {
                 rigCode = comArgs.rigCode;
-                rigName = String.format("(radio code: %d)", rigCode);
+                rigName = getNameKeyForRadioCodeValue(rigCode); 
+                //rigName = String.format("(radio code: %d)", rigCode);
+                // Disable comboBox because choice has already been made.
                 sv_radioNamesComboBox.setEnabled(false);
             }
             if (comArgs.interfaceName != null) {
@@ -940,12 +1017,9 @@ final public class JRX_TX extends javax.swing.JFrame implements
         double volume = ((ControlInterface) this.sv_volumeSlider).getConvertedValue();
         volume = (squelchOpen) ? volume : 0;
         if (volume != oldVolume) {
-            // Coz - for now, while I am working in the middle of the night,
-            // set volume to zero... Need to read volume setting from rig,
-            // then set the slider then you can set the volume to the same
-            // setting.  This way was brain jarring.
-            //setVolumeDirect(volume);
-            setVolumeDirect(0.0);
+            // Need to read volume setting from rig,
+            // then set the volume slider. @todo COZ
+            setVolumeDirect(volume);
             oldVolume = volume;
         }
     }
@@ -1166,7 +1240,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         overallTabbedPane = new javax.swing.JTabbedPane();
         operateTransceiverPanel = new javax.swing.JPanel();
         sv_squelchSlider = new com.cozcompany.jrx.accessibility.RWSlider(this,"L","SQL",0);
-        sv_volumeSlider = new com.cozcompany.jrx.accessibility.RWSlider(this,"L","AF",20);
+        sv_volumeSlider = new com.cozcompany.jrx.accessibility.RWSlider(this,"L","AF", 0);
         sv_rfGainSlider = new com.cozcompany.jrx.accessibility.RWSlider(this,"L","RF",50);
         sv_ctcssComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,"ctcss","");
         sv_synthSquelchCheckBox = new RWCheckBox(this,null,null);
