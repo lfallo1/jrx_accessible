@@ -29,7 +29,8 @@ import javax.swing.event.ChangeListener;
  *
  * @author lutusp
  */
-final public class RWSlider extends JSlider implements MouseWheelListener, ChangeListener, ControlInterface {
+final public class RWSlider extends JSlider implements MouseWheelListener, 
+        ChangeListener, ControlInterface {
 
     JRX_TX parent;
     String token;

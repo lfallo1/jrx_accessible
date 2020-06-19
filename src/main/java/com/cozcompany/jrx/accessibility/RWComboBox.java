@@ -57,7 +57,6 @@ final public class RWComboBox extends JComboBox<String> implements MouseWheelLis
     boolean needFilter = false;
     boolean needMode = false;
     boolean ctcss = false;
-    boolean enabled = false;
     boolean commOK = true;
 
     public RWComboBox(JRX_TX p, String pre, String t) {

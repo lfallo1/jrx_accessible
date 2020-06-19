@@ -87,10 +87,8 @@ public class SquelchScheme {
         //p("sqOpen " + sqOpen + "," + squelchOpen);
         if ((sqOpen != appFrame.iErrorValue && sqOpen != squelchOpen) || force) {
             //p("sqOpen2 " + sqOpen);
-            squelchOpen = sqOpen;
-            appFrame.setVolume(squelchOpen == 1);
+            squelchOpen = sqOpen;           
+            appFrame.setVolume(squelchOpen == 1); 
         }
-    }
-
-    
+    }   
 }

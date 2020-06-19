@@ -37,8 +37,6 @@ public class ScanController {
         } else {
             appFrame.memoryCollection.resetButtonColors();
         }
-        appFrame.scanTypeLabel.setText(label);
-        appFrame.scannerPanel.setToolTipText(toolTip);
         appFrame.scanIconLabel.setIcon((appFrame.scanStateMachine.validState()) ? appFrame.greenLed : appFrame.redLed);
     }
 

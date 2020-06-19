@@ -476,7 +476,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         
         scannerPanel.setBackground(new Color(240, 240, 220));
         scopeControlLeftPanel.setBackground(new Color(240, 240, 220));
-        scopeControlRightPanel.setBackground(new Color(200, 220, 240));
+        firstSettingsPanel.setBackground(new Color(200, 220, 240));
         digitsParent.setToolTipText("<html>Tune each digit:<ul><li>Mouse wheel (❃): up, down</li><li>Mouse click top: up</li><li>Mouse click bottom: down</li></ul></html>");
         scanDude.updateScanControls();
     }
@@ -1297,16 +1297,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
         keyerPanel = new javax.swing.JPanel();
         rttyPanel = new javax.swing.JPanel();
         scanPanel = new javax.swing.JPanel();
-        scannerPanel = new javax.swing.JPanel();
-        sv_scanStepComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,null,null);
-        sv_scanSpeedComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,null,null);
-        sv_dwellTimeComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,null,null);
-        scanDownButton = new javax.swing.JButton();
-        scanStopButton = new javax.swing.JButton();
-        scanUpButton = new javax.swing.JButton();
-        sv_squelchCheckBox = new RWCheckBox(this,null,null);
-        scanTypeLabel = new javax.swing.JLabel();
-        scanIconLabel = new javax.swing.JLabel();
         channelsTabbedPane = new javax.swing.JTabbedPane();
         memoryStoragePanel = new javax.swing.JPanel();
         memoryScrollPane = new javax.swing.JScrollPane();
@@ -1315,10 +1305,20 @@ final public class JRX_TX extends javax.swing.JFrame implements
         copyMemButton = new javax.swing.JButton();
         pasteMemButton = new javax.swing.JButton();
         eraseMemButton = new javax.swing.JButton();
-        helpButton = new javax.swing.JButton();
-        tuneComsButton = new javax.swing.JButton();
         favoriteSWLChannels = new javax.swing.JPanel();
         memoryPanel = new javax.swing.JPanel();
+        scannerPanel = new javax.swing.JPanel();
+        scanIconLabel = new javax.swing.JLabel();
+        sv_squelchCheckBox = new RWCheckBox(this,null,null);
+        scanDownButton = new javax.swing.JButton();
+        sv_scanStepComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,null,null);
+        sv_scanSpeedComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,null,null);
+        sv_dwellTimeComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,null,null);
+        scanStopButton = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        scanUpButton = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
         jrxScopePanel = new javax.swing.JPanel();
         scopePanel = new javax.swing.JPanel();
         scopeDisplayPanel = new SweepScope(this);
@@ -1333,13 +1333,16 @@ final public class JRX_TX extends javax.swing.JFrame implements
         copyButton = new javax.swing.JButton();
         scanHelpButton = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        scopeControlRightPanel = new javax.swing.JPanel();
+        appSettingsPanel = new javax.swing.JPanel();
+        firstSettingsPanel = new javax.swing.JPanel();
+        helpButton = new javax.swing.JButton();
         sv_jrxToRadioButton = new javax.swing.JRadioButton();
         sv_radioToJrxButton = new javax.swing.JRadioButton();
         sv_syncCheckBox = new javax.swing.JCheckBox();
         sv_timerIntervalComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,null,null);
         jLabel2 = new javax.swing.JLabel();
         sv_volumeExitCheckBox = new javax.swing.JCheckBox();
+        tuneComsButton = new javax.swing.JButton();
         sv_radioNamesComboBox = new javax.swing.JComboBox<>();
         ledPanel = new javax.swing.JPanel();
         speedIconLabel = new javax.swing.JLabel();
@@ -1382,7 +1385,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         sv_ctcssComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "123.0", "Item 2", "Item 3", "Item 4" }));
         sv_ctcssComboBox.setToolTipText("CTCSS tone squelch frequencies (❃)");
 
-        sv_synthSquelchCheckBox.setText("Squelch");
+        sv_synthSquelchCheckBox.setText("Squelch ON");
         sv_synthSquelchCheckBox.setToolTipText("Use JRX squelch scheme");
         sv_synthSquelchCheckBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1519,7 +1522,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 .addComponent(jRadioButton2)
                 .addGap(5, 5, 5)
                 .addComponent(jRadioButton3)
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
 
         jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jRadioButton1, jRadioButton2, jRadioButton3});
@@ -1556,68 +1559,62 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 .addComponent(jCheckBox2)
                 .addContainerGap(274, Short.MAX_VALUE))
             .addGroup(transmitterPanelLayout.createSequentialGroup()
-                .addGroup(transmitterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(transmitterPanelLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(rfPowerOutputSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel8)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(sv_antennaComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel18))
-                    .addGroup(transmitterPanelLayout.createSequentialGroup()
-                        .addGap(177, 177, 177)
-                        .addComponent(jLabel9)
-                        .addGap(66, 66, 66)
-                        .addComponent(toneSelectionComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap()
+                .addComponent(rfPowerOutputSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel8)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(sv_antennaComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel18)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(transmitterPanelLayout.createSequentialGroup()
+                .addGap(177, 177, 177)
+                .addComponent(jLabel9)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(toneSelectionComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(30, 30, 30))
         );
         transmitterPanelLayout.setVerticalGroup(
             transmitterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(transmitterPanelLayout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addGroup(transmitterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(rfPowerOutputSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8)
+                    .addComponent(sv_antennaComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel18))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(transmitterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(transmitterPanelLayout.createSequentialGroup()
-                        .addGap(15, 15, 15)
-                        .addGroup(transmitterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                            .addComponent(rfPowerOutputSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel8)
-                            .addComponent(sv_antennaComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel18))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(transmitterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                             .addComponent(micGainSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(12, 12, 12))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, transmitterPanelLayout.createSequentialGroup()
+                        .addGroup(transmitterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel12)
+                            .addComponent(toneSelectionComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
+                .addGroup(transmitterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(transmitterPanelLayout.createSequentialGroup()
+                        .addGroup(transmitterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                            .addComponent(compressionSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel10))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(transmitterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(transmitterPanelLayout.createSequentialGroup()
-                                .addGap(12, 12, 12)
-                                .addGroup(transmitterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                                    .addComponent(compressionSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel10))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(transmitterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(voxSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(transmitterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(jLabel11)
-                                        .addComponent(jCheckBox3)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(transmitterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
-                                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                            .addGroup(transmitterPanelLayout.createSequentialGroup()
-                                .addGap(4, 4, 4)
-                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(transmitterPanelLayout.createSequentialGroup()
-                                .addGap(12, 12, 12)
-                                .addComponent(jCheckBox2))))
-                    .addGroup(transmitterPanelLayout.createSequentialGroup()
-                        .addGap(79, 79, 79)
-                        .addComponent(jLabel12))
-                    .addGroup(transmitterPanelLayout.createSequentialGroup()
-                        .addGap(80, 80, 80)
-                        .addComponent(toneSelectionComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(voxSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(transmitterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel11)
+                                .addComponent(jCheckBox3)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(transmitterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
+                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jCheckBox2))
                 .addContainerGap(90, Short.MAX_VALUE))
         );
 
@@ -1857,6 +1854,8 @@ final public class JRX_TX extends javax.swing.JFrame implements
 
         operateTransceiverPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {sv_rfGainSlider, sv_squelchSlider, sv_volumeSlider});
 
+        operateTransceiverPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {sv_agcComboBox, sv_ctcssComboBox, sv_modesComboBox});
+
         operateTransceiverPanelLayout.setVerticalGroup(
             operateTransceiverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(operateTransceiverPanelLayout.createSequentialGroup()
@@ -1875,8 +1874,8 @@ final public class JRX_TX extends javax.swing.JFrame implements
                         .addGroup(operateTransceiverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                             .addComponent(sv_rfGainSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(rfGainLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(sv_ctcssComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(ctcssLabel))
+                            .addComponent(ctcssLabel)
+                            .addComponent(sv_ctcssComboBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(10, 10, 10)
                         .addGroup(operateTransceiverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                             .addComponent(squelchLabel)
@@ -1887,103 +1886,20 @@ final public class JRX_TX extends javax.swing.JFrame implements
                         .addGap(108, 108, 108)
                         .addGroup(operateTransceiverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(sv_synthSquelchCheckBox)
-                            .addComponent(sv_agcComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(sv_agcComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(agcLabel))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        operateTransceiverPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {ctcssLabel, muteCheckBox, sv_ctcssComboBox});
+        operateTransceiverPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {ctcssLabel, muteCheckBox});
 
         operateTransceiverPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {agcLabel, sv_agcComboBox, sv_synthSquelchCheckBox});
+
+        operateTransceiverPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {sv_rfGainSlider, sv_squelchSlider, sv_volumeSlider});
 
         overallTabbedPane.addTab("Operate Transceiver", operateTransceiverPanel);
         operateTransceiverPanel.getAccessibleContext().setAccessibleName("Operations Tab");
         operateTransceiverPanel.getAccessibleContext().setAccessibleDescription("Vital transceiver controls");
-
-        scannerPanel.setLayout(new java.awt.GridBagLayout());
-
-        sv_scanStepComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        sv_scanStepComboBox.setToolTipText("Scan frequency step size (❃)");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        scannerPanel.add(sv_scanStepComboBox, gridBagConstraints);
-
-        sv_scanSpeedComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        sv_scanSpeedComboBox.setToolTipText("Scan delay (❃)");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        scannerPanel.add(sv_scanSpeedComboBox, gridBagConstraints);
-        sv_scanSpeedComboBox.getAccessibleContext().setAccessibleName("Scan delay before restart scan");
-        sv_scanSpeedComboBox.getAccessibleContext().setAccessibleDescription("Scan delay when squelch opens");
-
-        sv_dwellTimeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        sv_dwellTimeComboBox.setToolTipText("Pause dwell time (❃)");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        scannerPanel.add(sv_dwellTimeComboBox, gridBagConstraints);
-        sv_dwellTimeComboBox.getAccessibleContext().setAccessibleName("Dwell time in seconds");
-
-        scanDownButton.setText("<-");
-        scanDownButton.setToolTipText("Scan down");
-        scanDownButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                scanDownButtonMouseClicked(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        scannerPanel.add(scanDownButton, gridBagConstraints);
-
-        scanStopButton.setText("Stop");
-        scanStopButton.setToolTipText("Halt scan");
-        scanStopButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                scanStopButtonMouseClicked(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        scannerPanel.add(scanStopButton, gridBagConstraints);
-
-        scanUpButton.setText("->");
-        scanUpButton.setToolTipText("Scan up");
-        scanUpButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                scanUpButtonMouseClicked(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 1;
-        scannerPanel.add(scanUpButton, gridBagConstraints);
-
-        sv_squelchCheckBox.setSelected(true);
-        sv_squelchCheckBox.setText("Squelch");
-        sv_squelchCheckBox.setToolTipText("Pause on squelch active");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 2;
-        scannerPanel.add(sv_squelchCheckBox, gridBagConstraints);
-
-        scanTypeLabel.setText("Scan");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 4);
-        scannerPanel.add(scanTypeLabel, gridBagConstraints);
-
-        scanIconLabel.setText("x");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 4);
-        scannerPanel.add(scanIconLabel, gridBagConstraints);
 
         memoryButtonsPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
         memoryButtonsPanel.setMinimumSize(new java.awt.Dimension(40, 40));
@@ -1993,7 +1909,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         buttonPanel2.setOpaque(false);
         buttonPanel2.setLayout(new java.awt.GridBagLayout());
 
-        copyMemButton.setText("CM");
+        copyMemButton.setText("COPY to Clipboard");
         copyMemButton.setToolTipText("Copy JRX memory buttons to clipboard");
         copyMemButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -2008,7 +1924,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         gridBagConstraints.insets = new java.awt.Insets(0, 1, 0, 1);
         buttonPanel2.add(copyMemButton, gridBagConstraints);
 
-        pasteMemButton.setText("PM");
+        pasteMemButton.setText("PASTE to Clipboard");
         pasteMemButton.setToolTipText("Paste JRX memory buttons from clipboard");
         pasteMemButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -2023,7 +1939,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         gridBagConstraints.insets = new java.awt.Insets(0, 1, 0, 1);
         buttonPanel2.add(pasteMemButton, gridBagConstraints);
 
-        eraseMemButton.setText("EM");
+        eraseMemButton.setText("ERASE ALL MEMORY");
         eraseMemButton.setToolTipText("Erase all JRX memory buttons");
         eraseMemButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -2038,35 +1954,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
         gridBagConstraints.insets = new java.awt.Insets(0, 1, 0, 1);
         buttonPanel2.add(eraseMemButton, gridBagConstraints);
 
-        helpButton.setText("HELP");
-        helpButton.setToolTipText("Visit the JRX Home Page");
-        helpButton.setActionCommand("Help");
-        helpButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                helpButtonMouseClicked(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 1, 0, 1);
-        buttonPanel2.add(helpButton, gridBagConstraints);
-
-        tuneComsButton.setText("Conf");
-        tuneComsButton.setToolTipText("Configure Hamlib communications");
-        tuneComsButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tuneComsButtonMouseClicked(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 1, 0, 1);
-        buttonPanel2.add(tuneComsButton, gridBagConstraints);
-
         javax.swing.GroupLayout memoryStoragePanelLayout = new javax.swing.GroupLayout(memoryStoragePanel);
         memoryStoragePanel.setLayout(memoryStoragePanelLayout);
         memoryStoragePanelLayout.setHorizontalGroup(
@@ -2074,13 +1961,15 @@ final public class JRX_TX extends javax.swing.JFrame implements
             .addGroup(memoryStoragePanelLayout.createSequentialGroup()
                 .addGap(90, 90, 90)
                 .addComponent(buttonPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(185, Short.MAX_VALUE))
-            .addComponent(memoryScrollPane)
+                .addContainerGap(72, Short.MAX_VALUE))
+            .addGroup(memoryStoragePanelLayout.createSequentialGroup()
+                .addComponent(memoryScrollPane)
+                .addContainerGap())
         );
         memoryStoragePanelLayout.setVerticalGroup(
             memoryStoragePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(memoryStoragePanelLayout.createSequentialGroup()
-                .addComponent(memoryScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE)
+                .addComponent(memoryScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(buttonPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -2103,7 +1992,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         );
         favoriteSWLChannelsLayout.setVerticalGroup(
             favoriteSWLChannelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(memoryPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(memoryPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 349, Short.MAX_VALUE)
         );
 
         memoryPanel.getAccessibleContext().setAccessibleName("Favorite Channels Table");
@@ -2113,24 +2002,138 @@ final public class JRX_TX extends javax.swing.JFrame implements
         favoriteSWLChannels.getAccessibleContext().setAccessibleName("Favorite SWL Channels");
         favoriteSWLChannels.getAccessibleContext().setAccessibleDescription("List selection can be used with scanner");
 
+        scanIconLabel.setText("x");
+
+        sv_squelchCheckBox.setSelected(true);
+        sv_squelchCheckBox.setText("Pause ON Squelch Open");
+        sv_squelchCheckBox.setToolTipText("Pause on squelch active");
+
+        scanDownButton.setText("Start Scan Down");
+        scanDownButton.setToolTipText("Scan down");
+        scanDownButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                scanDownButtonMouseClicked(evt);
+            }
+        });
+
+        sv_scanStepComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        sv_scanStepComboBox.setToolTipText("Scan frequency step size (❃)");
+
+        sv_scanSpeedComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        sv_scanSpeedComboBox.setToolTipText("Scan delay (❃)");
+
+        sv_dwellTimeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        sv_dwellTimeComboBox.setToolTipText("Pause dwell time (❃)");
+
+        scanStopButton.setText("Stop Scan");
+        scanStopButton.setToolTipText("Halt scan");
+        scanStopButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                scanStopButtonMouseClicked(evt);
+            }
+        });
+        scanStopButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                scanStopButtonActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("Scan Step");
+
+        jLabel4.setText("Scan Speed");
+
+        scanUpButton.setText("Start Scan Up");
+        scanUpButton.setToolTipText("Scan up");
+        scanUpButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                scanUpButtonMouseClicked(evt);
+            }
+        });
+
+        jLabel5.setText("Dwell Time");
+
+        javax.swing.GroupLayout scannerPanelLayout = new javax.swing.GroupLayout(scannerPanel);
+        scannerPanel.setLayout(scannerPanelLayout);
+        scannerPanelLayout.setHorizontalGroup(
+            scannerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(scannerPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(scannerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(scannerPanelLayout.createSequentialGroup()
+                        .addComponent(scanIconLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(scanDownButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(scanStopButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(scanUpButton)
+                        .addGap(18, 18, 18)
+                        .addComponent(sv_squelchCheckBox))
+                    .addGroup(scannerPanelLayout.createSequentialGroup()
+                        .addComponent(sv_scanStepComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel3)
+                        .addGap(18, 18, 18)
+                        .addComponent(sv_scanSpeedComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(sv_dwellTimeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel5)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        scannerPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {sv_dwellTimeComboBox, sv_scanSpeedComboBox, sv_scanStepComboBox});
+
+        scannerPanelLayout.setVerticalGroup(
+            scannerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(scannerPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(scannerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(sv_scanStepComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(sv_dwellTimeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(sv_scanSpeedComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(10, 10, 10)
+                .addGroup(scannerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(scanIconLabel)
+                    .addComponent(scanDownButton)
+                    .addComponent(scanStopButton)
+                    .addComponent(scanUpButton)
+                    .addComponent(sv_squelchCheckBox))
+                .addContainerGap())
+        );
+
+        scannerPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel4, sv_dwellTimeComboBox, sv_scanSpeedComboBox, sv_scanStepComboBox});
+
+        scanDownButton.getAccessibleContext().setAccessibleName("START SCAN DOWNWARDS");
+        sv_scanSpeedComboBox.getAccessibleContext().setAccessibleName("Scan delay before restart scan");
+        sv_scanSpeedComboBox.getAccessibleContext().setAccessibleDescription("Scan delay when squelch opens");
+        sv_dwellTimeComboBox.getAccessibleContext().setAccessibleName("Dwell time in seconds");
+        scanStopButton.getAccessibleContext().setAccessibleName("Stop Scan");
+        scanUpButton.getAccessibleContext().setAccessibleName("START SCAN UPWARDS");
+
         javax.swing.GroupLayout scanPanelLayout = new javax.swing.GroupLayout(scanPanel);
         scanPanel.setLayout(scanPanelLayout);
         scanPanelLayout.setHorizontalGroup(
             scanPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(scanPanelLayout.createSequentialGroup()
-                .addGap(181, 181, 181)
-                .addComponent(scannerPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(scanPanelLayout.createSequentialGroup()
-                .addComponent(channelsTabbedPane)
+                .addComponent(channelsTabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 681, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 6, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, scanPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(scannerPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         scanPanelLayout.setVerticalGroup(
             scanPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(scanPanelLayout.createSequentialGroup()
                 .addGap(5, 5, 5)
-                .addComponent(scannerPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(scannerPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(channelsTabbedPane))
         );
 
@@ -2286,77 +2289,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
         gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         scopeControlPanel.add(scopeControlLeftPanel, gridBagConstraints);
 
-        scopeControlRightPanel.setLayout(new java.awt.GridBagLayout());
-
-        jrxRadioButtonGroup.add(sv_jrxToRadioButton);
-        sv_jrxToRadioButton.setSelected(true);
-        sv_jrxToRadioButton.setText("JRX->Radio");
-        sv_jrxToRadioButton.setToolTipText("At startup, JRX sets the radio's controls");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        scopeControlRightPanel.add(sv_jrxToRadioButton, gridBagConstraints);
-
-        jrxRadioButtonGroup.add(sv_radioToJrxButton);
-        sv_radioToJrxButton.setText("Radio->JRX");
-        sv_radioToJrxButton.setToolTipText("At startup, the radio sets JRX's controls");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        scopeControlRightPanel.add(sv_radioToJrxButton, gridBagConstraints);
-
-        sv_syncCheckBox.setText("Sync with radio");
-        sv_syncCheckBox.setToolTipText("<html>Dynamically synchronize JRX<br/>controls with radio controls");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        scopeControlRightPanel.add(sv_syncCheckBox, gridBagConstraints);
-
-        sv_timerIntervalComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        sv_timerIntervalComboBox.setToolTipText("Control/event update timer interval (❃)");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        scopeControlRightPanel.add(sv_timerIntervalComboBox, gridBagConstraints);
-
-        jLabel2.setText("JRX setup controls");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        scopeControlRightPanel.add(jLabel2, gridBagConstraints);
-
-        sv_volumeExitCheckBox.setSelected(true);
-        sv_volumeExitCheckBox.setText("Volume down on exit");
-        sv_volumeExitCheckBox.setToolTipText("<html>Turn down the radio volume<br/>when JRX exits");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        scopeControlRightPanel.add(sv_volumeExitCheckBox, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
-        scopeControlPanel.add(scopeControlRightPanel, gridBagConstraints);
-
         scopePanel.add(scopeControlPanel, java.awt.BorderLayout.SOUTH);
 
         jrxScopePanel.add(scopePanel);
@@ -2364,6 +2296,117 @@ final public class JRX_TX extends javax.swing.JFrame implements
         overallTabbedPane.addTab("Scope", jrxScopePanel);
         jrxScopePanel.getAccessibleContext().setAccessibleName("Band scope ");
         jrxScopePanel.getAccessibleContext().setAccessibleDescription("Visual sweep display of selected band.");
+
+        helpButton.setText("HELP");
+        helpButton.setToolTipText("Visit the JRX Home Page");
+        helpButton.setActionCommand("Help");
+        helpButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                helpButtonMouseClicked(evt);
+            }
+        });
+
+        jrxRadioButtonGroup.add(sv_jrxToRadioButton);
+        sv_jrxToRadioButton.setSelected(true);
+        sv_jrxToRadioButton.setText("JRX->Radio");
+        sv_jrxToRadioButton.setToolTipText("At startup, JRX sets the radio's controls");
+
+        jrxRadioButtonGroup.add(sv_radioToJrxButton);
+        sv_radioToJrxButton.setText("Radio->JRX");
+        sv_radioToJrxButton.setToolTipText("At startup, the radio sets JRX's controls");
+
+        sv_syncCheckBox.setText("Sync App with radio");
+        sv_syncCheckBox.setToolTipText("<html>Dynamically synchronize JRX<br/>controls with radio controls");
+
+        sv_timerIntervalComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        sv_timerIntervalComboBox.setToolTipText("Control/event update timer interval (❃)");
+
+        jLabel2.setLabelFor(sv_timerIntervalComboBox);
+        jLabel2.setText("Screen update Interal");
+
+        sv_volumeExitCheckBox.setSelected(true);
+        sv_volumeExitCheckBox.setText("Volume down on exit");
+        sv_volumeExitCheckBox.setToolTipText("<html>Turn down the radio volume<br/>when JRX exits");
+
+        tuneComsButton.setText("Comms Timing");
+        tuneComsButton.setToolTipText("Configure Hamlib communications");
+        tuneComsButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tuneComsButtonMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout firstSettingsPanelLayout = new javax.swing.GroupLayout(firstSettingsPanel);
+        firstSettingsPanel.setLayout(firstSettingsPanelLayout);
+        firstSettingsPanelLayout.setHorizontalGroup(
+            firstSettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(firstSettingsPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(firstSettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(firstSettingsPanelLayout.createSequentialGroup()
+                        .addComponent(sv_radioToJrxButton, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(firstSettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(firstSettingsPanelLayout.createSequentialGroup()
+                                .addGap(168, 168, 168)
+                                .addComponent(sv_volumeExitCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 351, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(firstSettingsPanelLayout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(helpButton))))
+                    .addGroup(firstSettingsPanelLayout.createSequentialGroup()
+                        .addGroup(firstSettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(firstSettingsPanelLayout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addComponent(sv_timerIntervalComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(sv_jrxToRadioButton, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(firstSettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(tuneComsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(sv_syncCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+        );
+        firstSettingsPanelLayout.setVerticalGroup(
+            firstSettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(firstSettingsPanelLayout.createSequentialGroup()
+                .addGap(2, 2, 2)
+                .addGroup(firstSettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(sv_timerIntervalComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2)
+                    .addComponent(sv_syncCheckBox)
+                    .addComponent(sv_volumeExitCheckBox))
+                .addGap(1, 1, 1)
+                .addGroup(firstSettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(sv_jrxToRadioButton)
+                    .addComponent(tuneComsButton))
+                .addGap(3, 3, 3)
+                .addGroup(firstSettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(sv_radioToJrxButton)
+                    .addComponent(helpButton))
+                .addContainerGap(20, Short.MAX_VALUE))
+        );
+
+        firstSettingsPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel2, sv_timerIntervalComboBox});
+
+        sv_syncCheckBox.getAccessibleContext().setAccessibleDescription("Dynamically synchronize App controls with radio controls");
+
+        javax.swing.GroupLayout appSettingsPanelLayout = new javax.swing.GroupLayout(appSettingsPanel);
+        appSettingsPanel.setLayout(appSettingsPanelLayout);
+        appSettingsPanelLayout.setHorizontalGroup(
+            appSettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(appSettingsPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(firstSettingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 652, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(29, Short.MAX_VALUE))
+        );
+        appSettingsPanelLayout.setVerticalGroup(
+            appSettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(appSettingsPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(firstSettingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(368, Short.MAX_VALUE))
+        );
+
+        overallTabbedPane.addTab("App Settings", appSettingsPanel);
 
         sv_radioNamesComboBox.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
         sv_radioNamesComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "IC-7100", "Item 2", "Item 3", "Item 4" }));
@@ -2632,6 +2675,10 @@ final public class JRX_TX extends javax.swing.JFrame implements
         // TODO add your handling code here:
     }//GEN-LAST:event_jCheckBox2ActionPerformed
 
+    private void scanStopButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_scanStopButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_scanStopButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -2674,6 +2721,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel afGainLabel;
     private javax.swing.JLabel agcLabel;
+    private javax.swing.JPanel appSettingsPanel;
     private javax.swing.JPanel buttonPanel2;
     private javax.swing.JTabbedPane channelsTabbedPane;
     protected javax.swing.JLabel comErrorIconLabel;
@@ -2685,6 +2733,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
     private javax.swing.JPanel digitsParent;
     private javax.swing.JButton eraseMemButton;
     private javax.swing.JPanel favoriteSWLChannels;
+    private javax.swing.JPanel firstSettingsPanel;
     private javax.swing.JButton helpButton;
     private javax.swing.JPanel ifControlsPanel;
     private javax.swing.JButton jButton1;
@@ -2702,6 +2751,9 @@ final public class JRX_TX extends javax.swing.JFrame implements
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
@@ -2735,12 +2787,10 @@ final public class JRX_TX extends javax.swing.JFrame implements
     protected javax.swing.JLabel scanIconLabel;
     private javax.swing.JPanel scanPanel;
     private javax.swing.JButton scanStopButton;
-    protected javax.swing.JLabel scanTypeLabel;
     private javax.swing.JButton scanUpButton;
-    protected javax.swing.JPanel scannerPanel;
+    private javax.swing.JPanel scannerPanel;
     private javax.swing.JPanel scopeControlLeftPanel;
     private javax.swing.JPanel scopeControlPanel;
-    private javax.swing.JPanel scopeControlRightPanel;
     private javax.swing.JButton scopeDefaultsButton;
     private javax.swing.JPanel scopeDisplayPanel;
     private javax.swing.JPanel scopePanel;
