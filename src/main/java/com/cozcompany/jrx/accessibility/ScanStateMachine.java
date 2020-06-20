@@ -8,6 +8,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
+import vfoDisplayControl.VfoDisplayControl;
 
 /**
  *
@@ -17,7 +18,7 @@ final public class ScanStateMachine {
     
 
     JRX_TX parent;
-    FreqDisplay vfoDisplayS;
+    VfoDisplayControl vfoDisplayS;
     long scanStartFreq = 0;
     long scanEndFreq = 0;
     int scanStartIndex = 0;
@@ -230,7 +231,8 @@ final public class ScanStateMachine {
         long freq = -1;
         int count = 100;
         while (freq < 0 && count-- > 0) {
-            scanMemoryIndex = incrementScan(scanMemoryIndex, scanStartIndex, scanEndIndex, scanDirection);
+            scanMemoryIndex = incrementScan(
+                    scanMemoryIndex, scanStartIndex, scanEndIndex, scanDirection);
             freq = getScanFrequency();
         }
         if (count < 0) {
@@ -257,13 +259,15 @@ final public class ScanStateMachine {
                 lastOpenSquelchTime = System.currentTimeMillis();
             }
             //p("freq: " + sv_freq);
-            double dwellTime = lastOpenSquelchTime + parent.scanDude.getTimeStep(parent.sv_dwellTimeComboBox);
+            double dwellTime = lastOpenSquelchTime + 
+                    parent.scanDude.getTimeStep(parent.sv_dwellTimeComboBox);
             double now = System.currentTimeMillis();
             if (now >= dwellTime && !sqopen && scanTimer != null) {
                 if (programScan) {
                     vfoDisplayS.frequencyToDigits(getNextScanFrequency());
                 } else {
-                    vfoDisplayS.frequencyToDigits(vfoDisplayS.getFreq() + (long)scanStep);
+                    vfoDisplayS.frequencyToDigits(
+                            vfoDisplayS.getFreq() + (long)scanStep);
                     long freq = vfoDisplayS.getFreq();
                     if (scanDirection < 0) {
                         if (freq < scanStartFreq) {
@@ -284,7 +288,9 @@ final public class ScanStateMachine {
             long t2 = System.currentTimeMillis();
             double dt = (t2 - t1) / 1000.0;
             if (parent.comArgs.debug >= 1) {
-                parent.pout(String.format("scan operation: frequency %d, latency: %f", vfoDisplayS.getFreq(), dt));
+                parent.pout(String.format(
+                        "scan operation: frequency %d, latency: %f", 
+                        vfoDisplayS.getFreq(), dt));
             }            
         }
     }

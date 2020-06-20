@@ -25,6 +25,13 @@ import javax.swing.*;
 
 import java.awt.*;
 import java.awt.datatransfer.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.*;
 import java.net.Socket;
 import java.net.URI;
@@ -34,17 +41,21 @@ import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Timer;
+import java.util.prefs.Preferences;
 import java.util.regex.Pattern;
+import javax.accessibility.AccessibleContext;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import vfoDisplayControl.VfoDisplayControl;
+import vfoDisplayControl.VfoSelectionInterface;
 
 /**
  * @author lutusp
  */
 final public class JRX_TX extends javax.swing.JFrame implements 
-        ListSelectionListener {
+        ListSelectionListener, ItemListener , ActionListener {
 
-    final String appVersion = "5.0.4";
+    final String appVersion = "5.0.5";
     final String appName;
     final String programName;
     String lineSep;
@@ -112,8 +123,21 @@ final public class JRX_TX extends javax.swing.JFrame implements
     Color darkGreen, darkBlue, darkRed;
     int comError = 0;
     long oldTime = 0; // debugging
-    FreqDisplay vfoDisplay;
+    
+    VfoDisplayControl vfoDisplay;
+    VfoSelectionInterface vfoState;
     ScanController scanDude;
+    static String VFO_SELECT_A_TEXT = "Select radio VFO A";
+    static String VFO_SELECT_B_TEXT = "Select radio VFO B";
+    static String LAST_VFO = "LAST_VFO";
+    final long MSN_FREQ = 3563000;   // MSN 80meter CW
+    final long SHAWSVILLE_REPEATER_OUTPUT_FREQ = 145330000; // Shawsville Rptr
+    JMenuBar menuBar;
+    public JRadioButtonMenuItem menuItemA;
+    public JRadioButtonMenuItem menuItemB;
+    public JTextField frequencyVfoA;
+    public JTextField frequencyVfoB;
+    Preferences prefs;
 
     //dependencies
     FileHelpers fileHelpers;
@@ -152,11 +176,25 @@ final public class JRX_TX extends javax.swing.JFrame implements
 
         baseFont = new Font(Font.MONOSPACED, Font.PLAIN, getFont().getSize());
         setFont(baseFont);
+        
+        
+                
         // Must create/initialize vfoDisplay before scan functions.
-        vfoDisplay = new FreqDisplay(this, digitsParent);
-        vfoDisplay.initDigits();
+        frequencyVfoA = new JTextField("0000.000000");
+        frequencyVfoB = new JTextField("0000.000000");
+        vfoDisplay = new VfoDisplayControl(this);
+        vfoState = setUpVfoComponents(vfoDisplay);
+        
+        
         scanStateMachine = new ScanStateMachine(this);       
         scanDude = new ScanController(this);
+        
+        //setBounds(0,0,648,320);
+        setResizable(true);
+        //Dimension minSize = new Dimension(400,250);
+        //setMinimumSize(minSize);
+        
+        
         // default app size
         setSize(defWidth, defHeight);
         createControlList();
@@ -174,7 +212,126 @@ final public class JRX_TX extends javax.swing.JFrame implements
     }
 
 
-
+    public VfoSelectionInterface setUpVfoComponents(VfoDisplayControl vfoGroup) {
+        // Create an Prefernces object for access to this user's preferences.
+        prefs = Preferences.userNodeForPackage(this.getClass());
+        // Use the Mac OSX menuBar at the top of the screen.
+        System.setProperty("apple.laf.useScreenMenuBar", "true");
+        addMenuBar(); // Need to have menu created before setupPanes();       
+        // Add an exclusive interface to the Vfo selector so that only one thread
+        // at a time gains access.
+        VfoSelectionInterface vfoState = new VfoSelectionInterface(menuItemA, menuItemB,
+            frequencyVfoA, frequencyVfoB );
+ 
+      
+          // @todo Add this later with stored frequency of the selected vfo.
+        String lastVfo = prefs.get("LAST_VFO", "VFO_SELECT_A_TEXT");
+        if ( lastVfo == null) {
+            // There is no history.
+            // Vfo A is arbitrary default,
+            vfoState.setVfoASelected();
+        } else if ( lastVfo.equals(VFO_SELECT_A_TEXT)) {
+            vfoState.setVfoASelected();
+        } else if ( lastVfo.equals(VFO_SELECT_B_TEXT)) {
+            vfoState.setVfoBSelected();
+        } else {
+            // Do no recognize the entry.
+            System.out.println("Unrecognized preference :"+lastVfo);
+            vfoState.setVfoASelected();
+        }        
+        // Must instantiate components before initialization of VfoDisplayControl.     
+        vfoGroup.setupPanes();                      
+        // @todo Later we will get these from Preferences.  When do we save a freq?
+        vfoState.writeFrequencyToRadioVfoA(MSN_FREQ);
+        vfoState.writeFrequencyToRadioVfoB(SHAWSVILLE_REPEATER_OUTPUT_FREQ);
+        vfoGroup.makeVisible(vfoState); 
+        
+        
+        // Cause the ones digit ftf to get the focus when the JFrame gets focus.                              
+        JFormattedTextField textField;
+        Vector<Component> order = vfoGroup.getTraversalOrder();
+        textField = (JFormattedTextField) order.get(0);
+         this.addWindowFocusListener(new WindowAdapter() {
+            public void windowGainedFocus(WindowEvent e) {
+                textField.requestFocusInWindow();
+            }
+        });
+        // Set up TestInfo GroupBox.  This is an example of grouping accessible
+        // controls to make an accessibility tree that uses few key strokes.
+        vfoGroup.setFocusable(true);       
+        String infoStr  = "<html>VFO Display Digits can be <br>"+
+                                "adjusted using up/down <br>"+
+                                "arrows, left click and the<br>"+
+                                "scroll wheel.             <br>"+
+                                "Left/right arrows traverse<br>"+
+                                "digits.  ";
+        // keysInfo is a Jlabel with instructions for the VFO key shortcuts.
+        //keysInfo.setText(infoStr);
+        // Associate labels with fields for accessibility.
+        //jLabel1.setLabelFor(frequencyVfoA);
+        //jLabel2.setLabelFor(frequencyVfoB);
+        return vfoState;
+    }
+    
+    /**
+     * Create the menu bar for the display and add menu items to operate the
+     * VFO selection and copy tasks.
+     */        
+    protected void addMenuBar() {    
+        menuBar = new JMenuBar();
+        setJMenuBar(menuBar);
+        //Build the first menu.
+        JMenu menu = new JMenu("Choose Radio VFO Operation");
+        menu.setMnemonic(KeyEvent.VK_V);
+        AccessibleContext menuContext = menu.getAccessibleContext();
+        menuContext.setAccessibleDescription(
+            "Pick the radio VFO that the VFO Panel controls");
+        menuContext.setAccessibleName("Choose Radio VFO");
+        menuBar.add(menu);
+        
+        //Set JMenuItem A.
+        menuItemA = new JRadioButtonMenuItem(VFO_SELECT_A_TEXT, true);
+        menuItemA.setAccelerator(KeyStroke.getKeyStroke(
+                KeyEvent.VK_A, ActionEvent.ALT_MASK));
+        AccessibleContext itemAContext = menuItemA.getAccessibleContext();
+        itemAContext.setAccessibleDescription(
+            "VFO panel controls radio VFO A");
+        itemAContext.setAccessibleName("Choose radio VFO A");       
+        menuItemA.addItemListener(this);
+        menu.add(menuItemA);
+        //Set JMenuItem B.
+        menuItemB = new JRadioButtonMenuItem(VFO_SELECT_B_TEXT, false);
+        menuItemB.setAccelerator(KeyStroke.getKeyStroke(
+                KeyEvent.VK_B, ActionEvent.ALT_MASK));
+        AccessibleContext itemBContext = menuItemB.getAccessibleContext();
+        itemBContext.setAccessibleDescription(
+            "VFO panel controls radio VFO B");
+        itemBContext.setAccessibleName("Choose radio VFO B");
+        menuItemB.addItemListener(this);
+        menu.add(menuItemB);
+        // Add VFO "copy" menu items.
+        menu.addSeparator();
+        JMenuItem a2b = new JMenuItem("Copy VFO A to VFO B", KeyEvent.VK_C);
+        AccessibleContext a2bContext = a2b.getAccessibleContext();
+        a2bContext.setAccessibleName("Copy Vfo A to Vfo B");
+        a2bContext.setAccessibleDescription("Use shortcut key option C");
+        a2b.setAccelerator(KeyStroke.getKeyStroke(
+                KeyEvent.VK_C, ActionEvent.ALT_MASK));
+        a2b.addItemListener(this);
+        a2b.addActionListener(this);
+        menu.add(a2b);
+        JMenuItem swap = new JMenuItem("Swap VFO A with VFO B", KeyEvent.VK_S);
+        AccessibleContext swapContext = a2b.getAccessibleContext();
+        swapContext.setAccessibleName("Swap Vfo A with Vfo B");
+        swapContext.setAccessibleDescription("Use shortcut key option S");
+        swap.setAccelerator(KeyStroke.getKeyStroke(
+                KeyEvent.VK_S, ActionEvent.ALT_MASK));
+        swap.addItemListener(this);
+        swap.addActionListener(this);
+        menu.add(swap);
+        
+        }
+ 
 
     private void startCyclicalTimer() {
         if (comArgs.runTimer) {
@@ -237,10 +394,10 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 setComErrorIcon();
                 readRadioControls(false);
             }
-            if (slowRadio || scanStateMachine.scanTimer != null) {
-                vfoDisplay.timerUpdateFreq();
-                //timerSetSliders();
-            }
+//            if (slowRadio || scanStateMachine.scanTimer != null) {
+//                vfoDisplay.timerUpdateFreq();
+//                //timerSetSliders();
+//            }
             resetTimer();
         }
     }
@@ -321,9 +478,10 @@ final public class JRX_TX extends javax.swing.JFrame implements
     }
 
     private void measureSpeed() {
+        long freq = vfoState.getSelectedVfoFrequency();
         long t = System.currentTimeMillis();
         oldRadioFrequency = -1;
-        setRadioFrequency(vfoDisplay.getFreq());
+        setRadioFrequency(freq);
         long dt = System.currentTimeMillis() - t;
         // use a diferent strategy for slow radios
         slowRadio = dt > 75;
@@ -345,7 +503,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
     /**
      * Create an array of controls which reflect and adjust the rig settings.
      * 
-     * The list of availible controls for the current rig model are read from
+     * The list of available controls for the current rig model are read from
      * rigctld and may not actually be accurate.  
      * 
      * We need a way to override the list provided by rigctl when we find that
@@ -619,7 +777,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         try {
             if (validSetup()) {
                 if (v < 0) {
-                    v = vfoDisplay.getFreq();
+                    v = vfoState.getSelectedVfoFrequency();
                 }
                 if (v < 0) {
                     throw (new Exception("frequency <= 0"));
@@ -2949,4 +3107,71 @@ final public class JRX_TX extends javax.swing.JFrame implements
     private javax.swing.JTabbedPane vfoTabbedPane;
     private javax.swing.JSlider voxSlider;
     // End of variables declaration//GEN-END:variables
+
+   @Override
+    public void actionPerformed(ActionEvent e) {
+        String actionString = e.getActionCommand();
+        if (actionString == "Copy VFO A to VFO B") {
+            vfoState.copyAtoB();
+                 
+            if (!vfoState.vfoA_IsSelected()) {
+                long freqA = vfoState.getVfoAFrequency();
+                vfoDisplay.frequencyToDigits(freqA);
+            }
+            JOptionPane.showMessageDialog(this,
+                    "VFO A copied to VFO B",
+                    "VFO A copied to VFO B",  // VoiceOver reads only this line.
+                    JOptionPane.PLAIN_MESSAGE);
+        } else if (actionString == "Swap VFO A with VFO B") {
+            vfoState.swapAwithB();
+                 
+            if (vfoState.vfoA_IsSelected()) {
+                long freqA = vfoState.getVfoAFrequency();
+                vfoDisplay.frequencyToDigits(freqA);
+            } else {
+                long freqB = vfoState.getVfoBFrequency();
+                vfoDisplay.frequencyToDigits(freqB);                
+            }
+            JOptionPane.showMessageDialog(this,
+                    "VFO A swapped with VFO B",
+                    "VFO A swapped with VFO B",  // VoiceOver reads only this line.
+                    JOptionPane.PLAIN_MESSAGE);            
+        }
+    } 
+    @Override
+    public void itemStateChanged(ItemEvent e) {
+        if (inhibit) return;        
+        
+        Object itemObj = e.getItem();
+        JMenuItem item = (JMenuItem) itemObj;
+        String itemText = item.getText();
+        //System.out.println("item.name :"+itemText);
+        if (itemText.equals(VFO_SELECT_A_TEXT)) {
+            //item.firePropertyChange("MENU_ITEM1", false, true);
+            if (item.isSelected()) {
+                vfoState.setVfoASelected();
+                prefs.put(LAST_VFO, VFO_SELECT_A_TEXT);
+                // If voiceOver enabled, need this dialog to announce vfo change.
+                JOptionPane.showMessageDialog(this,
+                    "VFO A Selected", // VoiceOver does not read the text in dialog.
+                    "VFO A Selected", // VoiceOver reads only this line, the title.
+                    JOptionPane.PLAIN_MESSAGE);
+            }           
+        } else if (itemText.equals(VFO_SELECT_B_TEXT)) {
+            //item.firePropertyChange("MENU_ITEM1", false, true);
+            if (item.isSelected()) {
+                vfoState.setVfoBSelected();
+                prefs.put(LAST_VFO, VFO_SELECT_B_TEXT);
+                // If voiceOver enabled, need this dialog to announce vfo change.
+                JOptionPane.showMessageDialog(this,
+                    "VFO B Selected",
+                    "VFO B Selected",  // VoiceOver reads only this line.
+                    JOptionPane.PLAIN_MESSAGE);
+            }
+        } else {
+            System.out.println("Unknown menu item handled in itemStateChanged()");
+        }
+        long freq = vfoState.getSelectedVfoFrequency();
+        vfoDisplay.frequencyToDigits(freq);
+    }
 }

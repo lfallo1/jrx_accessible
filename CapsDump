@@ -1,0 +1,144 @@
+Caps dump for model: 370
+Model name:	IC-7100
+Mfg name:	Icom
+Backend version:	0.8
+Backend copyright:	LGPL
+Backend status:	Untested
+Rig type:	Transceiver
+PTT type:	Rig capable
+DCD type:	Rig capable
+Port type:	RS-232
+Serial speed: 300..19200 bauds, 8N1 
+Write delay: 0mS, timeout 1000mS, 3 retry
+Post Write delay: 0mS
+Has targetable VFO: N
+Has transceive: Y
+Announce: 0x0
+Max RIT: -9.999kHz/+9.999kHz
+Max XIT: -9.999kHz/+9.999kHz
+Max IF-SHIFT: -0.0kHz/+0.0kHz
+Preamp: 20dB
+Attenuator: 20dB
+CTCSS: 67.0 69.3 71.9 74.4 77.0 79.7 82.5 85.4 88.5 91.5 94.8 97.4 100.0 103.5 107.2 110.9 114.8 118.8 123.0 127.3 131.8 136.5 141.3 146.2 151.4 156.7 159.8 162.2 165.5 167.9 171.3 173.8 177.3 179.9 183.5 186.2 189.9 192.8 196.6 199.5 203.5 206.5 210.7 218.1 225.7 229.1 233.6 241.8 250.3 254.1 Hz, 50 tones
+DCS: 23 25 26 31 32 36 43 47 51 53 54 65 71 72 73 74 114 115 116 122 125 131 132 134 143 145 152 155 156 162 165 172 174 205 212 223 225 226 243 244 245 246 251 252 255 261 263 265 266 271 274 306 311 315 325 331 332 343 346 351 356 364 365 371 411 412 413 423 431 432 445 446 452 454 455 462 464 465 466 503 506 516 523 526 532 546 565 606 612 624 627 631 632 654 662 664 703 712 723 731 732 734 743 754, 104 codes
+Get functions: FAGC NB COMP VOX TONE TSQL FBKIN ANF NR MN LOCK VSC AFC SATMODE SCOPE 
+Set functions: FAGC NB COMP VOX TONE TSQL FBKIN ANF NR MN LOCK VSC AFC SATMODE SCOPE RESUME 
+Get level: PREAMP(0..0/0) ATT(0..0/0) VOX(0..0/0) AF(0..0/0) RF(0..0/0) SQL(0..0/0) IF(0..0/0) APF(0..0/0) NR(0..0/0) PBT_IN(0..0/0) PBT_OUT(0..0/0) CWPITCH(0..0/0) RFPOWER(0..0/0) MICGAIN(0..0/0) KEYSPD(0..0/0) NOTCHF(0..0/0) COMP(0..0/0) AGC(0..0/0) VOXGAIN(0..0/0) ANTIVOX(0..0/0) RAWSTR(0..255/0) SWR(0..0/0) 
+Set level: PREAMP(0..0/0) ATT(0..0/0) VOX(0..0/0) AF(0..0/0) RF(0..0/0) SQL(0..0/0) IF(0..0/0) APF(0..0/0) NR(0..0/0) PBT_IN(0..0/0) PBT_OUT(0..0/0) CWPITCH(0..0/0) RFPOWER(0..0/0) MICGAIN(0..0/0) KEYSPD(0..0/0) NOTCHF(0..0/0) COMP(0..0/0) AGC(0..0/0) VOXGAIN(0..0/0) ANTIVOX(0..0/0) 
+Extra levels:
+Get parameters: ANN(0..0/0) BACKLIGHT(0..0/0) 
+Set parameters: ANN(0..0/0) BACKLIGHT(0..0/0) 
+Extra parameters:
+Mode list: AM CW USB LSB RTTY FM CWR RTTYR 
+VFO list: MEM Main Sub VFOA VFOB 
+VFO Ops: CPY XCHG FROM_VFO TO_VFO MCL TUNE 
+Scan Ops: MEM SLCT PRIO VFO 
+Number of banks:	0
+Memory name desc size:	9
+Memories:
+	1..396:   	MEM
+	  Mem caps: 
+	397..400:   	CALL
+	  Mem caps: 
+	401..424:   	EDGE
+	  Mem caps: 
+TX ranges status, region 1:	OK (0)
+RX ranges status, region 1:	OK (0)
+TX ranges status, region 2:	OK (0)
+RX ranges status, region 2:	OK (0)
+Tuning steps:
+	1 Hz:   	CW USB LSB 
+	10 Hz:   	CW USB LSB 
+	50 Hz:   	CW USB LSB 
+	100 Hz:   	CW USB LSB 
+	100 Hz:   	FM 
+	5 kHz:   	FM 
+	6.25 kHz:   	FM 
+	10 kHz:   	FM 
+	12.5 kHz:   	FM 
+	20 kHz:   	FM 
+	25 kHz:   	FM 
+	100 kHz:   	FM 
+Tuning steps status:	OK (0)
+Filters:
+	2.4 kHz:   	CW USB LSB RTTY 
+	500 Hz:   	CW RTTY 
+	15 kHz:   	FM 
+	6 kHz:   	AM FM 
+Bandwidths:
+	AM	Normal: 6 kHz,	Narrow: 0 Hz,	Wide: 0 Hz
+	CW	Normal: 2.4 kHz,	Narrow: 500 Hz,	Wide: 0 Hz
+	USB	Normal: 2.4 kHz,	Narrow: 0 Hz,	Wide: 0 Hz
+	LSB	Normal: 2.4 kHz,	Narrow: 0 Hz,	Wide: 0 Hz
+	RTTY	Normal: 2.4 kHz,	Narrow: 500 Hz,	Wide: 0 Hz
+	FM	Normal: 15 kHz,	Narrow: 6 kHz,	Wide: 0 Hz
+Has priv data:	Y
+Has Init:	Y
+Has Cleanup:	Y
+Has Open:	N
+Has Close:	N
+Can set Conf:	Y
+Can get Conf:	Y
+Can set Frequency:	Y
+Can get Frequency:	Y
+Can set Mode:	Y
+Can get Mode:	Y
+Can set VFO:	Y
+Can get VFO:	N
+Can set PTT:	Y
+Can get PTT:	Y
+Can get DCD:	Y
+Can set Repeater Duplex:	Y
+Can get Repeater Duplex:	Y
+Can set Repeater Offset:	Y
+Can get Repeater Offset:	Y
+Can set Split Freq:	Y
+Can get Split Freq:	Y
+Can set Split Mode:	Y
+Can get Split Mode:	Y
+Can set Split VFO:	Y
+Can get Split VFO:	N
+Can set Tuning Step:	Y
+Can get Tuning Step:	Y
+Can set RIT:	Y
+Can get RIT:	N
+Can set XIT:	N
+Can get XIT:	N
+Can set CTCSS:	Y
+Can get CTCSS:	Y
+Can set DCS:	N
+Can get DCS:	N
+Can set CTCSS Squelch:	Y
+Can get CTCSS Squelch:	Y
+Can set DCS Squelch:	Y
+Can get DCS Squelch:	Y
+Can set Power Stat:	Y
+Can get Power Stat:	N
+Can Reset:	N
+Can get Ant:	Y
+Can set Ant:	Y
+Can set Transceive:	E
+Can get Transceive:	N
+Can set Func:	Y
+Can get Func:	Y
+Can set Level:	Y
+Can get Level:	Y
+Can set Param:	Y
+Can get Param:	Y
+Can send DTMF:	N
+Can recv DTMF:	N
+Can send Morse:	Y
+Can decode Events:	Y
+Can set Bank:	N
+Can set Mem:	Y
+Can get Mem:	N
+Can set Channel:	E
+Can get Channel:	E
+Can ctl Mem/VFO:	Y
+Can Scan:	Y
+Can get Info:	N
+Can get power2mW:	N
+Can get mW2power:	N
+
+Overall backend warnings: 0
+RPRT 0

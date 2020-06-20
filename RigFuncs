@@ -1,0 +1,498 @@
+
+==============================================================================
+
+Start rigctl for IC-7100 on the mac :
+rigctl -m 370 -r /dev/tty.SLAB_USBtoUART2
+
+Rig command: f
+Frequency: 145590000
+    Reads the frequency from the VFO shown on the rig screen, VFO A.
+
+Rig command: m
+Mode: FM
+Passband: 15000
+
+Rig command: M ?
+AM CW USB LSB RTTY FM CWR RTTYR 
+    These are the modes supported by the backend of rigctl, not all the modes
+    supported by the radio, for example D-STAR is supported by radio.
+
+Rig command: v
+get_vfo: error = Feature not available
+    This command is NOT supported by backend.
+
+Rig command: V VFOB
+    This command actually changed the radio to use VFO B.
+
+Rig command: f
+Frequency: 14070000
+
+Rig command: m
+Mode: PKTUSB
+Passband: 2400
+    The mode is actually USB-D on the screen.  UNDOCUMENTED MODE FOR RIGCTL.
+
+Rig command: V VFOA
+    This command actually changed the radio to use VFO A instantaneously.  Since
+    the two VFO s were on different bands, I heard the relay click in the radio
+    and there was NO perceptual delay.  The mode is retained with the VFO.
+
+Rig command: f
+Frequency: 145590000
+
+Rig command: m
+Mode: FM
+Passband: 15000
+
+
+Rig command: y
+get_ant: error = Command rejected by the rig
+    y asks for the antenna.  So there is always an error response to this in 
+    JRX because dump_caps says it can handle the inquiry.  That is a Hamlib bug.
+
+Rig command: l IF
+get_level: error = Command rejected by the rig
+
+Rig command: l ?
+PREAMP ATT VOX AF RF SQL IF APF NR PBT_IN PBT_OUT CWPITCH RFPOWER MICGAIN 
+KEYSPD NOTCHF COMP AGC VOXGAIN ANTIVOX RAWSTR SWR STRENGTH 
+    So Hamlib says the rig responds to "l IF" command, but it does not.  That is
+    a Hamlib bug.  JRX always shows com error because it hamlib replys that this
+    command is supported by the rig.  It is not.
+
+Rig command: l PREAMP
+Level Value: 0
+
+Rig command: l VOX
+get_level: error = Command rejected by the rig
+
+Rig command: l AF
+Level Value: 0.000000
+
+Rig command: l RF
+Level Value: 1.000000
+
+Rig command: l IF
+get_level: error = Command rejected by the rig
+    JRX always shows com error because....
+
+Rig command: l APF
+get_level: error = Command rejected by the rig
+
+Rig command: l NR
+Level Value: 0.031373
+
+Rig command: l PBT_IN
+get_level: error = Command rejected by the rig
+
+Rig command: l PBT_OUT
+get_level: error = Command rejected by the rig
+
+Rig command: l CWPITCH
+Level Value: 128
+
+Rig command: l RFPOWER
+Level Value: 0.000000
+
+Rig command: l MICGAIN
+Level Value: 0.501961
+
+Rig command: l KEYSPD
+Level Value: 15
+
+Rig command: l NOTCHF
+Level Value: 0
+
+Rig command: l COMP
+Level Value: 0.501961
+
+Rig command: l AGC
+Level Value: 5
+
+Rig command: l VOXGAIN
+Level Value: 0.098039
+
+Rig command: l ANTIVOX
+Level Value: 0.098039
+
+Rig command: L RAWSTR
+Level Value: AGC
+set_level: error = Feature not available
+
+Rig command: l SWR
+Level Value: 1.000000
+
+Rig command: l STRENGTH
+Level Value: -60
+
+============================================================================
+    
+Rig command: L ?
+PREAMP ATT VOX AF RF SQL IF APF NR PBT_IN PBT_OUT CWPITCH RFPOWER MICGAIN KEYSPD 
+NOTCHF COMP AGC VOXGAIN ANTIVOX 
+    L is set level and these are the levels supported by the backend of rigctl.
+
+Rig command: L PREAMP 20
+
+Rig command: l PREAMP
+Level Value: 20
+    I think the preamp is 20 db on VHF and maybe something else on HF.
+
+Rig command: f
+Frequency: 145590000
+
+Rig command: F 14000000
+
+Rig command: l PREAMP
+Level Value: 0
+
+Rig command: L PREAMP
+Level Value: 10
+set_level: error = Invalid parameter
+
+Rig command: L PREAMP 20
+
+Rig command: l PREAMP
+Level Value: 20
+    The preamp was set to P.AMP1 which is maybe 20 db?
+
+I manually set the preamp to P.AMP2.
+
+Rig command: l PREAMP
+get_level: error = Protocol error
+
+Rig command: L PREAMP 20
+    Sets preamp to P.AMP1 on the rig screen.
+
+Rig command: l PREAMP
+Level Value: 20
+
+Rig command: l PREAMP
+Level Value: 20
+
+Rig command: L PREAMP 0
+    Turns the preamp off.
+
+Rig command: l PREAMP
+Level Value: 0
+
+==============================================================================
+
+Rig command: U ?
+FAGC NB COMP VOX TONE TSQL FBKIN ANF NR MN LOCK VSC AFC SATMODE SCOPE RESUME 
+
+Rig command: u ?
+FAGC NB COMP VOX TONE TSQL FBKIN ANF NR MN LOCK VSC AFC SATMODE SCOPE 
+
+
+note: the mode is SSB.
+
+Rig command: u FAGC
+Func Status: 3
+    The AGC was SLOW
+Rig command: u FAGC
+Func Status: 2
+    The AGC was MEDium
+Rig command: u FAGC
+Func Status: 1
+    The AGC was FAST
+Rig command: U FAGC 3
+    AGC was set to SLOW.
+Rig command: U FAGC 2
+    AGC was set to Medium.
+Rig command: U FAGC 1
+    AGC was set to FAST.  These settings are user adjustable for SSB.
+
+Rig command: U FAGC 0
+set_func: error = Command rejected by the rig
+
+note: Now the rig is in mode FM.
+
+Rig command: U FAGC 1
+    The screen says AGC-F (FAST AGC).  There is no way to change this FM setting.
+
+Rig command: U FAGC 2
+set_func: error = Command rejected by the rig
+
+Rig command: U FAGC 3
+set_func: error = Command rejected by the rig
+
+note : set mode to SSB to try the rest of the function status commands:
+
+Rig command: u NB
+Func Status: 0
+
+Rig command: u COMP
+Func Status: 0
+
+Rig command: u VOX
+Func Status: 0
+
+Rig command: u TONE
+Func Status: 0
+
+Rig command: u TSQL
+Func Status: 0
+
+Rig command: u FBKIN
+Func Status: 1
+
+Rig command: u ANF
+Func Status: 0
+
+Rig command: u NR
+Func Status: 0
+
+Rig command: u MN
+Func Status: 0
+
+Rig command: u LOCK
+Func Status: 0
+
+Rig command: u SATMODE
+get_func: error = Command rejected by the rig
+
+Rig command: u SCOPE
+get_func: error = Command rejected by the rig
+
+Rig command: u VSC
+Func Status: 0
+
+===============================================================================
+
+skipping commands p, P  .
+
+command B set bank does not appear to be supported, but .....
+
+
+Rig command: E 2
+    Sets the VFO to memory #2 in the current Bank.
+
+command e read memory is not supported.
+
+
+Rig command: d
+get_dcs_code: error = Feature not available
+
+Rig command: c
+CTCSS Tone: 885
+
+Rig command: o
+Rptr Offset: 500000
+
+Rig command: o
+Rptr Offset: 600000
+
+Rig command: r
+Rptr Shift: -
+
+Rig command: a
+Transceive: OFF
+
+
+Rig command: n
+Tuning Step: 5000
+
+Rig command: s
+get_split_vfo: error = Feature not available
+
+Rig command: k
+get_split_freq_mode: error = Command rejected by the rig
+Note: only works when rig screen says SPLIT.
+
+Rig command: i
+get_split_freq: error = Command rejected by the rig
+Note: only works when rig screen says SPLIT.
+
+===============================================================================
+
+Rig command: h
+Channel: 5
+Channel: 5, Name: ''
+VFO: MEM, Antenna: 0, Split: OFF
+Freq:   147.135 MHz	Mode:   FM	Width:   15 kHz
+txFreq: 147.135 MHz	txMode: FM	txWidth: 15 kHz
+Shift: +, Offset: +600 kHz, Step: 5 kHz, RIT: 0 Hz, XIT: 0 Hz
+CTCSS: 107.2Hz, CTCSSsql: 88.5Hz, DCS: 0.0, DCSsql: 2.3
+Functions: FAGC TONE FBKIN 
+Levels: PREAMP: 0,	 ATT: 0,	 VOX: 0,	 AF: 6.27451%,	 RF: 100%,	 
+SQL: 25.4902%,	 IF: 0,	 APF: 0%,	 NR: 3.13726%,	 PBT_IN: 0%,	 
+PBT_OUT: 0%,	 CWPITCH: 128,	 RFPOWER: 0%,	 MICGAIN: 50.1961%,	 
+KEYSPD: 15,	 NOTCHF: 0,	 COMP: 50.1961%,	 AGC: 5,	 VOXGAIN: 9.80392%,	 
+ANTIVOX: 9.80392%
+
+
+note: Rigctl changes rig settings from VFO to memory selection in current bank to 
+memory 05 where:
+txFreq:  147.735  NOT as reported by rigctl.
+Antenna: 0  is not necessarily true, rig does not support this inquiry.
+Split: OFF  is true. Rig has separate functions for Split and DUP.  
+Rig is not really responding to Antenna: Everything else is correct.
+
+
+Rig command: h 6
+Channel: 6, Name: ''
+VFO: MEM, Antenna: 0, Split: OFF
+Freq:   147.24 MHz	Mode:   FM	Width:   15 kHz
+txFreq: 147.24 MHz	txMode: FM	txWidth: 15 kHz
+Shift: +, Offset: +600 kHz, Step: 5 kHz, RIT: 0 Hz, XIT: 0 Hz
+CTCSS: 88.5Hz, CTCSSsql: 88.5Hz, DCS: 0.0, DCSsql: 2.3
+Functions: FAGC FBKIN 
+Levels: PREAMP: 0,	 ATT: 0,	 VOX: 0,	 AF: 6.27451%,	 RF: 100%,	 
+SQL: 25.4902%,	 IF: 0,	 APF: 0%,	 NR: 3.13726%,	 PBT_IN: 0%,	 
+PBT_OUT: 0%,	 CWPITCH: 128, RFPOWER: 0%,	 MICGAIN: 50.1961%,	 
+KEYSPD: 15,	 NOTCHF: 0,	 COMP: 50.1961%,	 AGC: 5,	 VOXGAIN: 9.80392%,	 
+ANTIVOX: 9.80392%
+
+note: Actually changed rig to memory selection in current bank to memory 06 where:
+txFreq:  147.840  NOT as reported by rigctl.
+
+Rig command: h 8
+Channel: 8, Name: ''
+VFO: MEM, Antenna: 0, Split: OFF
+Freq:   3.563 MHz	Mode:   CW	Width:   2.4 kHz
+txFreq: 3.563 MHz	txMode: CW	txWidth: 2.4 kHz
+Shift: None, Offset: +500 kHz, Step: 1 kHz, RIT: 0 Hz, XIT: 0 Hz
+CTCSS: 88.5Hz, CTCSSsql: 88.5Hz, DCS: 0.0, DCSsql: 2.3
+Functions: FAGC FBKIN 
+Levels: PREAMP: 0,	 ATT: 0,	 VOX: 16,	 AF: 6.27451%,	 RF: 100%,	 
+SQL: 0%,	 IF: 0,	 APF: 0%,	 NR: 3.13726%,	 PBT_IN: 74.1176%,	 
+PBT_OUT: 74.1176%,	 CWPITCH: 128,	 RFPOWER: 0%,	 MICGAIN: 50.1961%,	 
+KEYSPD: 15,	 NOTCHF: 0,	 COMP: 50.1961%,	 AGC: 1,	 VOXGAIN: 9.80392%,	 
+ANTIVOX: 9.80392%
+
+Note: This is a simplex channel that uses a different antenna output connector
+than 2/440.  
+Offset:  0   This is simplex so there is NO Offset, not +500khz as reported by rigctl.
+
+==============================================================================
+
+Here, k gives the transmit info when it says SPLIT on the screen.
+Rig command: k
+TX Frequency: 14000000
+TX Mode: CW
+TX Passband: 500
+Here, the A/B button reversed the split.  
+Rig command: k
+TX Frequency: 14059000
+TX Mode: CW
+TX Passband: 500
+Here I tried a repeater shift command on SPLIT.
+Rig command: r
+get_rptr_shift: error = Protocol error
+Then I picked a repeater channel from rig Memory.
+Rig command: r
+Rptr Shift: +
+That was correct. The shift was up 600 khz. Screen says: DUP+
+Picked a repeater with a downward shift.
+Rig command: r
+Rptr Shift: -
+That is correct.  Screen says: DUP-
+Now a 6 meter repeater.
+Rig command: r
+Rptr Shift: -
+That is correct.  The screen says DUP- and the shift is 1Mhz down.
+Rig command: o
+Rptr Offset: 1000000
+This command gives the repeater offset in Hertz.
+===========================================================================
+
+Looking for a sequence of commands to determine current state of rig:
+
+Rig command: i
+get_split_freq: error = Command rejected by the rig
+SO WE ARE NOT SPLIT.
+Rig command: r
+get_rptr_shift: error = Protocol error
+SO WE ARE NOT DUP+ OR DUP- ; NOT ON A REPEATER.
+
+
+
+
+
+
+
+
+
+
+
+
+
+Rig command: 2
+Power [0.0..1.0]: 
+? for help, q to quit.
+Note: This command may actually set power output level in percent.
+
+
+Rig command: 4
+Power mW: 
+? for help, q to quit.
+Note: This command may actually set power output level in milliWatts.
+
+
+Rig command: \dump_state
+0
+370
+2
+30000.000000 60000000.000000 0x1bf -1 -1 0x16000003 0x3
+136000.000000 174000000.000000 0x1bf -1 -1 0x16000003 0x4
+420000000.000000 480000000.000000 0x1bf -1 -1 0x16000003 0x8
+1240000000.000000 1320000000.000000 0x1bf -1 -1 0x16000003 0x10
+0 0 0 0 0 0 0
+1800000.000000 2000000.000000 0x1be 2000 100000 0x16000003 0x3
+3500000.000000 4000000.000000 0x1be 2000 100000 0x16000003 0x3
+7000000.000000 7300000.000000 0x1be 2000 100000 0x16000003 0x3
+10100000.000000 10150000.000000 0x1be 2000 100000 0x16000003 0x3
+14000000.000000 14350000.000000 0x1be 2000 100000 0x16000003 0x3
+18068000.000000 18168000.000000 0x1be 2000 100000 0x16000003 0x3
+21000000.000000 21450000.000000 0x1be 2000 100000 0x16000003 0x3
+24890000.000000 24990000.000000 0x1be 2000 100000 0x16000003 0x3
+28000000.000000 29700000.000000 0x1be 2000 100000 0x16000003 0x3
+1800000.000000 2000000.000000 0x1 2000 25000 0x16000003 0x3
+3500000.000000 4000000.000000 0x1 2000 25000 0x16000003 0x3
+7000000.000000 7300000.000000 0x1 2000 25000 0x16000003 0x3
+10100000.000000 10150000.000000 0x1 2000 25000 0x16000003 0x3
+14000000.000000 14350000.000000 0x1 2000 25000 0x16000003 0x3
+18068000.000000 18168000.000000 0x1 2000 25000 0x16000003 0x3
+21000000.000000 21450000.000000 0x1 2000 25000 0x16000003 0x3
+24890000.000000 24990000.000000 0x1 2000 25000 0x16000003 0x3
+28000000.000000 29700000.000000 0x1 2000 25000 0x16000003 0x3
+5255000.000000 5405000.000000 0x1be 2000 100000 0x16000003 0x3
+5255000.000000 5405000.000000 0x1 2000 100000 0x16000003 0x3
+50000000.000000 54000000.000000 0x1be 2000 100000 0x16000003 0x3
+144000000.000000 148000000.000000 0x1be 2000 100000 0x16000003 0x4
+430000000.000000 440000000.000000 0x1be 2000 75000 0x16000003 0x8
+1240000000.000000 1300000000.000000 0x1be 1000 10000 0x16000003 0x10
+0 0 0 0 0 0 0
+0xe 1
+0xe 10
+0xe 50
+0xe 100
+0x20 100
+0x20 5000
+0x20 6250
+0x20 10000
+0x20 12500
+0x20 20000
+0x20 25000
+0x20 100000
+0 0
+0x1e 2400
+0x12 500
+0x20 15000
+0x21 6000
+0 0
+9999
+9999
+0
+0
+20 
+20 
+0xe0523bf
+0x1e0523bf
+0x5463ffff
+0x63ffff
+0x5
+0x5
+
+Rig command: 

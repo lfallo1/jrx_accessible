@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.cozcompany</groupId>
     <artifactId>jrx-accessibility</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>5.0.4</version>
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -22,7 +22,7 @@
                     <archive>
                         <manifest>
                             <!-- give full qualified name of your main class-->
-                            <mainClass>com.cozcompany.jrx.accessibility.JRX</mainClass>
+                            <mainClass>com.cozcompany.jrx.accessibility.JRX_TX</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
