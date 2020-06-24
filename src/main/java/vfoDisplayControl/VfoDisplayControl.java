@@ -118,7 +118,7 @@ final public class VfoDisplayControl extends GroupBox
         setupGlassPane(display);
         setupContentPane(display);
 
-        //adjustSize(display);     
+        adjustSize(display);     
         
     }
     
@@ -238,8 +238,15 @@ final public class VfoDisplayControl extends GroupBox
         Rectangle displayRect = resizedDisplay.getGlassPane().getBounds();
         if (displayRect == null) return;  // too early...
         int displayWidth = displayRect.width;
+        
+        ///////////HACK
+        //displayWidth = 630;
+        
         if (displayWidth == 0) return; // too early...
-        int displayHeight = displayRect.height;        
+        int displayHeight = displayRect.height;
+        
+        ////////////HACK
+        //displayHeight = 115;
         
         float givenAspectRatio = (float)displayHeight / (float)displayWidth;
         Rectangle newBounds;

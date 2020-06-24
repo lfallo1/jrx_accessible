@@ -184,10 +184,12 @@ final public class JRX_TX extends javax.swing.JFrame implements
         frequencyVfoB = new JTextField("VFO B  0000.000000");
         vfoTabbedPane.setTabComponentAt(0, frequencyVfoA);
         vfoTabbedPane.setTabComponentAt(1, frequencyVfoB);
-        vfoDisplay = new VfoDisplayControl(this);
-        rxVfoPanel.add((Component)vfoDisplay);
+        vfoDisplay = (VfoDisplayControl)jInternalFrame1;
+        //vfoDisplay = new VfoDisplayControl(this);
+        //rxVfoPanel.add((Component)vfoDisplay);
         vfoState = setUpVfoComponents(vfoDisplay);
         rxVfoPanel.setVisible(true);
+        //Dimension aDim = rxVfoPanel.getSize();
         
         
         scanStateMachine = new ScanStateMachine(this);       
@@ -440,15 +442,15 @@ final public class JRX_TX extends javax.swing.JFrame implements
             inhibit = true;
             setComboBoxScales();
             inhibit = false;
-//            if (sv_jrxToRadioButton.isSelected()) {
-//                vfoState.setVfoStateSimplex();
-//                vfoState.setRxVfo(VfoSelectionInterface.vfoChoice.VFOA);
-//                vfoState.writeFrequencyToRadioSelectedVfo(MSN_FREQ);
-//                writeRadioControls();
-//            } else {
-//                vfoDisplay.loadRadioFrequencyToVfoB();
-//                vfoDisplay.loadRadioFrequencyToVfoA(); 
-//            }
+            if (sv_jrxToRadioButton.isSelected()) {
+                vfoState.setVfoStateSimplex();
+                vfoState.setRxVfo(VfoSelectionInterface.vfoChoice.VFOA);
+                vfoState.writeFrequencyToRadioSelectedVfo(MSN_FREQ);
+                writeRadioControls();
+            } else {
+                vfoDisplay.loadRadioFrequencyToVfoB();
+                vfoDisplay.loadRadioFrequencyToVfoA(); 
+            }
             squelchScheme.setRadioSquelch();
             readRadioControls(true);  // Reads frequency from radio
             startCyclicalTimer();
@@ -651,7 +653,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         scannerPanel.setBackground(new Color(240, 240, 220));
         scopeControlLeftPanel.setBackground(new Color(240, 240, 220));
         firstSettingsPanel.setBackground(new Color(200, 220, 240));
-        digitsParent.setToolTipText("<html>Tune each digit:<ul><li>Mouse wheel (❃): up, down</li><li>Mouse click top: up</li><li>Mouse click bottom: down</li></ul></html>");
+        rxVfoPanel.setToolTipText("<html>Tune each digit:<ul><li>Mouse wheel (❃): up, down</li><li>Mouse click top: up</li><li>Mouse click bottom: down</li></ul></html>");
         scanDude.updateScanControls();
     }
 
@@ -1523,13 +1525,12 @@ final public class JRX_TX extends javax.swing.JFrame implements
         sv_interfacesComboBox = new javax.swing.JComboBox<>();
         vfoTabbedPane = new javax.swing.JTabbedPane();
         rxVfoPanel = new javax.swing.JPanel();
-        digitsParent = new javax.swing.JPanel();
+        jInternalFrame1 = new VfoDisplayControl(this);
         txVfoPanel = new javax.swing.JPanel();
         dualVfoPanel = new javax.swing.JPanel();
         receiveLeftDualPanel = new javax.swing.JPanel();
         jTextField1 = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        transmitRightDualPanel = new javax.swing.JPanel();
         jTextField2 = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -1744,9 +1745,9 @@ final public class JRX_TX extends javax.swing.JFrame implements
                     .addGroup(transmitterPanelLayout.createSequentialGroup()
                         .addGap(96, 96, 96)
                         .addComponent(jCheckBox2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(8, Short.MAX_VALUE))))
+                        .addContainerGap(10, Short.MAX_VALUE))))
             .addGroup(transmitterPanelLayout.createSequentialGroup()
                 .addGroup(transmitterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(transmitterPanelLayout.createSequentialGroup()
@@ -2699,20 +2700,35 @@ final public class JRX_TX extends javax.swing.JFrame implements
 
         rxVfoPanel.setBackground(new java.awt.Color(0, 0, 0));
 
-        digitsParent.setLayout(new java.awt.GridBagLayout());
+        jInternalFrame1.setBorder(null);
+        jInternalFrame1.setVisible(true);
+
+        javax.swing.GroupLayout jInternalFrame1Layout = new javax.swing.GroupLayout(jInternalFrame1.getContentPane());
+        jInternalFrame1.getContentPane().setLayout(jInternalFrame1Layout);
+        jInternalFrame1Layout.setHorizontalGroup(
+            jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 676, Short.MAX_VALUE)
+        );
+        jInternalFrame1Layout.setVerticalGroup(
+            jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 106, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout rxVfoPanelLayout = new javax.swing.GroupLayout(rxVfoPanel);
         rxVfoPanel.setLayout(rxVfoPanelLayout);
         rxVfoPanelLayout.setHorizontalGroup(
             rxVfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(digitsParent, javax.swing.GroupLayout.DEFAULT_SIZE, 745, Short.MAX_VALUE)
+            .addGroup(rxVfoPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jInternalFrame1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(8, Short.MAX_VALUE))
         );
         rxVfoPanelLayout.setVerticalGroup(
             rxVfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(digitsParent, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE)
+            .addGroup(rxVfoPanelLayout.createSequentialGroup()
+                .addComponent(jInternalFrame1)
+                .addContainerGap())
         );
-
-        digitsParent.getAccessibleContext().setAccessibleName("VFO Display Control");
 
         vfoTabbedPane.addTab("RX VFO  146.670 Mhz", null, rxVfoPanel, "Receiver VFO control and display.  Use arrow keys to change values and traverse digits.");
         rxVfoPanel.getAccessibleContext().setAccessibleName("RX VFO PANEL");
@@ -2722,7 +2738,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         txVfoPanel.setLayout(txVfoPanelLayout);
         txVfoPanelLayout.setHorizontalGroup(
             txVfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 745, Short.MAX_VALUE)
+            .addGap(0, 690, Short.MAX_VALUE)
         );
         txVfoPanelLayout.setVerticalGroup(
             txVfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2742,22 +2758,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel7.setText("RECEIVE");
 
-        javax.swing.GroupLayout receiveLeftDualPanelLayout = new javax.swing.GroupLayout(receiveLeftDualPanel);
-        receiveLeftDualPanel.setLayout(receiveLeftDualPanelLayout);
-        receiveLeftDualPanelLayout.setHorizontalGroup(
-            receiveLeftDualPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 372, Short.MAX_VALUE)
-            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        receiveLeftDualPanelLayout.setVerticalGroup(
-            receiveLeftDualPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, receiveLeftDualPanelLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jLabel7)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-
         jTextField2.setBackground(new java.awt.Color(0, 0, 0));
         jTextField2.setFont(new java.awt.Font("Lucida Grande", 0, 48)); // NOI18N
         jTextField2.setForeground(new java.awt.Color(0, 255, 0));
@@ -2767,22 +2767,37 @@ final public class JRX_TX extends javax.swing.JFrame implements
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel6.setText("TRANSMIT");
 
-        javax.swing.GroupLayout transmitRightDualPanelLayout = new javax.swing.GroupLayout(transmitRightDualPanel);
-        transmitRightDualPanel.setLayout(transmitRightDualPanelLayout);
-        transmitRightDualPanelLayout.setHorizontalGroup(
-            transmitRightDualPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 355, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, transmitRightDualPanelLayout.createSequentialGroup()
-                .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+        javax.swing.GroupLayout receiveLeftDualPanelLayout = new javax.swing.GroupLayout(receiveLeftDualPanel);
+        receiveLeftDualPanel.setLayout(receiveLeftDualPanelLayout);
+        receiveLeftDualPanelLayout.setHorizontalGroup(
+            receiveLeftDualPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(receiveLeftDualPanelLayout.createSequentialGroup()
+                .addGroup(receiveLeftDualPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(receiveLeftDualPanelLayout.createSequentialGroup()
+                        .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(receiveLeftDualPanelLayout.createSequentialGroup()
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGroup(receiveLeftDualPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 386, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(433, 433, 433))
         );
-        transmitRightDualPanelLayout.setVerticalGroup(
-            transmitRightDualPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, transmitRightDualPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel6)
+
+        receiveLeftDualPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jTextField1, jTextField2});
+
+        receiveLeftDualPanelLayout.setVerticalGroup(
+            receiveLeftDualPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, receiveLeftDualPanelLayout.createSequentialGroup()
+                .addGroup(receiveLeftDualPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 86, Short.MAX_VALUE))
+                .addGroup(receiveLeftDualPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 78, Short.MAX_VALUE)
+                    .addComponent(jTextField2))
+                .addGap(0, 0, 0))
         );
 
         javax.swing.GroupLayout dualVfoPanelLayout = new javax.swing.GroupLayout(dualVfoPanel);
@@ -2791,17 +2806,14 @@ final public class JRX_TX extends javax.swing.JFrame implements
             dualVfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(dualVfoPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(receiveLeftDualPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(transmitRightDualPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(receiveLeftDualPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 737, Short.MAX_VALUE)
+                .addContainerGap())
         );
         dualVfoPanelLayout.setVerticalGroup(
             dualVfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(receiveLeftDualPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(dualVfoPanelLayout.createSequentialGroup()
-                .addComponent(transmitRightDualPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 23, Short.MAX_VALUE))
+                .addComponent(receiveLeftDualPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         vfoTabbedPane.addTab("DUAL VFO DISPLAY", dualVfoPanel);
@@ -2815,22 +2827,18 @@ final public class JRX_TX extends javax.swing.JFrame implements
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(radioPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 717, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(vfoTabbedPane)
-                .addContainerGap())
+                .addComponent(vfoTabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+            .addComponent(radioPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 717, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(30, 30, 30)
+                .addContainerGap(30, Short.MAX_VALUE)
                 .addComponent(radioPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(vfoTabbedPane)
-                .addContainerGap())
+                .addComponent(vfoTabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
@@ -3011,7 +3019,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
     private javax.swing.JButton copyButton;
     private javax.swing.JButton copyMemButton;
     protected javax.swing.JLabel dcdIconLabel;
-    private javax.swing.JPanel digitsParent;
     private javax.swing.JPanel dualVfoPanel;
     private javax.swing.JButton eraseMemButton;
     private javax.swing.JPanel favoriteSWLChannels;
@@ -3022,6 +3029,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
     private javax.swing.JButton jButton2;
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JCheckBox jCheckBox3;
+    private javax.swing.JInternalFrame jInternalFrame1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -3125,7 +3133,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
     protected javax.swing.JCheckBox sv_volumeExitCheckBox;
     protected javax.swing.JSlider sv_volumeSlider;
     private javax.swing.JComboBox<String> toneSelectionComboBox;
-    private javax.swing.JPanel transmitRightDualPanel;
     private javax.swing.JPanel transmitterPanel;
     private javax.swing.JButton tuneComsButton;
     private javax.swing.JPanel txVfoPanel;

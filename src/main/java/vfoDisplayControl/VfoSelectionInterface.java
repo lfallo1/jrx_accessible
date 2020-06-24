@@ -131,10 +131,10 @@ public class VfoSelectionInterface {
     }
     
     public void setTextVfoA(long hertz) {           
-        frequencyVfoA.setText("Vfo A  "+ Double.toString(((double)hertz) / 1.E06));
+        frequencyVfoA.setText("  VFO A   "+ Double.toString(((double)hertz) / 1.E06)+ "  ");
     }
     public void setTextVfoB(long hertz) {           
-        frequencyVfoB.setText("Vfo B  "+ Double.toString(((double)hertz) / 1.E06));
+        frequencyVfoB.setText("  VFO B   "+ Double.toString(((double)hertz) / 1.E06)+ "  ");
     }
 
     
