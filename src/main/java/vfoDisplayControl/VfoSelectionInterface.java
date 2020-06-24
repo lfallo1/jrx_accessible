@@ -89,6 +89,7 @@ public class VfoSelectionInterface {
      */
     public enum vfoChoice { VFOA, VFOB };
     public enum duplexChoice { PLUS, MINUS };
+    int RETRY_RX_FREQ = 3;
     
     
     
@@ -135,11 +136,27 @@ public class VfoSelectionInterface {
     public long getRxFrequency() {
         lock.readLock().lock(); 
         long value = 0;
-        String sf = askRadio("f");
-        if (sf == null) 
-            value = 0;
-        else 
-            value = Long.parseLong(sf);
+        for(int retry=0; retry < RETRY_RX_FREQ; retry++) {
+            String sf = askRadio("f");
+            if (sf == null) { 
+                value = 0;
+            } else if (sf.matches(".*RPRT 0")) {
+                value = 0;
+                
+            } else {
+                try {
+                    value = Long.parseLong(sf);
+                }
+                catch ( NumberFormatException e ) {
+                    value = 0;                   
+                }
+            }
+            if (value == 0 ) {
+                System.out.println("getRxFrequency retry : "+ retry);
+                continue;
+            }
+            else break;        
+        }
         lock.readLock().unlock(); 
         return value;       
     }
@@ -322,8 +339,9 @@ public class VfoSelectionInterface {
      */
     public vfoChoice getRxVfo() {
         lock.readLock().lock();
+        aFrame.noVfoDialog = true;
         vfoChoice choice;
-        long freq1 = getRxFrequency();               
+        long freq1 = getRxFrequency();
         setVfoASelected();      
         long freq2 = getRxFrequency();          
         // If the freqs are the same, VFOA is rxVFO.
@@ -341,18 +359,21 @@ public class VfoSelectionInterface {
             // Set VFO A selected.
             setRxVfo(vfoChoice.VFOA);
         }
-        else
+        else {
             choice = vfoChoice.VFOB; //VFOB is selected;
             setTextVfoB(freq1);
             frequencyVfoB.setBackground(SELECTED_COLOR);
             setTextVfoA(freq2);
             frequencyVfoA.setBackground(UNSELECTED_COLOR);
+        }
+        aFrame.noVfoDialog = false;
         lock.readLock().unlock(); 
         return choice;
     }
     
     public long getVfoAFrequency() {
         lock.readLock().lock();
+        aFrame.noVfoDialog = true;
         long frequencyHertz = 0;
         // get current rx freq
         long freq1 = getRxFrequency();            
@@ -373,12 +394,14 @@ public class VfoSelectionInterface {
             frequencyVfoB.setBackground(SELECTED_COLOR);
             frequencyVfoA.setBackground(UNSELECTED_COLOR);
         }
+        aFrame.noVfoDialog = false;
         lock.readLock().unlock(); 
         return frequencyHertz;
     }
        
      public long getVfoBFrequency() {
-        lock.readLock().lock();  //blocks until lock is available.     
+        lock.readLock().lock();  //blocks until lock is available.
+        aFrame.noVfoDialog = true;
         long frequencyHertz = 0;
         // get current rx freq
         long freq1 = getRxFrequency();            
@@ -399,6 +422,7 @@ public class VfoSelectionInterface {
             frequencyVfoA.setBackground(SELECTED_COLOR);
             frequencyVfoB.setBackground(UNSELECTED_COLOR);  
         }
+        aFrame.noVfoDialog = false;
         lock.readLock().unlock(); 
         return frequencyHertz;
     }
@@ -418,19 +442,23 @@ public class VfoSelectionInterface {
     public boolean writeFrequencyToRadioSelectedVfo(long frequencyHertz) {        
         boolean success = true;
         lock.writeLock().lock();  //blocks until lock is available.
+        aFrame.noVfoDialog = true;
         String commArgs = new String("F "+Long.toString(frequencyHertz));        
         String reply = askRadio(commArgs);
         success = (reply != null);
-        lock.writeLock().unlock();
         // Now update the app controls.
         getVfoAFrequency();
-        getVfoBFrequency();       
+        getVfoBFrequency();
+        aFrame.noVfoDialog= false;
+        lock.writeLock().unlock();
+
         return success;
     }
      
     public boolean writeFrequencyToRadioVfoA(long frequencyHertz) {
         boolean success = false;
         lock.writeLock().lock();  //blocks until lock is available.
+        aFrame.noVfoDialog = true;
         long freq1 = getRxFrequency();               
         setVfoASelected();      
         long freq2 = getRxFrequency();          
@@ -450,6 +478,7 @@ public class VfoSelectionInterface {
             setVfoBSelected();
             setTextVfoB(freq1);
         }
+        aFrame.noVfoDialog = false;
        lock.writeLock().unlock();
         return success;
     }
@@ -457,6 +486,7 @@ public class VfoSelectionInterface {
     public boolean writeFrequencyToRadioVfoB(long frequencyHertz) {
         boolean success = false;
         lock.writeLock().lock();  //blocks until lock is available.
+        aFrame.noVfoDialog = true;
         long freq1 = getRxFrequency();               
         setVfoBSelected();      
         long freq2 = getRxFrequency();          
@@ -476,9 +506,9 @@ public class VfoSelectionInterface {
             frequencyVfoA.setBackground(SELECTED_COLOR);
             frequencyVfoB.setBackground(UNSELECTED_COLOR);            
         }
-       lock.writeLock().unlock();
+        aFrame.noVfoDialog = false;
+        lock.writeLock().unlock();
         return success;
-
     }
      
      
