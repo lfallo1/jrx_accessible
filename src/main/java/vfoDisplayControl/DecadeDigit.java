@@ -59,7 +59,7 @@ public class DecadeDigit extends JFormattedTextField
             System.out.println("No formatter was created for the DecadeDigit.");
         }
         setModel(new DecadeModel(0,this));
-        setToolTipText("Lou, use the force!");
+        setToolTipText("Use arrow keys");
         // Set foreground numeral color Green. Set background transparent.        
         setFocusable(true);
         setForeground(Color.GREEN);
