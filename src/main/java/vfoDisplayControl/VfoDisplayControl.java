@@ -414,6 +414,7 @@ final public class VfoDisplayControl extends GroupBox
      */
     public void frequencyToDigits(long v) {
         if(inhibit) return;
+        silent = true;  // Do not handle digit generated value changes.
         sv_freq = v;
         currentFrequency = sv_freq;
         long modulatedValue = v;
@@ -424,7 +425,8 @@ final public class VfoDisplayControl extends GroupBox
             fd.setValue( (int) (modulatedValue % 10));
             fd.setBright(modulatedValue != 0);
             modulatedValue /= 10;
-        }         
+        }
+        silent = false;  // Enable digit change event handling.
     }
 
     /**
@@ -552,7 +554,7 @@ final public class VfoDisplayControl extends GroupBox
      */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        //if (silent) return;
+        if (silent) return;
         Object source = evt.getSource();
         DecadeDigit digit = (DecadeDigit)source;
         String name = digit.getName();

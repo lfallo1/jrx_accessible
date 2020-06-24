@@ -109,7 +109,9 @@ final public class ParseComLine {
                 + "       -t (run event timer) 0 = no, 1 = yes\n"
                 + "       -i initialize radio settings to defaults, no arg\n"
                 + "          (doesn't lose memory or other settings)\n"
-                + "       -h this help and exit\n";
+                + "       -h this help and exit\n"
+                + "Requires : Hamlib 4.0 or later.\n"
+                + "At the terminal prompt:  rigctl -V  gives the Hamlib version installed.\n";
         System.out.println(help);
         System.exit(0);
     }
