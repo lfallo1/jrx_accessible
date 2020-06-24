@@ -1131,8 +1131,10 @@ final public class JRX_TX extends javax.swing.JFrame implements
         }
         return sb.toString().trim();
     }
-
+    
+    
     public String sendRadioCom(String s, int localDebug, boolean writeMode) {
+        vfoState.lock.readLock().lock(); 
         String result = null;
         if (validSetup() && hamlibDaemon != null && hamlibSocket != null && s != null) {
             if (hamlibSocket.isConnected()) {
@@ -1156,8 +1158,11 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 }
             }
         }
+        vfoState.lock.readLock().unlock(); 
         return result;
     }
+    
+
 
     protected void setVolume(boolean squelchOpen) {
         //p("setvolume " + squelchOpen);
