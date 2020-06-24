@@ -112,13 +112,6 @@ public class VfoSelectionInterface {
         //assert (vfoA.getModel().getGroup()==vfoB.getModel().getGroup());
     }
     
-//    public void initVfoControls () {
-//        opStateControl = getVfoOperatingState();
-//        currentVfoControl = getRxVfo();
-//        duplexControl = isDuplexPlus();
-//        getSplitFreq = getSplitFreq();    
-//        
-//    }
 
     private String askRadio(String ask){
         String sf = " ";    
