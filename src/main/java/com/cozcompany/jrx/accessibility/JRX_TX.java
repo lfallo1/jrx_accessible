@@ -130,12 +130,18 @@ final public class JRX_TX extends javax.swing.JFrame implements
     ScanController scanDude;
     static String VFO_SELECT_A_TEXT = "Select radio VFO A";
     static String VFO_SELECT_B_TEXT = "Select radio VFO B";
+    static String VFO_SIMPLEX_TEXT  = "Select simplex";
+    static String VFO_DUPLEX_TEXT   = "Select duplex";
+    static String VFO_SPLIT_TEXT    = "Select split";
     static String LAST_VFO = "LAST_VFO";
     final long MSN_FREQ = 3563000;   // MSN 80meter CW
     final long SHAWSVILLE_REPEATER_OUTPUT_FREQ = 145330000; // Shawsville Rptr
     JMenuBar menuBar;
     public JRadioButtonMenuItem menuItemA;
     public JRadioButtonMenuItem menuItemB;
+    public JRadioButtonMenuItem menuItemSimplex; 
+    public JRadioButtonMenuItem menuItemDuplex;
+    public JRadioButtonMenuItem menuItemSplit; 
     public JTextField frequencyVfoA;
     public JTextField frequencyVfoB;
     Preferences prefs;
@@ -317,7 +323,42 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 KeyEvent.VK_S, ActionEvent.ALT_MASK));
         swap.addItemListener(this);
         swap.addActionListener(this);
-        menu.add(swap);       
+        menu.add(swap);
+        
+        // Add VFO operating modes radio menu buttons.
+        menu.addSeparator();
+        menuItemSimplex = new JRadioButtonMenuItem(VFO_SIMPLEX_TEXT, true);
+        splitFreqGroup.add(menuItemSimplex);
+        menuItemSimplex.setAccelerator(KeyStroke.getKeyStroke(
+                KeyEvent.VK_P, ActionEvent.ALT_MASK));
+        AccessibleContext simplexContext = menuItemSimplex.getAccessibleContext();
+        simplexContext.setAccessibleDescription(
+            "VFO simplex operation");
+        simplexContext.setAccessibleName("Simplex");       
+        menuItemSimplex.addItemListener(this);
+        menu.add(menuItemSimplex);
+        
+        menuItemDuplex = new JRadioButtonMenuItem(VFO_DUPLEX_TEXT, false);
+        splitFreqGroup.add(menuItemDuplex);
+        menuItemDuplex.setAccelerator(KeyStroke.getKeyStroke(
+                KeyEvent.VK_D, ActionEvent.ALT_MASK));
+        AccessibleContext duplexContext = menuItemDuplex.getAccessibleContext();
+        duplexContext.setAccessibleDescription(
+            "VFO duplex operation");
+        simplexContext.setAccessibleName("Duplex");       
+        menuItemDuplex.addItemListener(this);
+        menu.add(menuItemDuplex);
+        
+        menuItemSplit = new JRadioButtonMenuItem(VFO_SPLIT_TEXT, false);
+        splitFreqGroup.add(menuItemSplit);
+        menuItemSplit.setAccelerator(KeyStroke.getKeyStroke(
+                KeyEvent.VK_T, ActionEvent.ALT_MASK));
+        AccessibleContext splitContext = menuItemSplit.getAccessibleContext();
+        splitContext.setAccessibleDescription(
+            "VFO split operation");
+        splitContext.setAccessibleName("Split");       
+        menuItemSplit.addItemListener(this);
+        menu.add(menuItemSplit);
     }
  
 
@@ -1423,9 +1464,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
         sv_antennaComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,"Y","");
         jLabel18 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
-        jRadioButton3 = new javax.swing.JRadioButton();
         ifControlsPanel = new javax.swing.JPanel();
         sv_filtersComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,"F","");
         verticalListPanel = new javax.swing.JPanel();
@@ -1643,49 +1681,16 @@ final public class JRX_TX extends javax.swing.JFrame implements
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        splitFreqGroup.add(jRadioButton1);
-        jRadioButton1.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
-        jRadioButton1.setText("Simplex");
-
-        splitFreqGroup.add(jRadioButton2);
-        jRadioButton2.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
-        jRadioButton2.setText("Repeater Duplex");
-
-        splitFreqGroup.add(jRadioButton3);
-        jRadioButton3.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
-        jRadioButton3.setText("Split Frequency same mode");
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jRadioButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jRadioButton3))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(6, 6, 6)
-                .addComponent(jRadioButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(23, Short.MAX_VALUE))
+            .addGap(0, 249, Short.MAX_VALUE)
         );
-
-        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jRadioButton1, jRadioButton3});
-
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jRadioButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(5, 5, 5)
-                .addComponent(jRadioButton2)
-                .addGap(5, 5, 5)
-                .addComponent(jRadioButton3)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGap(0, 104, Short.MAX_VALUE)
         );
-
-        jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jRadioButton1, jRadioButton2, jRadioButton3});
 
         javax.swing.GroupLayout transmitterPanelLayout = new javax.swing.GroupLayout(transmitterPanel);
         transmitterPanel.setLayout(transmitterPanelLayout);
@@ -1722,16 +1727,15 @@ final public class JRX_TX extends javax.swing.JFrame implements
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(10, Short.MAX_VALUE))))
             .addGroup(transmitterPanelLayout.createSequentialGroup()
+                .addGap(6, 6, 6)
                 .addGroup(transmitterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(transmitterPanelLayout.createSequentialGroup()
-                        .addGap(6, 6, 6)
                         .addComponent(voxSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel11)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jCheckBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(transmitterPanelLayout.createSequentialGroup()
-                        .addGap(6, 6, 6)
                         .addComponent(rfPowerOutputSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -3014,9 +3018,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
-    private javax.swing.JRadioButton jRadioButton3;
     private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
