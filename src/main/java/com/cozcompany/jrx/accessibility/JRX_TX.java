@@ -97,7 +97,8 @@ final public class JRX_TX extends javax.swing.JFrame implements
     int squelchHigh = 100;
     boolean isWindows;
     boolean isMacOs;
-    boolean inhibit;
+    public boolean inhibit;
+    public boolean noVfoDialog;
     Font digitsFont;
     Font baseFont;
     final String FILE_SEP = System.getProperty("file.separator");
@@ -221,6 +222,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
  
       
         // @todo Add this later with stored frequency of the selected vfo.
+        noVfoDialog = true;
         String lastVfo = prefs.get("LAST_VFO", "VFO_SELECT_A_TEXT");
         if ( lastVfo == null) {
             // There is no history.
@@ -240,6 +242,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         // @todo Later we will get these from Preferences.  When do we save a freq?
         vfoState.writeFrequencyToRadioVfoA(MSN_FREQ);
         vfoState.writeFrequencyToRadioVfoB(SHAWSVILLE_REPEATER_OUTPUT_FREQ);
+        noVfoDialog = false;
         vfoGroup.makeVisible(vfoState); 
         
         
@@ -422,6 +425,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 vfoDisplay.loadRadioFrequencyToVfoB();
                 vfoDisplay.loadRadioFrequencyToVfoA(); 
             }
+            vfoDisplay.setUpFocusManager();
             inhibit = false;            
             squelchScheme.setRadioSquelch();
             readRadioControls(true);  // Reads frequency from radio
@@ -3126,7 +3130,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
     } 
     @Override
     public void itemStateChanged(ItemEvent e) {
-        if (inhibit) return;        
+        if (noVfoDialog) return;        
         
         Object itemObj = e.getItem();
         JMenuItem item = (JMenuItem) itemObj;
