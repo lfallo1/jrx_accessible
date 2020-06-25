@@ -50,7 +50,8 @@ import javax.swing.JTextField;
  * changes thread safe.
  * 5) The VFO operating state must be one of [Simplex, Duplex, Split]. The rig
  * allows SPLIT and DUP at the same time.  If that is found to be the case on
- * startup, then SPLIT will be turned off.  That is an arbitrary choice.  
+ * startup, then SPLIT will be turned off.  That is an arbitrary choice. 
+ * 6) sendRadioCom() uses gets a read lock.
  *    If, at any time after startup, Split and Dup are both found to be on, then 
  * the current app control state will determine what happens.  There can only be 
  * one state.  I see it as an operating mistake to have DUP on and SPLIT on at 
@@ -69,7 +70,7 @@ import javax.swing.JTextField;
  * @author Coz
  */
 public class VfoSelectionInterface {
-    private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();    
+    public final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();    
     JRadioButtonMenuItem vfoA;
     JRadioButtonMenuItem vfoB;
     JTextField frequencyVfoA;
@@ -112,8 +113,7 @@ public class VfoSelectionInterface {
         //Menu items must be in the same group to be exclusively selected.
         //assert (vfoA.getModel().getGroup()==vfoB.getModel().getGroup());
     }
-    
-
+        
     private String askRadio(String ask){
         String sf = " ";    
         try {
@@ -134,15 +134,14 @@ public class VfoSelectionInterface {
     
     
     public long getRxFrequency() {
-        lock.readLock().lock(); 
+        lock.writeLock().lock(); 
         long value = 0;
         for(int retry=0; retry < RETRY_RX_FREQ; retry++) {
             String sf = askRadio("f");
             if (sf == null) { 
                 value = 0;
             } else if (sf.matches(".*RPRT 0")) {
-                value = 0;
-                
+                value = 0;                
             } else {
                 try {
                     value = Long.parseLong(sf);
@@ -157,7 +156,7 @@ public class VfoSelectionInterface {
             }
             else break;        
         }
-        lock.readLock().unlock(); 
+        lock.writeLock().unlock(); 
         return value;       
     }
     
@@ -169,13 +168,13 @@ public class VfoSelectionInterface {
        
     public opState getVfoOperatingState() {
         opState op = opState.SIMPLEX;
-        lock.readLock().lock();
+        lock.writeLock().lock();
         if (isVfoOpStateSplitOn())
             op = opState.SPLIT;
         else if (isVfoOpStateDupOn())
             op = opState.DUPLEX;
         else op = opState.SIMPLEX;
-        lock.readLock().unlock();
+        lock.writeLock().unlock();
         return op;
     }
     
@@ -195,7 +194,7 @@ public class VfoSelectionInterface {
      * @param txChoice either VFO_A or VFO_B
      */   
     public boolean setVfoOpStateSplitOn(vfoChoice txChoice) {
-        lock.readLock().lock();
+        lock.writeLock().lock();
         // Technically you must turn repeater duplex off.
         if (isVfoOpStateDupOn()) {
             setVfoOpStateDupOff();
@@ -204,21 +203,21 @@ public class VfoSelectionInterface {
                 "S 1 "+getVfoName(txChoice));
         String reply = askRadio(commArgs);
         boolean success = (reply != null);
-        lock.readLock().unlock();
+        lock.writeLock().unlock();
         return success;       
     }
     
     public boolean setVfoOpStateSplitOff() {
-        lock.readLock().lock();
+        lock.writeLock().lock();
         String commArgs = new String("S 0 VFOA");  // VFO does not matter.
         String reply = askRadio(commArgs);
         boolean success = (reply != null);
-        lock.readLock().unlock();        
+        lock.writeLock().unlock();        
         return success;       
     }
     
     public boolean isVfoOpStateSplitOn() {
-        lock.readLock().lock();
+        lock.writeLock().lock();
         boolean splitOn = false;
         boolean error = true;
         String commArgs = new String("s");  
@@ -233,39 +232,39 @@ public class VfoSelectionInterface {
             String splitSearch = "?i).*Split: 1";
             splitOn = reply.matches(splitSearch);            
         }
-        lock.readLock().unlock();   
+        lock.writeLock().unlock();   
         return splitOn;        
     }
     
     public boolean setVfoOpStateDupPlus() {
-        lock.readLock().lock();
+        lock.writeLock().lock();
         String commArgs = new String("R +");
         String reply = askRadio(commArgs);
         boolean success = (reply != null);
-        lock.readLock().unlock();   
+        lock.writeLock().unlock();   
         return success;
     }
     
     public boolean setVfoOpStateDupMinus() {
-        lock.readLock().lock();
+        lock.writeLock().lock();
         String commArgs = new String("R -");
         String reply = askRadio(commArgs);
         boolean success = (reply!=null);
-        lock.readLock().unlock(); 
+        lock.writeLock().unlock(); 
         return success;
     }
     
     public boolean setVfoOpStateDupOff() {
-        lock.readLock().lock();
+        lock.writeLock().lock();
         String commArgs = new String("R 0");        
         String reply = askRadio(commArgs);
         boolean success = (reply != null);
-        lock.readLock().unlock(); 
+        lock.writeLock().unlock(); 
         return success;        
     }
     
     public boolean isVfoOpStateDupOn() {
-        lock.readLock().lock();
+        lock.writeLock().lock();
         boolean shiftOn = false;
         String commArgs = new String("r");  
         // Returns "Protocol error" when on hf band.
@@ -276,12 +275,12 @@ public class VfoSelectionInterface {
             String dupSearch = "(?i).*Rptr Shift: [\\+\\-]";
             shiftOn = reply.matches(dupSearch);
         }
-        lock.readLock().unlock(); 
+        lock.writeLock().unlock(); 
         return shiftOn;                
     }
     
     public boolean isVfoDuplexPlus() {
-        lock.readLock().lock();
+        lock.writeLock().lock();
         boolean dupPlus = false;
         String commArgs = new String("r");  
         // Returns "Protocol error" when on hf band.
@@ -292,24 +291,25 @@ public class VfoSelectionInterface {
             String dupPlusSearch = "(?i).*Rptr Shift: \\+";
             dupPlus = reply.matches(dupPlusSearch);
         }
-        lock.readLock().unlock(); 
+        lock.writeLock().unlock(); 
         return dupPlus;        
     }
     
     public void setVfoStateSimplex() {
-        lock.readLock().lock();  
+        lock.writeLock().lock();  
         setVfoOpStateSplitOff();
         setVfoOpStateDupOff();
-        lock.readLock().unlock();         
+        lock.writeLock().unlock();         
     }
     public void setRxVfo(vfoChoice choice) {
-        lock.readLock().lock();        
+        lock.writeLock().lock();        
         String commArgs = new String("V "+ getVfoName(choice));
         String reply = askRadio(commArgs);        
-        lock.readLock().unlock(); 
+        lock.writeLock().unlock(); 
     }
     
-    public boolean setVfoASelected(){
+    public boolean setVfoASelected() {
+        lock.writeLock().lock();  
         boolean success = true;  
         String commArgs = new String("V " + getVfoName(vfoChoice.VFOA));
         String reply = askRadio(commArgs);
@@ -317,10 +317,12 @@ public class VfoSelectionInterface {
         vfoA.setSelected(true);
         frequencyVfoA.setBackground(SELECTED_COLOR);
         frequencyVfoB.setBackground(UNSELECTED_COLOR);
+        lock.writeLock().unlock(); 
         return success;
     }
     
     public boolean setVfoBSelected() {
+        lock.writeLock().lock();  
         boolean success = true; 
         String commArgs = new String("V " + getVfoName(vfoChoice.VFOB));
         String reply = askRadio(commArgs);
@@ -328,6 +330,7 @@ public class VfoSelectionInterface {
         vfoB.setSelected(true);
         frequencyVfoB.setBackground(SELECTED_COLOR);
         frequencyVfoA.setBackground(UNSELECTED_COLOR);
+        lock.writeLock().unlock(); 
         return success;
     }
         
@@ -338,7 +341,7 @@ public class VfoSelectionInterface {
      * @return vfoChoice
      */
     public vfoChoice getRxVfo() {
-        lock.readLock().lock();
+        lock.writeLock().lock();
         aFrame.noVfoDialog = true;
         vfoChoice choice;
         long freq1 = getRxFrequency();
@@ -360,6 +363,7 @@ public class VfoSelectionInterface {
             setRxVfo(vfoChoice.VFOA);
         }
         else {
+            setVfoBSelected(); 
             choice = vfoChoice.VFOB; //VFOB is selected;
             setTextVfoB(freq1);
             frequencyVfoB.setBackground(SELECTED_COLOR);
@@ -367,12 +371,12 @@ public class VfoSelectionInterface {
             frequencyVfoA.setBackground(UNSELECTED_COLOR);
         }
         aFrame.noVfoDialog = false;
-        lock.readLock().unlock(); 
+        lock.writeLock().unlock(); 
         return choice;
     }
     
     public long getVfoAFrequency() {
-        lock.readLock().lock();
+        lock.writeLock().lock();
         aFrame.noVfoDialog = true;
         long frequencyHertz = 0;
         // get current rx freq
@@ -395,12 +399,12 @@ public class VfoSelectionInterface {
             frequencyVfoA.setBackground(UNSELECTED_COLOR);
         }
         aFrame.noVfoDialog = false;
-        lock.readLock().unlock(); 
+        lock.writeLock().unlock(); 
         return frequencyHertz;
     }
        
      public long getVfoBFrequency() {
-        lock.readLock().lock();  //blocks until lock is available.
+        lock.writeLock().lock();  //blocks until lock is available.
         aFrame.noVfoDialog = true;
         long frequencyHertz = 0;
         // get current rx freq
@@ -418,13 +422,13 @@ public class VfoSelectionInterface {
         } else {
             // Selected vfo had been VFOA.
             setVfoASelected();
-            setTextVfoA(freq1);
+            setTextVfoB(freq2);
             frequencyVfoA.setBackground(SELECTED_COLOR);
             frequencyVfoB.setBackground(UNSELECTED_COLOR);  
         }
         aFrame.noVfoDialog = false;
-        lock.readLock().unlock(); 
-        return frequencyHertz;
+        lock.writeLock().unlock(); 
+        return freq2;
     }
 
     public boolean vfoA_IsSelected() {
@@ -526,33 +530,6 @@ public class VfoSelectionInterface {
         //String reply = askRadio(commArgs);       
     }
       
-    /**
-     * Given which Vfo to access, write the given frequency to the radio.
-     * @return true when frequency successfully communicated to radio.
-     * @param frequencyHertz 
-     * @param isVfoA
-     * WANT TO DELETE THIS METHOD  DO NOT USE iT.........
-    */
-    public boolean writeXFrequencyToRadio(long frequencyHertz, boolean isVfoA) {
-        boolean success = true;
-        lock.writeLock().lock();  //blocks until lock is available.
-    
-        // Simulate sending freq value to Radio for testing.
-        // Update the radio frequency text field.
-        double mhz = (double) frequencyHertz;
-        mhz = mhz / 1000000.0;
-        DecimalFormat decimalFormat = new DecimalFormat("#.000000");
-        String numberAsString = decimalFormat.format(mhz);
-        if (isVfoA)
-            frequencyVfoA.setText(numberAsString);
-        else
-            frequencyVfoB.setText(numberAsString);
-
-        lock.writeLock().unlock();
-        return success;
-    }
-
-
     
     public boolean copyAtoB() {
         boolean success = true;
