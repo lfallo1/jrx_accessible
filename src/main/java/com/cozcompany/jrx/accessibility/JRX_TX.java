@@ -131,7 +131,8 @@ final public class JRX_TX extends javax.swing.JFrame implements
     static String VFO_SELECT_A_TEXT = "Select radio VFO A";
     static String VFO_SELECT_B_TEXT = "Select radio VFO B";
     static String VFO_SIMPLEX_TEXT  = "Select simplex";
-    static String VFO_DUPLEX_TEXT   = "Select duplex";
+    static String VFO_DUPLEX_PLUS_TEXT   = "Select duplex +";
+    static String VFO_DUPLEX_MINUS_TEXT   = "Select duplex -";
     static String VFO_SPLIT_TEXT    = "Select split";
     static String LAST_VFO = "LAST_VFO";
     final long MSN_FREQ = 3563000;   // MSN 80meter CW
@@ -140,7 +141,8 @@ final public class JRX_TX extends javax.swing.JFrame implements
     public JRadioButtonMenuItem menuItemA;
     public JRadioButtonMenuItem menuItemB;
     public JRadioButtonMenuItem menuItemSimplex; 
-    public JRadioButtonMenuItem menuItemDuplex;
+    public JRadioButtonMenuItem menuItemDuplexPlus;
+    public JRadioButtonMenuItem menuItemDuplexMinus;
     public JRadioButtonMenuItem menuItemSplit; 
     public JTextField frequencyVfoA;
     public JTextField frequencyVfoB;
@@ -245,11 +247,8 @@ final public class JRX_TX extends javax.swing.JFrame implements
         }        
         // Must instantiate components before initialization of VfoDisplayControl.     
         vfoGroup.setupPanes();                      
-        // @todo Later we will get these from Preferences.  When do we save a freq?
-        vfoState.writeFrequencyToRadioVfoA(MSN_FREQ);
-        vfoState.writeFrequencyToRadioVfoB(SHAWSVILLE_REPEATER_OUTPUT_FREQ);
         noVfoDialog = false;
-        vfoGroup.makeVisible(vfoState); 
+        
         
         
         // Cause the ones digit ftf to get the focus when the JFrame gets focus.                              
@@ -338,17 +337,28 @@ final public class JRX_TX extends javax.swing.JFrame implements
         menuItemSimplex.addItemListener(this);
         menu.add(menuItemSimplex);
         
-        menuItemDuplex = new JRadioButtonMenuItem(VFO_DUPLEX_TEXT, false);
-        splitFreqGroup.add(menuItemDuplex);
-        menuItemDuplex.setAccelerator(KeyStroke.getKeyStroke(
+        menuItemDuplexPlus = new JRadioButtonMenuItem(VFO_DUPLEX_PLUS_TEXT, false);
+        splitFreqGroup.add(menuItemDuplexPlus);
+        menuItemDuplexPlus.setAccelerator(KeyStroke.getKeyStroke(
                 KeyEvent.VK_D, ActionEvent.ALT_MASK));
-        AccessibleContext duplexContext = menuItemDuplex.getAccessibleContext();
-        duplexContext.setAccessibleDescription(
-            "VFO duplex operation");
-        simplexContext.setAccessibleName("Duplex");       
-        menuItemDuplex.addItemListener(this);
-        menu.add(menuItemDuplex);
+        AccessibleContext duplexPlusContext = menuItemDuplexPlus.getAccessibleContext();
+        duplexPlusContext.setAccessibleDescription(
+            "VFO duplex plus repeater offset operation");
+        duplexPlusContext.setAccessibleName("Duplex Plus");       
+        menuItemDuplexPlus.addItemListener(this);
+        menu.add(menuItemDuplexPlus);
         
+        menuItemDuplexMinus = new JRadioButtonMenuItem(VFO_DUPLEX_MINUS_TEXT, false);
+        splitFreqGroup.add(menuItemDuplexMinus);
+        menuItemDuplexMinus.setAccelerator(KeyStroke.getKeyStroke(
+                KeyEvent.VK_E, ActionEvent.ALT_MASK));
+        AccessibleContext duplexMinusContext = menuItemDuplexMinus.getAccessibleContext();
+        duplexMinusContext.setAccessibleDescription(
+            "VFO duplex minus repeater offset operation");
+        duplexMinusContext.setAccessibleName("Duplex Minus");       
+        menuItemDuplexMinus.addItemListener(this);
+        menu.add(menuItemDuplexMinus);
+               
         menuItemSplit = new JRadioButtonMenuItem(VFO_SPLIT_TEXT, false);
         splitFreqGroup.add(menuItemSplit);
         menuItemSplit.setAccelerator(KeyStroke.getKeyStroke(
@@ -456,7 +466,12 @@ final public class JRX_TX extends javax.swing.JFrame implements
             //setDefaultComboContent();
             setupHamlibDaemon();
             inhibit = true;
-            setComboBoxScales();
+            setComboBoxScales();            
+            vfoDisplay.setUpFocusManager();
+            
+            inhibit = false;            
+
+            vfoDisplay.makeVisible(vfoState); 
             if (sv_jrxToRadioButton.isSelected()) {
                 vfoState.setVfoStateSimplex();
                 vfoState.setRxVfo(VfoSelectionInterface.vfoChoice.VFOA);
@@ -466,12 +481,10 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 vfoDisplay.loadRadioFrequencyToVfoB();
                 vfoDisplay.loadRadioFrequencyToVfoA(); 
             }
-            vfoDisplay.setUpFocusManager();
-            inhibit = false;            
             squelchScheme.setRadioSquelch();
             readRadioControls(true);  // Reads frequency from radio
             startCyclicalTimer();
-            measureSpeed();
+            measureSpeed(); // Writes frequency to radio.
             setComErrorIcon();            
             memoryScrollPane.getVerticalScrollBar().setUnitIncrement(8);
         }
@@ -3143,7 +3156,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
         String itemText = item.getText();
         //System.out.println("item.name :"+itemText);
         if (itemText.equals(VFO_SELECT_A_TEXT)) {
-            //item.firePropertyChange("MENU_ITEM1", false, true);
             if (item.isSelected()) {
                 vfoState.setVfoASelected();
                 prefs.put(LAST_VFO, VFO_SELECT_A_TEXT);
@@ -3154,7 +3166,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
                     JOptionPane.PLAIN_MESSAGE);
             }           
         } else if (itemText.equals(VFO_SELECT_B_TEXT)) {
-            //item.firePropertyChange("MENU_ITEM1", false, true);
             if (item.isSelected()) {
                 vfoState.setVfoBSelected();
                 prefs.put(LAST_VFO, VFO_SELECT_B_TEXT);
@@ -3162,6 +3173,36 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 JOptionPane.showMessageDialog(this,
                     "VFO B Selected",
                     "VFO B Selected",  // VoiceOver reads only this line.
+                    JOptionPane.PLAIN_MESSAGE);
+            }
+        } else if (itemText.equals(VFO_SIMPLEX_TEXT)) {
+            if (item.isSelected()) {
+                vfoState.setVfoStateSimplex();
+                //prefs.put(LAST_VFO_OP, VFO_SIMPLEX_TEXT);
+                // If voiceOver enabled, need this dialog to announce vfo change.
+                JOptionPane.showMessageDialog(this,
+                    "Simplex Selected",
+                    "Simplex Selected",  // VoiceOver reads only this line.
+                    JOptionPane.PLAIN_MESSAGE);
+            }
+        } else if (itemText.equals(VFO_DUPLEX_PLUS_TEXT)) {
+            if (item.isSelected()) {
+                vfoState.setVfoOpStateDupPlus();
+                //prefs.put(LAST_VFO_OP, VFO_DUPLEX_PLUS_TEXT);
+                // If voiceOver enabled, need this dialog to announce vfo change.
+                JOptionPane.showMessageDialog(this,
+                    "Duplex Plus Selected",
+                    "Duplex Plus Selected",  // VoiceOver reads only this line.
+                    JOptionPane.PLAIN_MESSAGE);
+            }
+        } else if (itemText.equals(VFO_DUPLEX_MINUS_TEXT)) {
+            if (item.isSelected()) {
+                vfoState.setVfoOpStateDupMinus();
+                //prefs.put(LAST_VFO_OP, VFO_DUPLEX_MINUS_TEXT);
+                // If voiceOver enabled, need this dialog to announce vfo change.
+                JOptionPane.showMessageDialog(this,
+                    "Duplex Minus Selected",
+                    "Duplex Minus Selected",  // VoiceOver reads only this line.
                     JOptionPane.PLAIN_MESSAGE);
             }
         } else {
