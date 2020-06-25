@@ -55,7 +55,7 @@ import vfoDisplayControl.VfoSelectionInterface;
 final public class JRX_TX extends javax.swing.JFrame implements 
         ListSelectionListener, ItemListener , ActionListener {
 
-    final String appVersion = "5.0.5";
+    final String appVersion = "5.0.6";
     final String appName;
     final String programName;
     String lineSep;
@@ -476,8 +476,11 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 vfoState.setVfoStateSimplex();
                 vfoState.setRxVfo(VfoSelectionInterface.vfoChoice.VFOA);
                 vfoState.writeFrequencyToRadioSelectedVfo(MSN_FREQ);
+                long freqB = vfoState.getVfoBFrequency();
+                vfoState.setTextVfoB(freqB);
                 writeRadioControls();
             } else {
+                // Coz fix this.  It loses track of which radio VFO was selected.
                 vfoDisplay.loadRadioFrequencyToVfoB();
                 vfoDisplay.loadRadioFrequencyToVfoA(); 
             }
