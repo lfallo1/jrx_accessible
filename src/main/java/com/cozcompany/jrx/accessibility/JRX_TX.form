@@ -1073,7 +1073,7 @@
                 </Container>
                 <Component class="javax.swing.JCheckBox" name="sv_ctcssCheckBox">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="CTCSS SQL ON"/>
+                    <Property name="text" type="java.lang.String" value="CTCSS TSQL ON"/>
                     <Property name="toolTipText" type="java.lang.String" value="Tone squelch control"/>
                   </Properties>
                   <AuxValues>

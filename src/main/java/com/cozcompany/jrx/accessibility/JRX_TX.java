@@ -48,6 +48,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import vfoDisplayControl.VfoDisplayControl;
 import vfoDisplayControl.VfoSelectionInterface;
+import vfoDisplayControl.VfoStateInterface;
 
 /**
  * @author lutusp
@@ -71,6 +72,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
     SquelchScheme squelchScheme;
    
     Map<String, Integer> radioCodes = null;
+    Map<Integer, String> radioNames = null;
     Map<String, Double> filters = null;
     Map<String, Double> ctcss = null;
     ArrayList<ControlInterface> controlList;
@@ -122,11 +124,11 @@ final public class JRX_TX extends javax.swing.JFrame implements
     double oldVolume = -1;
     long oldRadioFrequency = -1;
     Color darkGreen, darkBlue, darkRed;
-    int comError = 0;
+    int comError = 0; // Comms Led starts out green.
     long oldTime = 0; // debugging
     
     VfoDisplayControl vfoDisplay;
-    VfoSelectionInterface vfoState;
+    VfoStateInterface vfoState;
     ScanController scanDude;
     static String VFO_SELECT_A_TEXT = "Select radio VFO A";
     static String VFO_SELECT_B_TEXT = "Select radio VFO B";
@@ -135,7 +137,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
     static String VFO_DUPLEX_MINUS_TEXT   = "Select duplex -";
     static String VFO_SPLIT_TEXT    = "Select split";
     static String LAST_VFO = "LAST_VFO";
-    final long MSN_FREQ = 3563000;   // MSN 80meter CW
+    final long AERO_CLUB_FREQ = 147240000;   // AERO CLUB 2m repeater output
     final long SHAWSVILLE_REPEATER_OUTPUT_FREQ = 145330000; // Shawsville Rptr
     JMenuBar menuBar;
     public JRadioButtonMenuItem menuItemA;
@@ -217,7 +219,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
     }
 
 
-    public VfoSelectionInterface setUpVfoComponents(VfoDisplayControl vfoGroup) {
+    public VfoStateInterface setUpVfoComponents(VfoDisplayControl vfoGroup) {
         // Create an Prefernces object for access to this user's preferences.
         prefs = Preferences.userNodeForPackage(this.getClass());
         // Use the Mac OSX menuBar at the top of the screen.
@@ -225,7 +227,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         addMenuBar();      
         // Add an exclusive interface to the Vfo selector so that only one thread
         // at a time gains access.
-        VfoSelectionInterface vfoState = new VfoSelectionInterface(this, 
+        vfoState = new VfoStateInterface(this, 
                 menuItemA, menuItemB, frequencyVfoA, frequencyVfoB );
  
       
@@ -441,8 +443,11 @@ final public class JRX_TX extends javax.swing.JFrame implements
         }
     }
     /**
-     * On detecting an error in reply text, comError is set to 2 which is checked
-     * by this method and decremented on each check.
+     * Determine the state of the comms Led and set it appropriately.
+     * On detecting an error in reply text, comError is set to 2 by the radio
+     * comms method; then the comError variable is checked
+     * by this method and decremented on each check to determine the state of
+     * the comms Led.  So you need two good comms in a row to set the led green.
      * 
      */
     private void setComErrorIcon() {
@@ -474,8 +479,8 @@ final public class JRX_TX extends javax.swing.JFrame implements
             vfoDisplay.makeVisible(vfoState); 
             if (sv_jrxToRadioButton.isSelected()) {
                 vfoState.setVfoStateSimplex();
-                vfoState.setRxVfo(VfoSelectionInterface.vfoChoice.VFOA);
-                vfoState.writeFrequencyToRadioSelectedVfo(MSN_FREQ);
+                vfoState.setRxVfo(VfoStateInterface.vfoChoice.VFOA);
+                vfoState.writeFrequencyToRadioSelectedVfo(AERO_CLUB_FREQ);
                 long freqB = vfoState.getVfoBFrequency();
                 vfoState.setTextVfoB(freqB);
                 writeRadioControls();
@@ -725,15 +730,9 @@ final public class JRX_TX extends javax.swing.JFrame implements
 
 
     protected String getRadioModel() {
-        RWComboBox box = (RWComboBox)sv_radioNamesComboBox;
-        
-        
-        
-        
-        
+        RWComboBox box = (RWComboBox)sv_radioNamesComboBox;        
         return box.readValueStr();
     }
-
 
     protected void waitMS(int ms) {
         try {
@@ -905,10 +904,17 @@ final public class JRX_TX extends javax.swing.JFrame implements
      * display the rig spec "Version" that is listed for each rig so that bad
      * behavior could be tracked to a particular rig version.
      * 
+     * Requirement: It is possible to have a left-over rigctld running on the 
+     * system.  If so, you will get that rigctld rig caps and not the ones you
+     * are expecting.  You must see if one is already running.  If it is, then
+     * connect to it an issue a Quit command.  That should make it die.
+     * 
+     * 
      * @todo Move this to RadioNamesComboBox class.
      */
     private void initRigSpecs() {
         radioCodes = new TreeMap<>();
+        radioNames = new TreeMap<>();
         String a, b, rigSpecs="";
         //p("trying to read rig specs...");
         if (hamlibExecPath == null) {
@@ -946,6 +952,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
                                 pout("radio record: " + b + " = " + v);
                             }
                             radioCodes.put(b, v);
+                            radioNames.put(v, b);
                         }
                     }
                 } catch (Exception e) {
@@ -956,40 +963,23 @@ final public class JRX_TX extends javax.swing.JFrame implements
         sv_radioNamesComboBox.removeAllItems();
         sv_radioNamesComboBox.addItem("-- Radios --");
         for (String key : radioCodes.keySet()) {
-            int val = radioCodes.get(key);  // Coz - val is not used.
+            int val = radioCodes.get(key);  // Coz - val is not used. TODO remove.
             sv_radioNamesComboBox.addItem(key);
         }
     }
 
     /**
      * Return the key String for the given value.  
-     * @todo Coz Inefficient - sort the map by value and binary search.  Once the
-     * sorted map is created (on the first use) then the search is quick.  What
-     * happens when rigctl is updated?  How do you know when that happens? Yuck.
      * 
      * @param value
      * @return 
      */
     public String getNameKeyForRadioCodeValue(int value) {
-        int maxIndex = sv_radioNamesComboBox.getItemCount() - 1;
-        // The zeroth entry in comboBox is ---Radio---;
-        int index=1;
-        String rigName;
-        for (String key : radioCodes.keySet()) {
-            int radioCode = radioCodes.get(key);
-            rigName = sv_radioNamesComboBox.getItemAt(index);
-            if (radioCode == value) {
-                assert(rigName.equals(key));
-                sv_radioNamesComboBox.setSelectedIndex(index);
-                return rigName;           
-            }
-            if (index == maxIndex) break;
-            index++;    
-        }
-        return "Radio Unknown" ;          
+        String rigName = radioNames.get(value);
+        if (rigName == null) return "Radio Unknown" ;  
+        else return rigName;
     }
-    
-    
+       
     
     /**
      * Get a list of radios and their codes before the socket has been set up.
@@ -1035,6 +1025,8 @@ final public class JRX_TX extends javax.swing.JFrame implements
      * Requirement: Determine the rigName and set the radioNamesComboBox to
      * the correct rigName.  It is displayed prominently on the top of the UI
      * even if it is disabled.
+     * Requirement: Determine if a rigctld is already running.  If so, connect
+     * to it via normal means and give it a quit command.
      * 
      * Note: Prerequesite for this routine is the creation of the radioCodes.
      */
@@ -1057,8 +1049,8 @@ final public class JRX_TX extends javax.swing.JFrame implements
             }
             if (comArgs.rigCode >= 0 && rigCode == -1) {
                 rigCode = comArgs.rigCode;
-                rigName = getNameKeyForRadioCodeValue(rigCode); 
-                //rigName = String.format("(radio code: %d)", rigCode);
+                rigName = getNameKeyForRadioCodeValue(rigCode);
+                sv_radioNamesComboBox.setSelectedItem(rigName);
                 // Disable comboBox because choice has already been made.
                 sv_radioNamesComboBox.setEnabled(false);
             }
@@ -1982,7 +1974,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         rttyPanel.getAccessibleContext().setAccessibleName("RTTY");
         rttyPanel.getAccessibleContext().setAccessibleDescription("Radio Teletype settings and decode window.");
 
-        sv_ctcssCheckBox.setText("CTCSS SQL ON");
+        sv_ctcssCheckBox.setText("CTCSS TSQL ON");
         sv_ctcssCheckBox.setToolTipText("Tone squelch control");
 
         javax.swing.GroupLayout operateTransceiverPanelLayout = new javax.swing.GroupLayout(operateTransceiverPanel);
