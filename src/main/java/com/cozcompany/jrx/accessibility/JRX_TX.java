@@ -51,6 +51,21 @@ import vfoDisplayControl.VfoDisplayControl;
 import vfoDisplayControl.VfoStateInterface;
 
 /**
+ * JRX_TX contains the main thread of the application.
+ * 
+ * 
+ * Application State Variables:
+ * 
+ * 1) boolean inhibit : True means that the application does not at present have
+ * a complete and valid initialization AKA validSetup().  It is set to true upon
+ * startup.  When true, it inhibits controls from writing to the rig, inhibits
+ * starting the rigctld (daemon), inhibits initialize() method, inhibits S meter,
+ * inhibits reading radio frequency, inhibits getting mode from rig, inhibits all
+ * radio coms, inhibits setTableScanParams, setMemoryScanParams, and inhibits
+ * setScanParams.
+ * 
+ * 
+ * 
  * @author lutusp
  */
 final public class JRX_TX extends javax.swing.JFrame implements 
@@ -99,7 +114,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
     int squelchHigh = 100;
     boolean isWindows;
     boolean isMacOs;
-    public boolean inhibit;
+    public boolean inhibit;  // application state 
     public boolean noVfoDialog;
     Font digitsFont;
     Font baseFont;
@@ -213,7 +228,8 @@ final public class JRX_TX extends javax.swing.JFrame implements
             config.read();
         }
         chart = new ChannelChart(this);
-        chart.init();        
+        chart.init();
+        dismissOldHamlibTask();
         inhibit = false;
         initialize();
     }
@@ -460,7 +476,10 @@ final public class JRX_TX extends javax.swing.JFrame implements
         }
     }
 
-
+    /**
+     * Method is called upon changing the radio type or changing the device used
+     * for rig communication or startup.
+     */
     private void initialize() {
         if (!inhibit) {
             oldRadioFrequency = -1;
@@ -468,11 +487,11 @@ final public class JRX_TX extends javax.swing.JFrame implements
             dcdIconLabel.setIcon(greenLed);
             // must reset to defaults again
             // to accommodate change in rig
-            //setDefaultComboContent();
+            //setDefaultComboContent();   @todo Coz why is this commented out?
             setupHamlibDaemon();
-            inhibit = true;
+            inhibit = true;  // do not command rig while setting up scales.
             setComboBoxScales();            
-            vfoDisplay.setUpFocusManager();
+            vfoDisplay.setUpFocusManager();  // @todo move this down a line...
             
             inhibit = false;            
 
@@ -570,12 +589,12 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 sv_squelchSlider,
                 sv_volumeSlider,
                 sv_rfGainSlider,
-                //sv_ifShiftComboBox,
+                sv_ifShiftComboBox,
                 sv_dspComboBox,
                 sv_dspCheckBox,
                 sv_modesComboBox,
                 sv_filtersComboBox,
-                //sv_antennaComboBox,
+                sv_antennaComboBox,
                 sv_attenuatorComboBox,
                 sv_agcComboBox,
                 sv_preampComboBox,
@@ -703,13 +722,25 @@ final public class JRX_TX extends javax.swing.JFrame implements
 
     /**
      *  Get radio capability data from Hamlib backend and set up drop-down lists.
-     *  If a capability is not present in the replay to the "\dump_caps" command,
-     *  then the UI Component is not enabled (grayed out);
+     *  If a capability is not present in the reply to the "\dump_caps" command,
+     *  then the UI Component is not enabled (grayed out).  This is the first
+     * communication to the rig. If sendRadioCom returns a null radioData, we
+     * were unable to talk to the rig.  In this case, enable the radio selection
+     * combo box and enable the device selection combo box.  Something went
+     * wrong.
+     * 
+     * @return true if radioData != null.
      */
-    private void getRigCaps() {
+    private boolean getRigCaps() {
+        
         String com = "\\dump_caps";
         radioData = sendRadioCom(com, 3, false);
         System.out.println(" Reply to \\dump_caps "+ radioData);
+        if (radioData == null) {
+            // Unable to communicate with the radio.
+            sv_radioNamesComboBox.setEnabled(true);
+            sv_interfacesComboBox.setEnabled(true);
+        }  
 
         enableControlCap(sv_ctcssComboBox, radioData, "(?ism).*^Can set CTCSS Squelch:\\s+Y$", false);
         enableControlCap(sv_agcComboBox, radioData, "(?ism).*^Set level:.*?AGC\\(", true);
@@ -729,6 +760,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         String s = sendRadioCom("\\get_dcd", 0, false);
         dcdCapable = (s != null && s.matches("\\d+"));
         squelchScheme.setSquelchScheme();
+        return true;
     }
 
 
@@ -1028,8 +1060,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
      * Requirement: Determine the rigName and set the radioNamesComboBox to
      * the correct rigName.  It is displayed prominently on the top of the UI
      * even if it is disabled.
-     * Requirement: Determine if a rigctld is already running.  If so, connect
-     * to it via normal means and give it a quit command.
      * 
      * Note: Prerequesite for this routine is the creation of the radioCodes.
      */
@@ -1132,6 +1162,68 @@ final public class JRX_TX extends javax.swing.JFrame implements
         }
     }
     /**
+     * Only upon startup, determine if a rigctld is already running 
+     * and if so, connect to it via normal means and give it a quit command.
+     * 
+     */
+    private void dismissOldHamlibTask() {
+        boolean connected = false;
+        String result = null;
+        int n = 2;
+        int localDebug = 0;
+        while (!connected && n >= 0) {
+            try {
+                hamlibSocket = new Socket(hamlibHost, hamlibPort);
+                hamlibSocket.setKeepAlive(true);
+                hamlibSocket.setTcpNoDelay(true);
+                hamlib_is = hamlibSocket.getInputStream();
+                hamlib_os = hamlibSocket.getOutputStream();
+                connected = true;// hamlibSocket.isConnected();
+            } catch (Exception e) {
+                n--;
+                waitMS(500);
+            }
+        }
+        if (hamlibSocket != null) {
+            try {
+                // Send a Quit command to rigctld via tcp port output stream.
+                String s = "q";
+                hamlib_os.write((s + lineSep).getBytes());
+                hamlib_os.flush();
+                if (comArgs.debug >= localDebug) {
+                    pout("sendradiocom   emit: [" + s + "]");
+                }
+                result = readInputStream(hamlib_is);
+                if (comArgs.debug >= localDebug) {
+                    pout("sendradiocom result: [" + result.replaceAll("[\r\n]", " ") + "]");
+                }
+                // close streams
+                hamlibSocket.shutdownInput();   //Places the input stream for this socket at "end of stream".
+                hamlibSocket.shutdownOutput(); //Disables the output stream            
+                // close socket
+                if (hamlibSocket != null) {
+                    hamlibSocket.close();
+                    waitMS(100);
+                    hamlibSocket = null;
+                }
+            }
+            catch (Exception eProbe) {
+                pout("dismissOldHamlibTask had exception " + eProbe);
+            }
+                        
+            JOptionPane.showMessageDialog(this,"rigctld is already running.  Please kill the process.", 
+                    "rigctld is already running. Please kill the process.",
+                    JOptionPane.WARNING_MESSAGE);
+
+        }       
+    }
+    
+    
+    
+    
+    
+    
+    /**
      * Given a swing Component (created by the Swing Gui designer), the reply
      * text "source" from a rigctl capabilities command "\dump_Caps", a regular
      * expression string "search" for searching the reply text, and a boolean which is
@@ -1187,8 +1279,9 @@ final public class JRX_TX extends javax.swing.JFrame implements
     
     public String sendRadioCom(String s, int localDebug, boolean writeMode) {
         String result = null;
-        try {
-            vfoState.lock.writeLock().tryLock(5, TimeUnit.SECONDS);            
+        //int countBefore = vfoState.lock.getWriteHoldCount();
+        try {            
+            vfoState.lock.writeLock().lock();            
             if (validSetup() && hamlibDaemon != null && hamlibSocket != null && s != null) {
                 if (hamlibSocket.isConnected()) {
                     try {
@@ -1216,12 +1309,13 @@ final public class JRX_TX extends javax.swing.JFrame implements
         catch (Exception eComms) {
             System.out.println("sendRadioCom() had lock exception "+ eComms);
         }
-        finally {
-            int count = vfoState.lock.getWriteHoldCount();
-            if (vfoState.lock.isWriteLockedByCurrentThread() )
-                pout("sendRadioCom() comms is writeLocked by current" +
-                        " thread; count = "+count);            
-        }
+        
+        //int countAfter = vfoState.lock.getWriteHoldCount();
+        //boolean plusLocks = ((countAfter - countBefore) > 0);           
+//        if (vfoState.lock.isWriteLockedByCurrentThread() && plusLocks ) {
+//            pout("sendRadioCom() comms is writeLocked by current" +
+//                    " thread; count = "+countAfter);                           
+//        }
         return result;
     }
     
@@ -2930,13 +3024,13 @@ final public class JRX_TX extends javax.swing.JFrame implements
     }//GEN-LAST:event_sv_synthSquelchCheckBoxActionPerformed
 
     private void sv_interfacesComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sv_interfacesComboBoxActionPerformed
-        // TODO add your handling code here:
-        //initialize(); @todo Coz fix this
+
+        initialize(); //@todo Coz fix this
     }//GEN-LAST:event_sv_interfacesComboBoxActionPerformed
 
     private void sv_radioNamesComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sv_radioNamesComboBoxActionPerformed
-        // TODO add your handling code here:
-        //initialize(); @todo Coz fix this
+
+        initialize(); //@todo Coz fix this
     }//GEN-LAST:event_sv_radioNamesComboBoxActionPerformed
 
     private void sv_modesComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sv_modesComboBoxActionPerformed
