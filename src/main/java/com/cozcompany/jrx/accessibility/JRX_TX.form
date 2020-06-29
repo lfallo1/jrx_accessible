@@ -321,7 +321,7 @@
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="sv_synthSquelchCheckBox">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Squelch ON"/>
+                    <Property name="text" type="java.lang.String" value="JRX Squelch ON"/>
                     <Property name="toolTipText" type="java.lang.String" value="Use JRX squelch scheme"/>
                   </Properties>
                   <Events>

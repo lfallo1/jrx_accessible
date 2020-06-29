@@ -41,13 +41,13 @@ import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Timer;
+import java.util.concurrent.TimeUnit;
 import java.util.prefs.Preferences;
 import java.util.regex.Pattern;
 import javax.accessibility.AccessibleContext;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import vfoDisplayControl.VfoDisplayControl;
-import vfoDisplayControl.VfoSelectionInterface;
 import vfoDisplayControl.VfoStateInterface;
 
 /**
@@ -1186,31 +1186,42 @@ final public class JRX_TX extends javax.swing.JFrame implements
     
     
     public String sendRadioCom(String s, int localDebug, boolean writeMode) {
-        vfoState.lock.readLock().lock(); 
         String result = null;
-        if (validSetup() && hamlibDaemon != null && hamlibSocket != null && s != null) {
-            if (hamlibSocket.isConnected()) {
-                try {
-                    hamlib_os.write((s + lineSep).getBytes());
-                    hamlib_os.flush();
-                    if (comArgs.debug >= localDebug) {
-                        pout("sendradiocom   emit: [" + s + "]");
+        try {
+            vfoState.lock.writeLock().tryLock(5, TimeUnit.SECONDS);            
+            if (validSetup() && hamlibDaemon != null && hamlibSocket != null && s != null) {
+                if (hamlibSocket.isConnected()) {
+                    try {
+                        hamlib_os.write((s + lineSep).getBytes());
+                        hamlib_os.flush();
+                        if (comArgs.debug >= localDebug) {
+                            pout("sendradiocom   emit: [" + s + "]");
+                        }
+                        result = readInputStream(hamlib_is);
+                        if (comArgs.debug >= localDebug) {
+                            pout("sendradiocom result: [" + result.replaceAll("[\r\n]", " ") + "]");
+                            //p("sendradiocom result: [" + result + "]");
+                        }
+                        if (result.matches("(?i).*RPRT -.*")) {
+                            comError = 2;
+                            result = null;
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace(System.out);
                     }
-                    result = readInputStream(hamlib_is);
-                    if (comArgs.debug >= localDebug) {
-                        pout("sendradiocom result: [" + result.replaceAll("[\r\n]", " ") + "]");
-                        //p("sendradiocom result: [" + result + "]");
-                    }
-                    if (result.matches("(?i).*RPRT -.*")) {
-                        comError = 2;
-                        result = null;
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace(System.out);
                 }
             }
+            vfoState.lock.writeLock().unlock();
         }
-        vfoState.lock.readLock().unlock(); 
+        catch (Exception eComms) {
+            System.out.println("sendRadioCom() had lock exception "+ eComms);
+        }
+        finally {
+            int count = vfoState.lock.getWriteHoldCount();
+            if (vfoState.lock.isWriteLockedByCurrentThread() )
+                pout("sendRadioCom() comms is writeLocked by current" +
+                        " thread; count = "+count);            
+        }
         return result;
     }
     
@@ -1598,7 +1609,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         sv_ctcssComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "123.0", "Item 2", "Item 3", "Item 4" }));
         sv_ctcssComboBox.setToolTipText("CTCSS tone squelch frequencies (❃)");
 
-        sv_synthSquelchCheckBox.setText("Squelch ON");
+        sv_synthSquelchCheckBox.setText("JRX Squelch ON");
         sv_synthSquelchCheckBox.setToolTipText("Use JRX squelch scheme");
         sv_synthSquelchCheckBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
