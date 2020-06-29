@@ -71,7 +71,7 @@ import vfoDisplayControl.VfoStateInterface;
 final public class JRX_TX extends javax.swing.JFrame implements 
         ListSelectionListener, ItemListener , ActionListener {
 
-    final String appVersion = "5.0.6";
+    final String appVersion = "5.0.7";
     final String appName;
     final String programName;
     String lineSep;
@@ -1279,7 +1279,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
     
     public String sendRadioCom(String s, int localDebug, boolean writeMode) {
         String result = null;
-        //int countBefore = vfoState.lock.getWriteHoldCount();
+        int countBefore = vfoState.lock.getWriteHoldCount();
         try {            
             vfoState.lock.writeLock().lock();            
             if (validSetup() && hamlibDaemon != null && hamlibSocket != null && s != null) {
@@ -1310,12 +1310,12 @@ final public class JRX_TX extends javax.swing.JFrame implements
             System.out.println("sendRadioCom() had lock exception "+ eComms);
         }
         
-        //int countAfter = vfoState.lock.getWriteHoldCount();
-        //boolean plusLocks = ((countAfter - countBefore) > 0);           
-//        if (vfoState.lock.isWriteLockedByCurrentThread() && plusLocks ) {
-//            pout("sendRadioCom() comms is writeLocked by current" +
-//                    " thread; count = "+countAfter);                           
-//        }
+        int countAfter = vfoState.lock.getWriteHoldCount();
+        boolean plusLocks = ((countAfter - countBefore) > 0);           
+        if (vfoState.lock.isWriteLockedByCurrentThread() && plusLocks ) {
+            pout("sendRadioCom() comms is writeLocked by current" +
+                    " thread; count = "+countAfter);                           
+        }
         return result;
     }
     
