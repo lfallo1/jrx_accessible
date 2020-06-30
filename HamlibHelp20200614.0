@@ -1,0 +1,76 @@
+TheUnofOfTowson:hamlib-4.0~git Coz$ rigctl --help
+Usage: rigctl [OPTION]... [COMMAND]...
+Send COMMANDs to a connected radio transceiver or receiver.
+
+  -m, --model=ID                select radio model number. See model list
+  -r, --rig-file=DEVICE         set device of the radio to operate on
+  -p, --ptt-file=DEVICE         set device of the PTT device to operate on
+  -d, --dcd-file=DEVICE         set device of the DCD device to operate on
+  -P, --ptt-type=TYPE           set type of the PTT device to operate on
+  -D, --dcd-type=TYPE           set type of the DCD device to operate on
+  -s, --serial-speed=BAUD       set serial speed of the serial port
+  -c, --civaddr=ID              set CI-V address, decimal (for Icom rigs only)
+  -t, --send-cmd-term=CHAR      set send_cmd command termination char
+  -C, --set-conf=PARM=VAL       set config parameters
+  -L, --show-conf               list all config parameters
+  -l, --list                    list all model numbers and exit
+  -u, --dump-caps               dump capabilities and exit
+  -o, --vfo                     do not default to VFO_CURR, require extra vfo arg
+  -n, --no-restore-ai           do not restore auto information mode on rig
+  -i, --read-history            read prior interactive session history
+  -I, --save-history            save current interactive session history
+  -v, --verbose                 set verbose mode, cumulative (-v to -vvvvv)
+  -Y, --ignore_err              ignore rig_open errors
+  -Z, --debug-time-stamps       enable time stamps for debug messages
+  -h, --help                    display this help and exit
+  -V, --version                 output version information and exit
+
+Commands (some may not be available for this rig):
+F: set_freq        (Frequency)         f: get_freq        ()
+M: set_mode        (Mode,Passband)     m: get_mode        ()
+I: set_split_freq  (TX Frequency)      i: get_split_freq  ()
+X: set_split_mode  (TX Mode,TX Passband) x: get_split_mode  ()
+K: set_split_freq_mode(TX Frequency,TX Mode,TX Passband)              k: get_split_freq_mode()
+S: set_split_vfo   (Split,TX VFO)      s: get_split_vfo   ()
+N: set_ts          (Tuning Step)       n: get_ts          ()
+L: set_level       (Level,Level Value) l: get_level       (Level)
+U: set_func        (Func,Func Status)  u: get_func        (Func)
+P: set_parm        (Parm,Parm Value)   p: get_parm        (Parm)
+G: vfo_op          (Mem/VFO Op)        g: scan            (Scan Fct,Scan Channel)
+A: set_trn         (Transceive)        a: get_trn         ()
+R: set_rptr_shift  (Rptr Shift)        r: get_rptr_shift  ()
+O: set_rptr_offs   (Rptr Offset)       o: get_rptr_offs   ()
+C: set_ctcss_tone  (CTCSS Tone)        c: get_ctcss_tone  ()
+D: set_dcs_code    (DCS Code)          d: get_dcs_code    ()
+?: set_ctcss_sql   (CTCSS Sql)         ?: get_ctcss_sql   ()
+?: set_dcs_sql     (DCS Sql)           ?: get_dcs_sql     ()
+V: set_vfo         (VFO)               v: get_vfo         ()
+T: set_ptt         (PTT)               t: get_ptt         ()
+E: set_mem         (Memory#)           e: get_mem         ()
+H: set_channel     (Channel)           h: get_channel     (Channel,Read Only)
+B: set_bank        (Bank)              _: get_info        ()
+J: set_rit         (RIT)               j: get_rit         ()
+Z: set_xit         (XIT)               z: get_xit         ()
+Y: set_ant         (Antenna,Option)    y: get_ant         (AntCurr)
+?: set_powerstat   (Power Status)      ?: get_powerstat   ()
+?: send_dtmf       (Digits)            ?: recv_dtmf       ()
+*: reset           (Reset)             w: send_cmd        (Cmd)
+W: send_cmd_rx     (Cmd,Reply)         b: send_morse      (Morse)
+?: send_voice_mem  (Voice Mem#)        ?: get_dcd         ()
+?: set_twiddle     (Timeout (secs))    ?: get_twiddle     ()
+?: set_cache       (Timeout (msecs))   ?: get_cache       ()
+2: power2mW        (Power [0.0..1.0],Frequency,Mode)             4: mW2power        (Power mW,Frequency,Mode)
+1: dump_caps       ()                  3: dump_conf       ()
+?: dump_state      ()                  ?: chk_vfo         ()
+?: set_vfo_opt     (Status)            ?: halt            ()
+?: pause           (Seconds)           
+
+In interactive mode prefix long command names with '\', e.g. '\dump_state'
+
+The special command '-' is used to read further commands from standard input
+Commands and arguments read from standard input must be white space separated,
+comments are allowed, comments start with the # character and continue to the
+end of the line.
+
+Report bugs to <hamlib-developer@lists.sourceforge.net>.
+

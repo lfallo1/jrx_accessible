@@ -91,7 +91,10 @@ public class RWCheckBox extends JCheckBox implements ActionListener, ControlInte
         readValue();
         localInhibit = false;
     }
-
+    /**
+     * Only read values from radio when control is enabled.
+     * @param all 
+     */
     @Override
     public void selectiveReadValue(boolean all) {
         if (isEnabled()) {

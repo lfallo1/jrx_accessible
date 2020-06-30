@@ -81,7 +81,7 @@ final public class VfoDisplayControl extends GroupBox
     boolean inhibit = true;  // Inhibit interaction during construction.
     static Vector<Component> order;
     boolean silent = false;
-    VfoSelectionInterface vfoState;    
+    VfoStateInterface vfoState;    
     JPanel glassPane;       
     final float LITTLE_FONT_FUDGE = 0.90f;
     final float BIG_FONT_FUDGE = 0.90f;
@@ -238,16 +238,8 @@ final public class VfoDisplayControl extends GroupBox
         Rectangle displayRect = resizedDisplay.getGlassPane().getBounds();
         if (displayRect == null) return;  // too early...
         int displayWidth = displayRect.width;
-        
-        ///////////HACK
-        //displayWidth = 630;
-        
         if (displayWidth == 0) return; // too early...
         int displayHeight = displayRect.height;
-        
-        ////////////HACK
-        //displayHeight = 115;
-        
         float givenAspectRatio = (float)displayHeight / (float)displayWidth;
         Rectangle newBounds;
         if (givenAspectRatio < desiredAspectRatio) {
@@ -387,7 +379,7 @@ final public class VfoDisplayControl extends GroupBox
         
     
     
-    public void makeVisible(VfoSelectionInterface vfoInterface) {
+    public void makeVisible(VfoStateInterface vfoInterface) {
         vfoState = vfoInterface;
         long selectedFreq = vfoState.getSelectedVfoFrequency();
         inhibit = false;

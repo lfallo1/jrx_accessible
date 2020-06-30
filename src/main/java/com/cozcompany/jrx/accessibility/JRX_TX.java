@@ -71,7 +71,7 @@ import vfoDisplayControl.VfoStateInterface;
 final public class JRX_TX extends javax.swing.JFrame implements 
         ListSelectionListener, ItemListener , ActionListener {
 
-    final String appVersion = "5.0.7";
+    final String appVersion = "5.0.8";
     final String appName;
     final String programName;
     String lineSep;
@@ -769,7 +769,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         return box.readValueStr();
     }
 
-    protected void waitMS(int ms) {
+    public void waitMS(int ms) {
         try {
             Thread.sleep(ms);
         } catch (Exception e) {
@@ -1364,11 +1364,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 waitMS(100);
                 hamlibSocket = null;
             }
-            if (hamlibDaemon != null) {
-                hamlibDaemon.destroy();
-                waitMS(100);
-                hamlibDaemon = null;
-            }
         } catch (Exception e) {
             e.printStackTrace(System.out);
         }
@@ -1516,6 +1511,16 @@ final public class JRX_TX extends javax.swing.JFrame implements
         config.write();
         memoryCollection.writeMemoryButtons();
         closeConnection();
+        // Kill the Hamlib daemon.
+        for (int tries=0; tries < 2; tries++){
+            try {
+                hamlibDaemon.destroy();
+                waitMS(1000); // Sometimes its hard to kill this guy.               
+            }
+            catch (Exception e) {
+                pout("closeApp failed to terminate hamlibDaemon with exception "+e);
+            }
+        }
         System.exit(0);
     }
 

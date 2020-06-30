@@ -1,0 +1,31 @@
+Here are testing results for rigctld version 20200614.0 with ID-51A 50th Anniversary Edition.
+Testing platform: iMac Osx Catalina 10.15.5
+USB/Serial adapter :
+Command line :     /usr/local/bin/rigctld -m 3084 -r /dev/tty.usbserial-AK08M0W1
+Tester: Coz Cosby WA3RQD cell: 443-797-9743  email: cozwhy@yahoo.com
+JRX_TX Repository: 
+
+Background:  Testing rigctl has gone very well.  I am one of the developers on
+the JRX improvement team. We are making JRX blind accessible and adding the
+capability to operate transmitters as well as receivers.  Controlling the HT's will
+open up many doors for blind amateurs as rigs like the ID-51 have more capability
+than large rigs a few years ago, but the voice feedback is not sufficient to operate
+all those features.  We are developing on the Mac first because it has a large
+following in the blind community because of the support for VoiceOver.   We are
+expecting a Beta release of JRX_TX in September 2020.  I have access to these rigs
+through our development group:
+IC-7100
+ID-1
+IC-706
+TH-74A
+TH-71A
+TH-7A
+ID-51A      
+Will report on each as time allows, but I will spend most of my time with the
+IC=7100 and the ID-51A while I develop and test the JRX_TX application.  FYI, 
+making VoiceOver play nicely on a Mac takes about the same effort as developing
+the app for sighted use.  It's not for the feint of heart.  I am retired now and
+this keeps me off the street. 73 Coz
+
+
+

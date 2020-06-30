@@ -1,0 +1,112 @@
+// Using new command line switch -o which requires a VFO arg.
+
+rigctl -r /dev/tty.SLAB_USBtoUART1 -m 3070 -vv -o
+Opened rig model 3070, 'IC-7100'
+
+Rig command: f
+VFO: VFOA
+Frequency: 144246000
+
+Rig command: f VFOA
+Frequency: 144246000
+
+Rig command: V VFOB
+
+Rig command: f VFOA
+Frequency: 144246000
+
+Rig command: f VFOB
+Frequency: 14001000
+
+Rig command: m
+VFO: VFOA
+Mode: CW
+Passband: 500
+
+Rig command: m VFOB
+Mode: USB
+Passband: 3000
+
+// You can hear a double click when
+requesting info about the non-selected
+vfo. Now I need to find a way to see 
+when SPLIT is ON/OFF.
+
+Rig command: s VFOB
+Split: 0
+TX VFO: VFOA
+
+// This tells me SPLIT is OFF and VFOA is
+not selected.
+
+////////////////////////
+Do not use -o command line arg.
+// Split is not on.
+Rig command: s
+Split: 0
+TX VFO: VFOA
+
+Rig command: S 0 VFOB
+
+Rig command: s
+Split: 0
+TX VFO: VFOA
+
+Rig command: S 1 VFOB
+// Turns on SPLIT.
+
+Rig command: s
+Split: 1
+TX VFO: VFOB
+
+Rig command: S 0 VFOB
+// Turns off SPLIT.
+
+Rig command: s
+Split: 0
+TX VFO: VFOA
+
+Rig command: S 1 VFOA
+// Turns on SPLIT.
+
+Rig command: s
+Split: 1
+TX VFO: VFOB
+
+Rig command: S 0 VFOB
+// Turns off SPLIT and VFOA still selected.
+
+Rig command: s
+Split: 0
+TX VFO: VFOA
+
+// So for command S and s, Split 0 means split OFF.
+// So for command S and s, Split 1 means split ON.
+
+///////////////////////////////////////////////
+// Now on 14 Mhz CW try get_rptr_shift:
+
+Rig command: r
+icom_get_rptr_shift: unsupported shift 0get_rptr_shift: error = Protocol error
+
+// Now on a 2m repeater 147.135 with DUP+
+Rig command: r
+Rptr Shift: +
+
+Rig command: R 0
+Rig command: r
+icom_get_rptr_shift: unsupported shift 0get_rptr_shift: error = Protocol error
+// Turned off DUP.
+
+Rig command: R +
+// Turned on DUP+
+
+Rig command: r
+Rptr Shift: +
+
+Rig command: R -
+// Turned on DUP- and TX is 600000 down correctly.
+
+Rig command: r
+Rptr Shift: -
+
