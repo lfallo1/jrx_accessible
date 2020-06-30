@@ -291,6 +291,9 @@ final public class JRX_TX extends javax.swing.JFrame implements
     /**
      * Create the menu bar for the display and add menu items to operate the
      * VFO selection and copy tasks.
+     * 
+     * Requirement: Gray or otherwise disable menu items that are not supported
+     * by the rig.  For example, ID-51 does not support SPLIT vfo op mode.
      */        
     protected void addMenuBar() {                         
         menuBar = jMenuBar1;
@@ -523,7 +526,8 @@ final public class JRX_TX extends javax.swing.JFrame implements
 
     private void writeRadioControls() {
         for (ControlInterface cont : controlList) {
-            cont.writeValue(true);
+            if (((Component)cont).isEnabled() )
+                cont.writeValue(true);
         }
     }
 
@@ -736,7 +740,8 @@ final public class JRX_TX extends javax.swing.JFrame implements
             sv_radioNamesComboBox.setEnabled(true);
             sv_interfacesComboBox.setEnabled(true);
         }  
-        vfoState.getVfoCommandChoices(radioData);
+        vfoState.setVfoCommandChoices(radioData);
+        vfoState.setVfoSplitCapability(radioData);
         enableControlCap(sv_ctcssComboBox, radioData, "(?ism).*^Can set CTCSS Squelch:\\s+Y$", false);
         enableControlCap(sv_agcComboBox, radioData, "(?ism).*^Set level:.*?AGC\\(", true);
         enableControlCap(sv_attenuatorComboBox, radioData, "(?ism).*^Set level:.*?ATT\\(", false);
@@ -1226,7 +1231,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
      * @param cc
      * @param source
      * @param search
-     * @param level 
+     * @param level when true searches for level command capability: "U  xxxx"
      */
     protected void enableControlCap(Component cc, String source, String search, boolean level) {
         boolean enabled = (source != null && source.matches(search + ".*"));
