@@ -29,7 +29,7 @@ import javax.swing.event.ChangeListener;
  *
  * @author lutusp
  */
-final public class RWSlider extends JSlider implements MouseWheelListener, 
+public class RWSlider extends JSlider implements MouseWheelListener, 
         ChangeListener, ControlInterface {
 
     JRX_TX parent;
@@ -108,7 +108,7 @@ final public class RWSlider extends JSlider implements MouseWheelListener,
         }
         return localLvl;
     }
-
+    
     protected double ntrp(double xl, double xh, double yl, double yh, double x) {
         return (x - xl) * (yh - yl) / (xh - xl) + yl;
     }

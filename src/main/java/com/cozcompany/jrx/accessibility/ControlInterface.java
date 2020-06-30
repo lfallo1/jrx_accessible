@@ -19,6 +19,8 @@
 // ***************************************************************************
 package com.cozcompany.jrx.accessibility;
 
+import java.awt.Component;
+
 /**
  *
  * @author lutusp
@@ -33,5 +35,31 @@ public interface ControlInterface {
     public void readConvertedValue();
     public void selectiveReadValue(boolean all);
     public void writeValue(boolean force);
-    
+    default boolean enableCap(ControlInterface cc, 
+            String source, String search, boolean hasLevel ) {
+        
+        boolean enabled = (source != null && source.matches(search + ".*"));
+        ((Component)cc).setEnabled(enabled);
+        if (enabled && hasLevel) {
+            try {
+                // This class is an instance of ControlInterface.
+                String range = source.replaceFirst(search + 
+                        "([0-9+-]+)\\.\\.([0-9+-]+).*", "$1,$2");
+                String[] digits = range.split(",");
+                int low = Integer.parseInt(digits[0]);
+                int high = Integer.parseInt(digits[1]);
+                if (high - low == 0) {
+                    low = 0;
+                    high = 1;
+                }
+                ControlInterface box = (ControlInterface) cc;
+                //(source + " control cap:" + low + "," + high);
+                box.setYLow(low);
+                box.setYHigh(high);                
+            } catch (Exception e) {
+                e.printStackTrace(System.out);
+            }
+        }
+        return enabled;    
+    }    
 }
