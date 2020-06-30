@@ -485,16 +485,11 @@ final public class JRX_TX extends javax.swing.JFrame implements
             oldRadioFrequency = -1;
             dcdIconLabel.setText("");
             dcdIconLabel.setIcon(greenLed);
-            // must reset to defaults again
-            // to accommodate change in rig
-            //setDefaultComboContent();   @todo Coz why is this commented out?
+            // Must reset to defaults again to accommodate change in rig.
+            setDefaultComboContent();  
             setupHamlibDaemon();
-            inhibit = true;  // do not command rig while setting up scales.
-            setComboBoxScales();            
-            vfoDisplay.setUpFocusManager();  // @todo move this down a line...
-            
-            inhibit = false;            
-
+            setComboBoxScales();                          
+            vfoDisplay.setUpFocusManager();  
             vfoDisplay.makeVisible(vfoState); 
             if (sv_jrxToRadioButton.isSelected()) {
                 vfoState.setVfoStateSimplex();
@@ -504,7 +499,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 vfoState.setTextVfoB(freqB);
                 writeRadioControls();
             } else {
-                // Coz fix this.  It loses track of which radio VFO was selected.
+                // @todo Coz fix this.  It loses track of which radio VFO was selected.
                 vfoDisplay.loadRadioFrequencyToVfoB();
                 vfoDisplay.loadRadioFrequencyToVfoA(); 
             }
@@ -741,7 +736,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
             sv_radioNamesComboBox.setEnabled(true);
             sv_interfacesComboBox.setEnabled(true);
         }  
-
+        vfoState.getVfoCommandChoices(radioData);
         enableControlCap(sv_ctcssComboBox, radioData, "(?ism).*^Can set CTCSS Squelch:\\s+Y$", false);
         enableControlCap(sv_agcComboBox, radioData, "(?ism).*^Set level:.*?AGC\\(", true);
         enableControlCap(sv_attenuatorComboBox, radioData, "(?ism).*^Set level:.*?ATT\\(", false);
@@ -857,13 +852,11 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 if (v < 0) {
                     v = vfoState.getSelectedVfoFrequency();
                 }
-                if (v < 0) {
+                if (v <= 0) {
                     throw (new Exception("frequency <= 0"));
                 }
                 if (oldRadioFrequency != v) {
-                    String com = String.format("F %d", v);
-                    sendRadioCom(com, 0, true);
-                    //System.out.println("setRadioFrequency() : "+ com);
+                    boolean success = vfoState.writeFrequencyToRadioSelectedVfo(v);
                     oldRadioFrequency = v;
                 }
             }
@@ -920,12 +913,13 @@ final public class JRX_TX extends javax.swing.JFrame implements
 
     private void setComboBoxScales() {
         if (hamlibExecPath == null) return;
-
+        inhibit = true; // Do not cause a change handler to call initialize().
         ((RWComboBox) sv_preampComboBox).setGenericComboBoxScale("Pre", "(?ism).*^Preamp:\\s*(.*?)\\s*$.*", true, true);
         ((RWComboBox) sv_attenuatorComboBox).setGenericComboBoxScale("Att", "(?ism).*^Attenuator:\\s*(.*?)\\s*$.*", true, true);
         ((RWComboBox) sv_filtersComboBox).setGenericComboBoxScale("", "", true, true);
         ((RWComboBox) sv_modesComboBox).setGenericComboBoxScale("Mode", "(?ism).*^Mode list:\\s*(.*?)\\s*$.*", false, false);
         ((RWComboBox) sv_ctcssComboBox).setGenericComboBoxScale("CTCSS", "(?ism).*^CTCSS:\\s*(.*?)\\s*$.*", false, true);
+        inhibit = false;
     }
     /**
      * Read rig specs from hamlib backend and insert into radioCodes TreeMap; then
@@ -1061,7 +1055,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
      * the correct rigName.  It is displayed prominently on the top of the UI
      * even if it is disabled.
      * 
-     * Note: Prerequesite for this routine is the creation of the radioCodes.
+     * Note: Prerequisite for this routine is the creation of the radioCodes.
      */
     private void setupHamlibDaemon() {
         if (!inhibit) {
@@ -1083,14 +1077,18 @@ final public class JRX_TX extends javax.swing.JFrame implements
             if (comArgs.rigCode >= 0 && rigCode == -1) {
                 rigCode = comArgs.rigCode;
                 rigName = getNameKeyForRadioCodeValue(rigCode);
+                inhibit = true;
                 sv_radioNamesComboBox.setSelectedItem(rigName);
                 // Disable comboBox because choice has already been made.
                 sv_radioNamesComboBox.setEnabled(false);
+                inhibit = false;
             }
             if (comArgs.interfaceName != null) {
                 interfaceName = comArgs.interfaceName;
+                inhibit = true;
                 sv_interfacesComboBox.setSelectedItem(interfaceName);
                 sv_interfacesComboBox.setEnabled(false);
+                inhibit = false;
             } else if (sv_interfacesComboBox.getSelectedIndex() > 0) {
                 interfaceName = (String) sv_interfacesComboBox.getSelectedItem();
             }
@@ -1218,11 +1216,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
         }       
     }
     
-    
-    
-    
-    
-    
     /**
      * Given a swing Component (created by the Swing Gui designer), the reply
      * text "source" from a rigctl capabilities command "\dump_Caps", a regular
@@ -1276,7 +1269,15 @@ final public class JRX_TX extends javax.swing.JFrame implements
         return sb.toString().trim();
     }
     
-    
+    /**
+     * Send the string "s" to the radio via rigctld TCP port with writeLock and 
+     * return the result string or null when in error.
+     * 
+     * @param s
+     * @param localDebug
+     * @param writeMode
+     * @return 
+     */
     public String sendRadioCom(String s, int localDebug, boolean writeMode) {
         String result = null;
         int countBefore = vfoState.lock.getWriteHoldCount();
@@ -1309,7 +1310,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         catch (Exception eComms) {
             System.out.println("sendRadioCom() had lock exception "+ eComms);
         }
-        
+        // @todo Development info to System.out for accumulated locks.
         int countAfter = vfoState.lock.getWriteHoldCount();
         boolean plusLocks = ((countAfter - countBefore) > 0);           
         if (vfoState.lock.isWriteLockedByCurrentThread() && plusLocks ) {
@@ -3024,13 +3025,11 @@ final public class JRX_TX extends javax.swing.JFrame implements
     }//GEN-LAST:event_sv_synthSquelchCheckBoxActionPerformed
 
     private void sv_interfacesComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sv_interfacesComboBoxActionPerformed
-
-        initialize(); //@todo Coz fix this
+        if (!inhibit) initialize(); 
     }//GEN-LAST:event_sv_interfacesComboBoxActionPerformed
 
     private void sv_radioNamesComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sv_radioNamesComboBoxActionPerformed
-
-        initialize(); //@todo Coz fix this
+        if (!inhibit) initialize(); 
     }//GEN-LAST:event_sv_radioNamesComboBoxActionPerformed
 
     private void sv_modesComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sv_modesComboBoxActionPerformed
