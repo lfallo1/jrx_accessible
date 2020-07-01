@@ -46,6 +46,15 @@ public class IfFilterComboBox extends RWComboBox {
         parent.inhibit = old_inhibit;
     }
 
+    protected double getFilterBW() {
+        int i = getSelectedIndex();
+        if (i >= 0 && i < reverseUseMap.size()) {
+            return Double.parseDouble(reverseUseMap.get(i));
+        }
+        return 0;
+    }
+
+
     
     /**
      * Filter comboBox has unique setup.

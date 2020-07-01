@@ -694,14 +694,14 @@ final public class JRX_TX extends javax.swing.JFrame implements
         }
         
         // yhigh intentionally = ylow to allow the rig to set the range
-        //setComboBoxContent((RWComboBox) sv_ifShiftComboBox, "IF", -50, 50, 5, -50, 50, 0, 0, 0); //@todo Coz remove comment
-        sv_ifShiftComboBox.setEnabled(false); // @todo Coz temporary fix.... Remove this line.
-        setComboBoxContent((RWComboBox) sv_dspComboBox, "DSP", 0, 100, 5, 0, 100, 0, 1, 0);
-        setComboBoxContent((RWComboBox) sv_agcComboBox, "AGC", 0, 10, 1, 0, 1, 0, 10, 1);
-        //setComboBoxContent((RWComboBox) sv_antennaComboBox, "Ant", 0, 4, 1, 0, 1, 0, 1, 1);  //@todo Coz remove comment
-        sv_antennaComboBox.setEnabled(false); // @todo Coz temporary fix... Remove this line.
+        ((RWComboBox)sv_ifShiftComboBox).setComboBoxContent("IF", -50, 50, 5, -50, 50, 0, 0, 0); //@todo Coz remove comment
+        //sv_ifShiftComboBox.setEnabled(false); // @todo Coz temporary fix.... Remove this line.
+        ((RWComboBox)sv_dspComboBox).setComboBoxContent("DSP", 0, 100, 5, 0, 100, 0, 1, 0);
+        ((RWComboBox)sv_agcComboBox).setComboBoxContent("AGC", 0, 10, 1, 0, 1, 0, 10, 1);
+        ((RWComboBox)sv_antennaComboBox).setComboBoxContent("Ant", 0, 4, 1, 0, 1, 0, 1, 1);  //@todo Coz remove comment
+        //sv_antennaComboBox.setEnabled(false); // @todo Coz temporary fix... Remove this line.
         initInterfaceList();
-        initRigSpecs();
+        getSupportedRadios();
         memoryCollection.readMemoryButtons();
         initTimeValues((RWComboBox) sv_timerIntervalComboBox);
 
@@ -826,33 +826,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
         return signalStrength;
     }
 
-    private void setComboBoxContent(
-            RWComboBox box,
-            String label,
-            int start,
-            int end,
-            int step,
-            int xlow,
-            int xhigh,
-            int ylow,
-            int yhigh,
-            int initial) {
-        box.removeAllItems();
-        for (int i = start; i <= end; i += step) {
-            String s = String.format("%s %d", label, i);
-            //box.addListItem(rigSpecs, "" + i);
-            box.addListItem(s, i, "" + i);
-        }
-        box.setXLow(xlow);
-        box.setXHigh(xhigh);
-        // to avoid resetting values,
-        // make yhigh = ylow
-        if (yhigh > ylow) {
-            box.setYLow(ylow);
-            box.setYHigh(yhigh);
-        }
-        box.setSelectedIndex(box.useMap.get("" + initial));
-    }
 
 
     protected void readFrequency() {
@@ -950,7 +923,8 @@ final public class JRX_TX extends javax.swing.JFrame implements
         inhibit = false;
     }
     /**
-     * Read rig specs from hamlib backend and insert into radioCodes TreeMap; then
+     * Read a list of supported radios from hamlib backend and insert into 
+     * radioCodes TreeMap; then
      * populate sv_radioNamesComboBox with the radio names.  The hamlib daemon
      * runs for the sole purpose of handling the -l command and then exits. The
      * rig specs are one rig per line and formatted in 5 columns using spaces 
@@ -958,18 +932,18 @@ final public class JRX_TX extends javax.swing.JFrame implements
      * character position from the start of the line.  That makes it easier to
      * check the parsing by position.  The rig numbers are increasing from top to
      * bottom of the list, but are not always consecutive.  It would be good to
-     * display the rig spec "Version" that is listed for each rig so that bad
+     * display the back end  "Version" that is listed for each rig so that bad
      * behavior could be tracked to a particular rig version.
      * 
      * Requirement: It is possible to have a left-over rigctld running on the 
      * system.  If so, you will get that rigctld rig caps and not the ones you
-     * are expecting.  You must see if one is already running.  If it is, then
-     * connect to it an issue a Quit command.  That should make it die.
+     * are expecting.  You must see if one is already running.  It cannot be
+     * killed by giving it a command.  Warn the user with a dialog box.
      * 
      * 
      * @todo Move this to RadioNamesComboBox class.
      */
-    private void initRigSpecs() {
+    private void getSupportedRadios() {
         radioCodes = new TreeMap<>();
         radioNames = new TreeMap<>();
         String a, b, rigSpecs="";
@@ -1039,7 +1013,8 @@ final public class JRX_TX extends javax.swing.JFrame implements
        
     
     /**
-     * Get a list of radios and their codes before the socket has been set up.
+     * Run a command line command an retrieve the response - used to get a list
+     * of radios and their codes before the socket has been set up.
      */ 
     private String runSysCommand(String[] array, boolean read) {
         String result = "";
@@ -1224,8 +1199,8 @@ final public class JRX_TX extends javax.swing.JFrame implements
                     pout("sendradiocom result: [" + result.replaceAll("[\r\n]", " ") + "]");
                 }
                 // close streams
-                hamlibSocket.shutdownInput();   //Places the input stream for this socket at "end of stream".
-                hamlibSocket.shutdownOutput(); //Disables the output stream            
+                hamlibSocket.shutdownInput(); 
+                hamlibSocket.shutdownOutput();         
                 // close socket
                 if (hamlibSocket != null) {
                     hamlibSocket.close();
@@ -1236,11 +1211,11 @@ final public class JRX_TX extends javax.swing.JFrame implements
             catch (Exception eProbe) {
                 pout("dismissOldHamlibTask had exception " + eProbe);
             }
-                        
-            JOptionPane.showMessageDialog(this,"rigctld is already running.  Please kill the process.", 
-                    "rigctld is already running. Please kill the process.",
+            // Only the second arg (title) is read by voiceOver.            
+            JOptionPane.showMessageDialog(this,
+                    "rigctld is already running. Please kill the process.", 
+                    "rigctld is already running. Please kill the process.", 
                     JOptionPane.WARNING_MESSAGE);
-
         }       
     }
     
@@ -1339,7 +1314,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         catch (Exception eComms) {
             System.out.println("sendRadioCom() had lock exception "+ eComms);
         }
-        // @todo Development info to System.out for accumulated locks.
+        // Debug info to System.out for accumulated locks.
         int countAfter = vfoState.lock.getWriteHoldCount();
         boolean plusLocks = ((countAfter - countBefore) > 0);           
         if (vfoState.lock.isWriteLockedByCurrentThread() && plusLocks ) {
@@ -1356,8 +1331,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
         double volume = ((ControlInterface) this.sv_volumeSlider).getConvertedValue();
         volume = (squelchOpen) ? volume : 0;
         if (volume != oldVolume) {
-            // Need to read volume setting from rig,
-            // then set the volume slider. @todo COZ
             setVolumeDirect(volume);
             oldVolume = volume;
         }
@@ -1412,7 +1385,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
 
     protected void getSignalStrength() {
         try {
-            // don't do this for high debug levels
+            // Do not perform operation for high debug levels
             if (comArgs.debug < 2) {
                 String com = (testRawSignalMode()) ? "l RAWSTR" : "l STRENGTH";
                 String result = sendRadioCom(com, 1, false);
@@ -1429,11 +1402,16 @@ final public class JRX_TX extends javax.swing.JFrame implements
             e.printStackTrace(System.out);
         }
     }
-
-    // based on a little online research
-    // x (db) 0 = s9
-    // x (db) -54 = s0
-    double dbToSUnits(double x) {
+    /**
+     * Convert double value in db to S units.
+     *    based on a little online research
+     * x (db) 0 = s9
+     * x (db) -54 = s0
+     * @author Paul
+     * @param x double signal strength in dbm
+     * @return double S units
+     */
+     double dbToSUnits(double x) {
         return 9 + x / 6.0;
     }
 
@@ -3235,7 +3213,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
     protected javax.swing.JCheckBox sv_apfCheckBox;
     protected javax.swing.JComboBox sv_attenuatorComboBox;
     protected javax.swing.JCheckBox sv_blankerCheckBox;
-    private javax.swing.JCheckBox sv_compressionCheckBox;
+    protected javax.swing.JCheckBox sv_compressionCheckBox;
     protected javax.swing.JCheckBox sv_ctcssCheckBox;
     protected javax.swing.JComboBox sv_ctcssComboBox;
     protected javax.swing.JCheckBox sv_dspCheckBox;

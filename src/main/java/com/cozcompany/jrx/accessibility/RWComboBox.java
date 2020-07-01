@@ -94,6 +94,32 @@ public class RWComboBox extends JComboBox<String> implements
         super.addItem(disp);
     }
 
+    public void setComboBoxContent(
+            String label,
+            int start,
+            int end,
+            int step,
+            int xlow,
+            int xhigh,
+            int ylow,
+            int yhigh,
+            int initial) {
+        removeAllItems();
+        for (int i = start; i <= end; i += step) {
+            String s = String.format("%s %d", label, i);
+            addListItem(s, i, "" + i);
+        }
+        setXLow(xlow);
+        setXHigh(xhigh);
+        // To avoid resetting values, make yhigh = ylow.
+        if (yhigh > ylow) {
+            setYLow(ylow);
+            setYHigh(yhigh);
+        }
+        setSelectedIndex(useMap.get("" + initial));
+    }
+    
+    
     protected void setGenericComboBoxScale(
             String tag,
             String search,
@@ -160,46 +186,7 @@ public class RWComboBox extends JComboBox<String> implements
         parent.inhibit = old_inhibit;
     }
 
-    private void setupFilterCombo() {
-        if (parent.radioData != null) {
-            removeAllItems();
-            // "valToKey" serves some important purposes:
-            // it sorts the entries and eliminates duplicates
-            TreeMap<Long, String> valToKey = new TreeMap<>();
-            //keyToVal.put("BW auto", 0L);
-            valToKey.put(0L, "BW auto");
-            String s = parent.radioData.replaceFirst(
-                                    "(?is).*?Filters:(.*?)Bandwidths.*", "$1");
-            Pattern pattern = Pattern.compile("(?is)[0-9.]+ k?hz");
-            Matcher m = pattern.matcher(s);
-            while (m.find()) {
-                String ss = m.group();
-                String[] array = ss.split("\\s+");
-                ss = "BW " + ss;
-                //p("filter: " + array[0] + "," + array[1]);
-                double mult = (array[1].equalsIgnoreCase("hz")) ? 1 : 1000;
-                double bw = Double.parseDouble(array[0]) * mult;
-                long dv = (long) bw;  // bandwidth value, ss is units like khz
-                //keyToVal.put(ss, dv);
-                valToKey.put(dv, ss);
-            }
-            for (long dv : valToKey.keySet()) {
-                //addListItem(valToKey.get(dv), "" + dv);
-                addListItem(valToKey.get(dv), dv, "" + dv);
-                if (parent.comArgs.debug >= 1) {
-                                    parent.pout("key to filter : [" + dv + "]");
-                }
-            }
-        }
-    }
 
-    protected double getFilterBW() {
-        int i = getSelectedIndex();
-        if (i >= 0 && i < reverseUseMap.size()) {
-            return Double.parseDouble(reverseUseMap.get(i));
-        }
-        return 0;
-    }
 
     protected void setComboBoxIndex(int index) {
         index = Math.max(0, index);

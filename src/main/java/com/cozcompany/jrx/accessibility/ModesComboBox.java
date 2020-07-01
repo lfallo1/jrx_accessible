@@ -46,7 +46,7 @@ public class ModesComboBox extends RWComboBox {
     protected void writeValueStr() {
         if (commOK && !parent.inhibit) {
             strFilter = String.format("%.1f", 
-                     ((RWComboBox) parent.sv_filtersComboBox).getFilterBW());               
+                     ((IfFilterComboBox) parent.sv_filtersComboBox).getFilterBW());               
             int index = getSelectedIndex();
             strSelection = reverseUseMap.get(index);
             if (strSelection != null) {
