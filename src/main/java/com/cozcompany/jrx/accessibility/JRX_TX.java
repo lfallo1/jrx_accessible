@@ -63,6 +63,7 @@ import vfoDisplayControl.VfoStateInterface;
  * inhibits reading radio frequency, inhibits getting mode from rig, inhibits all
  * radio coms, inhibits setTableScanParams, setMemoryScanParams, and inhibits
  * setScanParams.
+ * 2) boolean isMacOS : We are running on a MAC.
  * 
  * 
  * 
@@ -531,24 +532,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
         }
     }
 
-    /**
-     * Query the Mode comboBox to get the modulation mode of item n.  Validates
-     * input parameter n.
-     * 
-     * @todo Move this to the ModeComboBox class.
-     * 
-     * @param n
-     * @return modulation mode name string or ""
-     */
-    protected String getMode(int n) {
-        String s = "";
-        RWComboBox box = (RWComboBox) sv_modesComboBox;
-        if (n >= 0 && n < box.reverseUseMap.size()) {
-            s = box.reverseUseMap.get(n);
-        }
-        return s;
-    }
-
     private void measureSpeed() {
         long freq = vfoState.getSelectedVfoFrequency();
         long t = System.currentTimeMillis();
@@ -605,7 +588,9 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 sv_micGainSlider,
                 sv_rfPowerSlider,
                 sv_voxLevelSlider,
-                sv_enableVoxCheckBox
+                sv_enableVoxCheckBox,
+                sv_compressionSlider,
+                sv_compressionCheckBox
         };
         for (Component comp : list) {
             controlList.add((ControlInterface) comp);
@@ -764,22 +749,9 @@ final public class JRX_TX extends javax.swing.JFrame implements
         ((RWComboBox)sv_dspComboBox).enableCap(radioData, "(?ism).*^Set level:.*?NR\\(", true);
         ((RWCheckBox)sv_enableVoxCheckBox).enableCap(radioData, "(?ism).*^Set functions:.*?\\sVOX\\s", false);
         ((RWCheckBox)sv_dspCheckBox).enableCap(radioData, "(?ism).*^Set level:.*?NR\\(", false);
+        ((RWCheckBox)sv_compressionCheckBox).enableCap(radioData,"(?ism).*^Set functions:.*?\\sCOMP\\s", false);
+        ((RWSlider)sv_compressionSlider).enableCap(radioData, "(?ism).*^Set level:.*?COMP\\(", true);
         
-        //enableControlCap(sv_ctcssComboBox, radioData, "(?ism).*^Can set CTCSS Squelch:\\s+Y$", false);
-        //enableControlCap(sv_agcComboBox, radioData, "(?ism).*^Set level:.*?AGC\\(", true);
-        //enableControlCap(sv_attenuatorComboBox, radioData, "(?ism).*^Set level:.*?ATT\\(", false);
-        //enableControlCap(sv_antennaComboBox, radioData, "(?ism).*^Can set Ant:\\rigSpecs+Y$", false); // Coz override for IC-7100
-        //enableControlCap(sv_preampComboBox, radioData, "(?ism).*^Set level:.*?PREAMP\\(", true);
-        //enableControlCap(sv_volumeSlider, radioData, "(?ism).*^Set level:.*?AF\\(", true);
-        //enableControlCap(sv_rfGainSlider, radioData, "(?ism).*^Set level:.*?RF\\(", true);
-        //enableControlCap(sv_squelchSlider, radioData, "(?ism).*^Set level:.*?SQL\\(", true);
-        //enableControlCap(sv_ifShiftComboBox, radioData, "(?ism).*^Set level:.*?IF\\(", true); // Coz override for IC-7100
-        //enableControlCap(sv_blankerCheckBox, radioData, "(?ism).*^Set functions:.*?\\sNB\\s", false);
-        //enableControlCap(sv_anfCheckBox, radioData, "(?ism).*^Set functions:.*?\\sANF\\s", false);
-        //enableControlCap(sv_apfCheckBox, radioData, "(?ism).*^Set functions:.*?\\sAPF\\s", false);
-        //enableControlCap(sv_dspComboBox, radioData, "(?ism).*^Set level:.*?NR\\(", true);
-        //enableControlCap(sv_enableVoxCheckBox, radioData, "(?ism).*^Set functions:.*?\\sVOX\\s", false);
-        //enableControlCap(sv_dspCheckBox, radioData, "(?ism).*^Set level:.*?NR\\(", false);
         String s = sendRadioCom("\\get_dcd", 0, false);
         dcdCapable = (s != null && s.matches("\\d+"));
         squelchScheme.setSquelchScheme();
@@ -809,7 +781,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
         return (int) ntrp(xa, xb, ya, yb, x);
     }
 
-
     protected double freqStrength(long v) {
         if (v > 0) {
             long t1 = System.currentTimeMillis();
@@ -825,8 +796,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
         }
         return signalStrength;
     }
-
-
 
     protected void readFrequency() {
         long freq = vfoState.getRxFrequency();
@@ -1585,9 +1554,9 @@ final public class JRX_TX extends javax.swing.JFrame implements
         sv_antennaComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,"Y","");
         jLabel18 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
-        sv_compressionCheckBox = new javax.swing.JCheckBox();
+        sv_compressionCheckBox = new RWCheckBox(this, "U", "COMP");
         sv_enableVoxCheckBox = new RWCheckBox(this,"U","VOX");
-        compressionSlider = new javax.swing.JSlider();
+        sv_compressionSlider = new RWSlider(this,"L","COMP",0);
         sv_micGainSlider = new MicGainSlider(this);
         sv_voxLevelSlider = new VoxLevelSlider(this);
         jLabel9 = new javax.swing.JLabel();
@@ -1799,9 +1768,9 @@ final public class JRX_TX extends javax.swing.JFrame implements
             }
         });
 
-        compressionSlider.setMajorTickSpacing(10);
-        compressionSlider.setMinorTickSpacing(5);
-        compressionSlider.setPaintTicks(true);
+        sv_compressionSlider.setMajorTickSpacing(10);
+        sv_compressionSlider.setMinorTickSpacing(5);
+        sv_compressionSlider.setPaintTicks(true);
 
         sv_micGainSlider.setMajorTickSpacing(10);
         sv_micGainSlider.setMinorTickSpacing(5);
@@ -1817,7 +1786,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         jLabel11.setLabelFor(sv_voxLevelSlider);
         jLabel11.setText("VOX Level");
 
-        jLabel10.setLabelFor(compressionSlider);
+        jLabel10.setLabelFor(sv_compressionSlider);
         jLabel10.setText("Compression");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -1828,53 +1797,53 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(compressionSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(sv_compressionSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(sv_enableVoxCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jLabel10)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(sv_compressionCheckBox))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(sv_voxLevelSlider, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
                             .addComponent(sv_micGainSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel9)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel9)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel10)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(sv_compressionCheckBox)))))
-                .addContainerGap(15, Short.MAX_VALUE))
+                                .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(sv_enableVoxCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(10, 10, 10)
+                .addGap(9, 9, 9)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(sv_voxLevelSlider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(sv_micGainSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(compressionSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(sv_compressionSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel10)
-                            .addComponent(sv_compressionCheckBox))
-                        .addGap(12, 12, 12)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel11)
-                            .addComponent(sv_enableVoxCheckBox))))
-                .addContainerGap(16, Short.MAX_VALUE))
+                            .addComponent(sv_enableVoxCheckBox))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(12, 12, 12)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel10)
+                            .addComponent(sv_compressionCheckBox))))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
-        jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {compressionSlider, jLabel10, sv_compressionCheckBox});
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel10, sv_compressionCheckBox, sv_compressionSlider});
 
         jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel11, sv_enableVoxCheckBox, sv_voxLevelSlider});
+
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel9, sv_micGainSlider});
 
         javax.swing.GroupLayout transmitterPanelLayout = new javax.swing.GroupLayout(transmitterPanel);
         transmitterPanel.setLayout(transmitterPanelLayout);
@@ -3132,7 +3101,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
     private javax.swing.JPanel buttonPanel2;
     private javax.swing.JTabbedPane channelsTabbedPane;
     protected javax.swing.JLabel comErrorIconLabel;
-    private javax.swing.JSlider compressionSlider;
     private javax.swing.JButton copyButton;
     private javax.swing.JButton copyMemButton;
     protected javax.swing.JLabel dcdIconLabel;
@@ -3214,6 +3182,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
     protected javax.swing.JComboBox sv_attenuatorComboBox;
     protected javax.swing.JCheckBox sv_blankerCheckBox;
     protected javax.swing.JCheckBox sv_compressionCheckBox;
+    private javax.swing.JSlider sv_compressionSlider;
     protected javax.swing.JCheckBox sv_ctcssCheckBox;
     protected javax.swing.JComboBox sv_ctcssComboBox;
     protected javax.swing.JCheckBox sv_dspCheckBox;

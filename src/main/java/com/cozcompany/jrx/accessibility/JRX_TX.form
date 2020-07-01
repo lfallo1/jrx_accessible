@@ -576,11 +576,11 @@
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" attributes="0">
                                           <Group type="102" attributes="0">
-                                              <Component id="compressionSlider" min="-2" pref="160" max="-2" attributes="0"/>
+                                              <Component id="sv_compressionSlider" min="-2" pref="160" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jLabel11" min="-2" pref="85" max="-2" attributes="0"/>
-                                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                                              <Component id="sv_enableVoxCheckBox" min="-2" pref="114" max="-2" attributes="0"/>
+                                              <Component id="jLabel10" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                              <Component id="sv_compressionCheckBox" min="-2" max="-2" attributes="0"/>
                                           </Group>
                                           <Group type="102" attributes="0">
                                               <Group type="103" groupAlignment="1" max="-2" attributes="0">
@@ -589,49 +589,46 @@
                                               </Group>
                                               <EmptySpace max="-2" attributes="0"/>
                                               <Group type="103" groupAlignment="0" attributes="0">
-                                                  <Group type="102" attributes="0">
-                                                      <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
-                                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                                                  </Group>
-                                                  <Group type="102" attributes="0">
-                                                      <Component id="jLabel10" min="-2" max="-2" attributes="0"/>
-                                                      <EmptySpace max="32767" attributes="0"/>
-                                                      <Component id="sv_compressionCheckBox" min="-2" max="-2" attributes="0"/>
+                                                  <Component id="jLabel9" alignment="0" min="-2" max="-2" attributes="0"/>
+                                                  <Group type="102" alignment="0" attributes="0">
+                                                      <Component id="jLabel11" min="-2" pref="85" max="-2" attributes="0"/>
+                                                      <EmptySpace max="-2" attributes="0"/>
+                                                      <Component id="sv_enableVoxCheckBox" min="-2" pref="114" max="-2" attributes="0"/>
                                                   </Group>
                                               </Group>
                                           </Group>
                                       </Group>
-                                      <EmptySpace pref="15" max="32767" attributes="0"/>
+                                      <EmptySpace pref="23" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                             </DimensionLayout>
                             <DimensionLayout dim="1">
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" alignment="0" attributes="0">
-                                      <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="1" max="-2" attributes="0">
                                           <Group type="102" attributes="0">
                                               <Component id="sv_voxLevelSlider" linkSize="10" max="32767" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="sv_micGainSlider" min="-2" max="-2" attributes="0"/>
+                                              <Component id="sv_micGainSlider" linkSize="35" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="compressionSlider" linkSize="9" min="-2" max="-2" attributes="0"/>
+                                              <Component id="sv_compressionSlider" linkSize="9" min="-2" max="-2" attributes="0"/>
                                           </Group>
                                           <Group type="102" attributes="0">
-                                              <Component id="jLabel9" min="-2" pref="36" max="-2" attributes="0"/>
-                                              <EmptySpace max="32767" attributes="0"/>
-                                              <Group type="103" groupAlignment="3" attributes="0">
-                                                  <Component id="jLabel10" linkSize="9" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="sv_compressionCheckBox" linkSize="9" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              </Group>
-                                              <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
                                               <Group type="103" groupAlignment="3" attributes="0">
                                                   <Component id="jLabel11" linkSize="10" alignment="3" min="-2" max="-2" attributes="0"/>
                                                   <Component id="sv_enableVoxCheckBox" linkSize="10" alignment="3" min="-2" max="-2" attributes="0"/>
                                               </Group>
+                                              <EmptySpace max="32767" attributes="0"/>
+                                              <Component id="jLabel9" linkSize="35" min="-2" pref="36" max="-2" attributes="0"/>
+                                              <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
+                                              <Group type="103" groupAlignment="3" attributes="0">
+                                                  <Component id="jLabel10" linkSize="9" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                  <Component id="sv_compressionCheckBox" linkSize="9" alignment="3" min="-2" max="-2" attributes="0"/>
+                                              </Group>
                                           </Group>
                                       </Group>
-                                      <EmptySpace pref="16" max="32767" attributes="0"/>
+                                      <EmptySpace pref="15" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                             </DimensionLayout>
@@ -645,6 +642,7 @@
                                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="sv_compressionCheckBoxActionPerformed"/>
                               </Events>
                               <AuxValues>
+                                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new RWCheckBox(this, &quot;U&quot;, &quot;COMP&quot;);"/>
                                 <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
                               </AuxValues>
                             </Component>
@@ -660,12 +658,15 @@
                                 <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
                               </AuxValues>
                             </Component>
-                            <Component class="javax.swing.JSlider" name="compressionSlider">
+                            <Component class="javax.swing.JSlider" name="sv_compressionSlider">
                               <Properties>
                                 <Property name="majorTickSpacing" type="int" value="10"/>
                                 <Property name="minorTickSpacing" type="int" value="5"/>
                                 <Property name="paintTicks" type="boolean" value="true"/>
                               </Properties>
+                              <AuxValues>
+                                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new RWSlider(this,&quot;L&quot;,&quot;COMP&quot;,0);"/>
+                              </AuxValues>
                             </Component>
                             <Component class="javax.swing.JSlider" name="sv_micGainSlider">
                               <Properties>
@@ -708,7 +709,7 @@
                             <Component class="javax.swing.JLabel" name="jLabel10">
                               <Properties>
                                 <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
-                                  <ComponentRef name="compressionSlider"/>
+                                  <ComponentRef name="sv_compressionSlider"/>
                                 </Property>
                                 <Property name="text" type="java.lang.String" value="Compression"/>
                               </Properties>
