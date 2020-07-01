@@ -116,7 +116,6 @@ public class RWComboBox extends JComboBox<String> implements
                     int n = 0;
                     if (offOption) {
                         is = tag + " off";
-                        //addListItem(is, "0");
                         addListItem(is, 0, "0");
                         //stringValues.add(is);
                         //numericValues.add(0.0);

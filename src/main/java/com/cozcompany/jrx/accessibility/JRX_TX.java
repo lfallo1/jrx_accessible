@@ -1737,6 +1737,11 @@ final public class JRX_TX extends javax.swing.JFrame implements
 
         sv_ctcssComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "123.0", "Item 2", "Item 3", "Item 4" }));
         sv_ctcssComboBox.setToolTipText("CTCSS tone squelch frequencies (❃)");
+        sv_ctcssComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sv_ctcssComboBoxActionHandler(evt);
+            }
+        });
 
         sv_synthSquelchCheckBox.setText("JRX Squelch ON");
         sv_synthSquelchCheckBox.setToolTipText("Use JRX squelch scheme");
@@ -3095,6 +3100,13 @@ final public class JRX_TX extends javax.swing.JFrame implements
     private void sv_enableVoxCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sv_enableVoxCheckBoxActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_sv_enableVoxCheckBoxActionPerformed
+
+    private void sv_ctcssComboBoxActionHandler(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sv_ctcssComboBoxActionHandler
+        String itemStr = (String)sv_ctcssComboBox.getSelectedItem();
+        if (itemStr == null) return;
+        if (itemStr.matches("-- n/a.*") ) return;
+        sv_ctcssComboBox.getAccessibleContext().setAccessibleDescription("Selection is "+itemStr);
+    }//GEN-LAST:event_sv_ctcssComboBoxActionHandler
 
     /**
      * @param args the command line arguments
