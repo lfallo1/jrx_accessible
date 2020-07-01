@@ -34,12 +34,22 @@ public interface ControlInterface {
     public void readConvertedValue(double x);
     public void readConvertedValue();
     public void selectiveReadValue(boolean all);
+    /** Write value to radio when enabled.  
+     * @param force To force a write even if value has
+     * not changed set force true.
+     */
     public void writeValue(boolean force);
-    default boolean enableCap(ControlInterface cc, 
-            String source, String search, boolean hasLevel ) {
+    /**
+     * Examine the reply capabilities to see if this control is to be enabled.
+     * @param source is the capabilities string from the radio.
+     * @param search is the regex search expression
+     * @param hasLevel is true when the control has a numeric level (0..1)
+     * @return 
+     */
+    default boolean enableCap(String source, String search, boolean hasLevel) {
         
         boolean enabled = (source != null && source.matches(search + ".*"));
-        ((Component)cc).setEnabled(enabled);
+        ((Component)this).setEnabled(enabled);
         if (enabled && hasLevel) {
             try {
                 // This class is an instance of ControlInterface.
@@ -52,7 +62,7 @@ public interface ControlInterface {
                     low = 0;
                     high = 1;
                 }
-                ControlInterface box = (ControlInterface) cc;
+                ControlInterface box = (ControlInterface) this;
                 //(source + " control cap:" + low + "," + high);
                 box.setYLow(low);
                 box.setYHigh(high);                
@@ -62,4 +72,37 @@ public interface ControlInterface {
         }
         return enabled;    
     }    
+
+    
+    
+    
+    
+    
+//    default boolean enableCap(ControlInterface cc, 
+//            String source, String search, boolean hasLevel ) {
+//        
+//        boolean enabled = (source != null && source.matches(search + ".*"));
+//        ((Component)cc).setEnabled(enabled);
+//        if (enabled && hasLevel) {
+//            try {
+//                // This class is an instance of ControlInterface.
+//                String range = source.replaceFirst(search + 
+//                        "([0-9+-]+)\\.\\.([0-9+-]+).*", "$1,$2");
+//                String[] digits = range.split(",");
+//                int low = Integer.parseInt(digits[0]);
+//                int high = Integer.parseInt(digits[1]);
+//                if (high - low == 0) {
+//                    low = 0;
+//                    high = 1;
+//                }
+//                ControlInterface box = (ControlInterface) cc;
+//                //(source + " control cap:" + low + "," + high);
+//                box.setYLow(low);
+//                box.setYHigh(high);                
+//            } catch (Exception e) {
+//                e.printStackTrace(System.out);
+//            }
+//        }
+//        return enabled;    
+//    }    
 }

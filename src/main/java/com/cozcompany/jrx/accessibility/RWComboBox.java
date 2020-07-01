@@ -33,7 +33,8 @@ import javax.swing.JComboBox;
  *
  * @author lutusp
  */
-final public class RWComboBox extends JComboBox<String> implements MouseWheelListener, ActionListener, ControlInterface {
+public class RWComboBox extends JComboBox<String> implements 
+        MouseWheelListener, ActionListener, ControlInterface {
 
     JRX_TX parent;
     String prefix;
@@ -52,10 +53,7 @@ final public class RWComboBox extends JComboBox<String> implements MouseWheelLis
     double yValueHigh = 1;
     double numSelection = -10, oldNumSelection;
     String strSelection = null, oldStrSelection;
-    String strFilter = "", oldFilter = "x";
     boolean localInhibit = false;
-    boolean needFilter = false;
-    boolean needMode = false;
     boolean ctcss = false;
     boolean commOK = true;
 
@@ -66,13 +64,11 @@ final public class RWComboBox extends JComboBox<String> implements MouseWheelLis
         token = t;
         if (prefix != null) {
             ctcss = (prefix.equals("ctcss"));
-            needFilter = (prefix.equals("M"));
-            needMode = (prefix.equals("F"));
         }
         setup(true);
     }
 
-    private void setup(boolean first) {
+    protected void setup(boolean first) {
         if (first) {
             addMouseWheelListener(this);
             addActionListener(this);
@@ -80,8 +76,7 @@ final public class RWComboBox extends JComboBox<String> implements MouseWheelLis
         numericMode = false;
         commOK = true;
         oldNumSelection = -1;
-        oldStrSelection = "xxx";
-        oldFilter = "xxx";
+        oldStrSelection = "xxx";        
         displayMap = new TreeMap<>();
         useMap = new TreeMap<>();
         useMapDouble = new TreeMap<>();
@@ -108,68 +103,62 @@ final public class RWComboBox extends JComboBox<String> implements MouseWheelLis
         boolean old_inhibit = parent.inhibit;
         parent.inhibit = true;
         int index = getSelectedIndex();
-        if (needMode) {
-            setupFilterCombo();
-        } else {
-            if (parent.radioData != null) {
-                try {
-                    String s = parent.radioData.replaceFirst(search, "$1");
-                    if (parent.comArgs.debug >= 1) {
-                        parent.pout("combo box content: [" + s + "]");
-                    }
-                    String[] array = s.split("\\s+");
-                    String is;
-                    if (array != null) {
-                        removeAllItems();
-                        int n = 0;
-                        if (offOption) {
-                            is = tag + " off";
-                            //addListItem(is, "0");
-                            addListItem(is, 0, "0");
-                            //stringValues.add(is);
-                            //numericValues.add(0.0);
-                            //keyToIndex.put(is, n);
-                            n += 1;
-                        }
-                        for (String ss : array) {
-                            is = String.format(tag + " %s", ss);
-                            if (numeric) {
-                                if (ss.matches(".*?[0-9.+-]+.*")) {
-                                    ss = ss.replaceFirst(".*?([0-9.+-]+).*", "$1");
-                                } else {
-                                    break;
-                                }
-                            }
-                            if (ctcss) {
-                                double v = Double.parseDouble(ss);
-                                ss = String.format("%.0f", v * 10);
-                            }
-                            //addListItem(is, ss);
-                            //parent.pout("combobox argument: " + is);
-                            double v = 0;
-                            try {
-                                v = Double.parseDouble(ss);
-                                numericMode = true;
-                            } catch (Exception e) {
-                            }
-                            addListItem(is, v, ss);
-                            //keyToIndex.put(ss, n);
-                            n += 1;
-                            //stringValues.add(ss);
-                            //String sv = ss.replaceFirst(".*?(\\d+).*", "$1");
-                        }
-                    } else {
-                        comboPlaceholderData();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace(System.out);
+        if (parent.radioData != null) {
+            try {
+                String s = parent.radioData.replaceFirst(search, "$1");
+                if (parent.comArgs.debug >= 1) {
+                    parent.pout("combo box content: [" + s + "]");
                 }
-
+                String[] array = s.split("\\s+");
+                String is;
+                if (array != null) {
+                    removeAllItems();
+                    int n = 0;
+                    if (offOption) {
+                        is = tag + " off";
+                        //addListItem(is, "0");
+                        addListItem(is, 0, "0");
+                        //stringValues.add(is);
+                        //numericValues.add(0.0);
+                        //keyToIndex.put(is, n);
+                        n += 1;
+                    }
+                    for (String ss : array) {
+                        is = String.format(tag + " %s", ss);
+                        if (numeric) {
+                            if (ss.matches(".*?[0-9.+-]+.*")) {
+                                ss = ss.replaceFirst(".*?([0-9.+-]+).*","$1");
+                            } else {
+                                break;
+                            }
+                        }
+                        if (ctcss) {
+                            double v = Double.parseDouble(ss);
+                            ss = String.format("%.0f", v * 10);
+                        }
+                        //addListItem(is, ss);
+                        //parent.pout("combobox argument: " + is);
+                        double v = 0;
+                        try {
+                            v = Double.parseDouble(ss);
+                            numericMode = true;
+                        } catch (Exception e) {
+                        }
+                        addListItem(is, v, ss);
+                        //keyToIndex.put(ss, n);
+                        n += 1;
+                        //stringValues.add(ss);
+                        //String sv = ss.replaceFirst(".*?(\\d+).*", "$1");
+                    }
+                } else {
+                    comboPlaceholderData();
+                }
+            } catch (Exception e) {
+                e.printStackTrace(System.out);
             }
         }
         setComboBoxIndex(index);
         parent.inhibit = old_inhibit;
-        //return stringValues;
     }
 
     private void setupFilterCombo() {
@@ -180,7 +169,8 @@ final public class RWComboBox extends JComboBox<String> implements MouseWheelLis
             TreeMap<Long, String> valToKey = new TreeMap<>();
             //keyToVal.put("BW auto", 0L);
             valToKey.put(0L, "BW auto");
-            String s = parent.radioData.replaceFirst("(?is).*?Filters:(.*?)Bandwidths.*", "$1");
+            String s = parent.radioData.replaceFirst(
+                                    "(?is).*?Filters:(.*?)Bandwidths.*", "$1");
             Pattern pattern = Pattern.compile("(?is)[0-9.]+ k?hz");
             Matcher m = pattern.matcher(s);
             while (m.find()) {
@@ -190,7 +180,7 @@ final public class RWComboBox extends JComboBox<String> implements MouseWheelLis
                 //p("filter: " + array[0] + "," + array[1]);
                 double mult = (array[1].equalsIgnoreCase("hz")) ? 1 : 1000;
                 double bw = Double.parseDouble(array[0]) * mult;
-                long dv = (long) bw;
+                long dv = (long) bw;  // bandwidth value, ss is units like khz
                 //keyToVal.put(ss, dv);
                 valToKey.put(dv, ss);
             }
@@ -198,7 +188,7 @@ final public class RWComboBox extends JComboBox<String> implements MouseWheelLis
                 //addListItem(valToKey.get(dv), "" + dv);
                 addListItem(valToKey.get(dv), dv, "" + dv);
                 if (parent.comArgs.debug >= 1) {
-                    parent.pout("key to filter : [" + dv + "]");
+                                    parent.pout("key to filter : [" + dv + "]");
                 }
             }
         }
@@ -253,23 +243,14 @@ final public class RWComboBox extends JComboBox<String> implements MouseWheelLis
 
     protected void writeValueStr() {
         if (commOK && !parent.inhibit) {
-            if (needMode) {
-                ((RWComboBox) parent.sv_modesComboBox).writeValueStr();
-            } else {
-                if (needFilter) {
-                    strFilter = String.format("%.1f", ((RWComboBox) parent.sv_filtersComboBox).getFilterBW());
-                }
-                int index = getSelectedIndex();
-                strSelection = reverseUseMap.get(index);
-                if (strSelection != null) {
-                    if (!strSelection.equals(oldStrSelection) || !strFilter.equals(oldFilter)) {
-
-                        String com = String.format("%s %s %s %s", prefix.toUpperCase(), token, strSelection, strFilter);
-                        parent.sendRadioCom(com, 0, true);
-
-                        oldStrSelection = strSelection;
-                        oldFilter = strFilter;
-                    }
+            int index = getSelectedIndex();
+            strSelection = reverseUseMap.get(index);
+            if (strSelection != null) {
+                if (!strSelection.equals(oldStrSelection) ) {
+                    String com = String.format("%s %s %s %s", 
+                        prefix.toUpperCase(), token, strSelection);
+                    parent.sendRadioCom(com, 0, true);
+                    oldStrSelection = strSelection;
                 }
             }
         }
@@ -282,14 +263,14 @@ final public class RWComboBox extends JComboBox<String> implements MouseWheelLis
             if (numSelection != errorValue) {
                 String com;
                 //parent.pout("numselection: " + numSelection);
-                if (needMode) {
-                    ((RWComboBox) parent.sv_modesComboBox).writeValueStr();
-                } else {
+                {
                     if (numSelection != oldNumSelection) {
                         if (ctcss) {
-                            com = String.format("\\set_ctcss_sql %.0f", numSelection);
+                            com = String.format("\\set_ctcss_sql %.0f", 
+                                    numSelection);
                         } else {
-                            com = String.format("%s %s %.2f", prefix.toUpperCase(), token, numSelection);
+                            com = String.format("%s %s %.2f", 
+                                    prefix.toUpperCase(), token, numSelection);
                         }
                         parent.sendRadioCom(com, 0, true);
                         oldNumSelection = numSelection;
@@ -322,12 +303,8 @@ final public class RWComboBox extends JComboBox<String> implements MouseWheelLis
     protected String readValueStr() {
         String s = "";
         if (token != null && isEnabled() && commOK) {
-            if (needMode) {
-                ((RWComboBox) parent.sv_modesComboBox).readValueStr();
-            } else {
-                String com = String.format("%s %s", prefix.toLowerCase(), token);
-                s = parent.sendRadioCom(com, 0, false);
-            }
+            String com = String.format("%s %s", prefix.toLowerCase(), token);
+            s = parent.sendRadioCom(com, 0, false);
         }
         return s;
     }
@@ -348,7 +325,8 @@ final public class RWComboBox extends JComboBox<String> implements MouseWheelLis
                     setSelectedIndex(useMapDouble.get(numSelection));
                 } else {
                     // get the closest value
-                    Map.Entry<Double, Integer> me = useMapDouble.lowerEntry(numSelection);
+                    Map.Entry<Double, Integer> me = 
+                            useMapDouble.lowerEntry(numSelection);
                     if (me == null) {
                         me = useMapDouble.higherEntry(numSelection);
                     }
@@ -356,7 +334,8 @@ final public class RWComboBox extends JComboBox<String> implements MouseWheelLis
                         setSelectedIndex(me.getValue());
                     }
                 }
-                //parent.pout("read converted value: " + sn + ", index " + getSelectedIndex());
+                //parent.pout("read converted value: 
+                    //" + sn + ", index " + getSelectedIndex());
 
             } catch (Exception e) {
                 e.printStackTrace(System.out);
@@ -370,21 +349,7 @@ final public class RWComboBox extends JComboBox<String> implements MouseWheelLis
         localInhibit = true;
         if (numericMode) {
             readConvertedValue(readValueNum());
-        } else {
-            strSelection = readValueStr();
-            if (strSelection != null) {
-                if (needFilter) {
-                    String[] array = strSelection.split("(?sm)\\s+");
-                    if (array.length >= 2) {
-                        //parent.pout("selection: " + array[0] + "," + array[1]);
-                        inhibitSetItem(array[0]);
-                        ((RWComboBox) parent.sv_filtersComboBox).inhibitSetItem(array[1]);
-                    }
-                } else {
-                    inhibitSetItem(strSelection);
-                }
-            }
-        }
+        } 
         localInhibit = false;
     }
 

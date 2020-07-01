@@ -25,6 +25,6 @@ public class MicGainSlider extends RWSlider {
     public boolean enableIfCapable(String source){
         String search = "(?ism).*^Set level:.*?MICGAIN\\(";
         boolean hasLevelValue = true; // This control has Level Value:
-        return enableCap((ControlInterface)this, source, search, hasLevelValue);
+        return enableCap(source, search, hasLevelValue);
     }
 }

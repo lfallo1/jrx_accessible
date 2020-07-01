@@ -34,6 +34,6 @@ public class RfPowerSlider extends RWSlider {
     public boolean enableIfCapable(String source){
         String search = "(?ism).*^Set level:.*?RFPOWER\\(";
         boolean hasLevelValue = true; // This control has Level Value:
-        return enableCap((ControlInterface)this, source, search, hasLevelValue);
+        return enableCap(source, search, hasLevelValue);
     }    
 }

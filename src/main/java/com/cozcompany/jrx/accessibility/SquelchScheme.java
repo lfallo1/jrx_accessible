@@ -29,7 +29,7 @@ public class SquelchScheme {
         appFrame.sv_synthSquelchCheckBox.setEnabled(true);
         useJRXSquelch = appFrame.sv_synthSquelchCheckBox.isSelected();// && !dcdCapable;
         // reset squelch state to default
-        appFrame.enableControlCap(appFrame.sv_squelchSlider, appFrame.radioData, "(?ism).*^Set level:.*?SQL\\(", true);
+        ((RWSlider)appFrame.sv_squelchSlider).enableCap(appFrame.radioData, "(?ism).*^Set level:.*?SQL\\(", true);
         if (useJRXSquelch) {
             appFrame.sv_squelchSlider.setEnabled(true);
         }
