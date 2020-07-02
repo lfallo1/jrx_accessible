@@ -72,7 +72,7 @@ import vfoDisplayControl.VfoStateInterface;
 final public class JRX_TX extends javax.swing.JFrame implements 
         ListSelectionListener, ItemListener , ActionListener {
 
-    final String appVersion = "5.0.8";
+    final String appVersion = "5.0.9";
     final String appName;
     final String programName;
     String lineSep;
@@ -963,7 +963,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
         sv_radioNamesComboBox.removeAllItems();
         sv_radioNamesComboBox.addItem("-- Radios --");
         for (String key : radioCodes.keySet()) {
-            int val = radioCodes.get(key);  // Coz - val is not used. TODO remove.
             sv_radioNamesComboBox.addItem(key);
         }
     }
@@ -1549,8 +1548,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
         transmitterPanel = new javax.swing.JPanel();
         sv_rfPowerSlider = new RfPowerSlider(this);
         jLabel8 = new javax.swing.JLabel();
-        toneSelectionComboBox = new javax.swing.JComboBox<>();
-        jLabel12 = new javax.swing.JLabel();
         sv_antennaComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,"Y","");
         jLabel18 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
@@ -1559,9 +1556,10 @@ final public class JRX_TX extends javax.swing.JFrame implements
         sv_compressionSlider = new RWSlider(this,"L","COMP",0);
         sv_micGainSlider = new MicGainSlider(this);
         sv_voxLevelSlider = new VoxLevelSlider(this);
-        jLabel9 = new javax.swing.JLabel();
+        micGainLabel = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
+        sv_txCtcssCheckBox = new RWCheckBox(this,"U","TONE");
         ifControlsPanel = new javax.swing.JPanel();
         sv_filtersComboBox = new com.cozcompany.jrx.accessibility.IfFilterComboBox(this);
         verticalListPanel = new javax.swing.JPanel();
@@ -1664,6 +1662,11 @@ final public class JRX_TX extends javax.swing.JFrame implements
         });
 
         overallTabbedPane.setMinimumSize(new java.awt.Dimension(100, 400));
+        overallTabbedPane.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                overallTabbedPaneStateChanged(evt);
+            }
+        });
 
         sv_squelchSlider.setMajorTickSpacing(10);
         sv_squelchSlider.setMinorTickSpacing(5);
@@ -1743,10 +1746,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
         jLabel8.setLabelFor(sv_rfPowerSlider);
         jLabel8.setText("RF Power Output");
 
-        toneSelectionComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "TONE", "Item 2", "Item 3", "Item 4" }));
-
-        jLabel12.setText("Tx Tone Selection");
-
         sv_antennaComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         sv_antennaComboBox.setToolTipText("Available antennas (❃)");
 
@@ -1780,8 +1779,8 @@ final public class JRX_TX extends javax.swing.JFrame implements
         sv_voxLevelSlider.setMinorTickSpacing(5);
         sv_voxLevelSlider.setPaintTicks(true);
 
-        jLabel9.setLabelFor(sv_micGainSlider);
-        jLabel9.setText("MIC GAIN");
+        micGainLabel.setLabelFor(sv_micGainSlider);
+        micGainLabel.setText("MIC GAIN");
 
         jLabel11.setLabelFor(sv_voxLevelSlider);
         jLabel11.setText("VOX Level");
@@ -1808,7 +1807,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
                             .addComponent(sv_micGainSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel9)
+                            .addComponent(micGainLabel)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1831,7 +1830,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
                             .addComponent(jLabel11)
                             .addComponent(sv_enableVoxCheckBox))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(micGainLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(12, 12, 12)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel10)
@@ -1843,7 +1842,9 @@ final public class JRX_TX extends javax.swing.JFrame implements
 
         jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel11, sv_enableVoxCheckBox, sv_voxLevelSlider});
 
-        jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel9, sv_micGainSlider});
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {micGainLabel, sv_micGainSlider});
+
+        sv_txCtcssCheckBox.setText("Tx CTCSS TONE");
 
         javax.swing.GroupLayout transmitterPanelLayout = new javax.swing.GroupLayout(transmitterPanel);
         transmitterPanel.setLayout(transmitterPanelLayout);
@@ -1860,14 +1861,13 @@ final public class JRX_TX extends javax.swing.JFrame implements
                         .addContainerGap()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addGroup(transmitterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(sv_antennaComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(toneSelectionComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(transmitterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel12)
-                            .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(transmitterPanelLayout.createSequentialGroup()
+                                .addComponent(sv_antennaComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(sv_txCtcssCheckBox))))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
         transmitterPanelLayout.setVerticalGroup(
             transmitterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1878,19 +1878,15 @@ final public class JRX_TX extends javax.swing.JFrame implements
                     .addComponent(sv_rfPowerSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(transmitterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, transmitterPanelLayout.createSequentialGroup()
+                    .addGroup(transmitterPanelLayout.createSequentialGroup()
                         .addGroup(transmitterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(sv_antennaComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(transmitterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(toneSelectionComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(sv_txCtcssCheckBox))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(33, Short.MAX_VALUE))
         );
-
-        transmitterPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel12, toneSelectionComboBox});
 
         operationDetailsTabbedPane.addTab("Transmitter", null, transmitterPanel, "Important xmit controls and details.");
         transmitterPanel.getAccessibleContext().setAccessibleName("Transmitter ");
@@ -2168,8 +2164,14 @@ final public class JRX_TX extends javax.swing.JFrame implements
         operateTransceiverPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {sv_rfGainSlider, sv_squelchSlider, sv_volumeSlider});
 
         overallTabbedPane.addTab("Operate Transceiver", operateTransceiverPanel);
-        operateTransceiverPanel.getAccessibleContext().setAccessibleName("Operations Tab");
+        operateTransceiverPanel.getAccessibleContext().setAccessibleName("Tranceive Operations Tab");
         operateTransceiverPanel.getAccessibleContext().setAccessibleDescription("Vital transceiver controls");
+
+        scanPanel.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                scanPanelFocusGained(evt);
+            }
+        });
 
         memoryButtonsPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
         memoryButtonsPanel.setMinimumSize(new java.awt.Dimension(40, 40));
@@ -2407,9 +2409,9 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 .addComponent(channelsTabbedPane))
         );
 
-        overallTabbedPane.addTab("Scan", scanPanel);
+        overallTabbedPane.addTab("Scan", null, scanPanel, "Scan Functions");
         scanPanel.getAccessibleContext().setAccessibleName("Scan ");
-        scanPanel.getAccessibleContext().setAccessibleDescription("Software driven channel or increment receive scanner");
+        scanPanel.getAccessibleContext().setAccessibleDescription("Software driven channel or incremental receive scanner");
 
         scopePanel.setLayout(new java.awt.BorderLayout());
 
@@ -2563,7 +2565,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
 
         jrxScopePanel.add(scopePanel);
 
-        overallTabbedPane.addTab("Scope", jrxScopePanel);
+        overallTabbedPane.addTab("Scope", null, jrxScopePanel, "Oscilloscope Display of band sweep");
         jrxScopePanel.getAccessibleContext().setAccessibleName("Band scope ");
         jrxScopePanel.getAccessibleContext().setAccessibleDescription("Visual sweep display of selected band.");
 
@@ -2676,7 +2678,9 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 .addContainerGap())
         );
 
-        overallTabbedPane.addTab("App Settings", appSettingsPanel);
+        overallTabbedPane.addTab("App Settings", null, appSettingsPanel, "Application Settings");
+        appSettingsPanel.getAccessibleContext().setAccessibleName("Application Settings");
+        appSettingsPanel.getAccessibleContext().setAccessibleDescription("Application Settings");
 
         sv_radioNamesComboBox.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
         sv_radioNamesComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "IC-7100", "Item 2", "Item 3", "Item 4" }));
@@ -2770,9 +2774,11 @@ final public class JRX_TX extends javax.swing.JFrame implements
 
         radioPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {ledPanel, radioNamesLabel});
 
+        vfoTabbedPane.setToolTipText("Visual tool tip for VFO tabbed pane");
         vfoTabbedPane.setAlignmentY(0.0F);
 
         rxVfoPanel.setBackground(new java.awt.Color(0, 0, 0));
+        rxVfoPanel.setToolTipText("Rx VFO visual tool tip");
 
         jInternalFrame1.setBorder(null);
         jInternalFrame1.setVisible(true);
@@ -2806,7 +2812,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
 
         vfoTabbedPane.addTab("RX VFO  146.670 Mhz", null, rxVfoPanel, "Receiver VFO control and display.  Use arrow keys to change values and traverse digits.");
         rxVfoPanel.getAccessibleContext().setAccessibleName("RX VFO PANEL");
-        rxVfoPanel.getAccessibleContext().setAccessibleDescription("");
+        rxVfoPanel.getAccessibleContext().setAccessibleDescription("RX VFO audio description");
 
         javax.swing.GroupLayout txVfoPanelLayout = new javax.swing.GroupLayout(txVfoPanel);
         txVfoPanel.setLayout(txVfoPanelLayout);
@@ -2819,9 +2825,11 @@ final public class JRX_TX extends javax.swing.JFrame implements
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        vfoTabbedPane.addTab("TX VFO 146.070 Mhz", txVfoPanel);
+        vfoTabbedPane.addTab("TX VFO 146.070 Mhz", null, txVfoPanel, "TX VFO audio tool tip");
         txVfoPanel.getAccessibleContext().setAccessibleName("TX V F O display and control");
         txVfoPanel.getAccessibleContext().setAccessibleDescription("Use arrow keys to change value or traverse digits.");
+
+        dualVfoPanel.setToolTipText("Dual VFO visual tool tip");
 
         jTextField1.setBackground(new java.awt.Color(0, 0, 0));
         jTextField1.setFont(new java.awt.Font("Lucida Grande", 0, 48)); // NOI18N
@@ -2890,7 +2898,8 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 .addContainerGap())
         );
 
-        vfoTabbedPane.addTab("DUAL VFO DISPLAY", dualVfoPanel);
+        vfoTabbedPane.addTab("DUAL VFO DISPLAY", null, dualVfoPanel, "Dual VFO audio tool tip");
+        dualVfoPanel.getAccessibleContext().setAccessibleName("Dual VFO pane ");
 
         jMenu3.setText("VFO Operations");
         jMenuBar1.add(jMenu3);
@@ -2914,6 +2923,9 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 .addComponent(vfoTabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(12, 12, 12))
         );
+
+        vfoTabbedPane.getAccessibleContext().setAccessibleName("VFO tabbed pane");
+        vfoTabbedPane.getAccessibleContext().setAccessibleDescription("VFO tabbed pane audio description");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -3015,10 +3027,14 @@ final public class JRX_TX extends javax.swing.JFrame implements
 
     private void sv_interfacesComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sv_interfacesComboBoxActionPerformed
         if (!inhibit) initialize(); 
+        String selectionStr = (String)sv_interfacesComboBox.getSelectedItem();
+        sv_interfacesComboBox.getAccessibleContext().setAccessibleDescription("Selection is "+selectionStr);
     }//GEN-LAST:event_sv_interfacesComboBoxActionPerformed
 
     private void sv_radioNamesComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sv_radioNamesComboBoxActionPerformed
-        if (!inhibit) initialize(); 
+        if (!inhibit) initialize();
+        String selectionStr = (String)sv_radioNamesComboBox.getSelectedItem();
+        sv_radioNamesComboBox.getAccessibleContext().setAccessibleDescription("Selection is "+selectionStr);
     }//GEN-LAST:event_sv_radioNamesComboBoxActionPerformed
 
     private void sv_modesComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sv_modesComboBoxActionPerformed
@@ -3054,6 +3070,22 @@ final public class JRX_TX extends javax.swing.JFrame implements
         if (itemStr.matches("-- n/a.*") ) return;
         sv_ctcssComboBox.getAccessibleContext().setAccessibleDescription("Selection is "+itemStr);
     }//GEN-LAST:event_sv_ctcssComboBoxActionHandler
+
+    private void scanPanelFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_scanPanelFocusGained
+        scanPanel.getAccessibleContext().setAccessibleDescription("Scan Panel tab selected.");
+    }//GEN-LAST:event_scanPanelFocusGained
+
+    private void overallTabbedPaneStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_overallTabbedPaneStateChanged
+        
+        int index = overallTabbedPane.getSelectedIndex();
+        Component ponent = overallTabbedPane.getComponentAt(index);
+        String title = overallTabbedPane.getTitleAt(index);
+        System.out.println("Tabbed pane state change event :"+title+" selected.");
+        //ponent.getAccessibleContext().setAccessibleDescription(title);
+        //overallTabbedPane.getAccessibleContext().setAccessibleDescription(title);
+        //overallTabbedPane.setToolTipTextAt(index, title);
+        overallTabbedPane.getAccessibleContext().setAccessibleName(title);
+    }//GEN-LAST:event_overallTabbedPaneStateChanged
 
     /**
      * @param args the command line arguments
@@ -3115,7 +3147,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
@@ -3129,7 +3160,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
@@ -3145,6 +3175,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
     protected javax.swing.JPanel memoryPanel;
     private javax.swing.JScrollPane memoryScrollPane;
     private javax.swing.JPanel memoryStoragePanel;
+    private javax.swing.JLabel micGainLabel;
     private javax.swing.JLabel modeLabel;
     private javax.swing.JCheckBox muteCheckBox;
     private javax.swing.JPanel operateTransceiverPanel;
@@ -3182,7 +3213,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
     protected javax.swing.JComboBox sv_attenuatorComboBox;
     protected javax.swing.JCheckBox sv_blankerCheckBox;
     protected javax.swing.JCheckBox sv_compressionCheckBox;
-    private javax.swing.JSlider sv_compressionSlider;
+    protected javax.swing.JSlider sv_compressionSlider;
     protected javax.swing.JCheckBox sv_ctcssCheckBox;
     protected javax.swing.JComboBox sv_ctcssComboBox;
     protected javax.swing.JCheckBox sv_dspCheckBox;
@@ -3211,10 +3242,10 @@ final public class JRX_TX extends javax.swing.JFrame implements
     protected javax.swing.JCheckBox sv_syncCheckBox;
     public javax.swing.JCheckBox sv_synthSquelchCheckBox;
     protected javax.swing.JComboBox<String> sv_timerIntervalComboBox;
+    protected javax.swing.JCheckBox sv_txCtcssCheckBox;
     protected javax.swing.JCheckBox sv_volumeExitCheckBox;
     protected javax.swing.JSlider sv_volumeSlider;
     protected javax.swing.JSlider sv_voxLevelSlider;
-    private javax.swing.JComboBox<String> toneSelectionComboBox;
     private javax.swing.JPanel transmitterPanel;
     private javax.swing.JButton tuneComsButton;
     private javax.swing.JPanel txVfoPanel;

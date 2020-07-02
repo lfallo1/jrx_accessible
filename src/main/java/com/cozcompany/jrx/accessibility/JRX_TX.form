@@ -131,12 +131,15 @@
               <Dimension value="[100, 400]"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="overallTabbedPaneStateChanged"/>
+          </Events>
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
           <SubComponents>
             <Container class="javax.swing.JPanel" name="operateTransceiverPanel">
               <AccessibilityProperties>
-                <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="Operations Tab"/>
+                <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="Tranceive Operations Tab"/>
                 <Property name="AccessibleContext.accessibleDescription" type="java.lang.String" value="Vital transceiver controls"/>
               </AccessibilityProperties>
               <Constraints>
@@ -451,18 +454,17 @@
                                           <EmptySpace max="-2" attributes="0"/>
                                           <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace type="separate" max="-2" attributes="0"/>
-                                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                              <Component id="sv_antennaComboBox" max="32767" attributes="0"/>
-                                              <Component id="toneSelectionComboBox" max="32767" attributes="0"/>
-                                          </Group>
-                                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="0" attributes="0">
-                                              <Component id="jLabel12" min="-2" max="-2" attributes="0"/>
-                                              <Component id="jLabel18" alignment="0" min="-2" pref="92" max="-2" attributes="0"/>
+                                              <Group type="102" attributes="0">
+                                                  <Component id="sv_antennaComboBox" min="-2" max="-2" attributes="0"/>
+                                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                                  <Component id="jLabel18" min="-2" pref="92" max="-2" attributes="0"/>
+                                              </Group>
+                                              <Component id="sv_txCtcssCheckBox" min="-2" max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
                                   </Group>
-                                  <EmptySpace max="32767" attributes="0"/>
+                                  <EmptySpace pref="24" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -476,18 +478,15 @@
                                   </Group>
                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="jPanel1" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Group type="102" alignment="1" attributes="0">
+                                      <Group type="102" alignment="0" attributes="0">
                                           <Group type="103" groupAlignment="3" attributes="0">
                                               <Component id="sv_antennaComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
                                               <Component id="jLabel18" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
                                           </Group>
                                           <EmptySpace max="-2" attributes="0"/>
-                                          <Group type="103" groupAlignment="3" attributes="0">
-                                              <Component id="jLabel12" linkSize="11" alignment="3" min="-2" pref="27" max="-2" attributes="0"/>
-                                              <Component id="toneSelectionComboBox" linkSize="11" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          </Group>
+                                          <Component id="sv_txCtcssCheckBox" min="-2" max="-2" attributes="0"/>
                                       </Group>
+                                      <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace pref="33" max="32767" attributes="0"/>
                               </Group>
@@ -516,26 +515,6 @@
                               <ComponentRef name="sv_rfPowerSlider"/>
                             </Property>
                             <Property name="text" type="java.lang.String" value="RF Power Output"/>
-                          </Properties>
-                        </Component>
-                        <Component class="javax.swing.JComboBox" name="toneSelectionComboBox">
-                          <Properties>
-                            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                              <StringArray count="4">
-                                <StringItem index="0" value="TONE"/>
-                                <StringItem index="1" value="Item 2"/>
-                                <StringItem index="2" value="Item 3"/>
-                                <StringItem index="3" value="Item 4"/>
-                              </StringArray>
-                            </Property>
-                          </Properties>
-                          <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
-                          </AuxValues>
-                        </Component>
-                        <Component class="javax.swing.JLabel" name="jLabel12">
-                          <Properties>
-                            <Property name="text" type="java.lang.String" value="Tx Tone Selection"/>
                           </Properties>
                         </Component>
                         <Component class="javax.swing.JComboBox" name="sv_antennaComboBox">
@@ -589,7 +568,7 @@
                                               </Group>
                                               <EmptySpace max="-2" attributes="0"/>
                                               <Group type="103" groupAlignment="0" attributes="0">
-                                                  <Component id="jLabel9" alignment="0" min="-2" max="-2" attributes="0"/>
+                                                  <Component id="micGainLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                                                   <Group type="102" alignment="0" attributes="0">
                                                       <Component id="jLabel11" min="-2" pref="85" max="-2" attributes="0"/>
                                                       <EmptySpace max="-2" attributes="0"/>
@@ -620,7 +599,7 @@
                                                   <Component id="sv_enableVoxCheckBox" linkSize="10" alignment="3" min="-2" max="-2" attributes="0"/>
                                               </Group>
                                               <EmptySpace max="32767" attributes="0"/>
-                                              <Component id="jLabel9" linkSize="35" min="-2" pref="36" max="-2" attributes="0"/>
+                                              <Component id="micGainLabel" linkSize="35" min="-2" pref="36" max="-2" attributes="0"/>
                                               <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
                                               <Group type="103" groupAlignment="3" attributes="0">
                                                   <Component id="jLabel10" linkSize="9" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -666,6 +645,7 @@
                               </Properties>
                               <AuxValues>
                                 <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new RWSlider(this,&quot;L&quot;,&quot;COMP&quot;,0);"/>
+                                <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
                               </AuxValues>
                             </Component>
                             <Component class="javax.swing.JSlider" name="sv_micGainSlider">
@@ -690,7 +670,7 @@
                                 <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
                               </AuxValues>
                             </Component>
-                            <Component class="javax.swing.JLabel" name="jLabel9">
+                            <Component class="javax.swing.JLabel" name="micGainLabel">
                               <Properties>
                                 <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
                                   <ComponentRef name="sv_micGainSlider"/>
@@ -716,6 +696,15 @@
                             </Component>
                           </SubComponents>
                         </Container>
+                        <Component class="javax.swing.JCheckBox" name="sv_txCtcssCheckBox">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="Tx CTCSS TONE"/>
+                          </Properties>
+                          <AuxValues>
+                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new RWCheckBox(this,&quot;U&quot;,&quot;TONE&quot;);"/>
+                            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                          </AuxValues>
+                        </Component>
                       </SubComponents>
                     </Container>
                     <Container class="javax.swing.JPanel" name="ifControlsPanel">
@@ -1111,12 +1100,16 @@
             <Container class="javax.swing.JPanel" name="scanPanel">
               <AccessibilityProperties>
                 <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="Scan "/>
-                <Property name="AccessibleContext.accessibleDescription" type="java.lang.String" value="Software driven channel or increment receive scanner"/>
+                <Property name="AccessibleContext.accessibleDescription" type="java.lang.String" value="Software driven channel or incremental receive scanner"/>
               </AccessibilityProperties>
+              <Events>
+                <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="scanPanelFocusGained"/>
+              </Events>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-                  <JTabbedPaneConstraints tabName="Scan">
+                  <JTabbedPaneConstraints tabName="Scan" toolTip="Scan Functions">
                     <Property name="tabTitle" type="java.lang.String" value="Scan"/>
+                    <Property name="tabToolTip" type="java.lang.String" value="Scan Functions"/>
                   </JTabbedPaneConstraints>
                 </Constraint>
               </Constraints>
@@ -1526,8 +1519,9 @@
               </AccessibilityProperties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-                  <JTabbedPaneConstraints tabName="Scope">
+                  <JTabbedPaneConstraints tabName="Scope" toolTip="Oscilloscope Display of band sweep">
                     <Property name="tabTitle" type="java.lang.String" value="Scope"/>
+                    <Property name="tabToolTip" type="java.lang.String" value="Oscilloscope Display of band sweep"/>
                   </JTabbedPaneConstraints>
                 </Constraint>
               </Constraints>
@@ -1743,10 +1737,15 @@
               </SubComponents>
             </Container>
             <Container class="javax.swing.JPanel" name="appSettingsPanel">
+              <AccessibilityProperties>
+                <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="Application Settings"/>
+                <Property name="AccessibleContext.accessibleDescription" type="java.lang.String" value="Application Settings"/>
+              </AccessibilityProperties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-                  <JTabbedPaneConstraints tabName="App Settings">
+                  <JTabbedPaneConstraints tabName="App Settings" toolTip="Application Settings">
                     <Property name="tabTitle" type="java.lang.String" value="App Settings"/>
+                    <Property name="tabToolTip" type="java.lang.String" value="Application Settings"/>
                   </JTabbedPaneConstraints>
                 </Constraint>
               </Constraints>
@@ -2046,8 +2045,13 @@
     </Container>
     <Container class="javax.swing.JTabbedPane" name="vfoTabbedPane">
       <Properties>
+        <Property name="toolTipText" type="java.lang.String" value="Visual tool tip for VFO tabbed pane"/>
         <Property name="alignmentY" type="float" value="0.0"/>
       </Properties>
+      <AccessibilityProperties>
+        <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="VFO tabbed pane"/>
+        <Property name="AccessibleContext.accessibleDescription" type="java.lang.String" value="VFO tabbed pane audio description"/>
+      </AccessibilityProperties>
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
       <SubComponents>
@@ -2056,10 +2060,11 @@
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="0" green="0" red="0" type="rgb"/>
             </Property>
+            <Property name="toolTipText" type="java.lang.String" value="Rx VFO visual tool tip"/>
           </Properties>
           <AccessibilityProperties>
             <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="RX VFO PANEL"/>
-            <Property name="AccessibleContext.accessibleDescription" type="java.lang.String" value=""/>
+            <Property name="AccessibleContext.accessibleDescription" type="java.lang.String" value="RX VFO audio description"/>
           </AccessibilityProperties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
@@ -2123,8 +2128,9 @@
           </AccessibilityProperties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-              <JTabbedPaneConstraints tabName="TX VFO 146.070 Mhz">
+              <JTabbedPaneConstraints tabName="TX VFO 146.070 Mhz" toolTip="TX VFO audio tool tip">
                 <Property name="tabTitle" type="java.lang.String" value="TX VFO 146.070 Mhz"/>
+                <Property name="tabToolTip" type="java.lang.String" value="TX VFO audio tool tip"/>
               </JTabbedPaneConstraints>
             </Constraint>
           </Constraints>
@@ -2143,10 +2149,17 @@
           </Layout>
         </Container>
         <Container class="javax.swing.JPanel" name="dualVfoPanel">
+          <Properties>
+            <Property name="toolTipText" type="java.lang.String" value="Dual VFO visual tool tip"/>
+          </Properties>
+          <AccessibilityProperties>
+            <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="Dual VFO pane "/>
+          </AccessibilityProperties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-              <JTabbedPaneConstraints tabName="DUAL VFO DISPLAY">
+              <JTabbedPaneConstraints tabName="DUAL VFO DISPLAY" toolTip="Dual VFO audio tool tip">
                 <Property name="tabTitle" type="java.lang.String" value="DUAL VFO DISPLAY"/>
+                <Property name="tabToolTip" type="java.lang.String" value="Dual VFO audio tool tip"/>
               </JTabbedPaneConstraints>
             </Constraint>
           </Constraints>
