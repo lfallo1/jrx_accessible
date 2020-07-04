@@ -72,7 +72,7 @@ import vfoDisplayControl.VfoStateInterface;
 final public class JRX_TX extends javax.swing.JFrame implements 
         ListSelectionListener, ItemListener , ActionListener {
 
-    final String appVersion = "5.0.9";
+    final String appVersion = "5.0.10";
     final String appName;
     final String programName;
     String lineSep;
@@ -409,7 +409,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
      * TimerTask (PeriodicEvents) after the given interval; technically this
      * method RESTARTS the timer (as opposed to resetting the timer).
      */
-    private void resetTimer() {
+    protected void resetTimer() {
         long delay = (long) ((RWComboBox) sv_timerIntervalComboBox).getConvertedValue();
         //p("delay: " + delay);
         if (delay > 0 && periodicTimer != null) {
@@ -453,6 +453,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 setSMeter();
                 squelchScheme.getSquelch(false);
                 setComErrorIcon();
+                
                 readRadioControls(false);
             }
 //            if (slowRadio || scanStateMachine.scanTimer != null) {
