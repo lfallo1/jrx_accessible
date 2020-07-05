@@ -45,7 +45,7 @@ public class BarnDoor extends JPanel {
        outlineColor = c;
     }
     
-    public void addShapes(Dimension dim) {
+    public void addGeo(Dimension dim) {
         setPreferredSize(dim);
         // Empty shapes and fill again to resize.
         bag.clear(); 

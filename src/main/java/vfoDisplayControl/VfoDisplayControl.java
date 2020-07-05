@@ -286,9 +286,9 @@ final public class VfoDisplayControl extends GroupBox
         //Dimension littleDigitDim = new Dimension((int)(desiredLittleFontWidth), (int)(desiredLittleFontHeight));
         for (int iii=0; iii<barnDoors.size(); iii++) {
             if ( iii > 6)
-                barnDoors.get(iii).addShapes(littleDigitDim);
+                barnDoors.get(iii).addGeo(littleDigitDim);
             else
-                barnDoors.get(iii).addShapes(bigDigitDim);
+                barnDoors.get(iii).addGeo(bigDigitDim);
         }
         Container contentPane = resizedDisplay.getContentPane();
         Graphics g = contentPane.getGraphics();
@@ -349,7 +349,7 @@ final public class VfoDisplayControl extends GroupBox
         
         for (int iii=0; iii<4; iii++) {
             BarnDoor door = new BarnDoor(bigDigitDim);
-            door.addShapes(bigDigitDim);
+            door.addGeo(bigDigitDim);
             barnDoors.add(door);
             pane.add(door);
             door.setVisible(true);
@@ -358,7 +358,7 @@ final public class VfoDisplayControl extends GroupBox
        
         for (int iii=4; iii<7; iii++) {
             BarnDoor door = new BarnDoor(bigDigitDim);
-            door.addShapes(bigDigitDim);
+            door.addGeo(bigDigitDim);
             barnDoors.add(door);
             pane.add(door);
             door.setVisible(true);
@@ -367,7 +367,7 @@ final public class VfoDisplayControl extends GroupBox
 
         for (int iii=7; iii<10; iii++) {
             BarnDoor door = new BarnDoor(littleDigitDim);
-            door.addShapes(littleDigitDim); 
+            door.addGeo(littleDigitDim); 
             barnDoors.add(door);
             pane.add(door);
             door.setVisible(true);

@@ -55,7 +55,7 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <Component id="radioPanel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="0" pref="26" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="18" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -78,22 +78,24 @@
               <Group type="102" attributes="0">
                   <EmptySpace max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
+                      <Component id="vfoTabbedPane" alignment="1" max="32767" attributes="0"/>
+                      <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="overallTabbedPane" min="-2" pref="708" max="-2" attributes="0"/>
                               <Group type="102" attributes="0">
                                   <Component id="ledPanel" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="sv_radioNamesComboBox" min="-2" pref="148" max="-2" attributes="0"/>
+                                  <Component id="sv_radioNamesComboBox" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="radioNamesLabel" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                  <Component id="sv_interfacesComboBox" min="-2" pref="249" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="sv_interfacesComboBox" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="muteCheckBox" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       </Group>
-                      <Component id="vfoTabbedPane" alignment="1" pref="0" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -106,15 +108,16 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="2" attributes="0">
-                              <Component id="ledPanel" linkSize="1" alignment="2" max="32767" attributes="0"/>
-                              <Component id="radioNamesLabel" linkSize="1" alignment="2" min="-2" pref="18" max="-2" attributes="0"/>
-                              <Component id="sv_interfacesComboBox" alignment="2" min="-2" max="-2" attributes="0"/>
-                          </Group>
+                          <Component id="ledPanel" linkSize="1" max="32767" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
-                          <Component id="sv_radioNamesComboBox" min="-2" pref="45" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="sv_radioNamesComboBox" alignment="3" min="-2" pref="45" max="-2" attributes="0"/>
+                              <Component id="radioNamesLabel" linkSize="1" alignment="3" min="-2" pref="18" max="-2" attributes="0"/>
+                              <Component id="sv_interfacesComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="muteCheckBox" alignment="3" min="-2" pref="38" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
@@ -164,8 +167,6 @@
                                   <Component id="afGainLabel" min="-2" pref="63" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="sv_volumeSlider" linkSize="26" min="-2" pref="225" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="muteCheckBox" min="-2" pref="93" max="-2" attributes="0"/>
                               </Group>
                               <Component id="recieverGroupBox" min="-2" max="-2" attributes="0"/>
                           </Group>
@@ -180,7 +181,6 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="sv_volumeSlider" linkSize="31" alignment="0" max="32767" attributes="0"/>
                               <Component id="afGainLabel" alignment="0" min="-2" pref="51" max="-2" attributes="0"/>
-                              <Component id="muteCheckBox" alignment="0" min="-2" pref="38" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="recieverGroupBox" min="-2" max="-2" attributes="0"/>
@@ -1093,14 +1093,6 @@
                     <Property name="text" type="java.lang.String" value="AF Gain"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JCheckBox" name="muteCheckBox">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Mute"/>
-                  </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="muteCheckBoxActionPerformed"/>
-                  </Events>
-                </Component>
               </SubComponents>
             </Container>
             <Container class="javax.swing.JPanel" name="scanPanel">
@@ -1965,6 +1957,15 @@
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
           </AuxValues>
         </Component>
+        <Component class="javax.swing.JCheckBox" name="muteCheckBox">
+          <AccessibilityProperties>
+            <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="Mute audio"/>
+            <Property name="AccessibleContext.accessibleDescription" type="java.lang.String" value="mute audio"/>
+          </AccessibilityProperties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="muteCheckBoxActionPerformed"/>
+          </Events>
+        </Component>
         <Container class="javax.swing.JPanel" name="ledPanel">
           <Properties>
             <Property name="opaque" type="boolean" value="false"/>
@@ -2142,7 +2143,7 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <EmptySpace min="0" pref="687" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="695" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
