@@ -20,9 +20,7 @@
 package com.cozcompany.jrx.accessibility;
 
 import com.cozcompany.jrx.accessibility.utilities.FileHelpers;
-
 import javax.swing.*;
-
 import java.awt.*;
 import java.awt.datatransfer.*;
 import java.awt.event.ActionEvent;
@@ -36,12 +34,10 @@ import java.io.*;
 import java.net.Socket;
 import java.net.URI;
 import java.net.URISyntaxException;
-
 import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Timer;
-import java.util.concurrent.TimeUnit;
 import java.util.prefs.Preferences;
 import java.util.regex.Pattern;
 import javax.accessibility.AccessibleContext;
@@ -49,6 +45,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import vfoDisplayControl.VfoDisplayControl;
 import vfoDisplayControl.VfoStateInterface;
+import vfoDisplayControl.GroupBox;
 
 /**
  * JRX_TX contains the main thread of the application.
@@ -216,7 +213,8 @@ final public class JRX_TX extends javax.swing.JFrame implements
         rxVfoPanel.setVisible(true);
         scanStateMachine = new ScanStateMachine(this);       
         scanDude = new ScanController(this);
-        
+        recieverGroupBox.getAccessibleContext().
+                setAccessibleDescription("Receiver Controls");
         setResizable(true);
         // default app size
         setSize(defWidth, defHeight);
@@ -228,6 +226,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         if (!comArgs.reset) {
             config.read();
         }
+        muteCheckBox.setMnemonic(KeyEvent.VK_M);
         chart = new ChannelChart(this);
         chart.init();
         dismissOldHamlibTask();
@@ -1532,19 +1531,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
         radioPanel = new javax.swing.JPanel();
         overallTabbedPane = new javax.swing.JTabbedPane();
         operateTransceiverPanel = new javax.swing.JPanel();
-        sv_squelchSlider = new com.cozcompany.jrx.accessibility.RWSlider(this,"L","SQL",0);
-        sv_volumeSlider = new com.cozcompany.jrx.accessibility.RWSlider(this,"L","AF", 0);
-        sv_rfGainSlider = new com.cozcompany.jrx.accessibility.RWSlider(this,"L","RF",50);
-        sv_ctcssComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,"ctcss","");
-        sv_synthSquelchCheckBox = new RWCheckBox(this,null,null);
-        afGainLabel = new javax.swing.JLabel();
-        rfGainLabel = new javax.swing.JLabel();
-        squelchLabel = new javax.swing.JLabel();
-        sv_modesComboBox = new com.cozcompany.jrx.accessibility.ModesComboBox(this);
-        modeLabel = new javax.swing.JLabel();
-        sv_agcComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,"L","AGC");
-        agcLabel = new javax.swing.JLabel();
-        muteCheckBox = new javax.swing.JCheckBox();
         operationDetailsTabbedPane = new javax.swing.JTabbedPane();
         transmitterPanel = new javax.swing.JPanel();
         sv_rfPowerSlider = new RfPowerSlider(this);
@@ -1581,7 +1567,20 @@ final public class JRX_TX extends javax.swing.JFrame implements
         dstarPanel = new javax.swing.JPanel();
         keyerPanel = new javax.swing.JPanel();
         rttyPanel = new javax.swing.JPanel();
+        recieverGroupBox = new GroupBox();
+        sv_squelchSlider = new com.cozcompany.jrx.accessibility.RWSlider(this,"L","SQL",0);
+        sv_rfGainSlider = new com.cozcompany.jrx.accessibility.RWSlider(this,"L","RF",50);
+        sv_ctcssComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,"ctcss","");
+        sv_synthSquelchCheckBox = new RWCheckBox(this,null,null);
+        rfGainLabel = new javax.swing.JLabel();
+        squelchLabel = new javax.swing.JLabel();
+        sv_agcComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,"L","AGC");
+        agcLabel = new javax.swing.JLabel();
         sv_ctcssCheckBox = new RWCheckBox(this,"U","TSQL");
+        sv_modesComboBox = new com.cozcompany.jrx.accessibility.ModesComboBox(this);
+        sv_volumeSlider = new com.cozcompany.jrx.accessibility.AfGainSlider(this);
+        afGainLabel = new javax.swing.JLabel();
+        muteCheckBox = new javax.swing.JCheckBox();
         scanPanel = new javax.swing.JPanel();
         channelsTabbedPane = new javax.swing.JTabbedPane();
         memoryStoragePanel = new javax.swing.JPanel();
@@ -1641,12 +1640,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
         rxVfoPanel = new javax.swing.JPanel();
         jInternalFrame1 = new VfoDisplayControl(this);
         txVfoPanel = new javax.swing.JPanel();
-        dualVfoPanel = new javax.swing.JPanel();
-        receiveLeftDualPanel = new javax.swing.JPanel();
-        jTextField1 = new javax.swing.JTextField();
-        jLabel7 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu3 = new javax.swing.JMenu();
 
@@ -1666,75 +1659,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
         overallTabbedPane.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 overallTabbedPaneStateChanged(evt);
-            }
-        });
-
-        sv_squelchSlider.setMajorTickSpacing(10);
-        sv_squelchSlider.setMinorTickSpacing(5);
-        sv_squelchSlider.setPaintTicks(true);
-        sv_squelchSlider.setToolTipText("Squelch (❃)\n");
-        sv_squelchSlider.setValue(0);
-        sv_squelchSlider.setMaximumSize(new java.awt.Dimension(32, 38));
-        sv_squelchSlider.setPreferredSize(new java.awt.Dimension(20, 38));
-
-        sv_volumeSlider.setMajorTickSpacing(10);
-        sv_volumeSlider.setMinorTickSpacing(5);
-        sv_volumeSlider.setPaintTicks(true);
-        sv_volumeSlider.setToolTipText("Audio Gain (❃)");
-
-        sv_rfGainSlider.setMajorTickSpacing(10);
-        sv_rfGainSlider.setMinorTickSpacing(5);
-        sv_rfGainSlider.setPaintTicks(true);
-
-        sv_ctcssComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "123.0", "Item 2", "Item 3", "Item 4" }));
-        sv_ctcssComboBox.setToolTipText("CTCSS tone squelch frequencies (❃)");
-        sv_ctcssComboBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                sv_ctcssComboBoxActionHandler(evt);
-            }
-        });
-
-        sv_synthSquelchCheckBox.setText("JRX Squelch ON");
-        sv_synthSquelchCheckBox.setToolTipText("Use JRX squelch scheme");
-        sv_synthSquelchCheckBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                sv_synthSquelchCheckBoxActionPerformed(evt);
-            }
-        });
-
-        afGainLabel.setText("AF Gain");
-
-        rfGainLabel.setLabelFor(sv_rfGainSlider);
-        rfGainLabel.setText("RF Gain");
-
-        squelchLabel.setText("Squelch");
-
-        sv_modesComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "LSB", "Item 2", "Item 3", "Item 4" }));
-        sv_modesComboBox.setToolTipText("Operating modes (❃)");
-        sv_modesComboBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                sv_modesComboBoxActionPerformed(evt);
-            }
-        });
-
-        modeLabel.setLabelFor(sv_modesComboBox);
-        modeLabel.setText("MODE");
-
-        sv_agcComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "AGC", "Item 2", "Item 3", "Item 4" }));
-        sv_agcComboBox.setToolTipText("AGC setting (❃)");
-        sv_agcComboBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                sv_agcComboBoxActionPerformed(evt);
-            }
-        });
-
-        agcLabel.setLabelFor(sv_agcComboBox);
-        agcLabel.setText("AGC");
-
-        muteCheckBox.setText("Mute");
-        muteCheckBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                muteCheckBoxActionPerformed(evt);
             }
         });
 
@@ -1886,7 +1810,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(sv_txCtcssCheckBox))
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(33, Short.MAX_VALUE))
+                .addContainerGap(124, Short.MAX_VALUE))
         );
 
         operationDetailsTabbedPane.addTab("Transmitter", null, transmitterPanel, "Important xmit controls and details.");
@@ -2069,100 +1993,174 @@ final public class JRX_TX extends javax.swing.JFrame implements
         rttyPanel.getAccessibleContext().setAccessibleName("RTTY");
         rttyPanel.getAccessibleContext().setAccessibleDescription("Radio Teletype settings and decode window.");
 
+        recieverGroupBox.setBorder(null);
+        recieverGroupBox.setVisible(true);
+
+        sv_squelchSlider.setMajorTickSpacing(10);
+        sv_squelchSlider.setMinorTickSpacing(5);
+        sv_squelchSlider.setPaintTicks(true);
+        sv_squelchSlider.setToolTipText("Squelch (❃)\n");
+        sv_squelchSlider.setValue(0);
+        sv_squelchSlider.setMaximumSize(new java.awt.Dimension(32, 38));
+        sv_squelchSlider.setPreferredSize(new java.awt.Dimension(20, 38));
+
+        sv_rfGainSlider.setMajorTickSpacing(10);
+        sv_rfGainSlider.setMinorTickSpacing(5);
+        sv_rfGainSlider.setPaintTicks(true);
+
+        sv_ctcssComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "123.0", "Item 2", "Item 3", "Item 4" }));
+        sv_ctcssComboBox.setToolTipText("CTCSS tone squelch frequencies (❃)");
+        sv_ctcssComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sv_ctcssComboBoxActionHandler(evt);
+            }
+        });
+
+        sv_synthSquelchCheckBox.setText("JRX Squelch ON");
+        sv_synthSquelchCheckBox.setToolTipText("Use JRX squelch scheme");
+        sv_synthSquelchCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sv_synthSquelchCheckBoxActionPerformed(evt);
+            }
+        });
+
+        rfGainLabel.setLabelFor(sv_rfGainSlider);
+        rfGainLabel.setText("RF Gain");
+
+        squelchLabel.setText("Squelch");
+
+        sv_agcComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "AGC", "Item 2", "Item 3", "Item 4" }));
+        sv_agcComboBox.setToolTipText("AGC setting (❃)");
+        sv_agcComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sv_agcComboBoxActionPerformed(evt);
+            }
+        });
+
+        agcLabel.setLabelFor(sv_agcComboBox);
+        agcLabel.setText("AGC");
+
         sv_ctcssCheckBox.setText("TSQL ON");
         sv_ctcssCheckBox.setToolTipText("Tone squelch control");
+
+        sv_modesComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "LSB", "Item 2", "Item 3", "Item 4" }));
+        sv_modesComboBox.setToolTipText("Operating modes (❃)");
+        sv_modesComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sv_modesComboBoxActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout recieverGroupBoxLayout = new javax.swing.GroupLayout(recieverGroupBox.getContentPane());
+        recieverGroupBox.getContentPane().setLayout(recieverGroupBoxLayout);
+        recieverGroupBoxLayout.setHorizontalGroup(
+            recieverGroupBoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(recieverGroupBoxLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(recieverGroupBoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(rfGainLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(squelchLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(recieverGroupBoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(recieverGroupBoxLayout.createSequentialGroup()
+                        .addComponent(sv_rfGainSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(sv_modesComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(54, 54, 54)
+                        .addComponent(sv_ctcssComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(recieverGroupBoxLayout.createSequentialGroup()
+                        .addComponent(sv_squelchSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(sv_synthSquelchCheckBox)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(sv_agcComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(recieverGroupBoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(recieverGroupBoxLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(sv_ctcssCheckBox)
+                        .addContainerGap())
+                    .addGroup(recieverGroupBoxLayout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(agcLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+        );
+
+        recieverGroupBoxLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {sv_rfGainSlider, sv_squelchSlider});
+
+        recieverGroupBoxLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {sv_agcComboBox, sv_ctcssComboBox, sv_modesComboBox});
+
+        recieverGroupBoxLayout.setVerticalGroup(
+            recieverGroupBoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(recieverGroupBoxLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(recieverGroupBoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(sv_rfGainSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(rfGainLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(recieverGroupBoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(sv_ctcssComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(sv_ctcssCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(sv_modesComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(recieverGroupBoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(squelchLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(sv_squelchSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(recieverGroupBoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(sv_agcComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(agcLabel)
+                        .addComponent(sv_synthSquelchCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        recieverGroupBoxLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {agcLabel, sv_agcComboBox});
+
+        recieverGroupBoxLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {sv_rfGainSlider, sv_squelchSlider});
+
+        sv_volumeSlider.setMajorTickSpacing(10);
+        sv_volumeSlider.setMinorTickSpacing(5);
+        sv_volumeSlider.setPaintTicks(true);
+        sv_volumeSlider.setToolTipText("Audio Gain (❃)");
+
+        afGainLabel.setText("AF Gain");
+
+        muteCheckBox.setText("Mute");
+        muteCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                muteCheckBoxActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout operateTransceiverPanelLayout = new javax.swing.GroupLayout(operateTransceiverPanel);
         operateTransceiverPanel.setLayout(operateTransceiverPanelLayout);
         operateTransceiverPanelLayout.setHorizontalGroup(
             operateTransceiverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(operateTransceiverPanelLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(operateTransceiverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(operationDetailsTabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 677, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(operateTransceiverPanelLayout.createSequentialGroup()
-                        .addGroup(operateTransceiverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(operateTransceiverPanelLayout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(afGainLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(sv_volumeSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(muteCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(operateTransceiverPanelLayout.createSequentialGroup()
-                                .addGroup(operateTransceiverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(rfGainLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(squelchLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(operateTransceiverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(sv_rfGainSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(operateTransceiverPanelLayout.createSequentialGroup()
-                                        .addComponent(sv_squelchSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(sv_synthSquelchCheckBox)))))
-                        .addGap(33, 33, 33)
-                        .addGroup(operateTransceiverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(sv_agcComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(sv_modesComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(sv_ctcssComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(10, 10, 10)
+                        .addComponent(afGainLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(operateTransceiverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(sv_ctcssCheckBox)
-                            .addComponent(agcLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(modeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(operateTransceiverPanelLayout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addComponent(operationDetailsTabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 677, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(sv_volumeSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(muteCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(recieverGroupBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-
-        operateTransceiverPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {sv_rfGainSlider, sv_squelchSlider, sv_volumeSlider});
-
-        operateTransceiverPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {sv_agcComboBox, sv_ctcssComboBox, sv_modesComboBox});
-
         operateTransceiverPanelLayout.setVerticalGroup(
             operateTransceiverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(operateTransceiverPanelLayout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(operateTransceiverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(operateTransceiverPanelLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(operateTransceiverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(operateTransceiverPanelLayout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(sv_modesComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(modeLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addComponent(afGainLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(operateTransceiverPanelLayout.createSequentialGroup()
-                        .addGroup(operateTransceiverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(sv_volumeSlider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(muteCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                    .addComponent(sv_volumeSlider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(afGainLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(muteCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(operateTransceiverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(operateTransceiverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                        .addComponent(rfGainLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, operateTransceiverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(sv_ctcssComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(sv_ctcssCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(sv_rfGainSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(operateTransceiverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(operateTransceiverPanelLayout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(agcLabel))
-                    .addGroup(operateTransceiverPanelLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(operateTransceiverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(operateTransceiverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(sv_synthSquelchCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(sv_agcComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(squelchLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(sv_squelchSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addComponent(recieverGroupBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(operationDetailsTabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 309, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(126, 126, 126))
+                .addComponent(operationDetailsTabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
-
-        operateTransceiverPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {agcLabel, sv_agcComboBox});
-
-        operateTransceiverPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {sv_rfGainSlider, sv_squelchSlider, sv_volumeSlider});
 
         overallTabbedPane.addTab("Operate Transceiver", operateTransceiverPanel);
         operateTransceiverPanel.getAccessibleContext().setAccessibleName("Tranceive Operations Tab");
@@ -2242,7 +2240,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         memoryStoragePanelLayout.setVerticalGroup(
             memoryStoragePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(memoryStoragePanelLayout.createSequentialGroup()
-                .addComponent(memoryScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 268, Short.MAX_VALUE)
+                .addComponent(memoryScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 396, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(buttonPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -2265,7 +2263,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         );
         favoriteSWLChannelsLayout.setVerticalGroup(
             favoriteSWLChannelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(memoryPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 309, Short.MAX_VALUE)
+            .addComponent(memoryPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 437, Short.MAX_VALUE)
         );
 
         memoryPanel.getAccessibleContext().setAccessibleName("Favorite Channels Table");
@@ -2655,7 +2653,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 .addGroup(firstSettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(sv_radioToJrxButton)
                     .addComponent(helpButton))
-                .addContainerGap(342, Short.MAX_VALUE))
+                .addContainerGap(471, Short.MAX_VALUE))
         );
 
         firstSettingsPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel2, sv_timerIntervalComboBox});
@@ -2733,26 +2731,85 @@ final public class JRX_TX extends javax.swing.JFrame implements
             }
         });
 
+        vfoTabbedPane.setToolTipText("Visual tool tip for VFO tabbed pane");
+        vfoTabbedPane.setAlignmentY(0.0F);
+
+        rxVfoPanel.setBackground(new java.awt.Color(0, 0, 0));
+        rxVfoPanel.setToolTipText(" VFO A visual tool tip");
+
+        jInternalFrame1.setBorder(null);
+        jInternalFrame1.setVisible(true);
+
+        javax.swing.GroupLayout jInternalFrame1Layout = new javax.swing.GroupLayout(jInternalFrame1.getContentPane());
+        jInternalFrame1.getContentPane().setLayout(jInternalFrame1Layout);
+        jInternalFrame1Layout.setHorizontalGroup(
+            jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 676, Short.MAX_VALUE)
+        );
+        jInternalFrame1Layout.setVerticalGroup(
+            jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 126, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout rxVfoPanelLayout = new javax.swing.GroupLayout(rxVfoPanel);
+        rxVfoPanel.setLayout(rxVfoPanelLayout);
+        rxVfoPanelLayout.setHorizontalGroup(
+            rxVfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(rxVfoPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jInternalFrame1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        rxVfoPanelLayout.setVerticalGroup(
+            rxVfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(rxVfoPanelLayout.createSequentialGroup()
+                .addComponent(jInternalFrame1)
+                .addContainerGap())
+        );
+
+        vfoTabbedPane.addTab("VFO  A", null, rxVfoPanel, "VFO A control and display.  Use arrow keys to change values and traverse digits.");
+        rxVfoPanel.getAccessibleContext().setAccessibleName("VFO A ");
+        rxVfoPanel.getAccessibleContext().setAccessibleDescription("VFO A audio description");
+
+        javax.swing.GroupLayout txVfoPanelLayout = new javax.swing.GroupLayout(txVfoPanel);
+        txVfoPanel.setLayout(txVfoPanelLayout);
+        txVfoPanelLayout.setHorizontalGroup(
+            txVfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 687, Short.MAX_VALUE)
+        );
+        txVfoPanelLayout.setVerticalGroup(
+            txVfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        vfoTabbedPane.addTab("VFO B ", null, txVfoPanel, "VFO B audio tool tip");
+        txVfoPanel.getAccessibleContext().setAccessibleName("V F O B display ");
+        txVfoPanel.getAccessibleContext().setAccessibleDescription("Use arrow keys to change value or traverse digits.");
+
         javax.swing.GroupLayout radioPanelLayout = new javax.swing.GroupLayout(radioPanel);
         radioPanel.setLayout(radioPanelLayout);
         radioPanelLayout.setHorizontalGroup(
             radioPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(radioPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(radioPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(overallTabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 708, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(radioPanelLayout.createSequentialGroup()
-                        .addComponent(ledPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(sv_radioNamesComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(radioNamesLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(sv_interfacesComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(radioPanelLayout.createSequentialGroup()
                 .addComponent(signalProgressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 703, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(radioPanelLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(radioPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(radioPanelLayout.createSequentialGroup()
+                        .addGroup(radioPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(overallTabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 708, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(radioPanelLayout.createSequentialGroup()
+                                .addComponent(ledPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(sv_radioNamesComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(radioNamesLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(sv_interfacesComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(vfoTabbedPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addContainerGap())
         );
         radioPanelLayout.setVerticalGroup(
             radioPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2769,138 +2826,16 @@ final public class JRX_TX extends javax.swing.JFrame implements
                         .addGap(3, 3, 3)
                         .addComponent(sv_radioNamesComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(overallTabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 491, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(overallTabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 620, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(vfoTabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         radioPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {ledPanel, radioNamesLabel});
 
-        vfoTabbedPane.setToolTipText("Visual tool tip for VFO tabbed pane");
-        vfoTabbedPane.setAlignmentY(0.0F);
-
-        rxVfoPanel.setBackground(new java.awt.Color(0, 0, 0));
-        rxVfoPanel.setToolTipText("Rx VFO visual tool tip");
-
-        jInternalFrame1.setBorder(null);
-        jInternalFrame1.setVisible(true);
-
-        javax.swing.GroupLayout jInternalFrame1Layout = new javax.swing.GroupLayout(jInternalFrame1.getContentPane());
-        jInternalFrame1.getContentPane().setLayout(jInternalFrame1Layout);
-        jInternalFrame1Layout.setHorizontalGroup(
-            jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 676, Short.MAX_VALUE)
-        );
-        jInternalFrame1Layout.setVerticalGroup(
-            jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 139, Short.MAX_VALUE)
-        );
-
-        javax.swing.GroupLayout rxVfoPanelLayout = new javax.swing.GroupLayout(rxVfoPanel);
-        rxVfoPanel.setLayout(rxVfoPanelLayout);
-        rxVfoPanelLayout.setHorizontalGroup(
-            rxVfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(rxVfoPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jInternalFrame1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(8, Short.MAX_VALUE))
-        );
-        rxVfoPanelLayout.setVerticalGroup(
-            rxVfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(rxVfoPanelLayout.createSequentialGroup()
-                .addComponent(jInternalFrame1)
-                .addContainerGap())
-        );
-
-        vfoTabbedPane.addTab("RX VFO  146.670 Mhz", null, rxVfoPanel, "Receiver VFO control and display.  Use arrow keys to change values and traverse digits.");
-        rxVfoPanel.getAccessibleContext().setAccessibleName("RX VFO PANEL");
-        rxVfoPanel.getAccessibleContext().setAccessibleDescription("RX VFO audio description");
-
-        javax.swing.GroupLayout txVfoPanelLayout = new javax.swing.GroupLayout(txVfoPanel);
-        txVfoPanel.setLayout(txVfoPanelLayout);
-        txVfoPanelLayout.setHorizontalGroup(
-            txVfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 690, Short.MAX_VALUE)
-        );
-        txVfoPanelLayout.setVerticalGroup(
-            txVfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-
-        vfoTabbedPane.addTab("TX VFO 146.070 Mhz", null, txVfoPanel, "TX VFO audio tool tip");
-        txVfoPanel.getAccessibleContext().setAccessibleName("TX V F O display and control");
-        txVfoPanel.getAccessibleContext().setAccessibleDescription("Use arrow keys to change value or traverse digits.");
-
-        dualVfoPanel.setToolTipText("Dual VFO visual tool tip");
-
-        jTextField1.setBackground(new java.awt.Color(0, 0, 0));
-        jTextField1.setFont(new java.awt.Font("Lucida Grande", 0, 48)); // NOI18N
-        jTextField1.setForeground(new java.awt.Color(0, 255, 0));
-        jTextField1.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        jTextField1.setText("146.67000");
-
-        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel7.setText("RECEIVE");
-
-        jTextField2.setBackground(new java.awt.Color(0, 0, 0));
-        jTextField2.setFont(new java.awt.Font("Lucida Grande", 0, 48)); // NOI18N
-        jTextField2.setForeground(new java.awt.Color(0, 255, 0));
-        jTextField2.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        jTextField2.setText("146.07000");
-
-        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel6.setText("TRANSMIT");
-
-        javax.swing.GroupLayout receiveLeftDualPanelLayout = new javax.swing.GroupLayout(receiveLeftDualPanel);
-        receiveLeftDualPanel.setLayout(receiveLeftDualPanelLayout);
-        receiveLeftDualPanelLayout.setHorizontalGroup(
-            receiveLeftDualPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(receiveLeftDualPanelLayout.createSequentialGroup()
-                .addGroup(receiveLeftDualPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(receiveLeftDualPanelLayout.createSequentialGroup()
-                        .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(receiveLeftDualPanelLayout.createSequentialGroup()
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGroup(receiveLeftDualPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 386, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(433, 433, 433))
-        );
-
-        receiveLeftDualPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jTextField1, jTextField2});
-
-        receiveLeftDualPanelLayout.setVerticalGroup(
-            receiveLeftDualPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, receiveLeftDualPanelLayout.createSequentialGroup()
-                .addGroup(receiveLeftDualPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(receiveLeftDualPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE)
-                    .addComponent(jTextField2))
-                .addGap(0, 0, 0))
-        );
-
-        javax.swing.GroupLayout dualVfoPanelLayout = new javax.swing.GroupLayout(dualVfoPanel);
-        dualVfoPanel.setLayout(dualVfoPanelLayout);
-        dualVfoPanelLayout.setHorizontalGroup(
-            dualVfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(dualVfoPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(receiveLeftDualPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 737, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        dualVfoPanelLayout.setVerticalGroup(
-            dualVfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(dualVfoPanelLayout.createSequentialGroup()
-                .addComponent(receiveLeftDualPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-
-        vfoTabbedPane.addTab("DUAL VFO DISPLAY", null, dualVfoPanel, "Dual VFO audio tool tip");
-        dualVfoPanel.getAccessibleContext().setAccessibleName("Dual VFO pane ");
+        vfoTabbedPane.getAccessibleContext().setAccessibleName("VFO tabbed pane");
+        vfoTabbedPane.getAccessibleContext().setAccessibleDescription("VFO tabbed pane audio description");
 
         jMenu3.setText("VFO Operations");
         jMenuBar1.add(jMenu3);
@@ -2912,37 +2847,26 @@ final public class JRX_TX extends javax.swing.JFrame implements
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(vfoTabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-            .addComponent(radioPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 717, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(radioPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 26, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(radioPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(vfoTabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(12, 12, 12))
+            .addComponent(radioPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
-
-        vfoTabbedPane.getAccessibleContext().setAccessibleName("VFO tabbed pane");
-        vfoTabbedPane.getAccessibleContext().setAccessibleDescription("VFO tabbed pane audio description");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-
         closeApp();
     }//GEN-LAST:event_formWindowClosing
 
     private void scanHelpButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_scanHelpButtonMouseClicked
-        // TODO add your handling code here:
         launchHelp("http://arachnoid.com/JRX/index.html#Spectrum_Analysis");
     }//GEN-LAST:event_scanHelpButtonMouseClicked
 
     private void copyButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_copyButtonMouseClicked
-        // TODO add your handling code here:
         getScopePanel().saveData();
     }//GEN-LAST:event_copyButtonMouseClicked
 
@@ -2952,77 +2876,62 @@ final public class JRX_TX extends javax.swing.JFrame implements
     }//GEN-LAST:event_scopeDefaultsButtonMouseClicked
 
     private void scopeScaleButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_scopeScaleButtonMouseClicked
-        // TODO add your handling code here:
         getScopePanel().autoscale();
     }//GEN-LAST:event_scopeScaleButtonMouseClicked
 
     private void sv_scopeDotsCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sv_scopeDotsCheckBoxActionPerformed
-        // TODO add your handling code here:
         repaint();
     }//GEN-LAST:event_sv_scopeDotsCheckBoxActionPerformed
 
     private void scopeStartStopButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_scopeStartStopButtonMouseClicked
-        // TODO add your handling code here:
         getScopePanel().startSweep();
     }//GEN-LAST:event_scopeStartStopButtonMouseClicked
 
     private void scanUpButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_scanUpButtonMouseClicked
-        // TODO add your handling code here:
         scanStateMachine.startScan(1);
     }//GEN-LAST:event_scanUpButtonMouseClicked
 
     private void scanStopButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_scanStopButtonMouseClicked
-        // TODO add your handling code here:
         scanStateMachine.stopScan(true);
     }//GEN-LAST:event_scanStopButtonMouseClicked
 
     private void scanDownButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_scanDownButtonMouseClicked
-        // TODO add your handling code here:
         scanStateMachine.startScan(-1);
     }//GEN-LAST:event_scanDownButtonMouseClicked
 
     private void sv_anfCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sv_anfCheckBoxActionPerformed
-        // TODO add your handling code here:
         enableDSP();
     }//GEN-LAST:event_sv_anfCheckBoxActionPerformed
 
     private void sv_apfCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sv_apfCheckBoxActionPerformed
-        // TODO add your handling code here:
         enableDSP();
     }//GEN-LAST:event_sv_apfCheckBoxActionPerformed
 
     private void sv_rawSigCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sv_rawSigCheckBoxActionPerformed
-        // TODO add your handling code here:
         testRawSignalMode();
     }//GEN-LAST:event_sv_rawSigCheckBoxActionPerformed
 
     private void tuneComsButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tuneComsButtonMouseClicked
-        // TODO add your handling code here:
-        showConfigDialog();
+       showConfigDialog();
     }//GEN-LAST:event_tuneComsButtonMouseClicked
 
     private void helpButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_helpButtonMouseClicked
-        // TODO add your handling code here:
         launchHelp("http://arachnoid.com/JRX");
     }//GEN-LAST:event_helpButtonMouseClicked
 
     private void eraseMemButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_eraseMemButtonMouseClicked
-        // TODO add your handling code here:
         memoryCollection.dispatch(evt);
     }//GEN-LAST:event_eraseMemButtonMouseClicked
 
     private void pasteMemButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pasteMemButtonMouseClicked
-        // TODO add your handling code here:
         memoryCollection.dispatch(evt);
     }//GEN-LAST:event_pasteMemButtonMouseClicked
 
     private void copyMemButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_copyMemButtonMouseClicked
-        // TODO add your handling code here:
         memoryCollection.dispatch(evt);
     }//GEN-LAST:event_copyMemButtonMouseClicked
 
     private void sv_synthSquelchCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sv_synthSquelchCheckBoxActionPerformed
-        // TODO add your handling code here:
         squelchScheme.setSquelchScheme();
     }//GEN-LAST:event_sv_synthSquelchCheckBoxActionPerformed
 
@@ -3058,11 +2967,12 @@ final public class JRX_TX extends javax.swing.JFrame implements
     }//GEN-LAST:event_scanStopButtonActionPerformed
 
     private void muteCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_muteCheckBoxActionPerformed
-        // TODO add your handling code here:
+        if (muteCheckBox.isSelected()) ((AfGainSlider)sv_volumeSlider).mute();
+        else    ((AfGainSlider)sv_volumeSlider).unmute();
     }//GEN-LAST:event_muteCheckBoxActionPerformed
 
     private void sv_enableVoxCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sv_enableVoxCheckBoxActionPerformed
-        // TODO add your handling code here:
+        System.out.println("Vox enable check box is not functional yet.");
     }//GEN-LAST:event_sv_enableVoxCheckBoxActionPerformed
 
     private void sv_ctcssComboBoxActionHandler(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sv_ctcssComboBoxActionHandler
@@ -3082,9 +2992,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
         Component ponent = overallTabbedPane.getComponentAt(index);
         String title = overallTabbedPane.getTitleAt(index);
         System.out.println("Tabbed pane state change event :"+title+" selected.");
-        //ponent.getAccessibleContext().setAccessibleDescription(title);
-        //overallTabbedPane.getAccessibleContext().setAccessibleDescription(title);
-        //overallTabbedPane.setToolTipTextAt(index, title);
         overallTabbedPane.getAccessibleContext().setAccessibleName(title);
     }//GEN-LAST:event_overallTabbedPaneStateChanged
 
@@ -3103,8 +3010,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
-
-
                 }
             }
         } catch (ClassNotFoundException | InstantiationException | 
@@ -3138,7 +3043,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
     private javax.swing.JButton copyMemButton;
     protected javax.swing.JLabel dcdIconLabel;
     private javax.swing.JPanel dstarPanel;
-    private javax.swing.JPanel dualVfoPanel;
     private javax.swing.JButton eraseMemButton;
     private javax.swing.JPanel favoriteSWLChannels;
     private javax.swing.JPanel firstSettingsPanel;
@@ -3158,16 +3062,12 @@ final public class JRX_TX extends javax.swing.JFrame implements
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
     private javax.swing.ButtonGroup jrxRadioButtonGroup;
     private javax.swing.JPanel jrxScopePanel;
     private javax.swing.JPanel keyerPanel;
@@ -3177,7 +3077,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
     private javax.swing.JScrollPane memoryScrollPane;
     private javax.swing.JPanel memoryStoragePanel;
     private javax.swing.JLabel micGainLabel;
-    private javax.swing.JLabel modeLabel;
     private javax.swing.JCheckBox muteCheckBox;
     private javax.swing.JPanel operateTransceiverPanel;
     private javax.swing.JTabbedPane operationDetailsTabbedPane;
@@ -3185,7 +3084,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
     private javax.swing.JButton pasteMemButton;
     private javax.swing.JLabel radioNamesLabel;
     private javax.swing.JPanel radioPanel;
-    private javax.swing.JPanel receiveLeftDualPanel;
+    protected javax.swing.JInternalFrame recieverGroupBox;
     private javax.swing.JLabel rfGainLabel;
     private javax.swing.JPanel rttyPanel;
     private javax.swing.JPanel rxVfoPanel;
@@ -3296,6 +3195,8 @@ final public class JRX_TX extends javax.swing.JFrame implements
             if (item.isSelected()) {
                 vfoState.setVfoASelected();
                 prefs.put(LAST_VFO, VFO_SELECT_A_TEXT);
+                long freq = vfoState.getSelectedVfoFrequency();
+                vfoDisplay.frequencyToDigits(freq);
                 // If voiceOver enabled, need this dialog to announce vfo change.
                 JOptionPane.showMessageDialog(this,
                     "VFO A Selected", // VoiceOver does not read the text in dialog.
@@ -3306,6 +3207,8 @@ final public class JRX_TX extends javax.swing.JFrame implements
             if (item.isSelected()) {
                 vfoState.setVfoBSelected();
                 prefs.put(LAST_VFO, VFO_SELECT_B_TEXT);
+                long freq = vfoState.getSelectedVfoFrequency();
+                vfoDisplay.frequencyToDigits(freq);
                 // If voiceOver enabled, need this dialog to announce vfo change.
                 JOptionPane.showMessageDialog(this,
                     "VFO B Selected",
@@ -3345,7 +3248,5 @@ final public class JRX_TX extends javax.swing.JFrame implements
         } else {
             System.out.println("Unknown menu item handled in itemStateChanged()");
         }
-        long freq = vfoState.getSelectedVfoFrequency();
-        vfoDisplay.frequencyToDigits(freq);
     }
 }

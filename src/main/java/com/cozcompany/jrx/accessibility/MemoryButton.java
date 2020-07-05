@@ -99,7 +99,7 @@ final public class MemoryButton extends JButton implements MouseListener {
 
     @Override
     public String getToolTipText(MouseEvent event) {
-        String ms = parent.getMode(mode);
+        String ms = parent.getMode();
         String s = (frequency >= 0) ? String.format("%.6f MHz %s", (double) frequency / 1e6, ms) : "Undefined";
         return String.format("<html>%s<br/>%s</html>", s, tt);
     }

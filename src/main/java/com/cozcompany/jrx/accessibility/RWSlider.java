@@ -55,7 +55,6 @@ public class RWSlider extends JSlider implements MouseWheelListener,
         setMajorTickSpacing(10);
         setMinorTickSpacing(5);
         setPaintTicks(true);
-        //setPaintLabels(true); //Coz do not need value labels on a squelch or af gain control.
         setup(true);
 
     }
@@ -81,6 +80,12 @@ public class RWSlider extends JSlider implements MouseWheelListener,
     @Override
     public void writeValue(boolean force) {
         if (commOK  || force) {
+//            try {
+//                parent.resetTimer();
+//            }
+//            catch (Exception e) {
+//                System.out.println("Had an exceptional exception");
+//            }
             if (!parent.inhibit && !localInhibit && isEnabled()) {
                 level = getConvertedValue();
                 if(parent.squelchScheme.useJRXSquelch && token.equals("AF")) {
