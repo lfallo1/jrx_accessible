@@ -491,6 +491,8 @@ final public class JRX_TX extends javax.swing.JFrame implements
             oldRadioFrequency = -1;
             dcdIconLabel.setText("");
             dcdIconLabel.setIcon(greenLed);
+            String dcdLedString = "DCD LED indicator is green";
+            dcdIconLabel.getAccessibleContext().setAccessibleDescription(dcdLedString);
             // Must reset to defaults again to accommodate change in rig.
             setDefaultComboContent();  
             setupHamlibDaemon();
@@ -505,9 +507,15 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 vfoState.setTextVfoB(freqB);
                 writeRadioControls();
             } else {
-                // @todo Coz fix this.  It loses track of which radio VFO was selected.
-                vfoDisplay.loadRadioFrequencyToVfoB();
-                vfoDisplay.loadRadioFrequencyToVfoA(); 
+                // Get the radio VFO settings and write them to application controls.
+                vfoDisplayControl.VfoStateInterface.vfoChoice  choice = vfoState.getRxVfo();
+                long valueA = vfoState.getVfoAFrequency();
+                long valueB = vfoState.getVfoBFrequency();
+                if (choice == vfoDisplayControl.VfoStateInterface.vfoChoice.VFOA) {
+                    vfoDisplay.frequencyToDigits(valueA);
+                } else {
+                    vfoDisplay.frequencyToDigits(valueB);
+                }
             }
             squelchScheme.setRadioSquelch();
             readRadioControls(true);  // Reads frequency from radio
@@ -825,11 +833,13 @@ final public class JRX_TX extends javax.swing.JFrame implements
                     v = vfoState.getSelectedVfoFrequency();
                 }
                 if (v <= 0) {
-                    throw (new Exception("frequency <= 0"));
-                }
-                if (oldRadioFrequency != v) {
-                    boolean success = vfoState.writeFrequencyToRadioSelectedVfo(v);
-                    oldRadioFrequency = v;
+                    //throw (new Exception("frequency <= 0"));
+                    System.out.println("vfoState current frequency <= 0.");
+                } else {
+                    if (oldRadioFrequency != v) {
+                        boolean success = vfoState.writeFrequencyToRadioSelectedVfo(v);
+                        oldRadioFrequency = v;
+                    }
                 }
             }
         } catch (Exception e) {
