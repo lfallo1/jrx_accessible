@@ -418,6 +418,11 @@ final public class JRX_TX extends javax.swing.JFrame implements
         }
     }
 /////////////////////////////////////////////////////////////////////////////////
+    /**
+     * Handle list selection event from SWL ChannelChart and write the freq and
+     * mode to the current Rx radio VFO.
+     * @param e 
+     */
     @Override
     public void valueChanged(ListSelectionEvent e) {
         if (e.getValueIsAdjusting()) {
@@ -430,11 +435,13 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 int row = lsm.getMinSelectionIndex();
                 String mode = chart.getValue(row, 2);
                 double freq = Double.parseDouble(chart.getValue(row, 3));
+                vfoState.writeFrequencyToRadioSelectedVfo((long)(freq*1e6 + 0.5));
                 vfoDisplay.frequencyToDigits((long) (freq * 1e6 + 0.5));
                 RWComboBox box = (RWComboBox) sv_modesComboBox;
                 mode = "Mode " + mode.toUpperCase();
                 Integer index = box.displayMap.get(mode);
                 if (index != null) sv_modesComboBox.setSelectedIndex(index);
+                box.writeValue(true);
             }
         } catch (Exception ex) {
             System.out.println(ex);
@@ -583,9 +590,9 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 sv_rfGainSlider,
                 sv_ifShiftComboBox,
                 sv_dspComboBox,
-                sv_dspCheckBox,
-                sv_modesComboBox,
+                sv_dspCheckBox,               
                 sv_filtersComboBox,
+                sv_modesComboBox,
                 sv_antennaComboBox,
                 sv_attenuatorComboBox,
                 sv_agcComboBox,
@@ -1604,17 +1611,17 @@ final public class JRX_TX extends javax.swing.JFrame implements
         favoriteSWLChannels = new javax.swing.JPanel();
         memoryPanel = new javax.swing.JPanel();
         scannerPanel = new javax.swing.JPanel();
-        scanIconLabel = new javax.swing.JLabel();
-        sv_squelchCheckBox = new RWCheckBox(this,null,null);
-        scanDownButton = new javax.swing.JButton();
         sv_scanStepComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,null,null);
-        sv_scanSpeedComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,null,null);
-        sv_dwellTimeComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,null,null);
-        scanStopButton = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
+        sv_scanSpeedComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,null,null);
         jLabel4 = new javax.swing.JLabel();
-        scanUpButton = new javax.swing.JButton();
+        sv_dwellTimeComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,null,null);
         jLabel5 = new javax.swing.JLabel();
+        scanIconLabel = new javax.swing.JLabel();
+        scanDownButton = new javax.swing.JButton();
+        scanStopButton = new javax.swing.JButton();
+        scanUpButton = new javax.swing.JButton();
+        sv_squelchCheckBox = new RWCheckBox(this,null,null);
         jrxScopePanel = new javax.swing.JPanel();
         scopePanel = new javax.swing.JPanel();
         scopeDisplayPanel = new SweepScope(this);
@@ -2005,7 +2012,10 @@ final public class JRX_TX extends javax.swing.JFrame implements
         rttyPanel.getAccessibleContext().setAccessibleName("RTTY");
         rttyPanel.getAccessibleContext().setAccessibleDescription("Radio Teletype settings and decode window.");
 
-        recieverGroupBox.setBorder(null);
+        recieverGroupBox.setBackground(new java.awt.Color(204, 204, 204));
+        recieverGroupBox.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        recieverGroupBox.setToolTipText("Rx Controls");
+        recieverGroupBox.setOpaque(true);
         recieverGroupBox.setVisible(true);
 
         sv_squelchSlider.setMajorTickSpacing(10);
@@ -2164,6 +2174,9 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 .addContainerGap())
         );
 
+        recieverGroupBox.getAccessibleContext().setAccessibleName("Receiver Group");
+        recieverGroupBox.getAccessibleContext().setAccessibleDescription("Receiver Controls Group");
+
         overallTabbedPane.addTab("Operate Transceiver", operateTransceiverPanel);
         operateTransceiverPanel.getAccessibleContext().setAccessibleName("Tranceive Operations Tab");
         operateTransceiverPanel.getAccessibleContext().setAccessibleDescription("Vital transceiver controls");
@@ -2275,11 +2288,25 @@ final public class JRX_TX extends javax.swing.JFrame implements
         favoriteSWLChannels.getAccessibleContext().setAccessibleName("Favorite SWL Channels");
         favoriteSWLChannels.getAccessibleContext().setAccessibleDescription("List selection can be used with scanner");
 
-        scanIconLabel.setText("x");
+        sv_scanStepComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        sv_scanStepComboBox.setToolTipText("Scan frequency step size (❃)");
 
-        sv_squelchCheckBox.setSelected(true);
-        sv_squelchCheckBox.setText("Pause ON Squelch Open");
-        sv_squelchCheckBox.setToolTipText("Pause on squelch active");
+        jLabel3.setLabelFor(sv_scanStepComboBox);
+        jLabel3.setText("Scan Step");
+
+        sv_scanSpeedComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        sv_scanSpeedComboBox.setToolTipText("Scan delay (❃)");
+
+        jLabel4.setLabelFor(sv_scanSpeedComboBox);
+        jLabel4.setText("Scan Speed");
+
+        sv_dwellTimeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        sv_dwellTimeComboBox.setToolTipText("Pause dwell time (❃)");
+
+        jLabel5.setLabelFor(sv_dwellTimeComboBox);
+        jLabel5.setText("Dwell Time");
+
+        scanIconLabel.setText("x");
 
         scanDownButton.setText("Start Scan Down");
         scanDownButton.setToolTipText("Scan down");
@@ -2288,15 +2315,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 scanDownButtonMouseClicked(evt);
             }
         });
-
-        sv_scanStepComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        sv_scanStepComboBox.setToolTipText("Scan frequency step size (❃)");
-
-        sv_scanSpeedComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        sv_scanSpeedComboBox.setToolTipText("Scan delay (❃)");
-
-        sv_dwellTimeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        sv_dwellTimeComboBox.setToolTipText("Pause dwell time (❃)");
 
         scanStopButton.setText("Stop Scan");
         scanStopButton.setToolTipText("Halt scan");
@@ -2311,10 +2329,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
             }
         });
 
-        jLabel3.setText("Scan Step");
-
-        jLabel4.setText("Scan Speed");
-
         scanUpButton.setText("Start Scan Up");
         scanUpButton.setToolTipText("Scan up");
         scanUpButton.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -2323,7 +2337,9 @@ final public class JRX_TX extends javax.swing.JFrame implements
             }
         });
 
-        jLabel5.setText("Dwell Time");
+        sv_squelchCheckBox.setSelected(true);
+        sv_squelchCheckBox.setText("Pause ON Squelch Open");
+        sv_squelchCheckBox.setToolTipText("Pause on squelch active");
 
         javax.swing.GroupLayout scannerPanelLayout = new javax.swing.GroupLayout(scannerPanel);
         scannerPanel.setLayout(scannerPanelLayout);
@@ -2383,10 +2399,10 @@ final public class JRX_TX extends javax.swing.JFrame implements
 
         scannerPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel4, sv_dwellTimeComboBox, sv_scanSpeedComboBox, sv_scanStepComboBox});
 
-        scanDownButton.getAccessibleContext().setAccessibleName("START SCAN DOWNWARDS");
         sv_scanSpeedComboBox.getAccessibleContext().setAccessibleName("Scan delay before restart scan");
         sv_scanSpeedComboBox.getAccessibleContext().setAccessibleDescription("Scan delay when squelch opens");
         sv_dwellTimeComboBox.getAccessibleContext().setAccessibleName("Dwell time in seconds");
+        scanDownButton.getAccessibleContext().setAccessibleName("START SCAN DOWNWARDS");
         scanUpButton.getAccessibleContext().setAccessibleName("START SCAN UPWARDS");
 
         javax.swing.GroupLayout scanPanelLayout = new javax.swing.GroupLayout(scanPanel);
@@ -3047,7 +3063,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
     private javax.swing.JLabel agcLabel;
     private javax.swing.JPanel appSettingsPanel;
     private javax.swing.JPanel buttonPanel2;
-    private javax.swing.JTabbedPane channelsTabbedPane;
+    protected javax.swing.JTabbedPane channelsTabbedPane;
     protected javax.swing.JLabel comErrorIconLabel;
     private javax.swing.JButton copyButton;
     private javax.swing.JButton copyMemButton;

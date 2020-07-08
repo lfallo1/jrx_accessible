@@ -88,8 +88,9 @@ public class RWSlider extends JSlider implements MouseWheelListener,
 //            }
             if (!parent.inhibit && !localInhibit && isEnabled()) {
                 level = getConvertedValue();
+                // @TODO Coz this does not make sense.... and was reported as a bug.  FIX THIS.
                 if(parent.squelchScheme.useJRXSquelch && token.equals("AF")) {
-                    level = (parent.squelchScheme.squelchOpen == 1)?level:0;
+                    level = (parent.squelchScheme.isSquelchOpen())?level:0;
                 }
                 if (force || level != oldLevel) {
                     String com = String.format("%s %s %.2f", prefix.toUpperCase(), token, level);

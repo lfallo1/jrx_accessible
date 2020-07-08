@@ -854,11 +854,22 @@
                 </Container>
                 <Container class="javax.swing.JInternalFrame" name="recieverGroupBox">
                   <Properties>
-                    <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                      <Border info="null"/>
+                    <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                      <Color blue="cc" green="cc" red="cc" type="rgb"/>
                     </Property>
+                    <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                      <Border info="org.netbeans.modules.form.compat2.border.EtchedBorderInfo">
+                        <EtchetBorder/>
+                      </Border>
+                    </Property>
+                    <Property name="toolTipText" type="java.lang.String" value="Rx Controls"/>
+                    <Property name="opaque" type="boolean" value="true"/>
                     <Property name="visible" type="boolean" value="true"/>
                   </Properties>
+                  <AccessibilityProperties>
+                    <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="Receiver Group"/>
+                    <Property name="AccessibleContext.accessibleDescription" type="java.lang.String" value="Receiver Controls Group"/>
+                  </AccessibilityProperties>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new GroupBox();"/>
                     <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
@@ -1135,6 +1146,9 @@
               </Layout>
               <SubComponents>
                 <Container class="javax.swing.JTabbedPane" name="channelsTabbedPane">
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                  </AuxValues>
 
                   <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
                   <SubComponents>
@@ -1373,37 +1387,6 @@
                     </DimensionLayout>
                   </Layout>
                   <SubComponents>
-                    <Component class="javax.swing.JLabel" name="scanIconLabel">
-                      <Properties>
-                        <Property name="text" type="java.lang.String" value="x"/>
-                      </Properties>
-                      <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
-                      </AuxValues>
-                    </Component>
-                    <Component class="javax.swing.JCheckBox" name="sv_squelchCheckBox">
-                      <Properties>
-                        <Property name="selected" type="boolean" value="true"/>
-                        <Property name="text" type="java.lang.String" value="Pause ON Squelch Open"/>
-                        <Property name="toolTipText" type="java.lang.String" value="Pause on squelch active"/>
-                      </Properties>
-                      <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new RWCheckBox(this,null,null);"/>
-                        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
-                      </AuxValues>
-                    </Component>
-                    <Component class="javax.swing.JButton" name="scanDownButton">
-                      <Properties>
-                        <Property name="text" type="java.lang.String" value="Start Scan Down"/>
-                        <Property name="toolTipText" type="java.lang.String" value="Scan down"/>
-                      </Properties>
-                      <AccessibilityProperties>
-                        <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="START SCAN DOWNWARDS"/>
-                      </AccessibilityProperties>
-                      <Events>
-                        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="scanDownButtonMouseClicked"/>
-                      </Events>
-                    </Component>
                     <Component class="javax.swing.JComboBox" name="sv_scanStepComboBox">
                       <Properties>
                         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
@@ -1421,6 +1404,14 @@
                         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
                         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
                       </AuxValues>
+                    </Component>
+                    <Component class="javax.swing.JLabel" name="jLabel3">
+                      <Properties>
+                        <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+                          <ComponentRef name="sv_scanStepComboBox"/>
+                        </Property>
+                        <Property name="text" type="java.lang.String" value="Scan Step"/>
+                      </Properties>
                     </Component>
                     <Component class="javax.swing.JComboBox" name="sv_scanSpeedComboBox">
                       <Properties>
@@ -1444,6 +1435,14 @@
                         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
                       </AuxValues>
                     </Component>
+                    <Component class="javax.swing.JLabel" name="jLabel4">
+                      <Properties>
+                        <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+                          <ComponentRef name="sv_scanSpeedComboBox"/>
+                        </Property>
+                        <Property name="text" type="java.lang.String" value="Scan Speed"/>
+                      </Properties>
+                    </Component>
                     <Component class="javax.swing.JComboBox" name="sv_dwellTimeComboBox">
                       <Properties>
                         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
@@ -1465,6 +1464,34 @@
                         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
                       </AuxValues>
                     </Component>
+                    <Component class="javax.swing.JLabel" name="jLabel5">
+                      <Properties>
+                        <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+                          <ComponentRef name="sv_dwellTimeComboBox"/>
+                        </Property>
+                        <Property name="text" type="java.lang.String" value="Dwell Time"/>
+                      </Properties>
+                    </Component>
+                    <Component class="javax.swing.JLabel" name="scanIconLabel">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="x"/>
+                      </Properties>
+                      <AuxValues>
+                        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                      </AuxValues>
+                    </Component>
+                    <Component class="javax.swing.JButton" name="scanDownButton">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="Start Scan Down"/>
+                        <Property name="toolTipText" type="java.lang.String" value="Scan down"/>
+                      </Properties>
+                      <AccessibilityProperties>
+                        <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="START SCAN DOWNWARDS"/>
+                      </AccessibilityProperties>
+                      <Events>
+                        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="scanDownButtonMouseClicked"/>
+                      </Events>
+                    </Component>
                     <Component class="javax.swing.JButton" name="scanStopButton">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="Stop Scan"/>
@@ -1474,16 +1501,6 @@
                         <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="scanStopButtonMouseClicked"/>
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="scanStopButtonActionPerformed"/>
                       </Events>
-                    </Component>
-                    <Component class="javax.swing.JLabel" name="jLabel3">
-                      <Properties>
-                        <Property name="text" type="java.lang.String" value="Scan Step"/>
-                      </Properties>
-                    </Component>
-                    <Component class="javax.swing.JLabel" name="jLabel4">
-                      <Properties>
-                        <Property name="text" type="java.lang.String" value="Scan Speed"/>
-                      </Properties>
                     </Component>
                     <Component class="javax.swing.JButton" name="scanUpButton">
                       <Properties>
@@ -1497,10 +1514,16 @@
                         <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="scanUpButtonMouseClicked"/>
                       </Events>
                     </Component>
-                    <Component class="javax.swing.JLabel" name="jLabel5">
+                    <Component class="javax.swing.JCheckBox" name="sv_squelchCheckBox">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="Dwell Time"/>
+                        <Property name="selected" type="boolean" value="true"/>
+                        <Property name="text" type="java.lang.String" value="Pause ON Squelch Open"/>
+                        <Property name="toolTipText" type="java.lang.String" value="Pause on squelch active"/>
                       </Properties>
+                      <AuxValues>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new RWCheckBox(this,null,null);"/>
+                        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                      </AuxValues>
                     </Component>
                   </SubComponents>
                 </Container>

@@ -5,7 +5,7 @@
 // *   This program is free software; you can redistribute it and/or modify  *
 // *   it under the terms of the GNU General Public License as published by  *
 // *   the Free Software Foundation; either version 2 of the License, or     *
-// *   (at your option) any later version.                                   *
+// *   (audibleTip your option) any later version.                                   *
 // *                                                                         *
 // *   This program is distributed in the hope that it will be useful,       *
 // *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -30,8 +30,15 @@ import javax.swing.JComboBox;
 import javax.swing.JSlider;
 
 /**
- * Each memory item is represented by a MemoryButton which has an internal state 
- * indicated by its color.
+ * Each memory button represents an available storage for a VFO frequency and 
+ * mode and has an internal state used for scan operations indicated by its 
+ * foreground font color.
+ * 
+ * BLACK -
+ * GREEN -
+ * BLUE -
+ * RED -
+ * PURPLE - 
  * 
  * @author lutusp
  */
@@ -44,10 +51,14 @@ final public class MemoryButton extends JButton implements MouseListener {
     int timeout = 1000;
     boolean defineButton = false;
     int skipDuringScan = 0;
-    String tt = "<span color=\"green\">Click: read</span><br/>"+
+    String visualTip = "<span color=\"green\">Click: read</span><br/>"+
             "<span color=\"blue\">Right-click: toggle skip in memory scan</span>"+
             "<br/><span color=\"red\">Click and hold 1 sec.: write</span>"+
             "<br/><span color=\"purple\">Right-click and hold 1 sec: erase</span>";
+    String audibleTip = "Left Click to set VFO frequency. " +
+                "Right click to toggle SKIP in memory scan. "+
+                "Click and hold one second to store current VFO and mode. "+
+                "Right click and hold one second to erase.";
     long frequency = -1;
     int mode;
     int filter;
@@ -58,12 +69,24 @@ final public class MemoryButton extends JButton implements MouseListener {
     int antenna;
     int preamp;
     int attenuator;
+    final Color STATE_GREEN; 
+    final Color STATE_RED;
+    final Color STATE_BLUE;
+    final Color STATE_BLACK;
+    final Color STATE_GRAY;
+
 
     public MemoryButton(String lbl, JRX_TX p) {
         super(lbl);
         label = lbl;
         parent = p;
-        setToolTipText(tt);
+        STATE_GREEN = parent.darkGreen;
+        STATE_RED = parent.darkRed;
+        STATE_BLUE = parent.darkBlue;
+        STATE_BLACK = Color.black;
+        STATE_GRAY = Color.darkGray;
+        setToolTipText(visualTip);
+        getAccessibleContext().setAccessibleDescription(audibleTip);
         setup();
         reset();
         updateState();
@@ -97,14 +120,45 @@ final public class MemoryButton extends JButton implements MouseListener {
         updateState(Color.black);
     }
 
+    protected String getStateString() {
+        String stateColorString = "GRAY";
+        if (isEnabled()) {
+            Color foreColor = getForeground();    
+            if (foreColor == STATE_BLACK)  
+                stateColorString = "BLACK";
+            else if (foreColor == STATE_GREEN)
+                stateColorString = "GREEN";
+            else if (foreColor == STATE_RED)
+                stateColorString = "RED";
+            else if (foreColor == STATE_BLUE)
+                stateColorString = "BLUE";
+            else 
+                stateColorString = "UNKNOWN"; 
+        } else {
+            // Button is not enabled.  Color is GRAY.
+            stateColorString = "GRAY";
+        } 
+        return stateColorString;       
+    }
+    
+    
     @Override
     public String getToolTipText(MouseEvent event) {
-        String ms = parent.getMode();
-        String s = (frequency >= 0) ? String.format("%.6f MHz %s", (double) frequency / 1e6, ms) : "Undefined";
-        return String.format("<html>%s<br/>%s</html>", s, tt);
+        String ms = parent.getMode();       
+        String freq = (frequency >= 0) ? String.format("%.6f MHz %s", 
+                (double) frequency / 1e6, ms) : "Undefined";
+        // Change accessibleDescription.
+        getAccessibleContext().setAccessibleDescription("button is "+
+                getStateString() +" "+ freq + audibleTip);
+        return String.format("<html>%s<br> %s</html>", freq, visualTip);
     }
-
-    private class defineButton extends TimerTask {
+    /**
+     * This timer task determines if a mouse button was held down longer than the 
+     * timeout value and if so, it stores the current Vfo frequency and operating
+     * parameters as a memory channel for a left-click or it erases the memory
+     * channel with a right-click.
+     */
+    private class DefineButton extends TimerTask {
 
         @Override
         public void run() {
@@ -131,7 +185,7 @@ final public class MemoryButton extends JButton implements MouseListener {
         setForeground(Color.red);
         defineButton = false;
         defineButtonTimer = new java.util.Timer();
-        defineButtonTimer.schedule(new defineButton(), timeout);
+        defineButtonTimer.schedule(new DefineButton(), timeout);
         parent.getScopePanel().stopSweep(false);
     }
 
@@ -158,7 +212,12 @@ final public class MemoryButton extends JButton implements MouseListener {
     private void updateIfNeeded(JComboBox cc, int v) {
         int ov = cc.getSelectedIndex();
         if (ov != v) {
-            cc.setSelectedIndex(v);
+            try {
+                cc.setSelectedIndex(v);
+            }
+            catch (Exception ex) {
+                p("MemoryButton:updateIfNeeded() exception :"+ ex);
+            }
         }
 
     }
@@ -179,15 +238,14 @@ final public class MemoryButton extends JButton implements MouseListener {
 
     protected boolean readButton() {
         if (frequency >= 0) {
-             parent.scanStateMachine.stopScan(false);
+            parent.scanStateMachine.stopScan(false);
             parent.memoryCollection.sv_mostRecentButton = label;
             // always set bandwidth before mode
-            updateIfNeeded(parent.sv_filtersComboBox, filter);
+            updateIfNeeded((JComboBox)(parent.sv_filtersComboBox), filter);
             // always set mode before frequency
-            updateIfNeeded(parent.sv_modesComboBox, mode);
-            //if (frequency != parent.sv_freq) {
+            updateIfNeeded((JComboBox)(parent.sv_modesComboBox), mode);
+            parent.vfoState.writeFrequencyToRadioSelectedVfo(frequency);
             parent.vfoDisplay.frequencyToDigits(frequency);
-            //}
             updateIfNeeded(parent.sv_ctcssComboBox, ctcss);
             updateIfNeeded(parent.sv_agcComboBox, agc);
             updateIfNeeded(parent.sv_preampComboBox, preamp);
@@ -209,9 +267,9 @@ final public class MemoryButton extends JButton implements MouseListener {
 
     private void writeButton() {
         parent.memoryCollection.sv_mostRecentButton = label;
-        filter = parent.sv_filtersComboBox.getSelectedIndex();
-        mode = parent.sv_modesComboBox.getSelectedIndex();
-        frequency = parent.vfoDisplay.getFreq();
+        filter = ((JComboBox)parent.sv_filtersComboBox).getSelectedIndex();
+        mode = ((JComboBox)parent.sv_modesComboBox).getSelectedIndex();
+        frequency = parent.vfoState.getRxFrequency();
         ctcss = parent.sv_ctcssComboBox.getSelectedIndex();
         agc = parent.sv_agcComboBox.getSelectedIndex();
         preamp = parent.sv_preampComboBox.getSelectedIndex();

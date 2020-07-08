@@ -81,21 +81,25 @@ final public class ScanStateMachine {
                             }
                         }
                     } else {
+                        // Scan every scanStep over a range.
                         long freq = vfoDisplayS.getFreq();
                         if (direction < 0) {                           
-                            if (freq > scanEndFreq || freq < scanStartFreq) {
+                            if (freq > scanEndFreq || freq < scanStartFreq) {                    
+                                parent.vfoState.writeFrequencyToRadioSelectedVfo(scanEndFreq);
                                 vfoDisplayS.frequencyToDigits(scanEndFreq);
                             }
                             scanStep = -Math.abs(scanStep);
                         } else {
                             if (freq > scanEndFreq || freq < scanStartFreq) {
+                                parent.vfoState.writeFrequencyToRadioSelectedVfo(scanStartFreq);
                                 vfoDisplayS.frequencyToDigits(scanStartFreq);
                             }
                             scanStep = Math.abs(scanStep);
                         }
                     }
                     scanTimer = new java.util.Timer();
-                    scanTimer.scheduleAtFixedRate(new ScanEvents(), 0, (int) scanSpeedMS);
+                    //scanTimer.scheduleAtFixedRate(new ScanEvents(), 0, (int) scanSpeedMS); // WHY?
+                    scanTimer.schedule(new ScanEvents(), 0, (int) scanSpeedMS);
                     parent.scanDude.updateScanControls();
                 }
             } else {
@@ -104,10 +108,15 @@ final public class ScanStateMachine {
                     scanStep = Math.abs(scanStep) * scanDirection;
                 }
                 if (programScan) {
-                    vfoDisplayS.frequencyToDigits(getNextScanFrequency());
+                    long freq = getNextScanFrequency();
+                    parent.vfoState.writeFrequencyToRadioSelectedVfo(freq);
+                    vfoDisplayS.frequencyToDigits(freq);
                 } else {
                     //parent.pout("increm scan");
-                    vfoDisplayS.frequencyToDigits(vfoDisplayS.getFreq() + (long)scanStep);
+                    // Scanning in steps between two memory buttons.
+                    long freq = vfoDisplayS.getFreq() + (long)scanStep;
+                    parent.vfoState.writeFrequencyToRadioSelectedVfo(freq);
+                    vfoDisplayS.frequencyToDigits(freq);
                 }
             }
         }
@@ -116,6 +125,7 @@ final public class ScanStateMachine {
     protected void stopScan(boolean alert) {
         if (scanTimer != null) {
             scanTimer.cancel();
+            scanTimer.purge();
             scanTimer = null;
         } else {
             if (alert) {
@@ -126,8 +136,7 @@ final public class ScanStateMachine {
     }
 
     protected boolean setScanParams() {
-        //int index = parent.getActiveTab();
-        int index = 0; // Coz fix this later.
+        int index = parent.channelsTabbedPane.getSelectedIndex();
         buttonScanMode = (index == 0);
         if (buttonScanMode) {
             return setMemoryScanParams();
@@ -181,6 +190,13 @@ final public class ScanStateMachine {
 
         /**
          * A Scanner method using a range of memory buttons as scan channels.
+         * There are two modes of memory button scans.  The first has two buttons
+         * in the buttonScanList.  The scan starts with the lowest frequency
+         * button and ends with the highest frequency button using the scan step
+         * to traverse the difference between the endpoints.
+         * 
+         * The second scan mode has more than two buttons in the buttonScanList
+         * and each button's frequency is scanned in turn.
          * 
          * @return Boolean success
          */
@@ -258,23 +274,29 @@ final public class ScanStateMachine {
             if (sqopen) {
                 lastOpenSquelchTime = System.currentTimeMillis();
             }
-            //p("freq: " + sv_freq);
             double dwellTime = lastOpenSquelchTime + 
                     parent.scanDude.getTimeStep(parent.sv_dwellTimeComboBox);
             double now = System.currentTimeMillis();
             if (now >= dwellTime && !sqopen && scanTimer != null) {
                 if (programScan) {
-                    vfoDisplayS.frequencyToDigits(getNextScanFrequency());
+                    // Scanning through group of memory buttons.
+                    long freq = getNextScanFrequency();
+                    parent.vfoState.writeFrequencyToRadioSelectedVfo(freq);
+                    vfoDisplayS.frequencyToDigits(freq);
                 } else {
-                    vfoDisplayS.frequencyToDigits(
-                            vfoDisplayS.getFreq() + (long)scanStep);
-                    long freq = vfoDisplayS.getFreq();
+                    // Scanning in steps between two memory buttons.
+                    long freq = vfoDisplayS.getFreq() + (long)scanStep;
+                    parent.vfoState.writeFrequencyToRadioSelectedVfo(freq);
+                    vfoDisplayS.frequencyToDigits(freq);
+                    freq = vfoDisplayS.getFreq();
                     if (scanDirection < 0) {
                         if (freq < scanStartFreq) {
+                            parent.vfoState.writeFrequencyToRadioSelectedVfo(scanEndFreq);
                             vfoDisplayS.frequencyToDigits(scanEndFreq);
                         }
                     } else {
                         if (freq > scanEndFreq) {
+                            parent.vfoState.writeFrequencyToRadioSelectedVfo(scanStartFreq);
                             vfoDisplayS.frequencyToDigits(scanStartFreq);
                         }
                     }
