@@ -29,3 +29,156 @@ this keeps me off the street. 73 Coz
 
 
 
+The-Unofficial-Mayor-Of-Towson:/ Coz$ rigctl -m 3084 -vv -r /dev/tty.usbserial-AK08M0W1 -s 19200                                  
+Opened rig model 3084, 'ID-51'
+
+
+                            Here are some things that need fixing:
+Rig command: p dstdat BINARY
+Segmentation fault: 11
+                
+
+
+
+
+                        This is just a log of some of the interesting tests:
+
+Rig command: f
+Frequency: 147240000
+
+Rig command: m
+Mode: FM
+Passband: 12000
+                
+                    /switched rig to a 440 D-Star local repeater.
+Rig command: m
+Mode: D-STAR
+Passband: 0
+
+Rig command: p ?
+
+
+Rig command: p dcals
+get_parm: error = Invalid parameter
+
+Rig command: \get_parm dcals
+get_parm: error = Invalid parameter
+
+Rig command: \get_parm ?
+
+
+Rig command: p dsrmes
+Parm Value: Not linked          W3DHS   INFO
+            This is correct.
+
+
+Rig command: f
+Frequency: 442112500
+            This is correct only I don't think that the rig really can set the
+            least 3 significant digits.  They are always zero.
+
+Rig command: p dstat                                                                                                               
+get_parm: error = Invalid parameter
+
+Rig command: pdsgpsm
+Precede multiple character command names with '\'
+
+Rig command: p dsgpsm                                                                                                              
+Parm Value: �
+
+Rig command: p dsmycs
+get_parm: error = Command rejected by the rig
+
+Rig command: p dstmes                                                                                                              
+get_parm: error = Command rejected by the rig
+
+Rig command: p digi_sel
+get_parm: error = Invalid parameter
+
+Rig command: p drive_gain
+get_parm: error = Invalid parameter
+
+Rig command: p dstxcs
+get_parm: error = Command rejected by the rig
+
+Rig command: p dscode
+get_parm: error = Command rejected by the rig
+
+Rig command: p dsrmes                                                                                                              
+Parm Value: Not linked          W3DHS   INFO
+
+Rig command: p dsrmes STRING
+Parm Value: Not linked          W3DHS   INFO
+
+Rig command: p STRING dsrmes
+get_parm: error = Invalid parameter
+
+Rig command: p dscals BINARY
+Parm Value: 
+Rig command: p dsdsql CHECKBUTTON
+get_parm: error = Command rejected by the rig
+
+Rig command: p dsstat BINARY
+Parm Value: 
+Rig command: p dsgpsd BINARY
+Parm Value: 
+Rig command: p dsgpsm STRING
+Parm Value: �
+                This may be correct as I am indoors and GPS has no signal.
+
+Rig command: p dscode NUMERIC                                                                                                      
+get_parm: error = Command rejected by the rig
+
+Rig command: p dstdat BINARY
+Segmentation fault: 11
+                Here is something you may want to look at.
+
+The-Unofficial-Mayor-Of-Towson:/ Coz$ rigctl -m 3084 -vv -r /dev/tty.usbserial-AK08M0W1 -s 19200
+Opened rig model 3084, 'ID-51'
+
+Rig command: p dsmycs STRING
+get_parm: error = Command rejected by the rig
+
+Rig command: p dstxcs BINARY
+get_parm: error = Command rejected by the rig
+
+Rig command: p dstmes STRING
+get_parm: error = Command rejected by the rig
+
+Rig command: p digi_sel_level NUMERIC                                                                                              
+get_parm: error = Invalid parameter
+
+Rig command: p scpdat BINARY
+get_parm: error = Invalid parameter
+
+Rig command: p scpdat
+get_parm: error = Invalid parameter
+
+Rig command: p scpsts CHECKBUTTON
+get_parm: error = Invalid parameter
+
+Rig command: p scpmss CHECKBUTTON
+get_parm: error = Invalid parameter
+
+            Switched rig to a 2meter D-Star rptr that is not linked.
+
+Rig command: p dsrmes
+Parm Value: Not linked          W3DHS   INFO
+
+Rig command: f
+Frequency: 145140000
+            
+            Now I manually linked the repeater to REF062C, Reflector 62 C.
+
+Rig command: p dsrmes
+Parm Value: Linked to REF062 C  W3DHS   INFO
+            Perfect.  Very nice.
+
+            Now I manually unlinked the repeater.
+Rig command: p dsrmes
+Parm Value: Not linked          W3DHS   INFO
+            This is very useful.
+
+
+
+

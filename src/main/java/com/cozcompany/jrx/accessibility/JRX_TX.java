@@ -751,7 +751,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         ((MicGainSlider)sv_micGainSlider).enableIfCapable(radioData);
         ((RfPowerSlider)sv_rfPowerSlider).enableIfCapable(radioData);
         ((VoxLevelSlider)sv_voxLevelSlider).enableIfCapable(radioData);
-        ((RWComboBox)sv_ctcssComboBox).enableCap(radioData, "(?ism).*^Can set CTCSS Squelch:\\s+Y$", false);
+        ((RWComboBox)sv_ctcssComboBox).enableCap(radioData, "(?ism).*^Can set CTCSS:\\s+Y$", false); 
         ((RWComboBox)sv_agcComboBox).enableCap(radioData, "(?ism).*^Set level:.*?AGC\\(", true);
         ((RWComboBox)sv_attenuatorComboBox).enableCap(radioData, "(?ism).*^Set level:.*?ATT\\(", false);
         ((RWComboBox)sv_antennaComboBox).enableCap(radioData, "(?ism).*^Can set Ant:\\rigSpecs+Y$", false); // Coz override for IC-7100
@@ -1585,6 +1585,8 @@ final public class JRX_TX extends javax.swing.JFrame implements
         jLabel17 = new javax.swing.JLabel();
         dstarPanel = new javax.swing.JPanel();
         keyerPanel = new javax.swing.JPanel();
+        jLabel6 = new javax.swing.JLabel();
+        jSlider1 = new javax.swing.JSlider();
         rttyPanel = new javax.swing.JPanel();
         recieverGroupBox = new GroupBox();
         sv_squelchSlider = new com.cozcompany.jrx.accessibility.RWSlider(this,"L","SQL",0);
@@ -2003,6 +2005,19 @@ final public class JRX_TX extends javax.swing.JFrame implements
         operationDetailsTabbedPane.addTab("D-STAR", dstarPanel);
         dstarPanel.getAccessibleContext().setAccessibleName("Noise Reduction");
         dstarPanel.getAccessibleContext().setAccessibleDescription("R X Controls to reduce interference");
+
+        jLabel6.setText("CW Speed WPM");
+        keyerPanel.add(jLabel6);
+
+        jSlider1.setMajorTickSpacing(10);
+        jSlider1.setMaximum(40);
+        jSlider1.setMinimum(5);
+        jSlider1.setMinorTickSpacing(1);
+        jSlider1.setOrientation(javax.swing.JSlider.VERTICAL);
+        jSlider1.setPaintLabels(true);
+        jSlider1.setPaintTicks(true);
+        jSlider1.setValue(15);
+        keyerPanel.add(jSlider1);
 
         operationDetailsTabbedPane.addTab("Keyer", keyerPanel);
         keyerPanel.getAccessibleContext().setAccessibleName("Keyer panel");
@@ -3088,12 +3103,14 @@ final public class JRX_TX extends javax.swing.JFrame implements
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem1;
+    private javax.swing.JSlider jSlider1;
     private javax.swing.ButtonGroup jrxRadioButtonGroup;
     private javax.swing.JPanel jrxScopePanel;
     private javax.swing.JPanel keyerPanel;

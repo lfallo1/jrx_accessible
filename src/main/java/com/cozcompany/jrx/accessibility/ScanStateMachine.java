@@ -134,7 +134,10 @@ final public class ScanStateMachine {
         }
         parent.scanDude.updateScanControls();
     }
-
+    /**
+     * Based on which tab is selected choose the scan frequencies and scan mode.
+     * @return true if successful.
+     */
     protected boolean setScanParams() {
         int index = parent.channelsTabbedPane.getSelectedIndex();
         buttonScanMode = (index == 0);
@@ -147,7 +150,10 @@ final public class ScanStateMachine {
 
     /**
      * A Scanner method using selected rows of the ChannelChart, scan the 
-     * channels listed there.
+     * channels listed there.  There are two ways to scan channels.  If you select
+     * more than two, each channel in the selection is scanned in turn.  If you
+     * select only two channels, the range in between those channels is scanned by
+     * the step size increment.
      * 
      * @return Boolean success
      */

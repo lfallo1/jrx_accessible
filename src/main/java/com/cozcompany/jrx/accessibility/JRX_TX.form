@@ -834,6 +834,25 @@
                       </Constraints>
 
                       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout"/>
+                      <SubComponents>
+                        <Component class="javax.swing.JLabel" name="jLabel6">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="CW Speed WPM"/>
+                          </Properties>
+                        </Component>
+                        <Component class="javax.swing.JSlider" name="jSlider1">
+                          <Properties>
+                            <Property name="majorTickSpacing" type="int" value="10"/>
+                            <Property name="maximum" type="int" value="40"/>
+                            <Property name="minimum" type="int" value="5"/>
+                            <Property name="minorTickSpacing" type="int" value="1"/>
+                            <Property name="orientation" type="int" value="1"/>
+                            <Property name="paintLabels" type="boolean" value="true"/>
+                            <Property name="paintTicks" type="boolean" value="true"/>
+                            <Property name="value" type="int" value="15"/>
+                          </Properties>
+                        </Component>
+                      </SubComponents>
                     </Container>
                     <Container class="javax.swing.JPanel" name="rttyPanel">
                       <AccessibilityProperties>
