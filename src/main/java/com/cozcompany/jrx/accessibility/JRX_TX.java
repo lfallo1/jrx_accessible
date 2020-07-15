@@ -77,7 +77,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
     String userPath;
     
     Timer periodicTimer;
-    ParseComLine comArgs = null;
+    public ParseComLine comArgs = null;
     ImageIcon redLed, greenLed, blueLed, yellowLed;
     ScanStateMachine scanStateMachine;
     ArrayList<String> interfaceNames = null;
@@ -104,7 +104,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
     InputStream hamlib_is = null;
     OutputStream hamlib_os = null;
     String hamlibExecPath = "rigctld";
-    String radioData = null;
+    public String radioData = null;
     Process hamlibDaemon = null;
     ConfigManager config = null;
     JFrame sv_frame = null;

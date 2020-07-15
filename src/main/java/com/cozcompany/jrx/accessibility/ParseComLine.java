@@ -26,7 +26,7 @@ package com.cozcompany.jrx.accessibility;
  */
 final public class ParseComLine {
 
-    int debug = -1;
+    public int debug = -1;
     int rigCode = -1;
     String interfaceName = null;
     String rigName = null;
