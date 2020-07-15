@@ -228,6 +228,7 @@
                                                   <Component id="jLabel18" min="-2" pref="92" max="-2" attributes="0"/>
                                               </Group>
                                               <Component id="sv_txCtcssCheckBox" min="-2" max="-2" attributes="0"/>
+                                              <Component id="sv_ctcssListButton" alignment="0" min="-2" pref="172" max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
                                   </Group>
@@ -252,6 +253,8 @@
                                           </Group>
                                           <EmptySpace max="-2" attributes="0"/>
                                           <Component id="sv_txCtcssCheckBox" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                          <Component id="sv_ctcssListButton" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                       <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
                                   </Group>
@@ -469,6 +472,12 @@
                           </Properties>
                           <AuxValues>
                             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new RWCheckBox(this,&quot;U&quot;,&quot;TONE&quot;);"/>
+                            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                          </AuxValues>
+                        </Component>
+                        <Component class="javax.swing.JButton" name="sv_ctcssListButton">
+                          <AuxValues>
+                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new components.CtcssListButton(this);"/>
                             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
                           </AuxValues>
                         </Component>
@@ -904,19 +913,17 @@
                                   <Component id="squelchLabel" alignment="1" min="-2" pref="66" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" attributes="0">
                                       <Component id="sv_rfGainSlider" linkSize="26" min="-2" pref="207" max="-2" attributes="0"/>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
                                       <Component id="sv_modesComboBox" linkSize="30" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="54" max="-2" attributes="0"/>
-                                      <Component id="sv_ctcssComboBox" linkSize="30" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" attributes="0">
                                       <Component id="sv_squelchSlider" linkSize="26" min="-2" pref="169" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="sv_synthSquelchCheckBox" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace max="32767" attributes="0"/>
+                                      <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
                                       <Component id="sv_agcComboBox" linkSize="30" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
@@ -942,10 +949,7 @@
                               <Group type="103" groupAlignment="1" attributes="0">
                                   <Component id="sv_rfGainSlider" linkSize="31" min="-2" max="-2" attributes="0"/>
                                   <Component id="rfGainLabel" min="-2" pref="40" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="sv_ctcssComboBox" alignment="3" min="-2" pref="38" max="-2" attributes="0"/>
-                                      <Component id="sv_ctcssCheckBox" alignment="3" min="-2" pref="38" max="-2" attributes="0"/>
-                                  </Group>
+                                  <Component id="sv_ctcssCheckBox" min="-2" pref="38" max="-2" attributes="0"/>
                                   <Component id="sv_modesComboBox" min="-2" pref="37" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
@@ -991,26 +995,6 @@
                       </Properties>
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new com.cozcompany.jrx.accessibility.RWSlider(this,&quot;L&quot;,&quot;RF&quot;,50);"/>
-                        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
-                      </AuxValues>
-                    </Component>
-                    <Component class="javax.swing.JComboBox" name="sv_ctcssComboBox">
-                      <Properties>
-                        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                          <StringArray count="4">
-                            <StringItem index="0" value="123.0"/>
-                            <StringItem index="1" value="Item 2"/>
-                            <StringItem index="2" value="Item 3"/>
-                            <StringItem index="3" value="Item 4"/>
-                          </StringArray>
-                        </Property>
-                        <Property name="toolTipText" type="java.lang.String" value="CTCSS tone squelch frequencies (&#x2743;)"/>
-                      </Properties>
-                      <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="sv_ctcssComboBoxActionHandler"/>
-                      </Events>
-                      <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new com.cozcompany.jrx.accessibility.RWComboBox(this,&quot;ctcss&quot;,&quot;&quot;);"/>
                         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
                       </AuxValues>
                     </Component>
