@@ -8,7 +8,13 @@ package com.cozcompany.jrx.accessibility;
 import javax.swing.Icon;
 
 /**
- *
+ * A class to provide DCD for radios without that capability.
+ * This class modifies the behavior of the squelchSlider in mysterious ways...
+ * so the behavior should be separated into a separate control, say a 
+ * synthetic squelch slider so that the two have NO interaction except that 
+ * when one is enabled, the other is disabled.
+ * 
+ * WARNING: Squelch scheme is disabled at debug levels 2 and higher.... WHY?
  * @author Coz
  */
 public class SquelchScheme {

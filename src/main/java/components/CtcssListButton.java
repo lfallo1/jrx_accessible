@@ -82,11 +82,6 @@ public class CtcssListButton extends RWListButton {
     public boolean enableIfCapable(String source){
         String search = "(?ism).*^Set functions:.*?\\sTONE\\s";
         boolean hasLevelValue = false; // This control has Level Value:
-        boolean isEnabled = enableCap(source, search, hasLevelValue);
-        if (isEnabled) {
-            super.writeValue(true);
-        }
-        return isEnabled;
-    }    
-
+        return enableCap(source, search, hasLevelValue);
+    }
 }

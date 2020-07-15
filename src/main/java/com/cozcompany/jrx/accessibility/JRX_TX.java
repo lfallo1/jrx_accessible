@@ -510,6 +510,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
             vfoDisplay.setUpFocusManager();  
             vfoDisplay.makeVisible(vfoState); 
             if (sv_jrxToRadioButton.isSelected()) {
+                // Force rig to app control settings.  NOT RECOMMENDED.
                 vfoState.setVfoStateSimplex();
                 vfoState.setRxVfo(VfoStateInterface.vfoChoice.VFOA);
                 vfoState.writeFrequencyToRadioSelectedVfo(AERO_CLUB_FREQ);
@@ -526,9 +527,21 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 } else {
                     vfoDisplay.frequencyToDigits(valueB);
                 }
+                VfoStateInterface.opState op = vfoState.getVfoOperatingState();
+                if (op == VfoStateInterface.opState.SIMPLEX) {
+                    menuItemSimplex.setSelected(true);
+                } else if (op == VfoStateInterface.opState.DUPLEX) {
+                    if (vfoState.isVfoDuplexPlus()) {
+                        menuItemDuplexPlus.setSelected(true);
+                    } else {
+                        menuItemDuplexMinus.setSelected(true);
+                    }                   
+                } else if (op == VfoStateInterface.opState.SPLIT) {
+                    menuItemSplit.setSelected(true);                   
+                }
             }
             squelchScheme.setRadioSquelch();
-            readRadioControls(true);  // Reads frequency from radio
+            readRadioControls(true);  // Side effect : Reads frequency from radio
             startCyclicalTimer();
             measureSpeed(); // Writes frequency to radio.
             setComErrorIcon();            
@@ -570,7 +583,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
 
     private void setDefaultComboContent() {
         ((RWComboBox) sv_filtersComboBox).comboPlaceholderData();
-        //((RWComboBox) sv_ctcssComboBox).comboPlaceholderData(); not needed
         ((RWComboBox) sv_preampComboBox).comboPlaceholderData();
         ((RWComboBox) sv_attenuatorComboBox).comboPlaceholderData();
         ((RWComboBox) sv_modesComboBox).comboPlaceholderData();
@@ -755,7 +767,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         ((MicGainSlider)sv_micGainSlider).enableIfCapable(radioData);
         ((RfPowerSlider)sv_rfPowerSlider).enableIfCapable(radioData);
         ((VoxLevelSlider)sv_voxLevelSlider).enableIfCapable(radioData);
-        ((RWListButton)sv_ctcssListButton).enableCap(radioData, "(?ism).*^Can set CTCSS:\\s+Y$", false); 
+        ((CtcssListButton)sv_ctcssListButton).enableIfCapable(radioData);
         ((RWComboBox)sv_agcComboBox).enableCap(radioData, "(?ism).*^Set level:.*?AGC\\(", true);
         ((RWComboBox)sv_attenuatorComboBox).enableCap(radioData, "(?ism).*^Set level:.*?ATT\\(", false);
         ((RWComboBox)sv_antennaComboBox).enableCap(radioData, "(?ism).*^Can set Ant:\\rigSpecs+Y$", false); // Coz override for IC-7100
@@ -771,6 +783,8 @@ final public class JRX_TX extends javax.swing.JFrame implements
         ((RWCheckBox)sv_enableVoxCheckBox).enableCap(radioData, "(?ism).*^Set functions:.*?\\sVOX\\s", false);
         ((RWCheckBox)sv_dspCheckBox).enableCap(radioData, "(?ism).*^Set level:.*?NR\\(", false);
         ((RWCheckBox)sv_compressionCheckBox).enableCap(radioData,"(?ism).*^Set functions:.*?\\sCOMP\\s", false);
+        ((RWCheckBox)sv_txCtcssCheckBox).enableCap(radioData,"(?ism).*^Set functions:.*?\\sTONE\\s", false);
+        ((RWCheckBox)sv_ctcssSquelchCheckBox).enableCap(radioData,"(?ism).*^Set functions:.*?\\sTSQL\\s", false);        
         ((RWSlider)sv_compressionSlider).enableCap(radioData, "(?ism).*^Set level:.*?COMP\\(", true);
         
         String s = sendRadioCom("\\get_dcd", 0, false);
@@ -2911,7 +2925,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
     }//GEN-LAST:event_copyButtonMouseClicked
 
     private void scopeDefaultsButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_scopeDefaultsButtonMouseClicked
-        // TODO add your handling code here:
         getScopePanel().setup();
     }//GEN-LAST:event_scopeDefaultsButtonMouseClicked
 
@@ -3020,7 +3033,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
     }//GEN-LAST:event_scanPanelFocusGained
 
     private void overallTabbedPaneStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_overallTabbedPaneStateChanged
-        
         int index = overallTabbedPane.getSelectedIndex();
         Component ponent = overallTabbedPane.getComponentAt(index);
         String title = overallTabbedPane.getTitleAt(index);

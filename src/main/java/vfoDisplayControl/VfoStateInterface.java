@@ -557,11 +557,12 @@ public class VfoStateInterface {
                 lock.writeLock().lock();                
                 String commArgs = new String("r");  
                 // Returns "Protocol error" when on hf band.
-                // Returns "Shift: + " when on vhf and DUP+.
-                // Returns "Shift: - " when on vhf and DUP-.        
+                // Returns "Shift: +" when on vhf and DUP+.
+                // Returns "Shift: -" when on vhf and DUP-.
+                // Returns "-" for ID-51A or "+"
                 String reply = askRadio(commArgs);
                 if (reply != null) {
-                    String dupSearch = "(?i).*Rptr Shift: [\\+\\-]";
+                    String dupSearch = "(?i).*[\\+\\-]$";
                     shiftOn = reply.matches(dupSearch);
                 }
                 if (shiftOn) currentOpState = opState.DUPLEX;
@@ -595,10 +596,11 @@ public class VfoStateInterface {
                 String commArgs = new String("r");  
                 // Returns "Protocol error" when on hf band.
                 // Returns "Shift: + " when on vhf and DUP+.
-                // Returns "Shift: - " when on vhf and DUP-.        
+                // Returns "Shift: - " when on vhf and DUP-.
+                // Returns "-" or "+" when rig is ID51A
                 String reply = askRadio(commArgs);
                 if (reply != null) {
-                    String dupPlusSearch = "(?i).*Rptr Shift: \\+";
+                    String dupPlusSearch = "(?i).*\\+$";
                     dupPlus = reply.matches(dupPlusSearch);
                 }
                 lock.writeLock().unlock(); 
