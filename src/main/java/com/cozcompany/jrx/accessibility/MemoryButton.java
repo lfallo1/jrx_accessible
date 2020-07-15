@@ -19,6 +19,7 @@
 // ***************************************************************************
 package com.cozcompany.jrx.accessibility;
 
+import components.CtcssListButton;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -208,6 +209,19 @@ final public class MemoryButton extends JButton implements MouseListener {
         }
         updateState();
     }
+    
+    private void updateIfNeeded(CtcssListButton cc, int v) {
+        int ov = cc.getSelectedIndex();
+        if (ov != v) {
+            try {
+                cc.setSelectedIndex(v);
+            }
+            catch (Exception ex) {
+                p("MemoryButton:updateIfNeeded() exception :"+ ex);
+            }
+        }
+
+    }
 
     private void updateIfNeeded(JComboBox cc, int v) {
         int ov = cc.getSelectedIndex();
@@ -246,7 +260,7 @@ final public class MemoryButton extends JButton implements MouseListener {
             updateIfNeeded((JComboBox)(parent.sv_modesComboBox), mode);
             parent.vfoState.writeFrequencyToRadioSelectedVfo(frequency);
             parent.vfoDisplay.frequencyToDigits(frequency);
-            updateIfNeeded(parent.sv_ctcssComboBox, ctcss);
+            updateIfNeeded((CtcssListButton)parent.sv_ctcssListButton, ctcss);
             updateIfNeeded(parent.sv_agcComboBox, agc);
             updateIfNeeded(parent.sv_preampComboBox, preamp);
             updateIfNeeded(parent.sv_antennaComboBox, antenna);
@@ -270,7 +284,7 @@ final public class MemoryButton extends JButton implements MouseListener {
         filter = ((JComboBox)parent.sv_filtersComboBox).getSelectedIndex();
         mode = ((JComboBox)parent.sv_modesComboBox).getSelectedIndex();
         frequency = parent.vfoState.getRxFrequency();
-        ctcss = parent.sv_ctcssComboBox.getSelectedIndex();
+        ctcss = ((CtcssListButton)parent.sv_ctcssListButton).getSelectedIndex();
         agc = parent.sv_agcComboBox.getSelectedIndex();
         preamp = parent.sv_preampComboBox.getSelectedIndex();
         antenna = parent.sv_antennaComboBox.getSelectedIndex();

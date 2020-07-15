@@ -6,6 +6,7 @@
 package components;
 
 import com.cozcompany.jrx.accessibility.JRX_TX;
+import com.cozcompany.jrx.accessibility.ControlInterface;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Map;
@@ -29,7 +30,7 @@ public class RWListButton extends JButton  implements
     TreeMap<Double, Integer> useMapDouble;
     TreeMap<Integer, String> reverseUseMap;
     boolean inConstructor = true;
-    boolean commOK = false;
+    boolean commOK = true;  // @TODO Coz fix this so it really indicates comms status....
     boolean numericMode = false;
     boolean ctcss = false;
     boolean localInhibit = false;
@@ -88,8 +89,19 @@ public class RWListButton extends JButton  implements
     }   
     public void setSelectedIndex(int index) {
         selectedIndex = index;
+        String displayedValue = reverseDisplayMap.get(index);
+        setButtonText(displayedValue);
     }
-    
+    /**
+     * The RWListButton uses the disp strings in the Dialog list and formats
+     * that disp string for the button text.  It reads the suse string from the
+     * rig and writes the suse string to the rig. The values represented by "use"
+     * "suse" are 10 times the displayed float making them whole numbers.
+     * All of the maps are vs a common index.
+     * @param disp a string like "107.2"
+     * @param use   a double like 1072.000
+     * @param suse a string like "1072.0"
+     */
     public void addListItem(String disp, double use, String suse) {
         int index = getItemCount();
         useMapDouble.put(use, index);
@@ -104,9 +116,9 @@ public class RWListButton extends JButton  implements
      * @todo allow width of formatted string to be set by var.
      * @param str 
      */
-    public void setButtonText(String prefix, String value) {
+    public void setButtonText(String value) {
         String str = prefix + " " + value;
-        String formattedText = String.format("%-25s", str);
+        String formattedText = String.format("%-23S ...", str);
         setText(formattedText);
         getAccessibleContext().setAccessibleDescription(str+" selected");
     }
@@ -231,7 +243,7 @@ public class RWListButton extends JButton  implements
     }
 
     private void action(ActionEvent evt) {
-        writeValue(false);
+        writeValue(true);
     }
 
     @Override
@@ -272,7 +284,7 @@ public class RWListButton extends JButton  implements
                 {
                     if (numSelection != oldNumSelection) {
                         if (ctcss) {
-                            com = String.format("\\set_ctcss_sql %.0f", 
+                            com = String.format("\\set_ctcss_tone %.0f", 
                                     numSelection);
                         } else {
                             com = String.format("%s %s %.2f", 
@@ -291,7 +303,7 @@ public class RWListButton extends JButton  implements
         if (token != null && isEnabled() && commOK) {
             String com;
             if (ctcss) {
-                com = "\\get_ctcss_sql";
+                com = "\\get_ctcss_tone";
             } else {
                 com = String.format("%s %s", prefix.toLowerCase(), token);
             }
@@ -359,13 +371,18 @@ public class RWListButton extends JButton  implements
         } 
         localInhibit = false;
     }
-
+    /**
+     * Set the selected item based on the given display string while the localInhibit
+     * is enabled.
+     * @param s the display string.
+     */
     protected void inhibitSetItem(String s) {
         try {
             localInhibit = true;
-            setSelectedIndex(useMap.get(s));
+            setSelectedIndex(displayMap.get(s));
+        } catch (Exception e) {           
+        } finally {
             localInhibit = false;
-        } catch (Exception e) {
         }
     }
     

@@ -930,7 +930,7 @@
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" attributes="0">
                                       <EmptySpace max="32767" attributes="0"/>
-                                      <Component id="sv_ctcssCheckBox" min="-2" max="-2" attributes="0"/>
+                                      <Component id="sv_ctcssSquelchCheckBox" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
@@ -949,7 +949,7 @@
                               <Group type="103" groupAlignment="1" attributes="0">
                                   <Component id="sv_rfGainSlider" linkSize="31" min="-2" max="-2" attributes="0"/>
                                   <Component id="rfGainLabel" min="-2" pref="40" max="-2" attributes="0"/>
-                                  <Component id="sv_ctcssCheckBox" min="-2" pref="38" max="-2" attributes="0"/>
+                                  <Component id="sv_ctcssSquelchCheckBox" min="-2" pref="38" max="-2" attributes="0"/>
                                   <Component id="sv_modesComboBox" min="-2" pref="37" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
@@ -1052,11 +1052,14 @@
                         <Property name="text" type="java.lang.String" value="AGC"/>
                       </Properties>
                     </Component>
-                    <Component class="javax.swing.JCheckBox" name="sv_ctcssCheckBox">
+                    <Component class="javax.swing.JCheckBox" name="sv_ctcssSquelchCheckBox">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="TSQL ON"/>
                         <Property name="toolTipText" type="java.lang.String" value="Tone squelch control"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="sv_ctcssSquelchCheckBoxActionPerformed"/>
+                      </Events>
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new RWCheckBox(this,&quot;U&quot;,&quot;TSQL&quot;);"/>
                         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>

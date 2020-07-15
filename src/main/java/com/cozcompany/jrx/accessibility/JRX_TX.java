@@ -601,7 +601,8 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 sv_agcComboBox,
                 sv_preampComboBox,
                 sv_ctcssListButton,
-                sv_ctcssCheckBox,
+                sv_txCtcssCheckBox,
+                sv_ctcssSquelchCheckBox,
                 sv_blankerCheckBox,
                 sv_apfCheckBox,
                 sv_anfCheckBox,
@@ -910,7 +911,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
         ((RWComboBox) sv_attenuatorComboBox).setGenericComboBoxScale("Att", "(?ism).*^Attenuator:\\s*(.*?)\\s*$.*", true, true);
         ((RWComboBox) sv_filtersComboBox).setGenericComboBoxScale("", "", true, true);
         ((RWComboBox) sv_modesComboBox).setGenericComboBoxScale("Mode", "(?ism).*^Mode list:\\s*(.*?)\\s*$.*", false, false);
-        //((RWListButton) sv_ctcssListButton).setGenericScale("CTCSS", "(?ism).*^CTCSS:\\s*(.*?)\\s*$.*", false, true);  //not needed for new class
         inhibit = false;
     }
     /**
@@ -1600,7 +1600,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         squelchLabel = new javax.swing.JLabel();
         sv_agcComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,"L","AGC");
         agcLabel = new javax.swing.JLabel();
-        sv_ctcssCheckBox = new RWCheckBox(this,"U","TSQL");
+        sv_ctcssSquelchCheckBox = new RWCheckBox(this,"U","TSQL");
         sv_modesComboBox = new com.cozcompany.jrx.accessibility.ModesComboBox(this);
         sv_volumeSlider = new com.cozcompany.jrx.accessibility.AfGainSlider(this);
         afGainLabel = new javax.swing.JLabel();
@@ -2075,8 +2075,13 @@ final public class JRX_TX extends javax.swing.JFrame implements
         agcLabel.setLabelFor(sv_agcComboBox);
         agcLabel.setText("AGC");
 
-        sv_ctcssCheckBox.setText("TSQL ON");
-        sv_ctcssCheckBox.setToolTipText("Tone squelch control");
+        sv_ctcssSquelchCheckBox.setText("TSQL ON");
+        sv_ctcssSquelchCheckBox.setToolTipText("Tone squelch control");
+        sv_ctcssSquelchCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sv_ctcssSquelchCheckBoxActionPerformed(evt);
+            }
+        });
 
         sv_modesComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "LSB", "Item 2", "Item 3", "Item 4" }));
         sv_modesComboBox.setToolTipText("Operating modes (❃)");
@@ -2110,7 +2115,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 .addGroup(recieverGroupBoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(recieverGroupBoxLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(sv_ctcssCheckBox)
+                        .addComponent(sv_ctcssSquelchCheckBox)
                         .addContainerGap())
                     .addGroup(recieverGroupBoxLayout.createSequentialGroup()
                         .addGap(18, 18, 18)
@@ -2129,7 +2134,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 .addGroup(recieverGroupBoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(sv_rfGainSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(rfGainLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(sv_ctcssCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(sv_ctcssSquelchCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(sv_modesComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(recieverGroupBoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -3023,6 +3028,10 @@ final public class JRX_TX extends javax.swing.JFrame implements
         overallTabbedPane.getAccessibleContext().setAccessibleName(title);
     }//GEN-LAST:event_overallTabbedPaneStateChanged
 
+    private void sv_ctcssSquelchCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sv_ctcssSquelchCheckBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_sv_ctcssSquelchCheckBoxActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -3144,8 +3153,8 @@ final public class JRX_TX extends javax.swing.JFrame implements
     protected javax.swing.JCheckBox sv_blankerCheckBox;
     protected javax.swing.JCheckBox sv_compressionCheckBox;
     protected javax.swing.JSlider sv_compressionSlider;
-    protected javax.swing.JCheckBox sv_ctcssCheckBox;
     protected javax.swing.JButton sv_ctcssListButton;
+    protected javax.swing.JCheckBox sv_ctcssSquelchCheckBox;
     protected javax.swing.JCheckBox sv_dspCheckBox;
     protected javax.swing.JComboBox sv_dspComboBox;
     protected javax.swing.JComboBox<String> sv_dwellTimeComboBox;

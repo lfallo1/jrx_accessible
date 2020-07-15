@@ -39,6 +39,6 @@ public class PickAction extends AbstractAction {
         //System.out.println("Action for PickAction command: "+ command);
         String selection = dialog.showDialog();
         //System.out.println("New selection is "+selection);
-        //listButton.setButtonText(prefix, selection);
+        //listButton.setButtonText(selection);
     }
 }

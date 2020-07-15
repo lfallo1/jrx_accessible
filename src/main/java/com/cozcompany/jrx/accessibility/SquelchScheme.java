@@ -68,8 +68,8 @@ public class SquelchScheme {
         if (appFrame.comArgs.debug >= 0) {
             appFrame.pout("DCD capable: " + appFrame.dcdCapable);
         }
-        ((RWSlider) appFrame.sv_squelchSlider).writeValue(false);
-        ((RWSlider) appFrame.sv_volumeSlider).writeValue(false);
+        ((RWSlider) appFrame.sv_squelchSlider).writeValue(true);
+        ((RWSlider) appFrame.sv_volumeSlider).writeValue(true);
         getSquelch(true);
         appFrame.scanDude.updateScanControls();
     }

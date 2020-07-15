@@ -156,7 +156,9 @@ public class ListDialog extends JDialog implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if ("Set".equals(e.getActionCommand())) {           
             value = (String)(list.getSelectedValue());
-            ((RWListButton)buttonComp).setButtonText(prefix, value);
+            ((RWListButton)buttonComp).inhibitSetItem(value);
+            ((RWListButton)buttonComp).setButtonText(value);
+            ((RWListButton)buttonComp).writeValue(true);
         }               
         setVisible(false);        
     }    

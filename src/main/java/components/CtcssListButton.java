@@ -68,10 +68,25 @@ public class CtcssListButton extends RWListButton {
         for (int index=0; index< choicesCTCSS.length; index++){
             double v = Double.valueOf(choicesCTCSS[index]);
             String ss = String.format("%.0f", v * 10);
-            super.addListItem(choicesCTCSS[index], v, ss);                   
+            super.addListItem(choicesCTCSS[index], v*10.0, ss);                   
         }
-        setButtonText(prefix, choicesCTCSS[this.selectedIndex]);
+        setButtonText(choicesCTCSS[this.selectedIndex]);
         getAccessibleContext().setAccessibleName(
                 "Open dialog to choose a CTCSS tone.");
-    }       
+    }
+        /**
+     * Given the rigcaps reply, determine if this control capability exists.
+     * @param source 
+     * @return boolean true when capability exists.
+     */
+    public boolean enableIfCapable(String source){
+        String search = "(?ism).*^Set functions:.*?\\sTONE\\s";
+        boolean hasLevelValue = false; // This control has Level Value:
+        boolean isEnabled = enableCap(source, search, hasLevelValue);
+        if (isEnabled) {
+            super.writeValue(true);
+        }
+        return isEnabled;
+    }    
+
 }
