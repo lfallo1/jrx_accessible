@@ -71,7 +71,7 @@ import vfoDisplayControl.GroupBox;
 final public class JRX_TX extends javax.swing.JFrame implements 
         ListSelectionListener, ItemListener , ActionListener {
 
-    final String appVersion = "5.0.11";
+    final String appVersion = "5.0.12";
     final String appName;
     final String programName;
     String lineSep;
@@ -564,14 +564,23 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 cont.writeValue(true);
         }
     }
-
+    /**
+     * Measure the time it takes to write the current frequency to the radio
+     * vfo.  Unfortunately, on some radios, this turns the CTCSS TONE off. So
+     * read the state of the TONE first and then set it afterwards appropriately.
+     */
     private void measureSpeed() {
         long freq = vfoState.getSelectedVfoFrequency();
+        // Read the current state of the TONE function.
+        ((RWCheckBox)sv_txCtcssCheckBox).readValue();
+        boolean wasOn = ((RWCheckBox)sv_txCtcssCheckBox).isSelected();
         long t = System.currentTimeMillis();
         oldRadioFrequency = -1;
         setRadioFrequency(freq);
         long dt = System.currentTimeMillis() - t;
-        // use a diferent strategy for slow radios
+        ((RWCheckBox)sv_txCtcssCheckBox).setSelected(wasOn);
+        ((RWCheckBox)sv_txCtcssCheckBox).writeValue(true);
+        // Use a diferent strategy for slow radios.
         slowRadio = dt > 75;
         speedIconLabel.setText("");
         speedIconLabel.setIcon(slowRadio ? redLed : greenLed);
