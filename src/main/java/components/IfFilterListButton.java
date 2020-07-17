@@ -162,7 +162,6 @@ public class IfFilterListButton extends RWListButton {
         localInhibit = true;
         {
             strSelection = readValueStr();  // gets the selected mode plus the bandwidth.
-            System.out.println("IfFilter strSelection = "+ strSelection);
             String[] fields = strSelection.split("\\s+");
             // The first field is the mode.  The second field is the bandWidth
             if (fields[1] != null) {

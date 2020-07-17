@@ -31,7 +31,7 @@ public class ModesListButton extends RWListButton {
         parent = aParent;
     }
     /**
-     * Must create components that use this pointer after the CTOR is complete.
+     * Must create components that use "this" pointer after the CTOR is complete.
      */
     public void initialize() {
         dialog = new ListDialog(

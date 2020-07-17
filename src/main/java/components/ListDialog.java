@@ -131,7 +131,6 @@ public class ListDialog extends JDialog implements ActionListener {
         });
 
         pack();
-        setLocationRelativeTo(buttonComp);        
     }
     
     public void setNewData(String[] newData) {
@@ -145,6 +144,9 @@ public class ListDialog extends JDialog implements ActionListener {
      * Show the dialog and return selection.
      */
     public String showDialog() {
+        int index = ((RWListButton)buttonComp).getSelectedIndex();
+        list.setSelectedIndex(index);
+        setLocationRelativeTo(buttonComp);        
         setVisible(true);
         return value;
     }
@@ -154,6 +156,8 @@ public class ListDialog extends JDialog implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if ("Set".equals(e.getActionCommand())) {           
             value = (String)(list.getSelectedValue());
+            int index = list.getSelectedIndex();
+            ((RWListButton)buttonComp).setSelectedIndex(index);           
             ((RWListButton)buttonComp).inhibitSetItem(value);
             ((RWListButton)buttonComp).setButtonText(value);
             ((RWListButton)buttonComp).writeValue(true);

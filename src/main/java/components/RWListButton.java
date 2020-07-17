@@ -195,7 +195,7 @@ public class RWListButton extends JButton  implements
                         n += 1;
                     }
                     for (String ss : array) {
-                        is = String.format(tag + " %s", ss);
+                        is = String.format(tag + " %s", ss);  //@TODO Coz remove tag.
                         if (numeric) {
                             if (ss.matches(".*?[0-9.+-]+.*")) {
                                 ss = ss.replaceFirst(".*?([0-9.+-]+).*","$1");
@@ -364,7 +364,7 @@ public class RWListButton extends JButton  implements
                     }
                 }
                 //parent.pout("read converted value: 
-                    //" + sn + ", index " + getSelectedIndex());
+                //" + sn + ", index " + getSelectedIndex());
 
             } catch (Exception e) {
                 e.printStackTrace(System.out);
@@ -390,11 +390,8 @@ public class RWListButton extends JButton  implements
         int index = 0;
         try {
             localInhibit = true;
-            System.out.println("inhibitSetItem s= "+ s);
-            System.out.println("useMap :"+ useMap);
             //String search = ".*"
             index = useMap.get(s);
-            System.out.println("useMap.get() returns index:" + index);
             setSelectedIndex(index);
         } catch (Exception e) {
             System.out.println("inhibitSetItem had exception : " + e + " and index = "  + index);
@@ -428,7 +425,6 @@ public class RWListButton extends JButton  implements
         return v;
     }
 
-
     @Override
     public void setXLow(double x) {
         xValueLow = x;
@@ -459,15 +455,4 @@ public class RWListButton extends JButton  implements
             setSelectedIndex(index);
         }
     }
-
-//    @Override
-//    public void mouseWheelMoved(MouseWheelEvent e) {
-//        int v = e.getWheelRotation();
-//        int iv = (v < 0) ? -1 : 1;
-//        changeIndex(iv);
-//    }
-
-    
-
-
 }
