@@ -2356,6 +2356,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         jLabel5.setText("Dwell Time");
 
         scanIconLabel.setText("x");
+        scanIconLabel.setToolTipText("Scan Led turns green when scanning.");
 
         scanDownButton.setText("Start Scan Down");
         scanDownButton.setToolTipText("Scan down");

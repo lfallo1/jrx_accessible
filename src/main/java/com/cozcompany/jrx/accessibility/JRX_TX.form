@@ -1468,6 +1468,7 @@
                     <Component class="javax.swing.JLabel" name="scanIconLabel">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="x"/>
+                        <Property name="toolTipText" type="java.lang.String" value="Scan Led turns green when scanning."/>
                       </Properties>
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>

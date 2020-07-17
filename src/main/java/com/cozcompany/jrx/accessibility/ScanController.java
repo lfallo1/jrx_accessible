@@ -28,13 +28,14 @@ public class ScanController {
         appFrame.sv_scanStepComboBox.setEnabled(appFrame.scanStateMachine.scanTimer == null);
         appFrame.sv_scanSpeedComboBox.setEnabled(appFrame.scanStateMachine.scanTimer == null);
         String label = "Scan"; 
-        String toolTip = "No active scan"; //@TODO COZ variable not used
+        String toolTip = "No active scan"; 
         if (appFrame.scanStateMachine.scanTimer != null) {
             label = (appFrame.scanStateMachine.programScan) ? " Channel list scan " : " Memory button scan ";
             toolTip = (appFrame.scanStateMachine.programScan) ? "Program scan: scans memory locations" : "Memory scan: scans between two defined frequencies";
         } else {
             appFrame.memoryCollection.resetButtonColors();
         }
+        appFrame.scanIconLabel.setToolTipText(toolTip);
         //appFrame.scanIconLabel.setIcon((appFrame.scanStateMachine.validState()) ? appFrame.greenLed : appFrame.redLed);
         AccessibleContext context = appFrame.scanIconLabel.getAccessibleContext();
         if (appFrame.scanStateMachine.scanTimer == null) {
