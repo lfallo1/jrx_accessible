@@ -24,7 +24,8 @@ public class RWListButton extends JButton  implements
     PickAction action;
     String prefix;
     String token;
-    TreeMap<String, Integer> displayMap;
+    String name;
+    public TreeMap<String, Integer> displayMap;
     TreeMap<Integer, String> reverseDisplayMap;
     TreeMap<String, Integer> useMap;
     TreeMap<Double, Integer> useMapDouble;
@@ -49,17 +50,18 @@ public class RWListButton extends JButton  implements
 
     
 
-    public RWListButton(JRX_TX aParent, String pre, String aToken) {
+    public RWListButton(JRX_TX aParent, String pre, String aToken, String aName) {
         super();
         parent = aParent;
         prefix = pre;
         token = aToken;
         if (prefix != null) {
             ctcss = (prefix.equals("ctcss"));
-        }       
+        }
+        name = aName;
         setup();       
     }
-    final protected void setup() {
+    protected void setup() {
         if (inConstructor) {
             addActionListener(this);
             inConstructor = false;
@@ -86,18 +88,27 @@ public class RWListButton extends JButton  implements
     }
     public int getSelectedIndex() {
         return selectedIndex;
-    }   
+    } 
+    public String getSelectedItem() {
+        return reverseDisplayMap.get(selectedIndex);
+    }
     public void setSelectedIndex(int index) {
         selectedIndex = index;
         String displayedValue = reverseDisplayMap.get(index);
         setButtonText(displayedValue);
     }
     /**
-     * The RWListButton uses the disp strings in the Dialog list and formats
-     * that disp string for the button text.  It reads the suse string from the
-     * rig and writes the suse string to the rig. The values represented by "use"
-     * "suse" are 10 times the displayed float making them whole numbers.
-     * All of the maps are vs a common index.
+     * The RWListButton uses the disp strings in the Dialog list, 
+     * the suse strings are read from the rig and written to the rig as command
+     * arguments, the "use" values are the actual double representations of the
+     * suse strings, and the strings "suse" are representations of whole numbers.
+     * All of the maps are versus a common index.
+     * 
+     * The reason that the disp strings no longer contain the list name is that
+     * voiceOver would read that list name over and over as you scroll through the 
+     * list which wastes moocho time and is very irritating.  The Dialog title
+     * indicates what the list values mean.
+     * 
      * @param disp a string like "107.2"
      * @param use   a double like 1072.000
      * @param suse a string like "1072.0"
@@ -117,7 +128,7 @@ public class RWListButton extends JButton  implements
      * @param str 
      */
     public void setButtonText(String value) {
-        String str = prefix + " " + value;
+        String str = name+" "+value;
         String formattedText = String.format("%-23S ...", str);
         setText(formattedText);
         getAccessibleContext().setAccessibleDescription(str+" selected");
@@ -206,7 +217,7 @@ public class RWListButton extends JButton  implements
                         n += 1;
                     }
                 } else {
-                    listButtonPlaceholderData(valueLabel);
+                    placeholderData(valueLabel);
                 }
             } catch (Exception e) {
                 e.printStackTrace(System.out);
@@ -222,14 +233,13 @@ public class RWListButton extends JButton  implements
         setSelectedIndex(index);
     }
 
-    protected void listButtonPlaceholderData(String label) {
+    public void placeholderData(String label) {
         boolean old_inhibit = parent.inhibit;
         parent.inhibit = true;
         int index = getSelectedIndex();
         index = Math.max(0, index);
         removeAllItems();
-        for (int i = 1; i < 64; i++) {
-            
+        for (int i = 1; i < 64; i++) {           
             addListItem(String.format("%s -- n/a %d --", label, i),  i, "" + i);
         }
         setListButtonIndex(index);
@@ -258,7 +268,7 @@ public class RWListButton extends JButton  implements
     }
     
     
-    protected void writeValueStr() {
+    public void writeValueStr() {
         if (commOK && !parent.inhibit) {
             int index = getSelectedIndex();
             strSelection = reverseUseMap.get(index);
@@ -319,7 +329,7 @@ public class RWListButton extends JButton  implements
         return numSelection;
     }
 
-    protected String readValueStr() {
+    public String readValueStr() {
         String s = "";
         if (token != null && isEnabled() && commOK) {
             String com = String.format("%s %s", prefix.toLowerCase(), token);
@@ -376,11 +386,18 @@ public class RWListButton extends JButton  implements
      * is enabled.
      * @param s the display string.
      */
-    protected void inhibitSetItem(String s) {
+    public void inhibitSetItem(String s) {
+        int index = 0;
         try {
             localInhibit = true;
-            setSelectedIndex(displayMap.get(s));
-        } catch (Exception e) {           
+            System.out.println("inhibitSetItem s= "+ s);
+            System.out.println("useMap :"+ useMap);
+            //String search = ".*"
+            index = useMap.get(s);
+            System.out.println("useMap.get() returns index:" + index);
+            setSelectedIndex(index);
+        } catch (Exception e) {
+            System.out.println("inhibitSetItem had exception : " + e + " and index = "  + index);
         } finally {
             localInhibit = false;
         }

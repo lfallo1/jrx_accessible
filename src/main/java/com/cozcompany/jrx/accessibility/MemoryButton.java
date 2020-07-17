@@ -20,6 +20,7 @@
 package com.cozcompany.jrx.accessibility;
 
 import components.CtcssListButton;
+import components.RWListButton;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -235,7 +236,20 @@ final public class MemoryButton extends JButton implements MouseListener {
         }
 
     }
+    private void updateIfNeeded(RWListButton cc, int v) {
+        int ov = cc.getSelectedIndex();
+        if (ov != v) {
+            try {
+                cc.setSelectedIndex(v);
+            }
+            catch (Exception ex) {
+                p("MemoryButton:updateIfNeeded() exception :"+ ex);
+            }
+        }
 
+    }
+
+    
     private void updateIfNeeded(JSlider sc, int v) {
         int ov = sc.getValue();
         if (ov != v) {
@@ -255,9 +269,9 @@ final public class MemoryButton extends JButton implements MouseListener {
             parent.scanStateMachine.stopScan(false);
             parent.memoryCollection.sv_mostRecentButton = label;
             // always set bandwidth before mode
-            updateIfNeeded((JComboBox)(parent.sv_filtersComboBox), filter);
+            updateIfNeeded((RWListButton)(parent.sv_ifFilterListButton), filter);
             // always set mode before frequency
-            updateIfNeeded((JComboBox)(parent.sv_modesComboBox), mode);
+            updateIfNeeded((RWListButton)(parent.sv_modesListButton), mode);
             parent.vfoState.writeFrequencyToRadioSelectedVfo(frequency);
             parent.vfoDisplay.frequencyToDigits(frequency);
             updateIfNeeded((CtcssListButton)parent.sv_ctcssListButton, ctcss);
@@ -281,8 +295,8 @@ final public class MemoryButton extends JButton implements MouseListener {
 
     private void writeButton() {
         parent.memoryCollection.sv_mostRecentButton = label;
-        filter = ((JComboBox)parent.sv_filtersComboBox).getSelectedIndex();
-        mode = ((JComboBox)parent.sv_modesComboBox).getSelectedIndex();
+        filter = ((RWListButton)parent.sv_ifFilterListButton).getSelectedIndex();
+        mode = ((RWListButton)parent.sv_modesListButton).getSelectedIndex();
         frequency = parent.vfoState.getRxFrequency();
         ctcss = ((CtcssListButton)parent.sv_ctcssListButton).getSelectedIndex();
         agc = parent.sv_agcComboBox.getSelectedIndex();

@@ -21,13 +21,11 @@ import javax.swing.JFrame;
 public class PickAction extends AbstractAction {
     RWListButton listButton = null;
     ListDialog dialog = null;
-    String prefix;
     
     public PickAction(String textPrefix, ImageIcon icon,
                       String desc, Integer mnemonic,
                       RWListButton aButton, ListDialog aDialog) {
         super(textPrefix, icon);
-        prefix = textPrefix;
         putValue(SHORT_DESCRIPTION, desc);
         putValue(MNEMONIC_KEY, mnemonic);
         listButton = aButton;
@@ -36,9 +34,6 @@ public class PickAction extends AbstractAction {
         
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
-        //System.out.println("Action for PickAction command: "+ command);
         String selection = dialog.showDialog();
-        //System.out.println("New selection is "+selection);
-        //listButton.setButtonText(selection);
     }
 }

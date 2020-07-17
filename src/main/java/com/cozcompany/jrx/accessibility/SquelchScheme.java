@@ -118,7 +118,7 @@ public class SquelchScheme {
             sv = appFrame.ntrp(0, 1, appFrame.squelchLow, appFrame.squelchHigh, sv);
             sqOpen = (appFrame.signalStrength > sv) ? 1 : 0;
         }
-        appFrame.pout("sqOpen: " + sqOpen + ", squelchOpen: " + squelchOpen.ordinal());
+        //appFrame.pout("sqOpen: " + sqOpen + ", squelchOpen: " + squelchOpen.ordinal());
         if ((sqOpen != appFrame.iErrorValue && sqOpen != squelchOpen.ordinal()) || force) {
             appFrame.pout("JRX wants to put audio gain full scale.  WHY?  sqOpen2: " + sqOpen);
             squelchOpen = SquelchOpen.values()[sqOpen];

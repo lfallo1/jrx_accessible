@@ -37,7 +37,7 @@ public class ListDialog extends JDialog implements ActionListener {
     private Component buttonComp;
     private String title;
     private Integer initialIndex;
-    private String prefix;
+    private String name;
     private String labelTxt;
     private JScrollPane listScroller;
     
@@ -56,15 +56,13 @@ public class ListDialog extends JDialog implements ActionListener {
                        String labelText,
                        String aTitle,
                        Integer initIndex,
-                       String[] listData,
-                       String prefixStr) {
+                       String[] listData) {
         
         super((JFrame)frame, aTitle, true);
         
         buttonComp = locationComp;
         title = aTitle;
         initialIndex = initIndex;
-        prefix = prefixStr;
         labelTxt = labelText;
         //Create and initialize the buttons.
         JButton cancelButton = new JButton("Cancel");
