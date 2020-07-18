@@ -19,7 +19,7 @@ import javax.swing.event.ListSelectionListener;
  
 /**
  * Modal dialog for selection of one string from a long list.  
- * @See ListDialogRunner.java for an example of using ListDialog.
+ * See ListDialogRunner.java for an example of using ListDialog.
  * The basics:
  * <pre>
     String[] choices = {"A", "long", "array", "of", "strings"};

@@ -124,8 +124,8 @@ public class RWListButton extends JButton  implements
     /**
      * Dynamically change button text to match selected list item.
      * 
-     * @todo allow width of formatted string to be set by var.
-     * @param str 
+     * @TODO allow width of formatted string to be set by var.
+     * @param expecting a String with a Name/Label and a selectedValue. 
      */
     public void setButtonText(String value) {
         String str = name+" "+value;

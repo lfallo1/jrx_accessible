@@ -81,14 +81,12 @@
                               <Component id="overallTabbedPane" min="-2" pref="708" max="-2" attributes="0"/>
                               <Group type="102" attributes="0">
                                   <Component id="ledPanel" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                  <Component id="sv_radioNamesComboBox" min="-2" pref="243" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="sv_radioNamesComboBox" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="radioNamesLabel" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="sv_interfacesComboBox" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="muteCheckBox" min="-2" max="-2" attributes="0"/>
+                                  <Component id="sv_interfacesComboBox" min="-2" pref="228" max="-2" attributes="0"/>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                  <Component id="muteCheckBox" min="-2" pref="91" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
@@ -105,15 +103,14 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="ledPanel" linkSize="1" max="32767" attributes="0"/>
+                          <Component id="ledPanel" max="32767" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="sv_radioNamesComboBox" alignment="3" min="-2" pref="45" max="-2" attributes="0"/>
-                              <Component id="radioNamesLabel" linkSize="1" alignment="3" min="-2" pref="18" max="-2" attributes="0"/>
                               <Component id="sv_interfacesComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="muteCheckBox" alignment="3" min="-2" pref="38" max="-2" attributes="0"/>
+                              <Component id="sv_radioNamesComboBox" alignment="3" min="-2" pref="38" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -209,30 +206,32 @@
                       <Layout>
                         <DimensionLayout dim="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Group type="102" attributes="0">
-                                          <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
-                                          <Component id="sv_rfPowerSlider" min="-2" pref="274" max="-2" attributes="0"/>
-                                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                          <Component id="jLabel8" min="-2" pref="133" max="-2" attributes="0"/>
+                                          <Component id="sv_antennaComboBox" pref="160" max="32767" attributes="0"/>
+                                          <EmptySpace min="-2" pref="64" max="-2" attributes="0"/>
                                       </Group>
-                                      <Group type="102" alignment="0" attributes="0">
-                                          <EmptySpace max="-2" attributes="0"/>
-                                          <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                                      <Group type="102" attributes="0">
                                           <Group type="103" groupAlignment="0" attributes="0">
-                                              <Group type="102" attributes="0">
-                                                  <Component id="sv_antennaComboBox" min="-2" max="-2" attributes="0"/>
-                                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                                  <Component id="jLabel18" min="-2" pref="92" max="-2" attributes="0"/>
-                                              </Group>
                                               <Component id="sv_txCtcssCheckBox" min="-2" max="-2" attributes="0"/>
                                               <Component id="sv_ctcssListButton" alignment="0" min="-2" pref="172" max="-2" attributes="0"/>
                                           </Group>
+                                          <EmptySpace max="32767" attributes="0"/>
                                       </Group>
                                   </Group>
-                                  <EmptySpace pref="24" max="32767" attributes="0"/>
+                              </Group>
+                              <Group type="102" attributes="0">
+                                  <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
+                                  <Component id="sv_rfPowerSlider" min="-2" pref="274" max="-2" attributes="0"/>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                  <Component id="jLabel8" min="-2" pref="133" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="jCheckBox1" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -241,16 +240,16 @@
                               <Group type="102" attributes="0">
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="jLabel8" min="-2" pref="32" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="3" attributes="0">
+                                          <Component id="jLabel8" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
+                                          <Component id="jCheckBox1" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      </Group>
                                       <Component id="sv_rfPowerSlider" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Group type="102" alignment="0" attributes="0">
-                                          <Group type="103" groupAlignment="3" attributes="0">
-                                              <Component id="sv_antennaComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              <Component id="jLabel18" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
-                                          </Group>
+                                          <Component id="sv_antennaComboBox" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace max="-2" attributes="0"/>
                                           <Component id="sv_txCtcssCheckBox" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
@@ -291,7 +290,7 @@
                           <Properties>
                             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                               <StringArray count="4">
-                                <StringItem index="0" value="Item 1"/>
+                                <StringItem index="0" value="ANTENNA 1"/>
                                 <StringItem index="1" value="Item 2"/>
                                 <StringItem index="2" value="Item 3"/>
                                 <StringItem index="3" value="Item 4"/>
@@ -303,11 +302,6 @@
                             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new com.cozcompany.jrx.accessibility.RWComboBox(this,&quot;Y&quot;,&quot;&quot;);"/>
                             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
                           </AuxValues>
-                        </Component>
-                        <Component class="javax.swing.JLabel" name="jLabel18">
-                          <Properties>
-                            <Property name="text" type="java.lang.String" value="Antenna"/>
-                          </Properties>
                         </Component>
                         <Container class="javax.swing.JPanel" name="jPanel1">
                           <Properties>
@@ -480,6 +474,11 @@
                             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new components.CtcssListButton(this);"/>
                             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
                           </AuxValues>
+                        </Component>
+                        <Component class="javax.swing.JCheckBox" name="jCheckBox1">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="TUNER"/>
+                          </Properties>
                         </Component>
                       </SubComponents>
                     </Container>
@@ -855,6 +854,40 @@
                             <Property name="value" type="int" value="15"/>
                           </Properties>
                         </Component>
+                        <Component class="javax.swing.JSlider" name="jSlider2">
+                          <Properties>
+                            <Property name="majorTickSpacing" type="int" value="300"/>
+                            <Property name="maximum" type="int" value="900"/>
+                            <Property name="minimum" type="int" value="300"/>
+                            <Property name="minorTickSpacing" type="int" value="300"/>
+                            <Property name="orientation" type="int" value="1"/>
+                            <Property name="paintLabels" type="boolean" value="true"/>
+                            <Property name="paintTicks" type="boolean" value="true"/>
+                          </Properties>
+                        </Component>
+                        <Component class="javax.swing.JLabel" name="jLabel7">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="&lt;html&gt;CW&lt;br&gt;Side&lt;br&gt;Tone&lt;br&gt;Frequency "/>
+                          </Properties>
+                        </Component>
+                        <Component class="javax.swing.JSlider" name="jSlider3">
+                          <Properties>
+                            <Property name="majorTickSpacing" type="int" value="10"/>
+                            <Property name="minorTickSpacing" type="int" value="5"/>
+                            <Property name="orientation" type="int" value="1"/>
+                            <Property name="paintTicks" type="boolean" value="true"/>
+                            <Property name="enabled" type="boolean" value="false"/>
+                          </Properties>
+                        </Component>
+                        <Component class="javax.swing.JLabel" name="jLabel9">
+                          <Properties>
+                            <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+                              <ComponentRef name="jSlider3"/>
+                            </Property>
+                            <Property name="text" type="java.lang.String" value="Level"/>
+                            <Property name="enabled" type="boolean" value="false"/>
+                          </Properties>
+                        </Component>
                       </SubComponents>
                     </Container>
                     <Container class="javax.swing.JPanel" name="rttyPanel">
@@ -912,27 +945,18 @@
                                       <Component id="sv_rfGainSlider" linkSize="26" min="-2" pref="207" max="-2" attributes="0"/>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
                                       <Component id="sv_modesListButton" min="-2" pref="215" max="-2" attributes="0"/>
+                                      <EmptySpace pref="37" max="32767" attributes="0"/>
+                                      <Component id="sv_ctcssSquelchCheckBox" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" attributes="0">
                                       <Component id="sv_squelchSlider" linkSize="26" min="-2" pref="169" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="sv_synthSquelchCheckBox" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
-                                      <Component id="sv_agcComboBox" min="-2" max="-2" attributes="0"/>
+                                      <Component id="sv_agcComboBox" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" attributes="0">
-                                      <EmptySpace max="32767" attributes="0"/>
-                                      <Component id="sv_ctcssSquelchCheckBox" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="agcLabel" min="-2" pref="44" max="-2" attributes="0"/>
-                                      <EmptySpace max="32767" attributes="0"/>
-                                  </Group>
-                              </Group>
+                              <EmptySpace max="-2" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -953,8 +977,7 @@
                                   <Component id="squelchLabel" min="-2" pref="41" max="-2" attributes="0"/>
                                   <Component id="sv_squelchSlider" linkSize="31" min="-2" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="sv_agcComboBox" linkSize="7" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
-                                      <Component id="agcLabel" linkSize="7" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="sv_agcComboBox" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
                                       <Component id="sv_synthSquelchCheckBox" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
@@ -1024,7 +1047,7 @@
                       <Properties>
                         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                           <StringArray count="4">
-                            <StringItem index="0" value="AGC"/>
+                            <StringItem index="0" value="AGC FAST"/>
                             <StringItem index="1" value="Item 2"/>
                             <StringItem index="2" value="Item 3"/>
                             <StringItem index="3" value="Item 4"/>
@@ -1039,14 +1062,6 @@
                         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new com.cozcompany.jrx.accessibility.RWComboBox(this,&quot;L&quot;,&quot;AGC&quot;);"/>
                         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
                       </AuxValues>
-                    </Component>
-                    <Component class="javax.swing.JLabel" name="agcLabel">
-                      <Properties>
-                        <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
-                          <ComponentRef name="sv_agcComboBox"/>
-                        </Property>
-                        <Property name="text" type="java.lang.String" value="AGC"/>
-                      </Properties>
                     </Component>
                     <Component class="javax.swing.JCheckBox" name="sv_ctcssSquelchCheckBox">
                       <Properties>
@@ -1947,30 +1962,10 @@
             </Container>
           </SubComponents>
         </Container>
-        <Component class="javax.swing.JComboBox" name="sv_radioNamesComboBox">
-          <Properties>
-            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Lucida Grande" size="14" style="0"/>
-            </Property>
-            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="4">
-                <StringItem index="0" value="IC-7100"/>
-                <StringItem index="1" value="Item 2"/>
-                <StringItem index="2" value="Item 3"/>
-                <StringItem index="3" value="Item 4"/>
-              </StringArray>
-            </Property>
-            <Property name="toolTipText" type="java.lang.String" value="Available radio manufacturers and models"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="sv_radioNamesComboBoxActionPerformed"/>
-          </Events>
-          <AuxValues>
-            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
-            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
-          </AuxValues>
-        </Component>
         <Component class="javax.swing.JCheckBox" name="muteCheckBox">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="MUTE"/>
+          </Properties>
           <AccessibilityProperties>
             <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="Mute audio"/>
             <Property name="AccessibleContext.accessibleDescription" type="java.lang.String" value="mute audio"/>
@@ -1988,7 +1983,7 @@
           <SubComponents>
             <Component class="javax.swing.JLabel" name="speedIconLabel">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Speed Icon"/>
+                <Property name="text" type="java.lang.String" value="&lt;html&gt;Speed&lt;br&gt;Icon"/>
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -1998,7 +1993,7 @@
             </Component>
             <Component class="javax.swing.JLabel" name="comErrorIconLabel">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Error Icon"/>
+                <Property name="text" type="java.lang.String" value="&lt;html&gt;Error&lt;br&gt;Icon"/>
                 <Property name="toolTipText" type="java.lang.String" value="Red indicates communications error"/>
               </Properties>
               <AuxValues>
@@ -2012,7 +2007,7 @@
             </Component>
             <Component class="javax.swing.JLabel" name="dcdIconLabel">
               <Properties>
-                <Property name="text" type="java.lang.String" value="DCD Icon"/>
+                <Property name="text" type="java.lang.String" value="&lt;html&gt;DCD&lt;br&gt;Icon"/>
               </Properties>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
@@ -2025,18 +2020,11 @@
             </Component>
           </SubComponents>
         </Container>
-        <Component class="javax.swing.JLabel" name="radioNamesLabel">
-          <Properties>
-            <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
-              <ComponentRef name="sv_radioNamesComboBox"/>
-            </Property>
-            <Property name="text" type="java.lang.String" value="Radio Name"/>
-          </Properties>
-        </Component>
         <Component class="javax.swing.JProgressBar" name="signalProgressBar">
           <Properties>
             <Property name="maximum" type="int" value="20"/>
             <Property name="minimum" type="int" value="-50"/>
+            <Property name="toolTipText" type="java.lang.String" value="Software S-Meter"/>
             <Property name="value" type="int" value="-50"/>
             <Property name="stringPainted" type="boolean" value="true"/>
           </Properties>
@@ -2168,6 +2156,22 @@
             </Container>
           </SubComponents>
         </Container>
+        <Component class="javax.swing.JButton" name="sv_radioNamesComboBox">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Lucida Grande" size="14" style="0"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="RADIO ICOM IC-7100 ..."/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="sv_radioNamesActionPerformed"/>
+          </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new RadioNamesListButton(this);"/>
+            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value=""/>
+            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+          </AuxValues>
+        </Component>
       </SubComponents>
     </Container>
   </SubComponents>

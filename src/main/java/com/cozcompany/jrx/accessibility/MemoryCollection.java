@@ -118,7 +118,7 @@ final public class MemoryCollection {
     protected void stringToButtons(String data, TreeMap<String, MemoryButton> buttonMap, String tag) {
         try {
             boolean first = true;
-            for (String s : data.split(parent.lineSep)) {
+            for (String s : data.split(parent.LINE_SEP)) {
                 if (first) {
                     if (!s.equals(header)) {
                         throw new Exception(String.format("%s contents not a button table for this JRX version.", tag));
@@ -138,10 +138,10 @@ final public class MemoryCollection {
 
     protected String buttonsToString(TreeMap<String, MemoryButton> buttonMap) {
         StringBuilder sb = new StringBuilder();
-        sb.append(header).append(parent.lineSep);
+        sb.append(header).append(parent.LINE_SEP);
         for (MemoryButton mb : buttonMap.values()) {
             if (mb.frequency >= 0) {
-                String rec = String.format("%s = %s" + parent.lineSep, mb.label, mb.toString());
+                String rec = String.format("%s = %s" + parent.LINE_SEP, mb.label, mb.toString());
                 sb.append(rec);
             }
         }
@@ -151,7 +151,7 @@ final public class MemoryCollection {
     protected void readButtonsFromFile(String filePath, TreeMap<String, MemoryButton> buttonMap) {
         File f = new File(filePath);
         if (f.exists()) {
-            String data = parent.readTextFile(filePath, parent.lineSep);
+            String data = parent.readTextFile(filePath, parent.LINE_SEP);
             stringToButtons(data, buttonMap, "file");
         }
     }
