@@ -27,7 +27,8 @@ public class CtcssListButton extends RWListButton {
     PickAction action;    
     ListDialog dialog;
     String title = new String("CTCSS TONE SELECTION");
-    String[] toneChoices = { "67.0", "69.3", "71.9", "74.4", "77.0", "79.7",
+    final public static String[] TONE_CHOICES = 
+      { "67.0", "69.3", "71.9", "74.4", "77.0", "79.7",
         "82.5", "85.4", "88.5", "91.5", "94.8", "97.4", "100.0", "103.5", "107.2",
         "110.9", "114.8", "118.8", "123.0", "127.3", "131.8", "136.5", "141.3",
         "146.2", "151.4", "156.7", "159.8", "162.2", "165.5", "167.9", "171.3",
@@ -38,6 +39,7 @@ public class CtcssListButton extends RWListButton {
         super( aParent,  "ctcss" , "" ,"CTCSS TONE", "CTCSS TONE SELECTION");
         parent = aParent;
         super.numericMode = true;
+        super.ctcss = true;
         setupMaps();
     }
     /**
@@ -51,10 +53,6 @@ public class CtcssListButton extends RWListButton {
         return enableCap(source, search, hasLevelValue);
     }
     
-    @Override
-    public String[] getChoiceStrings() {
-        return toneChoices;
-    }
 
 
 
@@ -121,10 +119,10 @@ public class CtcssListButton extends RWListButton {
     
     private void setupMaps() {
         String is;
-        if (choices != null) {
+        if (TONE_CHOICES != null) {
             removeAllItems();
             int n = 0;
-            for (String ss : choices) {
+            for (String ss : TONE_CHOICES) {
                 is = String.format(" %s", ss);
                 if (ss.matches(".*?[0-9.+-]+.*")) {
                     ss = ss.replaceFirst(".*?([0-9.+-]+).*","$1");
@@ -136,6 +134,8 @@ public class CtcssListButton extends RWListButton {
                 addListItem(is, v, ss);
                 n += 1;
             }
-        }        
+        }
+    int index = getSelectedIndex();
+    setSelectedIndex(index); // Sets the button title too.
     }
 }

@@ -52,7 +52,7 @@ public class RWListButton extends JButton  implements
     double yValueLow = 0;
     double yValueHigh = 1;
     String valueLabel = "";
-    public String[] choices; 
+    public String[] choices = { "choiceOne", "choiceTwo"}; // temporary list for ctor
     
 
     public RWListButton(JRX_TX aParent, String pre, String aToken, 
@@ -86,15 +86,19 @@ public class RWListButton extends JButton  implements
             firstTimeThrough = false;
         } 
         // Fill the maps with demo data.
-        placeholderData(name);
-        choices = getChoiceStrings();
+        if (ctcss) {
+            choices = CtcssListButton.TONE_CHOICES;
+        } else {
+            placeholderData(name);
+            choices = getChoiceStrings();
+        }
 
         dialog = new ListDialog(
                 parent, 
                 (Component)this, 
                 title, 
                 title,
-                this.selectedIndex,
+                selectedIndex,
                 choices);               
         action = new PickAction( 
                 name,
@@ -104,7 +108,7 @@ public class RWListButton extends JButton  implements
                 this,
                 dialog);        
         setAction(action);
-        setButtonText(choices[this.selectedIndex]);
+        setButtonText(choices[selectedIndex]);
         getAccessibleContext().setAccessibleName(
                 "Open dialog to choose a "+name+" .");
     }
