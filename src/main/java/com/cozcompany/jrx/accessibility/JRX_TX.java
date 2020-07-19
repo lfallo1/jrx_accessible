@@ -88,6 +88,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
     ArrayList<String> interfaceNames = null;
     ChannelChart chart;
     SquelchScheme squelchScheme;
+    public RigComms rigComms; // Singleton
    
     Map<String, Double> filters = null;
     Map<String, Double> ctcss = null;
@@ -170,6 +171,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
     public JRX_TX(String[] args) {
         // Call to initComponents happens after these calls.
         fileHelpers = new FileHelpers();
+        rigComms = new RigComms();
         comArgs = new ParseComLine(this, args);
         inhibit = true;
         oldTime = System.currentTimeMillis();       
@@ -1081,6 +1083,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
                             hamlib_is = hamlibSocket.getInputStream();
                             hamlib_os = hamlibSocket.getOutputStream();
                             connected = true;// hamlibSocket.isConnected();
+                            rigComms.setOnline();
                             if (comArgs.debug >= 0) {
                                 pout("socket connected: " + connected);
                             }
@@ -1091,6 +1094,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
                             waitMS(500);
                             if (n-- <= 0) {
                                 tellUser("Error: Cannot connect to Hamlib Daemon process.");
+                                rigComms.setOffline();
                             }
                         }
                     }
@@ -2990,7 +2994,10 @@ final public class JRX_TX extends javax.swing.JFrame implements
     }//GEN-LAST:event_sv_modesListButtonActionPerformed
 
     private void sv_radioNamesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sv_radioNamesActionPerformed
-        // TODO add your handling code here:
+        if (!inhibit) initialize(); 
+        String selectionStr = ((RadioNamesListButton)sv_radioNamesComboBox).getSelectedItem();
+        sv_radioNamesComboBox.getAccessibleContext().setAccessibleDescription("Selection is "+selectionStr);
+
     }//GEN-LAST:event_sv_radioNamesActionPerformed
 
     /**

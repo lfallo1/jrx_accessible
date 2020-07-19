@@ -6,10 +6,8 @@
 package components;
 
 import com.cozcompany.jrx.accessibility.JRX_TX;
-import java.awt.Component;
 import java.util.Map;
 import java.util.TreeMap;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
@@ -22,7 +20,7 @@ import javax.swing.JOptionPane;
  * toolTipText : Available radio manufacturers and models
  * actionCommand : comboBoxChanged
  * preferred size : [114,27]
- * font : Lucida Grande 14 Plain upped to 18 Plain
+ * font : Lucida Grande 14 Plain 
  * maximum row count = 8
  * 
  * @author Coz
@@ -30,51 +28,13 @@ import javax.swing.JOptionPane;
 public class RadioNamesListButton extends RWListButton {
     static Map<String, Integer> radioCodes = null;
     static Map<Integer, String> radioNames = null;
+    JRX_TX parent; 
 
-    JRX_TX parent;
-    PickAction action;    
-    ListDialog dialog;
-    String title = new String("RADIO MODEL SELECTION");
-    String[] choices = { "ICOM IC-7100", "ICOM IC-706"}; // for example...
     
     public RadioNamesListButton(JRX_TX aParent) {
-        super(aParent, "" , "", "RADIO");  // ???
+        super(aParent, "" , "", "RADIO", "RADIO MODEL SELECTION"); 
         super.numericMode = false;
-        parent = aParent;
-        
-    }
-
-    
-    
-    /**
-     * Must create components that use "this" pointer after the CTOR is complete.
-     */
-    public void initialize() {
-        dialog = new ListDialog(
-                (JFrame)super.parent, 
-                (Component)this, 
-                title, 
-                title,
-                this.selectedIndex,
-                choices);  
-             
-        action = new PickAction( 
-                "RADIO",
-                null,
-                "Select Radio Model from dialog list.",
-                null,                
-                this,
-                dialog);
-        
-        setAction(action);
-        
-        for (int index=0; index< choices.length; index++){
-            String ss = name+" "+choices[index];
-            super.addListItem(choices[index], 0.0, ss);                   
-        }
-        setButtonText(choices[this.selectedIndex]);
-        getAccessibleContext().setAccessibleName(
-                "Open dialog to choose a radio model.");
+        parent = aParent;        
     }
     
     /**
@@ -131,8 +91,6 @@ public class RadioNamesListButton extends RWListButton {
      * system.  If so, you will get that rigctld rig caps and not the ones you
      * are expecting.  You must see if one is already running.  It cannot be
      * killed by giving it a command.  Warn the user with a dialog box.
-     * 
-     * 
      * 
      */
     public void getSupportedRadios() {
@@ -195,13 +153,8 @@ public class RadioNamesListButton extends RWListButton {
             choices[index] = new String(key);
             index++;
         }
-        dialog.setNewData(choices);
+        super.dialog.setNewData(choices);
     }
-
-       
-    
-    
-    
     /**
      * Cannot find a usage in original code....
      * @return 

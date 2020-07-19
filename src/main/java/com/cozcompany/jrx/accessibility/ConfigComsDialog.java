@@ -10,7 +10,8 @@ import javax.swing.JDialog;
  *
  * @author lutusp
  */
-public class ConfigComsDialog extends javax.swing.JDialog implements Configurable {
+public class ConfigComsDialog extends javax.swing.JDialog 
+        implements Configurable {
 
     JRX_TX parent;
     boolean accept;

@@ -19,14 +19,13 @@
 // ***************************************************************************
 package com.cozcompany.jrx.accessibility;
 
+import com.cozcompany.jrx.accessibility.RigComms.CommsObserver;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import javax.swing.JComboBox;
 
 /**
@@ -34,7 +33,7 @@ import javax.swing.JComboBox;
  * @author lutusp
  */
 public class RWComboBox extends JComboBox<String> implements 
-        MouseWheelListener, ActionListener, ControlInterface {
+        MouseWheelListener, ActionListener, ControlInterface, CommsObserver {
 
     JRX_TX parent;
     String prefix;
@@ -55,7 +54,7 @@ public class RWComboBox extends JComboBox<String> implements
     String strSelection = null, oldStrSelection;
     boolean localInhibit = false;
     boolean ctcss = false;
-    boolean commOK = true;
+    boolean commOK = false;
 
     public RWComboBox(JRX_TX p, String pre, String t) {
         super();
@@ -410,4 +409,9 @@ public class RWComboBox extends JComboBox<String> implements
         int iv = (v < 0) ? -1 : 1;
         changeIndex(iv);
     }
+    @Override
+    public void update(String event) {
+        commOK =  (event == "online");
+    }
+
 }

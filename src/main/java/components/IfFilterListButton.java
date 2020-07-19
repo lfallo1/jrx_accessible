@@ -25,50 +25,15 @@ import javax.swing.JFrame;
  */
 public class IfFilterListButton extends RWListButton {
     JRX_TX parent;
-    PickAction action;    
-    ListDialog dialog;
-    String title = new String("IF BANDWIDTH SELECTION");
-    String[] choices = { "3", "6", "12" };
    
     public IfFilterListButton(JRX_TX aParent) {
-        super(aParent, "F", "","BANDWIDTH");
+        super(aParent, "F", "","BANDWIDTH", "IF BANDWIDTH SELECTION");
         parent = aParent;
         prefix = "F";
         token = "";
         super.numericMode = true;
     }
     
-    /**
-     * Must create components that use this pointer after the CTOR is complete.
-     */
-    public void initialize() {
-        dialog = new ListDialog(
-                (JFrame)super.parent, 
-                (Component)this, 
-                title, 
-                title,
-                this.selectedIndex,
-                choices);  
-             
-        action = new PickAction( 
-                "BW",
-                null,
-                "Select IF Bandwidth from dialog list.",
-                null,                
-                this,
-                dialog);
-        
-        setAction(action);
-        
-        for (int index=0; index< choices.length; index++){
-            double v = Double.valueOf(choices[index]);
-            String ss = String.format("%.0f Khz", v );
-            super.addListItem(choices[index], v*1000.0, ss);                   
-        }
-        setButtonText(choices[this.selectedIndex]);
-        getAccessibleContext().setAccessibleName(
-                "Open dialog to choose an I F bandwidth.");
-    }
     
     /**
      * This control capability is always enabled.
@@ -142,7 +107,7 @@ public class IfFilterListButton extends RWListButton {
                     parent.pout("key to filter : [" + dv + "]");
                 }
             }
-            dialog.setNewData(choices);
+            super.dialog.setNewData(choices);
         }
     }
     
@@ -161,11 +126,16 @@ public class IfFilterListButton extends RWListButton {
     public void readConvertedValue() {
         localInhibit = true;
         {
+            String[] fields = null;
             strSelection = readValueStr();  // gets the selected mode plus the bandwidth.
-            String[] fields = strSelection.split("\\s+");
+            if (strSelection != null) {
+                fields = strSelection.split("\\s+");
+            }
             // The first field is the mode.  The second field is the bandWidth
-            if (fields[1] != null) {
-                inhibitSetItem(fields[1]);
+            if (fields != null ) {
+                if (fields[1] != null) {
+                    inhibitSetItem(fields[1]);
+                }
             }
         }
         localInhibit = false;

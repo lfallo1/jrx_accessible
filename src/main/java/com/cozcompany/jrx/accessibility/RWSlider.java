@@ -19,6 +19,7 @@
 // ***************************************************************************
 package com.cozcompany.jrx.accessibility;
 
+import com.cozcompany.jrx.accessibility.RigComms.CommsObserver;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import javax.swing.JSlider;
@@ -30,7 +31,7 @@ import javax.swing.event.ChangeListener;
  * @author lutusp
  */
 public class RWSlider extends JSlider implements MouseWheelListener, 
-        ChangeListener, ControlInterface {
+        ChangeListener, ControlInterface, CommsObserver {
 
     JRX_TX parent;
     String token;
@@ -44,7 +45,7 @@ public class RWSlider extends JSlider implements MouseWheelListener,
     double yValueHigh = 1;
     double level = -1, oldLevel = -1;
     boolean localInhibit = false;
-    boolean commOK = true;
+    boolean commOK = false;
 
     public RWSlider(JRX_TX p, String pre, String t, int initial) {
         super();
@@ -179,4 +180,10 @@ public class RWSlider extends JSlider implements MouseWheelListener,
     public void setValue(int v) {
         super.setValue(v);
     }
+    
+    @Override
+    public void update(String event) {
+        commOK =  (event == "online");
+    }
+
 }

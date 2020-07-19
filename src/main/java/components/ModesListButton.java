@@ -15,50 +15,17 @@ import javax.swing.JOptionPane;
  * @author Coz
  */
 public class ModesListButton extends RWListButton {
-    JRX_TX parent;
-    PickAction action;    
-    ListDialog dialog;
-    String title = new String("MODES SELECTION");
+    JRX_TX parent;  
     String strFilter = "";
     String oldFilter = "x";
     String[] choices = { "AM", "FM", "CW" };
 
     public ModesListButton(JRX_TX aParent) {
-        super(aParent, "M", "", "MODE");
+        super(aParent, "M", "", "MODE", "MODES SELECTION");
         prefix = "M";
         token = "";
         super.numericMode = false;
         parent = aParent;
-    }
-    /**
-     * Must create components that use "this" pointer after the CTOR is complete.
-     */
-    public void initialize() {
-        dialog = new ListDialog(
-                (JFrame)super.parent, 
-                (Component)this, 
-                title, 
-                title,
-                this.selectedIndex,
-                choices);  
-             
-        action = new PickAction( 
-                "MODE",
-                null,
-                "Select Waveform Mode from dialog list.",
-                null,                
-                this,
-                dialog);
-        
-        setAction(action);
-        
-        for (int index=0; index< choices.length; index++){
-            String ss = name+" "+choices[index];
-            super.addListItem(choices[index], 0.0, ss);                   
-        }
-        setButtonText(choices[this.selectedIndex]);
-        getAccessibleContext().setAccessibleName(
-                "Open dialog to choose a waveform mode.");
     }
      
     //((RWComboBox) sv_modesComboBox).setGenericScale("Mode", 
@@ -154,7 +121,7 @@ public class ModesListButton extends RWListButton {
                     parent.pout("listButton content: [" + s + "]");
                 }
                 String[] array = s.split("\\s+");
-                dialog.setNewData(array);
+                super.dialog.setNewData(array);
                 String is;
                 if (array != null) {
                     removeAllItems();
@@ -179,6 +146,5 @@ public class ModesListButton extends RWListButton {
         }
         setListButtonIndex(index);
         parent.inhibit = old_inhibit;
-    }
-    
+    }    
 }

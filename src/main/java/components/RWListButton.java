@@ -7,6 +7,8 @@ package components;
 
 import com.cozcompany.jrx.accessibility.JRX_TX;
 import com.cozcompany.jrx.accessibility.ControlInterface;
+import com.cozcompany.jrx.accessibility.RigComms.CommsObserver;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Map;
@@ -19,19 +21,22 @@ import javax.swing.JButton;
  * @author Coz
  */
 public class RWListButton extends JButton  implements 
-        ControlInterface, ActionListener {
+        ControlInterface, ActionListener, CommsObserver {
     JRX_TX parent;
     PickAction action;
+    public ListDialog dialog;
+
     String prefix;
     String token;
     String name;
+    String title;
     public TreeMap<String, Integer> displayMap;
     TreeMap<Integer, String> reverseDisplayMap;
     TreeMap<String, Integer> useMap;
     TreeMap<Double, Integer> useMapDouble;
     TreeMap<Integer, String> reverseUseMap;
-    boolean inConstructor = true;
-    boolean commOK = true;  // @TODO Coz fix this so it really indicates comms status....
+    boolean firstTimeThrough = true;
+    boolean commOK = false;  
     boolean numericMode = false;
     boolean ctcss = false;
     boolean localInhibit = false;
@@ -47,10 +52,11 @@ public class RWListButton extends JButton  implements
     double yValueLow = 0;
     double yValueHigh = 1;
     String valueLabel = "";
-
+    public String[] choices; 
     
 
-    public RWListButton(JRX_TX aParent, String pre, String aToken, String aName) {
+    public RWListButton(JRX_TX aParent, String pre, String aToken, 
+            String aName, String aTitle) {
         super();
         parent = aParent;
         prefix = pre;
@@ -59,19 +65,50 @@ public class RWListButton extends JButton  implements
             ctcss = (prefix.equals("ctcss"));
         }
         name = aName;
+        title = aTitle;
         setup();       
     }
     protected void setup() {
-        if (inConstructor) {
-            addActionListener(this);
-            inConstructor = false;
-        }             
         displayMap = new TreeMap<>();
         useMap = new TreeMap<>();
         useMapDouble = new TreeMap<>();
         reverseDisplayMap = new TreeMap<>();
         reverseUseMap = new TreeMap<>();       
     }
+    
+    /**
+     * Must create components that use "this" pointer after the CTOR is complete.
+     */
+    public void initialize() {
+        if (firstTimeThrough) {
+            addActionListener(this);
+            parent.rigComms.addObserver(this);
+            firstTimeThrough = false;
+        } 
+        // Fill the maps with demo data.
+        placeholderData(name);
+        choices = getChoiceStrings();
+
+        dialog = new ListDialog(
+                parent, 
+                (Component)this, 
+                title, 
+                title,
+                this.selectedIndex,
+                choices);               
+        action = new PickAction( 
+                name,
+                null,
+                "Select "+name+" from dialog list.",
+                null,                
+                this,
+                dialog);        
+        setAction(action);
+        setButtonText(choices[this.selectedIndex]);
+        getAccessibleContext().setAccessibleName(
+                "Open dialog to choose a "+name+" .");
+    }
+    
     protected void removeAllItems() {
         displayMap.clear();
         useMap.clear();
@@ -121,6 +158,22 @@ public class RWListButton extends JButton  implements
         reverseDisplayMap.put(index, disp);
         reverseUseMap.put(index, suse);
     }
+
+    public void placeholderData(String label) {
+        boolean old_inhibit = parent.inhibit;
+        parent.inhibit = true;
+        int index = getSelectedIndex();
+        index = Math.max(0, index);
+        removeAllItems();
+        for (int i = 1; i < 64; i++) {           
+            addListItem(String.format("%s -- n/a %d --", label, i),  i, "" + i);
+        }
+        setListButtonIndex(index);
+        parent.inhibit = old_inhibit;
+    }
+
+
+
     /**
      * Dynamically change button text to match selected list item.
      * 
@@ -133,14 +186,17 @@ public class RWListButton extends JButton  implements
         setText(formattedText);
         getAccessibleContext().setAccessibleDescription(str+" selected");
     }
-
+    /**
+     * Return a String array suitable for populating a Dialog list.
+     * @return 
+     */
     public String[] getChoiceStrings() {
         int size = reverseDisplayMap.size();
-        String[] choices = new String[size];
+        String[] dialogChoices = new String[size];
         for (int index=0; index < size; index++){
-            choices[index] = reverseDisplayMap.get(index);           
+            dialogChoices[index] = reverseDisplayMap.get(index);           
         }
-        return choices;
+        return dialogChoices;
     }
 
     public void setContent(
@@ -233,18 +289,6 @@ public class RWListButton extends JButton  implements
         setSelectedIndex(index);
     }
 
-    public void placeholderData(String label) {
-        boolean old_inhibit = parent.inhibit;
-        parent.inhibit = true;
-        int index = getSelectedIndex();
-        index = Math.max(0, index);
-        removeAllItems();
-        for (int i = 1; i < 64; i++) {           
-            addListItem(String.format("%s -- n/a %d --", label, i),  i, "" + i);
-        }
-        setListButtonIndex(index);
-        parent.inhibit = old_inhibit;
-    }
 
 
     @Override
@@ -402,7 +446,7 @@ public class RWListButton extends JButton  implements
     
     @Override
     public void selectiveReadValue(boolean all) {
-        if (isEnabled()) {
+        if (isEnabled() && commOK) {
             readConvertedValue();
         }
     }
@@ -454,5 +498,10 @@ public class RWListButton extends JButton  implements
             index = Math.min(index, len - 1);
             setSelectedIndex(index);
         }
+    }
+
+    @Override
+    public void update(String event) {
+        commOK =  (event == "online");
     }
 }
