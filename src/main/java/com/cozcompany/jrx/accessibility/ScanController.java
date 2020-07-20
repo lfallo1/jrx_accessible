@@ -16,7 +16,6 @@ import javax.swing.JComboBox;
  */
 public class ScanController {
     JRX_TX appFrame;
-    Map<String, Double> scanSteps = null;
     Map<String, Integer> timeSteps = null;
 
     
@@ -25,7 +24,7 @@ public class ScanController {
         
     }
     protected void updateScanControls() {
-        appFrame.sv_scanStepComboBox.setEnabled(appFrame.scanStateMachine.scanTimer == null);
+        appFrame.sv_scanStepListButton.setEnabled(appFrame.scanStateMachine.scanTimer == null);
         appFrame.sv_scanSpeedComboBox.setEnabled(appFrame.scanStateMachine.scanTimer == null);
         String label = "Scan"; 
         String toolTip = "No active scan"; 
@@ -51,21 +50,6 @@ public class ScanController {
         double bv;
         double[] msteps = new double[]{1, 2, 5};
         String sl;
-        if (stepbox != null) {
-            stepbox.removeAllItems();
-            scanSteps = new TreeMap<>();
-            bv = 1;
-            for (int p = 0; p <= 7; p++) {
-                for (double lv : msteps) {
-                    double v = bv * lv;
-                    sl = stepLabel(v);
-                    scanSteps.put(sl, v);
-                    stepbox.addItem(sl);
-                }
-                bv *= 10;
-            }
-            setComboBoxIndex(stepbox, initstep);
-        }
         if (speedbox != null) {
             speedbox.removeAllItems();
             timeSteps = new TreeMap<>();
@@ -89,9 +73,6 @@ public class ScanController {
 
 
     
-    protected double getScanStep(JComboBox box) {
-        return scanSteps.get((String) box.getSelectedItem());
-    }
 
     protected double getTimeStep(JComboBox box) {
         return timeSteps.get((String) box.getSelectedItem());
@@ -107,20 +88,7 @@ public class ScanController {
         box.setSelectedIndex(index);
     }
 
-    private String stepLabel(double v) {
-        String[] labels = new String[]{"Hz", "kHz", "MHz"};
-        double tv = 1;
-        int i;
-        for (i = 0; i < labels.length; i++) {
-            if (v < tv * 1000) {
-                break;
-            }
-            tv *= 1000;
-        }
-        String s = String.format("%.0f %s", v / tv, labels[i]);
-        return s;
-    }
-    
+   
     protected void sleep(JComboBox box) {
         double v = getComboBoxTimeStep(box);
         appFrame.waitMS((int) v);

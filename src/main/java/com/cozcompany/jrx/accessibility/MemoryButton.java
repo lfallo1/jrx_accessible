@@ -211,7 +211,7 @@ final public class MemoryButton extends JButton implements MouseListener {
         updateState();
     }
     
-    private void updateIfNeeded(CtcssListButton cc, int v) {
+    private void updateIfNeeded(RWListButton cc, int v) {
         int ov = cc.getSelectedIndex();
         if (ov != v) {
             try {
@@ -225,18 +225,6 @@ final public class MemoryButton extends JButton implements MouseListener {
     }
 
     private void updateIfNeeded(JComboBox cc, int v) {
-        int ov = cc.getSelectedIndex();
-        if (ov != v) {
-            try {
-                cc.setSelectedIndex(v);
-            }
-            catch (Exception ex) {
-                p("MemoryButton:updateIfNeeded() exception :"+ ex);
-            }
-        }
-
-    }
-    private void updateIfNeeded(RWListButton cc, int v) {
         int ov = cc.getSelectedIndex();
         if (ov != v) {
             try {
@@ -279,7 +267,7 @@ final public class MemoryButton extends JButton implements MouseListener {
             updateIfNeeded(parent.sv_preampComboBox, preamp);
             updateIfNeeded(parent.sv_antennaComboBox, antenna);
             updateIfNeeded(parent.sv_attenuatorComboBox, attenuator);
-            updateIfNeeded(parent.sv_scanStepComboBox, stepSizeIndex);
+            updateIfNeeded((RWListButton)parent.sv_scanStepListButton, stepSizeIndex);
             //updateIfNeeded(parent.sv_rfGainSlider, rfGain);
             //updateIfNeeded(parent.sv_squelchSlider, squelch);
             //updateIfNeeded(parent.sv_ifShiftSlider, ifShift);
@@ -298,12 +286,12 @@ final public class MemoryButton extends JButton implements MouseListener {
         filter = ((RWListButton)parent.sv_ifFilterListButton).getSelectedIndex();
         mode = ((RWListButton)parent.sv_modesListButton).getSelectedIndex();
         frequency = parent.vfoState.getRxFrequency();
-        ctcss = ((CtcssListButton)parent.sv_ctcssListButton).getSelectedIndex();
+        ctcss = ((RWListButton)parent.sv_ctcssListButton).getSelectedIndex();
         agc = parent.sv_agcComboBox.getSelectedIndex();
         preamp = parent.sv_preampComboBox.getSelectedIndex();
         antenna = parent.sv_antennaComboBox.getSelectedIndex();
         attenuator = parent.sv_attenuatorComboBox.getSelectedIndex();
-        stepSizeIndex = parent.sv_scanStepComboBox.getSelectedIndex();
+        stepSizeIndex = ((RWListButton)parent.sv_scanStepListButton).getSelectedIndex();
         nb = (parent.sv_blankerCheckBox.isSelected()) ? 1 : 0;
         updateState();
     }

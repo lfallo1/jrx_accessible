@@ -68,10 +68,6 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
-                  <Component id="signalProgressBar" min="-2" pref="703" max="-2" attributes="0"/>
-                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-              </Group>
               <Group type="102" attributes="0">
                   <EmptySpace max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
@@ -82,17 +78,20 @@
                               <Group type="102" attributes="0">
                                   <Component id="ledPanel" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                  <Component id="sv_radioNamesComboBox" min="-2" pref="243" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="sv_interfacesComboBox" min="-2" pref="228" max="-2" attributes="0"/>
-                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                  <Component id="muteCheckBox" min="-2" pref="91" max="-2" attributes="0"/>
+                                  <Component id="sv_radioNamesListButton" min="-2" pref="243" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
+              </Group>
+              <Group type="102" alignment="0" attributes="0">
+                  <Group type="103" groupAlignment="1" attributes="0">
+                      <Component id="sv_interfacesListButton" alignment="1" min="-2" pref="328" max="-2" attributes="0"/>
+                      <Component id="signalProgressBar" min="-2" pref="703" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -108,9 +107,8 @@
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="sv_interfacesComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="muteCheckBox" alignment="3" min="-2" pref="38" max="-2" attributes="0"/>
-                              <Component id="sv_radioNamesComboBox" alignment="3" min="-2" pref="38" max="-2" attributes="0"/>
+                              <Component id="sv_radioNamesListButton" alignment="3" min="-2" pref="38" max="-2" attributes="0"/>
+                              <Component id="sv_interfacesListButton" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -160,6 +158,8 @@
                                   <Component id="afGainLabel" min="-2" pref="63" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="sv_volumeSlider" min="-2" pref="225" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="muteCheckBox" max="32767" attributes="0"/>
                               </Group>
                               <Component id="recieverGroupBox" min="-2" max="-2" attributes="0"/>
                           </Group>
@@ -174,6 +174,7 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="sv_volumeSlider" alignment="0" max="32767" attributes="0"/>
                               <Component id="afGainLabel" alignment="0" min="-2" pref="51" max="-2" attributes="0"/>
+                              <Component id="muteCheckBox" min="-2" pref="38" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="recieverGroupBox" min="-2" max="-2" attributes="0"/>
@@ -470,6 +471,9 @@
                           </AuxValues>
                         </Component>
                         <Component class="javax.swing.JButton" name="sv_ctcssListButton">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="CTCSS 107.2  ..."/>
+                          </Properties>
                           <AuxValues>
                             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new components.CtcssListButton(this);"/>
                             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
@@ -1108,6 +1112,18 @@
                     <Property name="text" type="java.lang.String" value="AF Gain"/>
                   </Properties>
                 </Component>
+                <Component class="javax.swing.JCheckBox" name="muteCheckBox">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="MUTE"/>
+                  </Properties>
+                  <AccessibilityProperties>
+                    <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="Mute audio"/>
+                    <Property name="AccessibleContext.accessibleDescription" type="java.lang.String" value="mute audio"/>
+                  </AccessibilityProperties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="muteCheckBoxActionPerformed"/>
+                  </Events>
+                </Component>
               </SubComponents>
             </Container>
             <Container class="javax.swing.JPanel" name="scanPanel">
@@ -1336,12 +1352,17 @@
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                   <Group type="102" attributes="0">
+                                      <EmptySpace max="-2" attributes="0"/>
                                       <Component id="scanIconLabel" min="-2" pref="16" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="scanDownButton" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Component id="sv_scanStepListButton" max="32767" attributes="0"/>
+                              </Group>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" alignment="0" attributes="0">
                                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                       <Component id="scanStopButton" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
@@ -1349,11 +1370,8 @@
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
                                       <Component id="sv_squelchCheckBox" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <Group type="102" attributes="0">
-                                      <Component id="sv_scanStepComboBox" linkSize="29" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                                  <Group type="102" alignment="1" attributes="0">
+                                      <EmptySpace min="-2" pref="44" max="-2" attributes="0"/>
                                       <Component id="sv_scanSpeedComboBox" linkSize="29" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="jLabel4" min="-2" pref="82" max="-2" attributes="0"/>
@@ -1363,7 +1381,7 @@
                                       <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
-                              <EmptySpace max="32767" attributes="0"/>
+                              <EmptySpace pref="25" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -1371,17 +1389,14 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jLabel3" alignment="0" min="-2" pref="15" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="sv_scanStepComboBox" linkSize="28" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="sv_dwellTimeComboBox" linkSize="28" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jLabel4" linkSize="28" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="sv_scanSpeedComboBox" linkSize="28" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  </Group>
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="sv_dwellTimeComboBox" linkSize="28" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel4" linkSize="28" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="sv_scanSpeedComboBox" linkSize="28" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="sv_scanStepListButton" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="2" attributes="0">
                                   <Component id="scanIconLabel" alignment="2" min="-2" max="-2" attributes="0"/>
                                   <Component id="scanDownButton" alignment="2" min="-2" max="-2" attributes="0"/>
@@ -1395,32 +1410,6 @@
                     </DimensionLayout>
                   </Layout>
                   <SubComponents>
-                    <Component class="javax.swing.JComboBox" name="sv_scanStepComboBox">
-                      <Properties>
-                        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                          <StringArray count="4">
-                            <StringItem index="0" value="Item 1"/>
-                            <StringItem index="1" value="Item 2"/>
-                            <StringItem index="2" value="Item 3"/>
-                            <StringItem index="3" value="Item 4"/>
-                          </StringArray>
-                        </Property>
-                        <Property name="toolTipText" type="java.lang.String" value="Scan frequency step size (&#x2743;)"/>
-                      </Properties>
-                      <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new com.cozcompany.jrx.accessibility.RWComboBox(this,null,null);"/>
-                        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
-                        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
-                      </AuxValues>
-                    </Component>
-                    <Component class="javax.swing.JLabel" name="jLabel3">
-                      <Properties>
-                        <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
-                          <ComponentRef name="sv_scanStepComboBox"/>
-                        </Property>
-                        <Property name="text" type="java.lang.String" value="Scan Step"/>
-                      </Properties>
-                    </Component>
                     <Component class="javax.swing.JComboBox" name="sv_scanSpeedComboBox">
                       <Properties>
                         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
@@ -1532,6 +1521,15 @@
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new RWCheckBox(this,null,null);"/>
                         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                      </AuxValues>
+                    </Component>
+                    <Component class="javax.swing.JButton" name="sv_scanStepListButton">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="STEP  1 Khz ..."/>
+                      </Properties>
+                      <AuxValues>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new ScanStepListButton(this);"/>
+                        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
                       </AuxValues>
                     </Component>
                   </SubComponents>
@@ -1962,18 +1960,6 @@
             </Container>
           </SubComponents>
         </Container>
-        <Component class="javax.swing.JCheckBox" name="muteCheckBox">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="MUTE"/>
-          </Properties>
-          <AccessibilityProperties>
-            <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="Mute audio"/>
-            <Property name="AccessibleContext.accessibleDescription" type="java.lang.String" value="mute audio"/>
-          </AccessibilityProperties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="muteCheckBoxActionPerformed"/>
-          </Events>
-        </Component>
         <Container class="javax.swing.JPanel" name="ledPanel">
           <Properties>
             <Property name="opaque" type="boolean" value="false"/>
@@ -2028,26 +2014,6 @@
             <Property name="value" type="int" value="-50"/>
             <Property name="stringPainted" type="boolean" value="true"/>
           </Properties>
-        </Component>
-        <Component class="javax.swing.JComboBox" name="sv_interfacesComboBox">
-          <Properties>
-            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="4">
-                <StringItem index="0" value="/dev/tty.SLABusbToUart2"/>
-                <StringItem index="1" value="Item 2"/>
-                <StringItem index="2" value="Item 3"/>
-                <StringItem index="3" value="Item 4"/>
-              </StringArray>
-            </Property>
-            <Property name="toolTipText" type="java.lang.String" value="Available communication interfaces"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="sv_interfacesComboBoxActionPerformed"/>
-          </Events>
-          <AuxValues>
-            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
-            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
-          </AuxValues>
         </Component>
         <Container class="javax.swing.JTabbedPane" name="vfoTabbedPane">
           <Properties>
@@ -2144,7 +2110,7 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <EmptySpace min="0" pref="695" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="688" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
@@ -2156,7 +2122,7 @@
             </Container>
           </SubComponents>
         </Container>
-        <Component class="javax.swing.JButton" name="sv_radioNamesComboBox">
+        <Component class="javax.swing.JButton" name="sv_radioNamesListButton">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Lucida Grande" size="14" style="0"/>
@@ -2169,6 +2135,18 @@
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new RadioNamesListButton(this);"/>
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value=""/>
+            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+          </AuxValues>
+        </Component>
+        <Component class="javax.swing.JButton" name="sv_interfacesListButton">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="INTERFACE /dev/tty.usbSerial ..."/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="sv_interfacesListButtonActionPerformed"/>
+          </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new InterfacesListButton(this);"/>
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
           </AuxValues>
         </Component>

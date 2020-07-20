@@ -4,6 +4,7 @@
  */
 package com.cozcompany.jrx.accessibility;
 
+import components.ScanStepListButton;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Timer;
@@ -187,7 +188,7 @@ final public class ScanStateMachine {
                     }
                 }
             }
-            scanStep = parent.scanDude.getScanStep(parent.sv_scanStepComboBox);
+            scanStep = ((ScanStepListButton)parent.sv_scanStepListButton).getScanStep();
             scanSpeedMS = parent.scanDude.getTimeStep(parent.sv_scanSpeedComboBox);
             return tableScanList != null;
         }
@@ -229,7 +230,7 @@ final public class ScanStateMachine {
                             scanEndFreq = temp;
                         }
                     }
-                    scanStep = parent.scanDude.getScanStep(parent.sv_scanStepComboBox);
+                    scanStep = ((ScanStepListButton)(parent.sv_scanStepListButton)).getScanStep();
                     scanSpeedMS = parent.scanDude.getTimeStep(parent.sv_scanSpeedComboBox);
                     return true;
 

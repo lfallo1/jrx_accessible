@@ -31,14 +31,14 @@ import javax.swing.event.ListSelectionListener;
                                 initialIndex);
  * </pre>
  */
-public class ListDialog extends JDialog implements ActionListener {
-    private String value = "";
-    private JList list;
-    private Component buttonComp;
-    private String title;
-    private Integer initialIndex;
-    private String name;
-    private String labelTxt;
+public class ListDialog extends JDialog {
+    protected String value = "";
+    protected JList list;
+    protected Component buttonComp;
+    protected String title;
+    protected Integer initialIndex;
+    protected String name;
+    protected String labelTxt;
     private JScrollPane listScroller;
     
  
@@ -66,11 +66,11 @@ public class ListDialog extends JDialog implements ActionListener {
         labelTxt = labelText;
         //Create and initialize the buttons.
         JButton cancelButton = new JButton("Cancel");
-        cancelButton.addActionListener(this);
+        cancelButton.addActionListener((RWListButton)locationComp);
         //
         final JButton setButton = new JButton("Set");
         setButton.setActionCommand("Set");
-        setButton.addActionListener(this);
+        setButton.addActionListener((RWListButton)locationComp);
         getRootPane().setDefaultButton(setButton);
         
         list = (JList) new DialogList(listData);
@@ -149,19 +149,5 @@ public class ListDialog extends JDialog implements ActionListener {
         setLocationRelativeTo(buttonComp);        
         setVisible(true);
         return value;
-    }
-      
-    // Handle clicks on the Set and Cancel buttons, then hide dialog.
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if ("Set".equals(e.getActionCommand())) {           
-            value = (String)(list.getSelectedValue());
-            int index = list.getSelectedIndex();
-            ((RWListButton)buttonComp).setSelectedIndex(index);           
-            ((RWListButton)buttonComp).inhibitSetItem(value);
-            ((RWListButton)buttonComp).setButtonText(value);
-            ((RWListButton)buttonComp).writeValue(true);
-        }               
-        setVisible(false);        
-    }    
+    }      
 }

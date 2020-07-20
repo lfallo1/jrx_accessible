@@ -19,6 +19,8 @@
 // ***************************************************************************
 package com.cozcompany.jrx.accessibility;
 
+import components.RWListButton;
+import components.ScanStepListButton;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -191,8 +193,8 @@ final public class SweepScope extends JPanel implements MouseMotionListener {
     private void setScanParams() {
         scopeData.clear();
         if (parent.validSetup()) {
-            String ss = (String) parent.sv_scopeStepComboBox.getSelectedItem();
-            scanStep = parent.scanDude.scanSteps.get(ss);
+            String ss = (String)((RWComboBox)parent.sv_scopeStepComboBox).getSelectedItem();
+            scanStep = ((ScanStepListButton)parent.sv_scanStepListButton).getScanStep();
             String ts = (String) parent.sv_scopeSpeedComboBox.getSelectedItem();
             scanSpeedMs = parent.scanDude.timeSteps.get(ts);
         }

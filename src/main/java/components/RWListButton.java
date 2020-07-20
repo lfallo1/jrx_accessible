@@ -37,7 +37,7 @@ public class RWListButton extends JButton  implements
     TreeMap<Integer, String> reverseUseMap;
     boolean firstTimeThrough = true;
     boolean commOK = false;  
-    boolean numericMode = false;
+    public boolean numericMode = false;
     boolean ctcss = false;
     boolean localInhibit = false;
     int selectedIndex = 0;
@@ -96,7 +96,7 @@ public class RWListButton extends JButton  implements
         dialog = new ListDialog(
                 parent, 
                 (Component)this, 
-                title, 
+                name, 
                 title,
                 selectedIndex,
                 choices);               
@@ -113,7 +113,7 @@ public class RWListButton extends JButton  implements
                 "Open dialog to choose a "+name+" .");
     }
     
-    protected void removeAllItems() {
+    public void removeAllItems() {
         displayMap.clear();
         useMap.clear();
         useMapDouble.clear();
@@ -137,6 +137,10 @@ public class RWListButton extends JButton  implements
         selectedIndex = index;
         String displayedValue = reverseDisplayMap.get(index);
         setButtonText(displayedValue);
+    }
+    public void setSelectedItem(String item){
+        selectedIndex = displayMap.get(item);
+        setButtonText(item);
     }
     /**
      * The RWListButton uses the disp strings in the Dialog list, 
@@ -293,13 +297,36 @@ public class RWListButton extends JButton  implements
         setSelectedIndex(index);
     }
 
-
-
+    // Handle clicks on the Set and Cancel buttons, then hide dialog.
     @Override
     public void actionPerformed(ActionEvent evt) {
-        action(evt);
-    }
-
+        if ("Set".equals(evt.getActionCommand())) {            
+            dialog.value = (String)(dialog.list.getSelectedValue());
+            int index = dialog.list.getSelectedIndex();           
+            ((RWListButton)dialog.buttonComp).setSelectedIndex(index);
+            if ("Scan Step".equals(dialog.labelTxt) || 
+                "Sweep Step".equals(dialog.labelTxt)||
+                "Scan Speed".equals(dialog.labelTxt)){
+                // This is app setting and radio is not aware of this component.
+            } else {
+                ((RWListButton)dialog.buttonComp).inhibitSetItem(dialog.value);
+                ((RWListButton)dialog.buttonComp).writeValue(true);
+            }
+            ((RWListButton)dialog.buttonComp).setButtonText(dialog.value);
+            dialog.setVisible(false);   
+        } else if ("Cancel".equals(evt.getActionCommand())) {
+            dialog.setVisible(false);   
+        } else if ( "Scan Step".equals(name) ||
+                    "Sweep Step".equals(name) || 
+                    "Scan Speed".equals(name)) {
+            return;
+        } else {
+            action(evt);
+        }                        
+    }    
+    
+    
+    
     private void action(ActionEvent evt) {
         writeValue(true);
     }
@@ -322,7 +349,7 @@ public class RWListButton extends JButton  implements
             strSelection = reverseUseMap.get(index);
             if (strSelection != null) {
                 if (!strSelection.equals(oldStrSelection) ) {
-                    String com = String.format("%s %s %s %s", 
+                    String com = String.format("%s %s %s ", 
                         prefix.toUpperCase(), token, strSelection);
                     parent.sendRadioCom(com, 0, true);
                     oldStrSelection = strSelection;
