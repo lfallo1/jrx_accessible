@@ -78,7 +78,7 @@ import vfoDisplayControl.GroupBox;
 final public class JRX_TX extends javax.swing.JFrame implements 
         ListSelectionListener, ItemListener , ActionListener {
 
-    final String appVersion = "5.0.13";
+    final String appVersion = "5.0.14";
     final String appName;
     final String programName;
     public final String LINE_SEP;
@@ -1543,6 +1543,15 @@ final public class JRX_TX extends javax.swing.JFrame implements
         afGainLabel = new javax.swing.JLabel();
         muteCheckBox = new javax.swing.JCheckBox();
         scanPanel = new javax.swing.JPanel();
+        scannerPanel = new javax.swing.JPanel();
+        sv_scanStepListButton = new ScanStepListButton(this);
+        sv_stepPeriodListButton = new StepPeriodListButton(this);
+        sv_dwellTimeListButton = new DwellTimeListButton(this);
+        scanIconLabel = new javax.swing.JLabel();
+        scanDownButton = new javax.swing.JButton();
+        scanStopButton = new javax.swing.JButton();
+        scanUpButton = new javax.swing.JButton();
+        sv_squelchCheckBox = new RWCheckBox(this,null,null);
         channelsTabbedPane = new javax.swing.JTabbedPane();
         memoryStoragePanel = new javax.swing.JPanel();
         memoryScrollPane = new javax.swing.JScrollPane();
@@ -1553,15 +1562,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
         eraseMemButton = new javax.swing.JButton();
         favoriteSWLChannels = new javax.swing.JPanel();
         memoryPanel = new javax.swing.JPanel();
-        scannerPanel = new javax.swing.JPanel();
-        scanIconLabel = new javax.swing.JLabel();
-        scanDownButton = new javax.swing.JButton();
-        scanStopButton = new javax.swing.JButton();
-        scanUpButton = new javax.swing.JButton();
-        sv_squelchCheckBox = new RWCheckBox(this,null,null);
-        sv_scanStepListButton = new ScanStepListButton(this);
-        sv_stepPeriodListButton = new StepPeriodListButton(this);
-        sv_dwellTimeListButton = new DwellTimeListButton(this);
         jrxScopePanel = new javax.swing.JPanel();
         scopePanel = new javax.swing.JPanel();
         scopeDisplayPanel = new SweepScope(this);
@@ -2160,6 +2160,108 @@ final public class JRX_TX extends javax.swing.JFrame implements
             }
         });
 
+        scannerPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        sv_scanStepListButton.setText("SCAN STEP  1 Khz ...");
+
+        sv_stepPeriodListButton.setText("STEP PERIOD  500 msec ...");
+
+        sv_dwellTimeListButton.setText("DWELL TIME  5 Sec ...");
+
+        scanIconLabel.setText("x");
+        scanIconLabel.setToolTipText("Scan Led turns green when scanning.");
+
+        scanDownButton.setText("Start Scan Down");
+        scanDownButton.setToolTipText("Scan down");
+        scanDownButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                scanDownButtonMouseClicked(evt);
+            }
+        });
+        scanDownButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                scanDownActionHandler(evt);
+            }
+        });
+
+        scanStopButton.setText("Stop Scan");
+        scanStopButton.setToolTipText("Halt scan");
+        scanStopButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                scanStopButtonMouseClicked(evt);
+            }
+        });
+        scanStopButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                scanStopButtonActionPerformed(evt);
+            }
+        });
+
+        scanUpButton.setText("Start Scan Up");
+        scanUpButton.setToolTipText("Scan up");
+        scanUpButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                scanUpButtonMouseClicked(evt);
+            }
+        });
+        scanUpButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                startScanUpHandler(evt);
+            }
+        });
+
+        sv_squelchCheckBox.setSelected(true);
+        sv_squelchCheckBox.setText("Pause ON Squelch Open");
+        sv_squelchCheckBox.setToolTipText("Pause on squelch active");
+
+        javax.swing.GroupLayout scannerPanelLayout = new javax.swing.GroupLayout(scannerPanel);
+        scannerPanel.setLayout(scannerPanelLayout);
+        scannerPanelLayout.setHorizontalGroup(
+            scannerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(scannerPanelLayout.createSequentialGroup()
+                .addComponent(sv_scanStepListButton, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(sv_stepPeriodListButton, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(sv_dwellTimeListButton, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(scannerPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(scanIconLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(scanDownButton, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(scanStopButton, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(scanUpButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(sv_squelchCheckBox)
+                .addGap(35, 35, 35))
+        );
+        scannerPanelLayout.setVerticalGroup(
+            scannerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(scannerPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(scannerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(sv_scanStepListButton)
+                    .addComponent(sv_stepPeriodListButton)
+                    .addComponent(sv_dwellTimeListButton))
+                .addGap(9, 9, 9)
+                .addGroup(scannerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(scannerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                        .addComponent(scanDownButton)
+                        .addComponent(scanStopButton)
+                        .addComponent(scanUpButton)
+                        .addComponent(sv_squelchCheckBox))
+                    .addGroup(scannerPanelLayout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(scanIconLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+
+        scanDownButton.getAccessibleContext().setAccessibleName("START SCAN DOWNWARDS");
+        scanUpButton.getAccessibleContext().setAccessibleName("START SCAN UPWARDS");
+
         memoryButtonsPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
         memoryButtonsPanel.setMinimumSize(new java.awt.Dimension(40, 40));
         memoryButtonsPanel.setLayout(new java.awt.GridLayout(1, 0));
@@ -2228,7 +2330,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         memoryStoragePanelLayout.setVerticalGroup(
             memoryStoragePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(memoryStoragePanelLayout.createSequentialGroup()
-                .addComponent(memoryScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE)
+                .addComponent(memoryScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(buttonPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -2251,7 +2353,9 @@ final public class JRX_TX extends javax.swing.JFrame implements
         );
         favoriteSWLChannelsLayout.setVerticalGroup(
             favoriteSWLChannelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(memoryPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 316, Short.MAX_VALUE)
+            .addGroup(favoriteSWLChannelsLayout.createSequentialGroup()
+                .addComponent(memoryPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 306, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         memoryPanel.getAccessibleContext().setAccessibleName("Favorite Channels Table");
@@ -2260,96 +2364,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
         channelsTabbedPane.addTab("Favorite SWL Channels", null, favoriteSWLChannels, "A list of popular SWL frequencies");
         favoriteSWLChannels.getAccessibleContext().setAccessibleName("Favorite SWL Channels");
         favoriteSWLChannels.getAccessibleContext().setAccessibleDescription("List selection can be used with scanner");
-
-        scanIconLabel.setText("x");
-        scanIconLabel.setToolTipText("Scan Led turns green when scanning.");
-
-        scanDownButton.setText("Start Scan Down");
-        scanDownButton.setToolTipText("Scan down");
-        scanDownButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                scanDownButtonMouseClicked(evt);
-            }
-        });
-
-        scanStopButton.setText("Stop Scan");
-        scanStopButton.setToolTipText("Halt scan");
-        scanStopButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                scanStopButtonMouseClicked(evt);
-            }
-        });
-        scanStopButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                scanStopButtonActionPerformed(evt);
-            }
-        });
-
-        scanUpButton.setText("Start Scan Up");
-        scanUpButton.setToolTipText("Scan up");
-        scanUpButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                scanUpButtonMouseClicked(evt);
-            }
-        });
-
-        sv_squelchCheckBox.setSelected(true);
-        sv_squelchCheckBox.setText("Pause ON Squelch Open");
-        sv_squelchCheckBox.setToolTipText("Pause on squelch active");
-
-        sv_scanStepListButton.setText("SCAN STEP  1 Khz ...");
-
-        sv_stepPeriodListButton.setText("STEP PERIOD  500 msec ...");
-
-        sv_dwellTimeListButton.setText("DWELL TIME  5 Sec ...");
-
-        javax.swing.GroupLayout scannerPanelLayout = new javax.swing.GroupLayout(scannerPanel);
-        scannerPanel.setLayout(scannerPanelLayout);
-        scannerPanelLayout.setHorizontalGroup(
-            scannerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(scannerPanelLayout.createSequentialGroup()
-                .addGroup(scannerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(scannerPanelLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(scanIconLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(scanDownButton))
-                    .addComponent(sv_scanStepListButton, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(scannerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(scannerPanelLayout.createSequentialGroup()
-                        .addComponent(scanStopButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(scanUpButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(sv_squelchCheckBox)
-                        .addGap(35, 35, 35))
-                    .addGroup(scannerPanelLayout.createSequentialGroup()
-                        .addComponent(sv_stepPeriodListButton, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(sv_dwellTimeListButton, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-        );
-        scannerPanelLayout.setVerticalGroup(
-            scannerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(scannerPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(scannerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(sv_scanStepListButton)
-                    .addComponent(sv_stepPeriodListButton)
-                    .addComponent(sv_dwellTimeListButton))
-                .addGap(9, 9, 9)
-                .addGroup(scannerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(scanIconLabel)
-                    .addComponent(scanDownButton)
-                    .addComponent(scanStopButton)
-                    .addComponent(scanUpButton)
-                    .addComponent(sv_squelchCheckBox))
-                .addContainerGap())
-        );
-
-        scanDownButton.getAccessibleContext().setAccessibleName("START SCAN DOWNWARDS");
-        scanUpButton.getAccessibleContext().setAccessibleName("START SCAN UPWARDS");
 
         javax.swing.GroupLayout scanPanelLayout = new javax.swing.GroupLayout(scanPanel);
         scanPanel.setLayout(scanPanelLayout);
@@ -2895,7 +2909,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
     }//GEN-LAST:event_sv_compressionCheckBoxActionPerformed
 
     private void scanStopButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_scanStopButtonActionPerformed
-        // TODO add your handling code here:
+        scanStateMachine.stopScan(true);
     }//GEN-LAST:event_scanStopButtonActionPerformed
 
     private void muteCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_muteCheckBoxActionPerformed
@@ -2940,6 +2954,14 @@ final public class JRX_TX extends javax.swing.JFrame implements
         ((RWListButton)sv_interfacesListButton).setButtonText(selectionStr);
         sv_interfacesListButton.getAccessibleContext().setAccessibleDescription("Selection is "+selectionStr);                                                  
     }//GEN-LAST:event_sv_interfacesListButtonActionPerformed
+
+    private void startScanUpHandler(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startScanUpHandler
+        scanStateMachine.startScan(1);
+    }//GEN-LAST:event_startScanUpHandler
+
+    private void scanDownActionHandler(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_scanDownActionHandler
+        scanStateMachine.startScan(-1);
+    }//GEN-LAST:event_scanDownActionHandler
 
     /**
      * @param args the command line arguments

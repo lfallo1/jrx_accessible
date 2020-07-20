@@ -44,15 +44,16 @@ public class ScanController {
             appFrame.scanIconLabel.setIcon(appFrame.greenLed);
             context.setAccessibleDescription("Scan state LED is green. "+label+" is active.");
         }
+        appFrame.scanIconLabel.repaint();
     }
 
 
 
     
 
-    protected double getTimeStep(JComboBox box) {
-        return timeSteps.get((String) box.getSelectedItem());
-    }
+//    protected double getTimeStep(JComboBox box) {
+//        return timeSteps.get((String) box.getSelectedItem());
+//    }
     
     protected double getComboBoxTimeStep(JComboBox box) {
         return timeSteps.get((String) box.getSelectedItem());
