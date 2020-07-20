@@ -4,7 +4,9 @@
  */
 package com.cozcompany.jrx.accessibility;
 
+import components.DwellTimeListButton;
 import components.ScanStepListButton;
+import components.StepPeriodListButton;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Timer;
@@ -188,8 +190,10 @@ final public class ScanStateMachine {
                     }
                 }
             }
-            scanStep = ((ScanStepListButton)parent.sv_scanStepListButton).getScanStep();
-            scanSpeedMS = parent.scanDude.getTimeStep(parent.sv_scanSpeedComboBox);
+            scanStep = ((ScanStepListButton)parent.sv_scanStepListButton).
+                    getScanStep();
+            scanSpeedMS = ((StepPeriodListButton)parent.sv_stepPeriodListButton).
+                    getTimeStep();
             return tableScanList != null;
         }
         return false;
@@ -209,7 +213,8 @@ final public class ScanStateMachine {
          */
     protected boolean setMemoryScanParams() {
         if (parent.validSetup()) {
-            buttonScanList = parent.memoryCollection.getScanButtons(parent.memoryButtonTotal);
+            buttonScanList = parent.memoryCollection.
+                    getScanButtons(parent.memoryButtonTotal);
             if (buttonScanList != null) {
                 int sz = buttonScanList.size();
                 if (sz >= 2) {
@@ -221,7 +226,8 @@ final public class ScanStateMachine {
                         scanStartFreq = buttonScanList.get(0).frequency;
                         scanEndFreq = buttonScanList.get(1).frequency;
                         if (scanStartFreq == scanEndFreq) {
-                            parent.tellUser("Scan start and end frequencies are the same");
+                            parent.tellUser(
+                                "Scan start and end frequencies are the same");
                             return false;
                         }
                         if (scanStartFreq > scanEndFreq) {
@@ -230,8 +236,10 @@ final public class ScanStateMachine {
                             scanEndFreq = temp;
                         }
                     }
-                    scanStep = ((ScanStepListButton)(parent.sv_scanStepListButton)).getScanStep();
-                    scanSpeedMS = parent.scanDude.getTimeStep(parent.sv_scanSpeedComboBox);
+                    scanStep = ((ScanStepListButton)parent.
+                            sv_scanStepListButton).getScanStep();
+                    scanSpeedMS = ((StepPeriodListButton)parent.
+                            sv_stepPeriodListButton).getTimeStep();
                     return true;
 
                 } else {
@@ -265,7 +273,11 @@ final public class ScanStateMachine {
         }
         return freq;
     }
-
+    /**
+     * Background task to scan channels.
+     * 
+     * Something in this task is eating click events on the start/stop buttons.
+     */
     class ScanEvents extends TimerTask {
 
         long lastOpenSquelchTime = -1;
@@ -282,7 +294,8 @@ final public class ScanStateMachine {
                 lastOpenSquelchTime = System.currentTimeMillis();
             }
             double dwellTime = lastOpenSquelchTime + 
-                    parent.scanDude.getTimeStep(parent.sv_dwellTimeComboBox);
+                    ((DwellTimeListButton)parent.sv_dwellTimeListButton).
+                            getTimeStep();
             double now = System.currentTimeMillis();
             if (now >= dwellTime && !sqopen && scanTimer != null) {
                 if (programScan) {

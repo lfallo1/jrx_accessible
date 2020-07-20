@@ -1152,7 +1152,7 @@
                       </Group>
                       <Group type="102" alignment="1" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="scannerPanel" max="32767" attributes="0"/>
+                          <Component id="scannerPanel" pref="675" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -1352,36 +1352,32 @@
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" attributes="0">
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="scanIconLabel" min="-2" pref="16" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="scanDownButton" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <Component id="sv_scanStepListButton" max="32767" attributes="0"/>
+                                  <Component id="sv_scanStepListButton" min="-2" pref="218" max="-2" attributes="0"/>
                               </Group>
+                              <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" alignment="0" attributes="0">
-                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                       <Component id="scanStopButton" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                       <Component id="scanUpButton" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                                      <EmptySpace max="32767" attributes="0"/>
                                       <Component id="sv_squelchCheckBox" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
                                   </Group>
-                                  <Group type="102" alignment="1" attributes="0">
-                                      <EmptySpace min="-2" pref="44" max="-2" attributes="0"/>
-                                      <Component id="sv_scanSpeedComboBox" linkSize="29" min="-2" max="-2" attributes="0"/>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="sv_stepPeriodListButton" min="-2" pref="228" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="jLabel4" min="-2" pref="82" max="-2" attributes="0"/>
-                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                      <Component id="sv_dwellTimeComboBox" linkSize="29" min="-2" pref="128" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
+                                      <Component id="sv_dwellTimeListButton" min="-2" pref="215" max="-2" attributes="0"/>
+                                      <EmptySpace max="32767" attributes="0"/>
                                   </Group>
                               </Group>
-                              <EmptySpace pref="25" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -1390,11 +1386,9 @@
                           <Group type="102" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="sv_dwellTimeComboBox" linkSize="28" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jLabel4" linkSize="28" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="sv_scanSpeedComboBox" linkSize="28" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="sv_scanStepListButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="sv_stepPeriodListButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="sv_dwellTimeListButton" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="2" attributes="0">
@@ -1410,65 +1404,6 @@
                     </DimensionLayout>
                   </Layout>
                   <SubComponents>
-                    <Component class="javax.swing.JComboBox" name="sv_scanSpeedComboBox">
-                      <Properties>
-                        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                          <StringArray count="4">
-                            <StringItem index="0" value="Item 1"/>
-                            <StringItem index="1" value="Item 2"/>
-                            <StringItem index="2" value="Item 3"/>
-                            <StringItem index="3" value="Item 4"/>
-                          </StringArray>
-                        </Property>
-                        <Property name="toolTipText" type="java.lang.String" value="Scan delay (&#x2743;)"/>
-                      </Properties>
-                      <AccessibilityProperties>
-                        <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="Scan delay before restart scan"/>
-                        <Property name="AccessibleContext.accessibleDescription" type="java.lang.String" value="Scan delay when squelch opens"/>
-                      </AccessibilityProperties>
-                      <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new com.cozcompany.jrx.accessibility.RWComboBox(this,null,null);"/>
-                        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
-                        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
-                      </AuxValues>
-                    </Component>
-                    <Component class="javax.swing.JLabel" name="jLabel4">
-                      <Properties>
-                        <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
-                          <ComponentRef name="sv_scanSpeedComboBox"/>
-                        </Property>
-                        <Property name="text" type="java.lang.String" value="Scan Speed"/>
-                      </Properties>
-                    </Component>
-                    <Component class="javax.swing.JComboBox" name="sv_dwellTimeComboBox">
-                      <Properties>
-                        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                          <StringArray count="4">
-                            <StringItem index="0" value="Item 1"/>
-                            <StringItem index="1" value="Item 2"/>
-                            <StringItem index="2" value="Item 3"/>
-                            <StringItem index="3" value="Item 4"/>
-                          </StringArray>
-                        </Property>
-                        <Property name="toolTipText" type="java.lang.String" value="Pause dwell time (&#x2743;)"/>
-                      </Properties>
-                      <AccessibilityProperties>
-                        <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="Dwell time in seconds"/>
-                      </AccessibilityProperties>
-                      <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new com.cozcompany.jrx.accessibility.RWComboBox(this,null,null);"/>
-                        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
-                        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
-                      </AuxValues>
-                    </Component>
-                    <Component class="javax.swing.JLabel" name="jLabel5">
-                      <Properties>
-                        <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
-                          <ComponentRef name="sv_dwellTimeComboBox"/>
-                        </Property>
-                        <Property name="text" type="java.lang.String" value="Dwell Time"/>
-                      </Properties>
-                    </Component>
                     <Component class="javax.swing.JLabel" name="scanIconLabel">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="x"/>
@@ -1525,10 +1460,28 @@
                     </Component>
                     <Component class="javax.swing.JButton" name="sv_scanStepListButton">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="STEP  1 Khz ..."/>
+                        <Property name="text" type="java.lang.String" value="SCAN STEP  1 Khz ..."/>
                       </Properties>
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new ScanStepListButton(this);"/>
+                        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+                      </AuxValues>
+                    </Component>
+                    <Component class="javax.swing.JButton" name="sv_stepPeriodListButton">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="STEP PERIOD  500 msec ..."/>
+                      </Properties>
+                      <AuxValues>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new StepPeriodListButton(this);"/>
+                        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+                      </AuxValues>
+                    </Component>
+                    <Component class="javax.swing.JButton" name="sv_dwellTimeListButton">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="DWELL TIME  5 Sec ..."/>
+                      </Properties>
+                      <AuxValues>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DwellTimeListButton(this);"/>
                         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
                       </AuxValues>
                     </Component>

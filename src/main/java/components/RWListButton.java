@@ -304,9 +304,10 @@ public class RWListButton extends JButton  implements
             dialog.value = (String)(dialog.list.getSelectedValue());
             int index = dialog.list.getSelectedIndex();           
             ((RWListButton)dialog.buttonComp).setSelectedIndex(index);
-            if ("Scan Step".equals(dialog.labelTxt) || 
-                "Sweep Step".equals(dialog.labelTxt)||
-                "Scan Speed".equals(dialog.labelTxt)){
+            if ("SCAN STEP".equals(dialog.labelTxt) || 
+                "SWEEP STEP".equals(dialog.labelTxt)||
+                "DWELL TIME".equals(dialog.labelTxt)||
+                "STEP PERIOD".equals(dialog.labelTxt)){
                 // This is app setting and radio is not aware of this component.
             } else {
                 ((RWListButton)dialog.buttonComp).inhibitSetItem(dialog.value);
@@ -316,9 +317,10 @@ public class RWListButton extends JButton  implements
             dialog.setVisible(false);   
         } else if ("Cancel".equals(evt.getActionCommand())) {
             dialog.setVisible(false);   
-        } else if ( "Scan Step".equals(name) ||
-                    "Sweep Step".equals(name) || 
-                    "Scan Speed".equals(name)) {
+        } else if ( "SCAN STEP".equals(name) ||
+                    "SWEEP STEP".equals(name) || 
+                    "DWELL TIME".equals(name) || 
+                    "STEP PERIOD".equals(name)) {
             return;
         } else {
             action(evt);

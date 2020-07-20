@@ -21,7 +21,7 @@ public class ScanStepListButton extends RWListButton {
     final Integer INIT_STEP = 12;
 
     public ScanStepListButton(JRX_TX parent) {
-        super(parent, "", "", "Scan Step", "SELECT SCAN STEP");
+        super(parent, "", "", "SCAN STEP", "SELECT SCAN STEP");
         super.numericMode = true;
     }
     

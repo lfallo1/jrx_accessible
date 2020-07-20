@@ -25,7 +25,7 @@ public class ScanController {
     }
     protected void updateScanControls() {
         appFrame.sv_scanStepListButton.setEnabled(appFrame.scanStateMachine.scanTimer == null);
-        appFrame.sv_scanSpeedComboBox.setEnabled(appFrame.scanStateMachine.scanTimer == null);
+        appFrame.sv_stepPeriodListButton.setEnabled(appFrame.scanStateMachine.scanTimer == null);
         String label = "Scan"; 
         String toolTip = "No active scan"; 
         if (appFrame.scanStateMachine.scanTimer != null) {
@@ -46,30 +46,6 @@ public class ScanController {
         }
     }
 
-    protected void initScanValues(JComboBox<String> stepbox, int initstep, JComboBox<String> speedbox, int initspeed) {
-        double bv;
-        double[] msteps = new double[]{1, 2, 5};
-        String sl;
-        if (speedbox != null) {
-            speedbox.removeAllItems();
-            timeSteps = new TreeMap<>();
-            bv = 1;
-            for (int p = 0; p <= 4; p++) {
-                for (double lv : msteps) {
-                    double v = bv * lv;
-                    if (v >= 1000) {
-                        sl = String.format("%d s", (int) (v / 1000));
-                    } else {
-                        sl = String.format("%d ms", (int) v);
-                    }
-                    timeSteps.put(sl, (int) v);
-                    speedbox.addItem(sl);
-                }
-                bv *= 10;
-            }
-            setComboBoxIndex(speedbox, initspeed);
-        }
-    }
 
 
     
