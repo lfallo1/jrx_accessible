@@ -73,7 +73,6 @@ public class RWComboBox extends JComboBox<String> implements
             addActionListener(this);
         }
         numericMode = false;
-        commOK = true;
         oldNumSelection = -1;
         oldStrSelection = "xxx";        
         displayMap = new TreeMap<>();
@@ -81,6 +80,7 @@ public class RWComboBox extends JComboBox<String> implements
         useMapDouble = new TreeMap<>();
         reverseDisplayMap = new TreeMap<>();
         reverseUseMap = new TreeMap<>();
+        parent.rigComms.addObserver(this);
     }
 
     public void addListItem(String disp, double use, String suse) {

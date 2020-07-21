@@ -734,7 +734,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         }
         
         // yhigh intentionally = ylow to allow the rig to set the range
-        ((RWComboBox)sv_ifShiftComboBox).setComboBoxContent("IF", -50, 50, 5, -50, 50, 0, 0, 0); //@todo Coz remove comment
+        //((RWComboBox)sv_ifShiftComboBox).setComboBoxContent("IF", -50, 50, 5, -50, 50, 0, 0, 0); //@todo Coz remove comment
         //sv_ifShiftComboBox.setEnabled(false); // @todo Coz temporary fix.... Remove this line.
         ((RWComboBox)sv_dspComboBox).setComboBoxContent("DSP", 0, 100, 5, 0, 100, 0, 1, 0);
         ((RWListButton)sv_agcListButton).setContent("AGC", 0, 10, 1, 0, 1, 0, 10, 1);
@@ -804,7 +804,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         ((RWSlider)sv_volumeSlider).enableCap(radioData, "(?ism).*^Set level:.*?AF\\(", true); 
         ((RWSlider)sv_rfGainSlider).enableCap(radioData, "(?ism).*^Set level:.*?RF\\(", true);
         ((RWSlider)sv_squelchSlider).enableCap(radioData, "(?ism).*^Set level:.*?SQL\\(", true);
-        ((RWComboBox)sv_ifShiftComboBox).enableCap(radioData, "(?ism).*^Set level:.*?IF\\(", true); // Coz override for IC-7100
+        //((RWComboBox)sv_ifShiftComboBox).enableCap(radioData, "(?ism).*^Set level:.*?IF\\(", true); // Coz override for IC-7100
         ((RWCheckBox)sv_blankerCheckBox).enableCap(radioData, "(?ism).*^Set functions:.*?\\sNB\\s", false);
         ((RWCheckBox)sv_anfCheckBox).enableCap(radioData, "(?ism).*^Set functions:.*?\\sANF\\s", false);
         ((RWCheckBox)sv_apfCheckBox).enableCap(radioData, "(?ism).*^Set functions:.*?\\sAPF\\s", false);
@@ -1528,7 +1528,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         dstarPanel = new javax.swing.JPanel();
         keyerPanel = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
-        jSlider1 = new javax.swing.JSlider();
+        sv_cwSpeedSlider = new CwSpeedSlider(this);
         jSlider2 = new javax.swing.JSlider();
         jLabel7 = new javax.swing.JLabel();
         jSlider3 = new javax.swing.JSlider();
@@ -1948,15 +1948,15 @@ final public class JRX_TX extends javax.swing.JFrame implements
         jLabel6.setText("CW Speed WPM");
         keyerPanel.add(jLabel6);
 
-        jSlider1.setMajorTickSpacing(10);
-        jSlider1.setMaximum(40);
-        jSlider1.setMinimum(5);
-        jSlider1.setMinorTickSpacing(1);
-        jSlider1.setOrientation(javax.swing.JSlider.VERTICAL);
-        jSlider1.setPaintLabels(true);
-        jSlider1.setPaintTicks(true);
-        jSlider1.setValue(15);
-        keyerPanel.add(jSlider1);
+        sv_cwSpeedSlider.setMajorTickSpacing(10);
+        sv_cwSpeedSlider.setMaximum(40);
+        sv_cwSpeedSlider.setMinimum(5);
+        sv_cwSpeedSlider.setMinorTickSpacing(1);
+        sv_cwSpeedSlider.setOrientation(javax.swing.JSlider.VERTICAL);
+        sv_cwSpeedSlider.setPaintLabels(true);
+        sv_cwSpeedSlider.setPaintTicks(true);
+        sv_cwSpeedSlider.setValue(15);
+        keyerPanel.add(sv_cwSpeedSlider);
 
         jSlider2.setMajorTickSpacing(300);
         jSlider2.setMaximum(900);
@@ -3023,7 +3023,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem1;
-    private javax.swing.JSlider jSlider1;
     private javax.swing.JSlider jSlider2;
     private javax.swing.JSlider jSlider3;
     private javax.swing.ButtonGroup jrxRadioButtonGroup;
@@ -3073,6 +3072,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
     protected javax.swing.JSlider sv_compressionSlider;
     protected javax.swing.JButton sv_ctcssListButton;
     protected javax.swing.JCheckBox sv_ctcssSquelchCheckBox;
+    public javax.swing.JSlider sv_cwSpeedSlider;
     protected javax.swing.JCheckBox sv_dspCheckBox;
     protected javax.swing.JComboBox sv_dspComboBox;
     public javax.swing.JButton sv_dwellTimeListButton;

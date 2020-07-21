@@ -57,10 +57,26 @@ public class RWSlider extends JSlider implements MouseWheelListener,
         setMinorTickSpacing(5);
         setPaintTicks(true);
         setup(true);
-
+        parent.rigComms.addObserver(this);
     }
 
-    private void setup(boolean first) {
+    /**
+     * Constructor called from a class extending this class.
+     * @param p
+     * @param pre
+     * @param t 
+     */
+    public RWSlider(JRX_TX p, String pre, String t) {
+        super();
+        parent = p;
+        this.prefix = pre;
+        this.token = t;
+        parent.rigComms.addObserver(this);
+    }
+    
+    
+    
+    public void setup(boolean first) {
         if (first) {
             addMouseWheelListener(this);
             addChangeListener(this);
@@ -180,10 +196,14 @@ public class RWSlider extends JSlider implements MouseWheelListener,
     public void setValue(int v) {
         super.setValue(v);
     }
-    
+
+    /**
+     * Comms state is from RigComms class which implements observer pattern.
+     * @param event 
+     */
     @Override
     public void update(String event) {
-        commOK =  (event == "online");
+        commOK = ("online".equals(event));
     }
 
 }
