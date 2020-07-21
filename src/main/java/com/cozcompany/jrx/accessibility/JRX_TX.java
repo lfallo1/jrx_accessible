@@ -78,7 +78,7 @@ import vfoDisplayControl.GroupBox;
 final public class JRX_TX extends javax.swing.JFrame implements 
         ListSelectionListener, ItemListener , ActionListener {
 
-    final String appVersion = "5.0.14";
+    final String appVersion = "5.0.15";
     final String appName;
     final String programName;
     public final String LINE_SEP;
@@ -217,6 +217,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         scanStateMachine = new ScanStateMachine(this);       
         scanDude = new ScanController(this);
         ((RadioNamesListButton)sv_radioNamesListButton).initialize();
+        ((InterfacesListButton)sv_interfacesListButton).initialize();
         recieverGroupBox.getAccessibleContext().
                 setAccessibleDescription("Receiver Controls");
         setResizable(true);
@@ -500,7 +501,8 @@ final public class JRX_TX extends javax.swing.JFrame implements
 
     /**
      * Method is called upon changing the radio type or changing the device used
-     * for rig communication or startup.
+     * for rig communication or startup.  The interface list is subject to change
+     * based on what kind of interface has been plugged in.
      */
     private void initialize() {
         if (!inhibit) {
@@ -509,7 +511,9 @@ final public class JRX_TX extends javax.swing.JFrame implements
             dcdIconLabel.setIcon(greenLed);
             String dcdLedString = "DCD LED indicator is green";
             dcdIconLabel.getAccessibleContext().setAccessibleDescription(dcdLedString);
-            // Must reset to defaults again to accommodate change in rig.
+            // Must reset to defaults again to accommodate change in rig and 
+            // possibly the interface device.
+            ((InterfacesListButton)sv_interfacesListButton).initInterfaceList();
             setDefaultComboContent();  
             setupHamlibDaemon();
             setComboBoxScales();                          
@@ -2754,6 +2758,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         });
 
         sv_interfacesListButton.setText("INTERFACE /dev/tty.usbSerial ...");
+        sv_interfacesListButton.setActionCommand("INTERFACE");
         sv_interfacesListButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 sv_interfacesListButtonActionPerformed(evt);

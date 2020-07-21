@@ -2104,6 +2104,7 @@
         <Component class="javax.swing.JButton" name="sv_interfacesListButton">
           <Properties>
             <Property name="text" type="java.lang.String" value="INTERFACE /dev/tty.usbSerial ..."/>
+            <Property name="actionCommand" type="java.lang.String" value="INTERFACE"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="sv_interfacesListButtonActionPerformed"/>

@@ -47,13 +47,17 @@ public class InterfacesListButton extends RWListButton {
             if (parent.comArgs.debug >= 1) {
                 parent.pout("serial list output: [" + data + "]");
             }
+            int index = 1;
             for (String s : data.split("\\s+")) {
                 // don't add unexpanded arguments
                 if (!s.matches(".*\\*.*")) {
-                    ((RWListButton)parent.sv_interfacesListButton).addListItem(s, 0, "0");
+                    ((RWListButton)parent.sv_interfacesListButton).addListItem(s, index, String.valueOf(index));
                     System.out.println("Found mac usb serial device :"+s);
+                    index++;
                 }
             }
         }
+        // Update the Dialog with new choices.
+        dialog.setNewData(getChoiceStrings());
     }     
 }
