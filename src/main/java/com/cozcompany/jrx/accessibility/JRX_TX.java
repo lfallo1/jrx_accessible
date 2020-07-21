@@ -20,6 +20,7 @@
 package com.cozcompany.jrx.accessibility;
 
 import com.cozcompany.jrx.accessibility.utilities.FileHelpers;
+import components.AgcListButton;
 import components.CtcssListButton;
 import components.IfFilterListButton;
 import components.ModesListButton;
@@ -224,7 +225,8 @@ final public class JRX_TX extends javax.swing.JFrame implements
         // default app size
         setSize(defWidth, defHeight);
         createControlList();
-        squelchScheme = new SquelchScheme(this);               
+        squelchScheme = new SquelchScheme(this);
+        ((AgcListButton)sv_agcListButton).initialize();
         setupControls();
         setDefaultComboContent(); 
         config = new ConfigManager(this);
@@ -234,6 +236,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         ((CtcssListButton)sv_ctcssListButton).initialize();
         ((IfFilterListButton)sv_ifFilterListButton).initialize();
         ((ModesListButton)sv_modesListButton).initialize();
+        
         // Why does the shortCut key M not work ????????
         muteCheckBox.setText("Mute"); // Do this manually, GUI uses deprecated call to setLabel()
         ((JCheckBox)muteCheckBox).setMnemonic(KeyEvent.VK_M);
@@ -629,7 +632,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 sv_modesListButton,
                 sv_antennaComboBox,
                 sv_attenuatorComboBox,
-                sv_agcComboBox,
+                sv_agcListButton,
                 sv_preampComboBox,
                 sv_ctcssListButton,
                 sv_txCtcssCheckBox,
@@ -734,7 +737,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         ((RWComboBox)sv_ifShiftComboBox).setComboBoxContent("IF", -50, 50, 5, -50, 50, 0, 0, 0); //@todo Coz remove comment
         //sv_ifShiftComboBox.setEnabled(false); // @todo Coz temporary fix.... Remove this line.
         ((RWComboBox)sv_dspComboBox).setComboBoxContent("DSP", 0, 100, 5, 0, 100, 0, 1, 0);
-        ((RWComboBox)sv_agcComboBox).setComboBoxContent("AGC", 0, 10, 1, 0, 1, 0, 10, 1);
+        ((RWListButton)sv_agcListButton).setContent("AGC", 0, 10, 1, 0, 1, 0, 10, 1);
         ((RWComboBox)sv_antennaComboBox).setComboBoxContent("Ant", 0, 4, 1, 0, 1, 0, 1, 1);  //@todo Coz remove comment
         //sv_antennaComboBox.setEnabled(false); // @todo Coz temporary fix... Remove this line.
         ((InterfacesListButton)sv_interfacesListButton).initInterfaceList();
@@ -794,7 +797,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         ((VoxLevelSlider)sv_voxLevelSlider).enableIfCapable(radioData);
         ((CtcssListButton)sv_ctcssListButton).enableIfCapable(radioData);
         ((IfFilterListButton)sv_ifFilterListButton).enableIfCapable(radioData);
-        ((RWComboBox)sv_agcComboBox).enableCap(radioData, "(?ism).*^Set level:.*?AGC\\(", true);
+        ((AgcListButton)sv_agcListButton).enableIfCapable(radioData);
         ((RWComboBox)sv_attenuatorComboBox).enableCap(radioData, "(?ism).*^Set level:.*?ATT\\(", false);
         ((RWComboBox)sv_antennaComboBox).enableCap(radioData, "(?ism).*^Can set Ant:\\rigSpecs+Y$", false); // Coz override for IC-7100
         ((RWComboBox)sv_preampComboBox).enableCap(radioData, "(?ism).*^Set level:.*?PREAMP\\(", true);
@@ -954,7 +957,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         return choice == JOptionPane.OK_OPTION;
     }
 
-    protected void tellUser(String prompt) {
+    public void tellUser(String prompt) {
         Beep.beep();
         JOptionPane.showMessageDialog(this, prompt);
     }
@@ -1540,9 +1543,9 @@ final public class JRX_TX extends javax.swing.JFrame implements
         sv_synthSquelchCheckBox = new RWCheckBox(this,null,null);
         rfGainLabel = new javax.swing.JLabel();
         squelchLabel = new javax.swing.JLabel();
-        sv_agcComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,"L","AGC");
         sv_ctcssSquelchCheckBox = new RWCheckBox(this,"U","TSQL");
         sv_modesListButton = new components.ModesListButton(this);
+        sv_agcListButton = new AgcListButton(this);
         sv_volumeSlider = new com.cozcompany.jrx.accessibility.AfGainSlider(this);
         afGainLabel = new javax.swing.JLabel();
         muteCheckBox = new javax.swing.JCheckBox();
@@ -2029,14 +2032,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
 
         squelchLabel.setText("Squelch");
 
-        sv_agcComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "AGC FAST", "Item 2", "Item 3", "Item 4" }));
-        sv_agcComboBox.setToolTipText("AGC setting (❃)");
-        sv_agcComboBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                sv_agcComboBoxActionPerformed(evt);
-            }
-        });
-
         sv_ctcssSquelchCheckBox.setText("TSQL ON");
         sv_ctcssSquelchCheckBox.setToolTipText("Tone squelch control");
         sv_ctcssSquelchCheckBox.addActionListener(new java.awt.event.ActionListener() {
@@ -2051,6 +2046,8 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 sv_modesListButtonActionPerformed(evt);
             }
         });
+
+        sv_agcListButton.setText("AGC   AGC-F  ...");
 
         javax.swing.GroupLayout recieverGroupBoxLayout = new javax.swing.GroupLayout(recieverGroupBox.getContentPane());
         recieverGroupBox.getContentPane().setLayout(recieverGroupBoxLayout);
@@ -2073,8 +2070,8 @@ final public class JRX_TX extends javax.swing.JFrame implements
                         .addComponent(sv_squelchSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(sv_synthSquelchCheckBox)
-                        .addGap(33, 33, 33)
-                        .addComponent(sv_agcComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(sv_agcListButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
@@ -2095,12 +2092,14 @@ final public class JRX_TX extends javax.swing.JFrame implements
                     .addComponent(squelchLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(sv_squelchSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(recieverGroupBoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(sv_agcComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(sv_synthSquelchCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(sv_synthSquelchCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(sv_agcListButton)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         recieverGroupBoxLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {sv_rfGainSlider, sv_squelchSlider});
+
+        sv_agcListButton.getAccessibleContext().setAccessibleDescription("AGC fast or slow settings");
 
         sv_volumeSlider.setMajorTickSpacing(10);
         sv_volumeSlider.setMinorTickSpacing(5);
@@ -2905,10 +2904,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
         squelchScheme.setSquelchScheme();
     }//GEN-LAST:event_sv_synthSquelchCheckBoxActionPerformed
 
-    private void sv_agcComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sv_agcComboBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_sv_agcComboBoxActionPerformed
-
     private void sv_compressionCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sv_compressionCheckBoxActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_sv_compressionCheckBoxActionPerformed
@@ -3080,7 +3075,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
     private javax.swing.JLabel speedIconLabel;
     private javax.swing.ButtonGroup splitFreqGroup;
     private javax.swing.JLabel squelchLabel;
-    protected javax.swing.JComboBox sv_agcComboBox;
+    public javax.swing.JButton sv_agcListButton;
     protected javax.swing.JCheckBox sv_anfCheckBox;
     protected javax.swing.JComboBox sv_antennaComboBox;
     protected javax.swing.JCheckBox sv_apfCheckBox;

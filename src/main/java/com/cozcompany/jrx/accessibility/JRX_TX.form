@@ -956,8 +956,8 @@
                                       <Component id="sv_squelchSlider" linkSize="26" min="-2" pref="169" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="sv_synthSquelchCheckBox" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
-                                      <Component id="sv_agcComboBox" max="32767" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="sv_agcListButton" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
@@ -981,8 +981,8 @@
                                   <Component id="squelchLabel" min="-2" pref="41" max="-2" attributes="0"/>
                                   <Component id="sv_squelchSlider" linkSize="31" min="-2" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="sv_agcComboBox" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
                                       <Component id="sv_synthSquelchCheckBox" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
+                                      <Component id="sv_agcListButton" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                               <EmptySpace max="32767" attributes="0"/>
@@ -1047,26 +1047,6 @@
                         <Property name="text" type="java.lang.String" value="Squelch"/>
                       </Properties>
                     </Component>
-                    <Component class="javax.swing.JComboBox" name="sv_agcComboBox">
-                      <Properties>
-                        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                          <StringArray count="4">
-                            <StringItem index="0" value="AGC FAST"/>
-                            <StringItem index="1" value="Item 2"/>
-                            <StringItem index="2" value="Item 3"/>
-                            <StringItem index="3" value="Item 4"/>
-                          </StringArray>
-                        </Property>
-                        <Property name="toolTipText" type="java.lang.String" value="AGC setting (&#x2743;)"/>
-                      </Properties>
-                      <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="sv_agcComboBoxActionPerformed"/>
-                      </Events>
-                      <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new com.cozcompany.jrx.accessibility.RWComboBox(this,&quot;L&quot;,&quot;AGC&quot;);"/>
-                        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
-                      </AuxValues>
-                    </Component>
                     <Component class="javax.swing.JCheckBox" name="sv_ctcssSquelchCheckBox">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="TSQL ON"/>
@@ -1089,6 +1069,18 @@
                       </Events>
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new components.ModesListButton(this);"/>
+                        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+                      </AuxValues>
+                    </Component>
+                    <Component class="javax.swing.JButton" name="sv_agcListButton">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="AGC   AGC-F  ..."/>
+                      </Properties>
+                      <AccessibilityProperties>
+                        <Property name="AccessibleContext.accessibleDescription" type="java.lang.String" value="AGC fast or slow settings"/>
+                      </AccessibilityProperties>
+                      <AuxValues>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new AgcListButton(this);"/>
                         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
                       </AuxValues>
                     </Component>

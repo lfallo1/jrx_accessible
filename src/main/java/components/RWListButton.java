@@ -139,8 +139,15 @@ public class RWListButton extends JButton  implements
         setButtonText(displayedValue);
     }
     public void setSelectedItem(String item){
-        selectedIndex = displayMap.get(item);
-        setButtonText(item);
+        Integer index  = displayMap.get(item);
+        if (index == null) {
+            // This is a software error.
+            parent.tellUser("Software ERROR: Chosen item : "+item+" is not available.");           
+        } else {
+            selectedIndex = index;
+            setButtonText(item);
+        }
+        
     }
     /**
      * The RWListButton uses the disp strings in the Dialog list, 
@@ -231,6 +238,7 @@ public class RWListButton extends JButton  implements
             setYHigh(yhigh);
         }
         setSelectedIndex(useMap.get("" + initial));
+        dialog.setNewData(getChoiceStrings());
     }
 
     public void setGenericScale(

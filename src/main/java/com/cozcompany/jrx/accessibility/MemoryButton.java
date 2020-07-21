@@ -19,6 +19,7 @@
 // ***************************************************************************
 package com.cozcompany.jrx.accessibility;
 
+import components.AgcListButton;
 import components.CtcssListButton;
 import components.RWListButton;
 import java.awt.Color;
@@ -263,7 +264,7 @@ final public class MemoryButton extends JButton implements MouseListener {
             parent.vfoState.writeFrequencyToRadioSelectedVfo(frequency);
             parent.vfoDisplay.frequencyToDigits(frequency);
             updateIfNeeded((CtcssListButton)parent.sv_ctcssListButton, ctcss);
-            updateIfNeeded(parent.sv_agcComboBox, agc);
+            updateIfNeeded((AgcListButton)parent.sv_agcListButton, agc);
             updateIfNeeded(parent.sv_preampComboBox, preamp);
             updateIfNeeded(parent.sv_antennaComboBox, antenna);
             updateIfNeeded(parent.sv_attenuatorComboBox, attenuator);
@@ -287,7 +288,7 @@ final public class MemoryButton extends JButton implements MouseListener {
         mode = ((RWListButton)parent.sv_modesListButton).getSelectedIndex();
         frequency = parent.vfoState.getRxFrequency();
         ctcss = ((RWListButton)parent.sv_ctcssListButton).getSelectedIndex();
-        agc = parent.sv_agcComboBox.getSelectedIndex();
+        agc = ((RWListButton)parent.sv_agcListButton).getSelectedIndex();
         preamp = parent.sv_preampComboBox.getSelectedIndex();
         antenna = parent.sv_antennaComboBox.getSelectedIndex();
         attenuator = parent.sv_attenuatorComboBox.getSelectedIndex();

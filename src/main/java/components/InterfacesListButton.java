@@ -59,5 +59,20 @@ public class InterfacesListButton extends RWListButton {
         }
         // Update the Dialog with new choices.
         dialog.setNewData(getChoiceStrings());
-    }     
+    }
+    
+    @Override
+    public void setSelectedItem(String item){
+        Integer index  = displayMap.get(item);
+        if (index == null) {
+            // Here is the case that the interface has been swapped out and maybe
+            // the radio too.  index is null.  We need to enable the interface control.
+            parent.tellUser("Chosen interface "+item+" is no longer available.");
+            setEnabled(true);
+        } else {
+            selectedIndex = index;
+            setButtonText(item);
+        }
+    }
+
 }
