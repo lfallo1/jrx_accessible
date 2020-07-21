@@ -267,7 +267,7 @@ final public class MemoryButton extends JButton implements MouseListener {
             updateIfNeeded((AgcListButton)parent.sv_agcListButton, agc);
             updateIfNeeded(parent.sv_preampComboBox, preamp);
             updateIfNeeded(parent.sv_antennaComboBox, antenna);
-            updateIfNeeded(parent.sv_attenuatorComboBox, attenuator);
+            updateIfNeeded(parent.sv_attenuatorCheckBox, attenuator);
             updateIfNeeded((RWListButton)parent.sv_scanStepListButton, stepSizeIndex);
             //updateIfNeeded(parent.sv_rfGainSlider, rfGain);
             //updateIfNeeded(parent.sv_squelchSlider, squelch);
@@ -291,7 +291,7 @@ final public class MemoryButton extends JButton implements MouseListener {
         agc = ((RWListButton)parent.sv_agcListButton).getSelectedIndex();
         preamp = parent.sv_preampComboBox.getSelectedIndex();
         antenna = parent.sv_antennaComboBox.getSelectedIndex();
-        attenuator = parent.sv_attenuatorComboBox.getSelectedIndex();
+        attenuator = (parent.sv_attenuatorCheckBox.isSelected()) ? 1 : 0;
         stepSizeIndex = ((RWListButton)parent.sv_scanStepListButton).getSelectedIndex();
         nb = (parent.sv_blankerCheckBox.isSelected()) ? 1 : 0;
         updateState();

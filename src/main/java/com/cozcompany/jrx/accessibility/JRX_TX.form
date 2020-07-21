@@ -179,8 +179,8 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="recieverGroupBox" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="operationDetailsTabbedPane" min="-2" pref="400" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="operationDetailsTabbedPane" min="-2" pref="276" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="130" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -258,7 +258,7 @@
                                       </Group>
                                       <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <EmptySpace pref="124" max="32767" attributes="0"/>
+                                  <EmptySpace max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -505,12 +505,6 @@
                               <Group type="102" attributes="0">
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Group type="102" attributes="0">
-                                          <EmptySpace max="-2" attributes="0"/>
-                                          <Component id="sv_attenuatorComboBox" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace max="-2" attributes="0"/>
-                                          <Component id="jLabel17" min="-2" max="-2" attributes="0"/>
-                                      </Group>
-                                      <Group type="102" attributes="0">
                                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                               <Group type="102" attributes="0">
                                                   <Group type="103" groupAlignment="0" attributes="0">
@@ -540,6 +534,10 @@
                                               </Group>
                                           </Group>
                                           <Component id="verticalListPanel" min="-2" pref="74" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Component id="sv_attenuatorCheckBox" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
                                   <EmptySpace min="-2" pref="245" max="-2" attributes="0"/>
@@ -575,10 +573,7 @@
                                       </Group>
                                   </Group>
                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="sv_attenuatorComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jLabel17" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  </Group>
+                                  <Component id="sv_attenuatorCheckBox" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                               </Group>
                           </Group>
@@ -775,37 +770,21 @@
                             <Property name="text" type="java.lang.String" value="Preamp"/>
                           </Properties>
                         </Component>
-                        <Component class="javax.swing.JComboBox" name="sv_attenuatorComboBox">
-                          <Properties>
-                            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                              <StringArray count="4">
-                                <StringItem index="0" value="Item 1"/>
-                                <StringItem index="1" value="Item 2"/>
-                                <StringItem index="2" value="Item 3"/>
-                                <StringItem index="3" value="Item 4"/>
-                              </StringArray>
-                            </Property>
-                            <Property name="toolTipText" type="java.lang.String" value="Input attenuator (&#x2743;)"/>
-                          </Properties>
-                          <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new com.cozcompany.jrx.accessibility.RWComboBox(this,&quot;L&quot;,&quot;ATT&quot;);"/>
-                            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
-                          </AuxValues>
-                        </Component>
-                        <Component class="javax.swing.JLabel" name="jLabel17">
-                          <Properties>
-                            <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
-                              <ComponentRef name="sv_attenuatorComboBox"/>
-                            </Property>
-                            <Property name="text" type="java.lang.String" value="Attenuator"/>
-                          </Properties>
-                        </Component>
                         <Component class="javax.swing.JButton" name="sv_ifFilterListButton">
                           <Properties>
                             <Property name="text" type="java.lang.String" value="BW  Auto     ..."/>
                           </Properties>
                           <AuxValues>
                             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new components.IfFilterListButton(this);"/>
+                            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+                          </AuxValues>
+                        </Component>
+                        <Component class="javax.swing.JCheckBox" name="sv_attenuatorCheckBox">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="Attenuator"/>
+                          </Properties>
+                          <AuxValues>
+                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new AttenuatorCheckBox(this);"/>
                             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
                           </AuxValues>
                         </Component>

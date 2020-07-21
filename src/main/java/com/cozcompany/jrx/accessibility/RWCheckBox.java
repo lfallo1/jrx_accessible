@@ -30,10 +30,10 @@ import javax.swing.JCheckBox;
 public class RWCheckBox extends JCheckBox implements ActionListener, ControlInterface {
 
     JRX_TX parent;
-    String token;
-    String prefix;
-    boolean state, oldState;
-    boolean localInhibit = false;
+    protected String token;
+    protected String prefix;
+    protected boolean state, oldState;
+    protected boolean localInhibit = false;
 
     public RWCheckBox(JRX_TX p, String pre, String t) {
         super();
@@ -61,7 +61,7 @@ public class RWCheckBox extends JCheckBox implements ActionListener, ControlInte
         }
     }
 
-    protected void readValue() {
+    public void readValue() {
         if (token != null) {
             String com = String.format("%s %s", prefix.toLowerCase(), token);
             String s = parent.sendRadioCom(com, 0, false);

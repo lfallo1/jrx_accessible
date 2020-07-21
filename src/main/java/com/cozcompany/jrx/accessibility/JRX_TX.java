@@ -21,6 +21,7 @@ package com.cozcompany.jrx.accessibility;
 
 import com.cozcompany.jrx.accessibility.utilities.FileHelpers;
 import components.AgcListButton;
+import components.AttenuatorCheckBox;
 import components.CtcssListButton;
 import components.IfFilterListButton;
 import components.ModesListButton;
@@ -606,7 +607,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
     private void setDefaultComboContent() {
         ((RWListButton) sv_ifFilterListButton).placeholderData("BW ");
         ((RWComboBox) sv_preampComboBox).comboPlaceholderData();
-        ((RWComboBox) sv_attenuatorComboBox).comboPlaceholderData();
         ((RWListButton) sv_modesListButton).placeholderData("Mode ");
     }
     /**
@@ -631,7 +631,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 sv_ifFilterListButton,
                 sv_modesListButton,
                 sv_antennaComboBox,
-                sv_attenuatorComboBox,
+                sv_attenuatorCheckBox,
                 sv_agcListButton,
                 sv_preampComboBox,
                 sv_ctcssListButton,
@@ -798,7 +798,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         ((CtcssListButton)sv_ctcssListButton).enableIfCapable(radioData);
         ((IfFilterListButton)sv_ifFilterListButton).enableIfCapable(radioData);
         ((AgcListButton)sv_agcListButton).enableIfCapable(radioData);
-        ((RWComboBox)sv_attenuatorComboBox).enableCap(radioData, "(?ism).*^Set level:.*?ATT\\(", false);
+        ((AttenuatorCheckBox)sv_attenuatorCheckBox).enableIfCapable(radioData);
         ((RWComboBox)sv_antennaComboBox).enableCap(radioData, "(?ism).*^Can set Ant:\\rigSpecs+Y$", false); // Coz override for IC-7100
         ((RWComboBox)sv_preampComboBox).enableCap(radioData, "(?ism).*^Set level:.*?PREAMP\\(", true);
         ((RWSlider)sv_volumeSlider).enableCap(radioData, "(?ism).*^Set level:.*?AF\\(", true); 
@@ -943,8 +943,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
         inhibit = true; // Do not cause a change event handler to call initialize().
         ((RWComboBox) sv_preampComboBox).setGenericComboBoxScale(
                 "Pre", "(?ism).*^Preamp:\\s*(.*?)\\s*$.*", true, true);
-        ((RWComboBox) sv_attenuatorComboBox).setGenericComboBoxScale(
-                "Att", "(?ism).*^Attenuator:\\s*(.*?)\\s*$.*", true, true);
         ((IfFilterListButton) sv_ifFilterListButton).setGenericScale("", "", true, true);
         ((ModesListButton) sv_modesListButton).setGenericScale(
                 "Mode", "(?ism).*^Mode list:\\s*(.*?)\\s*$.*", false, false);
@@ -1525,9 +1523,8 @@ final public class JRX_TX extends javax.swing.JFrame implements
         jLabel15 = new javax.swing.JLabel();
         sv_preampComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,"L","PREAMP");
         jLabel16 = new javax.swing.JLabel();
-        sv_attenuatorComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,"L","ATT");
-        jLabel17 = new javax.swing.JLabel();
         sv_ifFilterListButton = new components.IfFilterListButton(this);
+        sv_attenuatorCheckBox = new AttenuatorCheckBox(this);
         dstarPanel = new javax.swing.JPanel();
         keyerPanel = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
@@ -1781,7 +1778,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(sv_ctcssListButton))
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(124, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         operationDetailsTabbedPane.addTab("Transmitter", null, transmitterPanel, "Important xmit controls and details.");
@@ -1875,13 +1872,9 @@ final public class JRX_TX extends javax.swing.JFrame implements
         jLabel16.setLabelFor(sv_preampComboBox);
         jLabel16.setText("Preamp");
 
-        sv_attenuatorComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        sv_attenuatorComboBox.setToolTipText("Input attenuator (❃)");
-
-        jLabel17.setLabelFor(sv_attenuatorComboBox);
-        jLabel17.setText("Attenuator");
-
         sv_ifFilterListButton.setText("BW  Auto     ...");
+
+        sv_attenuatorCheckBox.setText("Attenuator");
 
         javax.swing.GroupLayout ifControlsPanelLayout = new javax.swing.GroupLayout(ifControlsPanel);
         ifControlsPanel.setLayout(ifControlsPanelLayout);
@@ -1889,11 +1882,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
             ifControlsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(ifControlsPanelLayout.createSequentialGroup()
                 .addGroup(ifControlsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(ifControlsPanelLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(sv_attenuatorComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel17))
                     .addGroup(ifControlsPanelLayout.createSequentialGroup()
                         .addGroup(ifControlsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(ifControlsPanelLayout.createSequentialGroup()
@@ -1916,7 +1904,10 @@ final public class JRX_TX extends javax.swing.JFrame implements
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(57, 57, 57)))
-                        .addComponent(verticalListPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(verticalListPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(ifControlsPanelLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(sv_attenuatorCheckBox)))
                 .addGap(245, 245, 245))
         );
         ifControlsPanelLayout.setVerticalGroup(
@@ -1942,9 +1933,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
                             .addComponent(sv_preampComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel16))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(ifControlsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(sv_attenuatorComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel17))
+                .addComponent(sv_attenuatorCheckBox)
                 .addContainerGap())
         );
 
@@ -2144,8 +2133,8 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(recieverGroupBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(operationDetailsTabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addComponent(operationDetailsTabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(130, 130, 130))
         );
 
         recieverGroupBox.getAccessibleContext().setAccessibleName("Receiver Group");
@@ -3024,7 +3013,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -3079,7 +3067,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
     protected javax.swing.JCheckBox sv_anfCheckBox;
     protected javax.swing.JComboBox sv_antennaComboBox;
     protected javax.swing.JCheckBox sv_apfCheckBox;
-    protected javax.swing.JComboBox sv_attenuatorComboBox;
+    public javax.swing.JCheckBox sv_attenuatorCheckBox;
     protected javax.swing.JCheckBox sv_blankerCheckBox;
     protected javax.swing.JCheckBox sv_compressionCheckBox;
     protected javax.swing.JSlider sv_compressionSlider;
