@@ -450,7 +450,7 @@ public class VfoStateInterface {
                     error = reply.matches("(?i).*Protocol error");
                 } 
                 if (!error) {
-                    String splitSearch = "?i).*Split: 1";
+                    String splitSearch = "(?i).*Split: 1";
                     splitOn = reply.matches(splitSearch);            
                 }
                 // Set local variable within writeLock.
