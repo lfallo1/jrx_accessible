@@ -197,7 +197,7 @@ public class RWListButton extends JButton  implements
      */
     public void setButtonText(String value) {
         String str = name+" "+value;
-        String formattedText = String.format("%-23S ...", str);
+        String formattedText = String.format("%-23s ...", str);
         setText(formattedText);
         getAccessibleContext().setAccessibleDescription(str+" selected");
     }

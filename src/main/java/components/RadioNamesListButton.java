@@ -64,6 +64,17 @@ public class RadioNamesListButton extends RWListButton {
             return -1;               
     }
     
+    static public boolean isValidRadioCode( int rigCode) {
+        String radioName = radioNames.get(rigCode);
+        return (radioName != null);        
+    }
+    
+    public int getSelectedRadioCode() {
+        String radio = getSelectedItem();
+        return getRadioCode(radio);
+        
+    }
+    
     public void setSelectedItem(String rigName) {
         Integer index = displayMap.get(rigName);
         if (index != null) {
@@ -155,12 +166,5 @@ public class RadioNamesListButton extends RWListButton {
         }
         super.dialog.setNewData(choices);
     }
-    /**
-     * Cannot find a usage in original code....
-     * @return 
-     */
-//    public String getRadioModel() {            
-//        return readValueStr();
-//    }
     
 }

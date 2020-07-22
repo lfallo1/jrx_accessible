@@ -799,12 +799,12 @@ final public class JRX_TX extends javax.swing.JFrame implements
         ((IfFilterListButton)sv_ifFilterListButton).enableIfCapable(radioData);
         ((AgcListButton)sv_agcListButton).enableIfCapable(radioData);
         ((AttenuatorCheckBox)sv_attenuatorCheckBox).enableIfCapable(radioData);
-        ((RWComboBox)sv_antennaComboBox).enableCap(radioData, "(?ism).*^Can set Ant:\\rigSpecs+Y$", false); // Coz override for IC-7100
+        ((RWComboBox)sv_antennaComboBox).enableCap(radioData, "(?ism).*^Can set Ant:\\rigSpecs+Y$", false); 
         ((RWComboBox)sv_preampComboBox).enableCap(radioData, "(?ism).*^Set level:.*?PREAMP\\(", true);
         ((RWSlider)sv_volumeSlider).enableCap(radioData, "(?ism).*^Set level:.*?AF\\(", true); 
         ((RWSlider)sv_rfGainSlider).enableCap(radioData, "(?ism).*^Set level:.*?RF\\(", true);
         ((RWSlider)sv_squelchSlider).enableCap(radioData, "(?ism).*^Set level:.*?SQL\\(", true);
-        //((RWComboBox)sv_ifShiftComboBox).enableCap(radioData, "(?ism).*^Set level:.*?IF\\(", true); // Coz override for IC-7100
+        ((RWComboBox)sv_ifShiftComboBox).enableCap(radioData, "(?ism).*^Set level:.*?IF\\(", true); 
         ((RWCheckBox)sv_blankerCheckBox).enableCap(radioData, "(?ism).*^Set functions:.*?\\sNB\\s", false);
         ((RWCheckBox)sv_anfCheckBox).enableCap(radioData, "(?ism).*^Set functions:.*?\\sANF\\s", false);
         ((RWCheckBox)sv_apfCheckBox).enableCap(radioData, "(?ism).*^Set functions:.*?\\sAPF\\s", false);
@@ -815,7 +815,8 @@ final public class JRX_TX extends javax.swing.JFrame implements
         ((RWCheckBox)sv_txCtcssCheckBox).enableCap(radioData,"(?ism).*^Set functions:.*?\\sTONE\\s", false);
         ((RWCheckBox)sv_ctcssSquelchCheckBox).enableCap(radioData,"(?ism).*^Set functions:.*?\\sTSQL\\s", false);        
         ((RWSlider)sv_compressionSlider).enableCap(radioData, "(?ism).*^Set level:.*?COMP\\(", true);
-        
+        int radioCode = ((RadioNamesListButton)sv_radioNamesListButton).getSelectedRadioCode();
+        RigCapsCorrections.correct(this, radioCode);
         String s = sendRadioCom("\\get_dcd", 0, false);
         dcdCapable = (s != null && s.matches("\\d+"));
         squelchScheme.setSquelchScheme();
@@ -1527,12 +1528,13 @@ final public class JRX_TX extends javax.swing.JFrame implements
         sv_attenuatorCheckBox = new AttenuatorCheckBox(this);
         dstarPanel = new javax.swing.JPanel();
         keyerPanel = new javax.swing.JPanel();
-        jLabel6 = new javax.swing.JLabel();
         sv_cwSpeedSlider = new CwSpeedSlider(this);
         jSlider2 = new javax.swing.JSlider();
+        jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jSlider3 = new javax.swing.JSlider();
-        jLabel9 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
+        jLabel3 = new javax.swing.JLabel();
         rttyPanel = new javax.swing.JPanel();
         recieverGroupBox = new GroupBox();
         sv_squelchSlider = new com.cozcompany.jrx.accessibility.RWSlider(this,"L","SQL",0);
@@ -1945,42 +1947,70 @@ final public class JRX_TX extends javax.swing.JFrame implements
         dstarPanel.getAccessibleContext().setAccessibleName("Noise Reduction");
         dstarPanel.getAccessibleContext().setAccessibleDescription("R X Controls to reduce interference");
 
-        jLabel6.setText("CW Speed WPM");
-        keyerPanel.add(jLabel6);
-
         sv_cwSpeedSlider.setMajorTickSpacing(10);
         sv_cwSpeedSlider.setMaximum(40);
         sv_cwSpeedSlider.setMinimum(5);
         sv_cwSpeedSlider.setMinorTickSpacing(1);
-        sv_cwSpeedSlider.setOrientation(javax.swing.JSlider.VERTICAL);
         sv_cwSpeedSlider.setPaintLabels(true);
         sv_cwSpeedSlider.setPaintTicks(true);
         sv_cwSpeedSlider.setValue(15);
-        keyerPanel.add(sv_cwSpeedSlider);
 
         jSlider2.setMajorTickSpacing(300);
         jSlider2.setMaximum(900);
         jSlider2.setMinimum(300);
-        jSlider2.setMinorTickSpacing(300);
-        jSlider2.setOrientation(javax.swing.JSlider.VERTICAL);
+        jSlider2.setMinorTickSpacing(100);
         jSlider2.setPaintLabels(true);
         jSlider2.setPaintTicks(true);
-        keyerPanel.add(jSlider2);
+        jSlider2.setValue(600);
 
-        jLabel7.setText("<html>CW<br>Side<br>Tone<br>Frequency ");
-        keyerPanel.add(jLabel7);
+        jLabel6.setText("CW Speed WPM");
 
-        jSlider3.setMajorTickSpacing(10);
-        jSlider3.setMinorTickSpacing(5);
-        jSlider3.setOrientation(javax.swing.JSlider.VERTICAL);
-        jSlider3.setPaintTicks(true);
-        jSlider3.setEnabled(false);
-        keyerPanel.add(jSlider3);
+        jLabel7.setText("CW Side-Tone \nFrequency ");
 
-        jLabel9.setLabelFor(jSlider3);
-        jLabel9.setText("Level");
-        jLabel9.setEnabled(false);
-        keyerPanel.add(jLabel9);
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jTextArea1.setText("DE WA3RQD/COZ  FM19QK");
+        jScrollPane1.setViewportView(jTextArea1);
+
+        jLabel3.setText("CW TEXT:  TO SEND END LINE WITH RETURN");
+
+        javax.swing.GroupLayout keyerPanelLayout = new javax.swing.GroupLayout(keyerPanel);
+        keyerPanel.setLayout(keyerPanelLayout);
+        keyerPanelLayout.setHorizontalGroup(
+            keyerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(keyerPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(keyerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1)
+                    .addGroup(keyerPanelLayout.createSequentialGroup()
+                        .addGroup(keyerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, keyerPanelLayout.createSequentialGroup()
+                                .addComponent(sv_cwSpeedSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel6)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jSlider2, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE)
+                        .addGap(6, 6, 6)))
+                .addContainerGap())
+        );
+        keyerPanelLayout.setVerticalGroup(
+            keyerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(keyerPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(keyerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(sv_cwSpeedSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jSlider2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
 
         operationDetailsTabbedPane.addTab("Keyer", keyerPanel);
         keyerPanel.getAccessibleContext().setAccessibleName("Keyer panel");
@@ -3014,17 +3044,18 @@ final public class JRX_TX extends javax.swing.JFrame implements
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSlider jSlider2;
-    private javax.swing.JSlider jSlider3;
+    private javax.swing.JTextArea jTextArea1;
     private javax.swing.ButtonGroup jrxRadioButtonGroup;
     private javax.swing.JPanel jrxScopePanel;
     private javax.swing.JPanel keyerPanel;

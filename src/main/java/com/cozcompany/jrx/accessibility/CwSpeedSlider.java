@@ -5,8 +5,8 @@
  */
 package com.cozcompany.jrx.accessibility;
 
-import com.cozcompany.jrx.accessibility.JRX_TX;
-import com.cozcompany.jrx.accessibility.RWSlider;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import javax.accessibility.AccessibleContext;
@@ -18,7 +18,7 @@ import javax.swing.event.ChangeListener;
  * @author Coz
  */
 public class CwSpeedSlider extends RWSlider 
-        implements MouseWheelListener, ChangeListener {
+        implements MouseWheelListener, ChangeListener, KeyListener {
     JRX_TX myParent;
     final int INITIAL_VALUE = 15;
     
@@ -43,6 +43,7 @@ public class CwSpeedSlider extends RWSlider
     public void setupOnce() {
         addMouseWheelListener(this);
         addChangeListener(this);
+        this.addKeyListener(this);
         super.initial = INITIAL_VALUE;
         setValue(initial);
     }
@@ -86,6 +87,28 @@ public class CwSpeedSlider extends RWSlider
         int v = e.getWheelRotation();
         int iv = (v < 0) ? -1 : 1;
         setValue(getValue() + iv);
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if (e.getKeyCode() == (KeyEvent.VK_RIGHT)) {
+            level = getValue();
+            level++;
+            setValue((int)level);
+        } else if (e.getKeyCode() == (KeyEvent.VK_LEFT)) {
+            level = getValue();
+            level--;
+            setValue((int)level);            
+        }        
+    }
+
+
+    @Override
+    public void keyReleased(KeyEvent e) {
     }
     
 }
