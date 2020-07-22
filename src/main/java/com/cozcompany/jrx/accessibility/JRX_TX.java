@@ -645,7 +645,8 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 sv_voxLevelSlider,
                 sv_enableVoxCheckBox,
                 sv_compressionSlider,
-                sv_compressionCheckBox
+                sv_compressionCheckBox,
+                sv_fbkinCheckBox
         };
         for (Component comp : list) {
             controlList.add((ControlInterface) comp);
@@ -734,12 +735,10 @@ final public class JRX_TX extends javax.swing.JFrame implements
         }
         
         // yhigh intentionally = ylow to allow the rig to set the range
-        //((RWComboBox)sv_ifShiftComboBox).setComboBoxContent("IF", -50, 50, 5, -50, 50, 0, 0, 0); //@todo Coz remove comment
-        //sv_ifShiftComboBox.setEnabled(false); // @todo Coz temporary fix.... Remove this line.
+        ((RWComboBox)sv_ifShiftComboBox).setComboBoxContent("IF", -50, 50, 5, -50, 50, 0, 0, 0); 
         ((RWComboBox)sv_dspComboBox).setComboBoxContent("DSP", 0, 100, 5, 0, 100, 0, 1, 0);
         ((RWListButton)sv_agcListButton).setContent("AGC", 0, 10, 1, 0, 1, 0, 10, 1);
-        ((RWComboBox)sv_antennaComboBox).setComboBoxContent("Ant", 0, 4, 1, 0, 1, 0, 1, 1);  //@todo Coz remove comment
-        //sv_antennaComboBox.setEnabled(false); // @todo Coz temporary fix... Remove this line.
+        ((RWComboBox)sv_antennaComboBox).setComboBoxContent("Ant", 0, 4, 1, 0, 1, 0, 1, 1);  
         ((InterfacesListButton)sv_interfacesListButton).initInterfaceList();
         ((RadioNamesListButton)sv_radioNamesListButton).getSupportedRadios();
         memoryCollection.readMemoryButtons();
@@ -748,8 +747,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
         ((ScanStepListButton)sv_scanStepListButton).init();
         ((StepPeriodListButton)sv_stepPeriodListButton).init();
         ((DwellTimeListButton)sv_dwellTimeListButton).init();
-        //scanDude.initScanValues(sv_scanStepComboBox, 12, sv_scanSpeedComboBox, 5);
-        //scanDude.initScanValues(null, 0, sv_dwellTimeComboBox, 10);
         //scanDude.initScanValues(sv_scopeStepComboBox, 12, sv_scopeSpeedComboBox, 0);
         memoryButtonsPanel.setBackground(new Color(128, 200, 220));
         
@@ -815,6 +812,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         ((RWCheckBox)sv_txCtcssCheckBox).enableCap(radioData,"(?ism).*^Set functions:.*?\\sTONE\\s", false);
         ((RWCheckBox)sv_ctcssSquelchCheckBox).enableCap(radioData,"(?ism).*^Set functions:.*?\\sTSQL\\s", false);        
         ((RWSlider)sv_compressionSlider).enableCap(radioData, "(?ism).*^Set level:.*?COMP\\(", true);
+        sv_tunerCheckBox.setEnabled(false);   // Not implemented yet.
         int radioCode = ((RadioNamesListButton)sv_radioNamesListButton).getSelectedRadioCode();
         RigCapsCorrections.correct(this, radioCode);
         String s = sendRadioCom("\\get_dcd", 0, false);
@@ -1509,7 +1507,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         jLabel10 = new javax.swing.JLabel();
         sv_txCtcssCheckBox = new RWCheckBox(this,"U","TONE");
         sv_ctcssListButton = new components.CtcssListButton(this);
-        jCheckBox1 = new javax.swing.JCheckBox();
+        sv_tunerCheckBox = new javax.swing.JCheckBox();
         ifControlsPanel = new javax.swing.JPanel();
         verticalListPanel = new javax.swing.JPanel();
         sv_rawSigCheckBox = new RWCheckBox(this,null,null);
@@ -1535,6 +1533,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         jLabel3 = new javax.swing.JLabel();
+        sv_fbkinCheckBox = new RWCheckBox(this,"U","FBKIN");
         rttyPanel = new javax.swing.JPanel();
         recieverGroupBox = new GroupBox();
         sv_squelchSlider = new com.cozcompany.jrx.accessibility.RWSlider(this,"L","SQL",0);
@@ -1734,7 +1733,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
 
         sv_ctcssListButton.setText("CTCSS 107.2  ...");
 
-        jCheckBox1.setText("TUNER");
+        sv_tunerCheckBox.setText("TUNER");
 
         javax.swing.GroupLayout transmitterPanelLayout = new javax.swing.GroupLayout(transmitterPanel);
         transmitterPanel.setLayout(transmitterPanelLayout);
@@ -1759,7 +1758,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jCheckBox1)
+                .addComponent(sv_tunerCheckBox)
                 .addContainerGap())
         );
         transmitterPanelLayout.setVerticalGroup(
@@ -1769,7 +1768,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 .addGroup(transmitterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(transmitterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jCheckBox1))
+                        .addComponent(sv_tunerCheckBox))
                     .addComponent(sv_rfPowerSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(transmitterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1974,6 +1973,13 @@ final public class JRX_TX extends javax.swing.JFrame implements
 
         jLabel3.setText("CW TEXT:  TO SEND END LINE WITH RETURN");
 
+        sv_fbkinCheckBox.setText("Fast Break-In");
+        sv_fbkinCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sv_fbkinActionHandler(evt);
+            }
+        });
+
         javax.swing.GroupLayout keyerPanelLayout = new javax.swing.GroupLayout(keyerPanel);
         keyerPanel.setLayout(keyerPanelLayout);
         keyerPanelLayout.setHorizontalGroup(
@@ -1992,8 +1998,11 @@ final public class JRX_TX extends javax.swing.JFrame implements
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jSlider2, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE)
-                        .addGap(6, 6, 6)))
+                        .addGroup(keyerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)
+                            .addGroup(keyerPanelLayout.createSequentialGroup()
+                                .addComponent(sv_fbkinCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
         keyerPanelLayout.setVerticalGroup(
@@ -2001,12 +2010,17 @@ final public class JRX_TX extends javax.swing.JFrame implements
             .addGroup(keyerPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(keyerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(sv_cwSpeedSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jSlider2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel3)
+                    .addGroup(keyerPanelLayout.createSequentialGroup()
+                        .addGroup(keyerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(sv_cwSpeedSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jSlider2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel3))
+                    .addGroup(keyerPanelLayout.createSequentialGroup()
+                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(sv_fbkinCheckBox)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -2982,6 +2996,10 @@ final public class JRX_TX extends javax.swing.JFrame implements
         scanStateMachine.startScan(-1);
     }//GEN-LAST:event_scanDownActionHandler
 
+    private void sv_fbkinActionHandler(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sv_fbkinActionHandler
+        // TODO add your handling code here:
+    }//GEN-LAST:event_sv_fbkinActionHandler
+
     /**
      * @param args the command line arguments
      */
@@ -3034,7 +3052,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
     private javax.swing.JPanel firstSettingsPanel;
     private javax.swing.JButton helpButton;
     private javax.swing.JPanel ifControlsPanel;
-    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JInternalFrame jInternalFrame1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -3108,6 +3125,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
     protected javax.swing.JComboBox sv_dspComboBox;
     public javax.swing.JButton sv_dwellTimeListButton;
     protected javax.swing.JCheckBox sv_enableVoxCheckBox;
+    protected javax.swing.JCheckBox sv_fbkinCheckBox;
     public javax.swing.JButton sv_ifFilterListButton;
     protected javax.swing.JComboBox sv_ifShiftComboBox;
     public javax.swing.JButton sv_interfacesListButton;
@@ -3130,6 +3148,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
     protected javax.swing.JCheckBox sv_syncCheckBox;
     public javax.swing.JCheckBox sv_synthSquelchCheckBox;
     protected javax.swing.JComboBox<String> sv_timerIntervalComboBox;
+    protected javax.swing.JCheckBox sv_tunerCheckBox;
     protected javax.swing.JCheckBox sv_txCtcssCheckBox;
     protected javax.swing.JCheckBox sv_volumeExitCheckBox;
     protected javax.swing.JSlider sv_volumeSlider;
