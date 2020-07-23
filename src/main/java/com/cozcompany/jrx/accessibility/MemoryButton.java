@@ -265,7 +265,7 @@ final public class MemoryButton extends JButton implements MouseListener {
             parent.vfoDisplay.frequencyToDigits(frequency);
             updateIfNeeded((CtcssListButton)parent.sv_ctcssListButton, ctcss);
             updateIfNeeded((AgcListButton)parent.sv_agcListButton, agc);
-            updateIfNeeded(parent.sv_preampComboBox, preamp);
+            updateIfNeeded(parent.sv_preampCheckBox, preamp);
             updateIfNeeded(parent.sv_antennaComboBox, antenna);
             updateIfNeeded(parent.sv_attenuatorCheckBox, attenuator);
             updateIfNeeded((RWListButton)parent.sv_scanStepListButton, stepSizeIndex);
@@ -289,7 +289,7 @@ final public class MemoryButton extends JButton implements MouseListener {
         frequency = parent.vfoState.getRxFrequency();
         ctcss = ((RWListButton)parent.sv_ctcssListButton).getSelectedIndex();
         agc = ((RWListButton)parent.sv_agcListButton).getSelectedIndex();
-        preamp = parent.sv_preampComboBox.getSelectedIndex();
+        preamp = (parent.sv_preampCheckBox.isSelected()) ? 1 : 0;
         antenna = parent.sv_antennaComboBox.getSelectedIndex();
         attenuator = (parent.sv_attenuatorCheckBox.isSelected()) ? 1 : 0;
         stepSizeIndex = ((RWListButton)parent.sv_scanStepListButton).getSelectedIndex();
