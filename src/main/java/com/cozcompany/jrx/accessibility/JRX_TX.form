@@ -827,7 +827,7 @@
                               <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="sv_cwSendText" max="32767" attributes="0"/>
+                                      <Component id="cwSendText" max="32767" attributes="0"/>
                                       <Group type="102" alignment="0" attributes="0">
                                           <Component id="jSlider2" min="-2" pref="167" max="-2" attributes="0"/>
                                           <EmptySpace max="-2" attributes="0"/>
@@ -873,7 +873,7 @@
                                   <EmptySpace pref="60" max="32767" attributes="0"/>
                                   <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="sv_cwSendText" min="-2" max="-2" attributes="0"/>
+                                  <Component id="cwSendText" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                               </Group>
                           </Group>
@@ -937,13 +937,13 @@
                             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
                           </AuxValues>
                         </Component>
-                        <Component class="javax.swing.JFormattedTextField" name="sv_cwSendText">
+                        <Component class="javax.swing.JFormattedTextField" name="cwSendText">
                           <AccessibilityProperties>
                             <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="Text to send via CW"/>
                             <Property name="AccessibleContext.accessibleDescription" type="java.lang.String" value="Type text to send and hit enter."/>
                           </AccessibilityProperties>
                           <Events>
-                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="sv_cwSendTextActionPerformed"/>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cwSendTextActionPerformed"/>
                           </Events>
                           <AuxValues>
                             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>

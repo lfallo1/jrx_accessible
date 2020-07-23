@@ -1533,7 +1533,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         jLabel7 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         sv_fbkinCheckBox = new RWCheckBox(this,"U","FBKIN");
-        sv_cwSendText = new javax.swing.JFormattedTextField();
+        cwSendText = new javax.swing.JFormattedTextField();
         rttyPanel = new javax.swing.JPanel();
         recieverGroupBox = new GroupBox();
         sv_squelchSlider = new com.cozcompany.jrx.accessibility.RWSlider(this,"L","SQL",0);
@@ -1975,9 +1975,9 @@ final public class JRX_TX extends javax.swing.JFrame implements
             }
         });
 
-        sv_cwSendText.addActionListener(new java.awt.event.ActionListener() {
+        cwSendText.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                sv_cwSendTextActionPerformed(evt);
+                cwSendTextActionPerformed(evt);
             }
         });
 
@@ -1988,7 +1988,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
             .addGroup(keyerPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(keyerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(sv_cwSendText)
+                    .addComponent(cwSendText)
                     .addGroup(keyerPanelLayout.createSequentialGroup()
                         .addComponent(jSlider2, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -2023,12 +2023,12 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 60, Short.MAX_VALUE)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(sv_cwSendText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(cwSendText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
-        sv_cwSendText.getAccessibleContext().setAccessibleName("Text to send via CW");
-        sv_cwSendText.getAccessibleContext().setAccessibleDescription("Type text to send and hit enter.");
+        cwSendText.getAccessibleContext().setAccessibleName("Text to send via CW");
+        cwSendText.getAccessibleContext().setAccessibleDescription("Type text to send and hit enter.");
 
         operationDetailsTabbedPane.addTab("Keyer", keyerPanel);
         keyerPanel.getAccessibleContext().setAccessibleName("Keyer panel");
@@ -3004,16 +3004,16 @@ final public class JRX_TX extends javax.swing.JFrame implements
         // TODO add your handling code here:
     }//GEN-LAST:event_sv_fbkinActionHandler
 
-    private void sv_cwSendTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sv_cwSendTextActionPerformed
+    private void cwSendTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cwSendTextActionPerformed
         String txt = evt.getActionCommand();
         System.out.println("Action Command : "+txt);
-        String getText = sv_cwSendText.getText();
+        String getText = cwSendText.getText();
         String comStr = "b "+getText;
         sendRadioCom(comStr, 1, true);
         System.out.println("Sending CW  ["+getText+"]");
-        sv_cwSendText.setText("");
+        cwSendText.setText("");
 
-    }//GEN-LAST:event_sv_cwSendTextActionPerformed
+    }//GEN-LAST:event_cwSendTextActionPerformed
 
     /**
      * @param args the command line arguments
@@ -3060,6 +3060,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
     protected javax.swing.JLabel comErrorIconLabel;
     private javax.swing.JButton copyButton;
     private javax.swing.JButton copyMemButton;
+    public javax.swing.JFormattedTextField cwSendText;
     protected javax.swing.JLabel dcdIconLabel;
     private javax.swing.JPanel dstarPanel;
     private javax.swing.JButton eraseMemButton;
@@ -3133,7 +3134,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
     protected javax.swing.JSlider sv_compressionSlider;
     protected javax.swing.JButton sv_ctcssListButton;
     protected javax.swing.JCheckBox sv_ctcssSquelchCheckBox;
-    public javax.swing.JFormattedTextField sv_cwSendText;
     public javax.swing.JSlider sv_cwSpeedSlider;
     protected javax.swing.JCheckBox sv_dspCheckBox;
     protected javax.swing.JComboBox sv_dspComboBox;

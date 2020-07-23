@@ -39,7 +39,8 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
 /**
- * 
+ * Configuration Manager class to retreive and save Swing control settings when
+ * the control name begins with "sv_" which probably stands for "save".
  * @author lutusp
  */
 final public class ConfigManager {
