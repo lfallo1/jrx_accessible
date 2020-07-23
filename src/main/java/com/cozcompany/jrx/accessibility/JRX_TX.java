@@ -237,6 +237,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         ((CtcssListButton)sv_ctcssListButton).initialize();
         ((IfFilterListButton)sv_ifFilterListButton).initialize();
         ((ModesListButton)sv_modesListButton).initialize();
+
         
         // Why does the shortCut key M not work ????????
         muteCheckBox.setText("Mute"); // Do this manually, GUI uses deprecated call to setLabel()
@@ -1527,13 +1528,12 @@ final public class JRX_TX extends javax.swing.JFrame implements
         dstarPanel = new javax.swing.JPanel();
         keyerPanel = new javax.swing.JPanel();
         sv_cwSpeedSlider = new CwSpeedSlider(this);
-        jSlider2 = new javax.swing.JSlider();
+        jSlider2 = new CwSideToneSlider(this);
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
         jLabel3 = new javax.swing.JLabel();
         sv_fbkinCheckBox = new RWCheckBox(this,"U","FBKIN");
+        sv_cwSendText = new javax.swing.JFormattedTextField();
         rttyPanel = new javax.swing.JPanel();
         recieverGroupBox = new GroupBox();
         sv_squelchSlider = new com.cozcompany.jrx.accessibility.RWSlider(this,"L","SQL",0);
@@ -1966,17 +1966,18 @@ final public class JRX_TX extends javax.swing.JFrame implements
 
         jLabel7.setText("CW Side-Tone \nFrequency ");
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jTextArea1.setText("DE WA3RQD/COZ  FM19QK");
-        jScrollPane1.setViewportView(jTextArea1);
-
         jLabel3.setText("CW TEXT:  TO SEND END LINE WITH RETURN");
 
         sv_fbkinCheckBox.setText("Fast Break-In");
         sv_fbkinCheckBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 sv_fbkinActionHandler(evt);
+            }
+        });
+
+        sv_cwSendText.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sv_cwSendTextActionPerformed(evt);
             }
         });
 
@@ -1987,22 +1988,23 @@ final public class JRX_TX extends javax.swing.JFrame implements
             .addGroup(keyerPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(keyerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
+                    .addComponent(sv_cwSendText)
                     .addGroup(keyerPanelLayout.createSequentialGroup()
-                        .addGroup(keyerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, keyerPanelLayout.createSequentialGroup()
+                        .addComponent(jSlider2, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 471, Short.MAX_VALUE))
+                    .addGroup(keyerPanelLayout.createSequentialGroup()
+                        .addGroup(keyerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(keyerPanelLayout.createSequentialGroup()
                                 .addComponent(sv_cwSpeedSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel6)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jSlider2, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(keyerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)
+                                .addGap(48, 48, 48)
+                                .addComponent(sv_fbkinCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(keyerPanelLayout.createSequentialGroup()
-                                .addComponent(sv_fbkinCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE)))))
+                                .addGap(63, 63, 63)
+                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         keyerPanelLayout.setVerticalGroup(
@@ -2010,21 +2012,23 @@ final public class JRX_TX extends javax.swing.JFrame implements
             .addGroup(keyerPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(keyerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(keyerPanelLayout.createSequentialGroup()
-                        .addGroup(keyerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(sv_cwSpeedSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jSlider2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel3))
-                    .addGroup(keyerPanelLayout.createSequentialGroup()
-                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(sv_cwSpeedSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(keyerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(sv_fbkinCheckBox)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(keyerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jSlider2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 60, Short.MAX_VALUE)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(sv_cwSendText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
+
+        sv_cwSendText.getAccessibleContext().setAccessibleName("Text to send via CW");
+        sv_cwSendText.getAccessibleContext().setAccessibleDescription("Type text to send and hit enter.");
 
         operationDetailsTabbedPane.addTab("Keyer", keyerPanel);
         keyerPanel.getAccessibleContext().setAccessibleName("Keyer panel");
@@ -3000,6 +3004,17 @@ final public class JRX_TX extends javax.swing.JFrame implements
         // TODO add your handling code here:
     }//GEN-LAST:event_sv_fbkinActionHandler
 
+    private void sv_cwSendTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sv_cwSendTextActionPerformed
+        String txt = evt.getActionCommand();
+        System.out.println("Action Command : "+txt);
+        String getText = sv_cwSendText.getText();
+        String comStr = "b "+getText;
+        sendRadioCom(comStr, 1, true);
+        System.out.println("Sending CW  ["+getText+"]");
+        sv_cwSendText.setText("");
+
+    }//GEN-LAST:event_sv_cwSendTextActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -3070,9 +3085,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JSlider jSlider2;
-    private javax.swing.JTextArea jTextArea1;
+    public javax.swing.JSlider jSlider2;
     private javax.swing.ButtonGroup jrxRadioButtonGroup;
     private javax.swing.JPanel jrxScopePanel;
     private javax.swing.JPanel keyerPanel;
@@ -3120,6 +3133,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
     protected javax.swing.JSlider sv_compressionSlider;
     protected javax.swing.JButton sv_ctcssListButton;
     protected javax.swing.JCheckBox sv_ctcssSquelchCheckBox;
+    public javax.swing.JFormattedTextField sv_cwSendText;
     public javax.swing.JSlider sv_cwSpeedSlider;
     protected javax.swing.JCheckBox sv_dspCheckBox;
     protected javax.swing.JComboBox sv_dspComboBox;
