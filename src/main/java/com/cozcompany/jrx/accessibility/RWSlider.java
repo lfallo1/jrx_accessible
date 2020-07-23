@@ -40,10 +40,10 @@ public class RWSlider extends JSlider implements MouseWheelListener,
     double errorValue = 1e100;
     double oldValue = -1;
     double xValueLow = 0;
-    double xValueHigh = 100;
-    double yValueLow = 0;
+    double xValueHigh = 100;            // default range is 0. to 100. displayed
+    double yValueLow = 0;               // default range is 0.0 to 1.0 rig value
     double yValueHigh = 1;
-    double level = -1, oldLevel = -1;
+    double level = -1, oldLevel = -1;  // range is 0.0 to 1.0 rig value
     boolean localInhibit = false;
     boolean commOK = false;
 

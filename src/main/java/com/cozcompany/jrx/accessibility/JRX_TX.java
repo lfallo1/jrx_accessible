@@ -627,7 +627,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 sv_volumeSlider,
                 sv_rfGainSlider,
                 sv_ifShiftComboBox,
-                sv_dspComboBox,
+                sv_dspSlider,
                 sv_dspCheckBox,               
                 sv_ifFilterListButton,
                 sv_modesListButton,
@@ -737,7 +737,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
         
         // yhigh intentionally = ylow to allow the rig to set the range
         ((RWComboBox)sv_ifShiftComboBox).setComboBoxContent("IF", -50, 50, 5, -50, 50, 0, 0, 0); 
-        ((RWComboBox)sv_dspComboBox).setComboBoxContent("DSP", 0, 100, 5, 0, 100, 0, 1, 0);
         ((RWListButton)sv_agcListButton).setContent("AGC", 0, 10, 1, 0, 1, 0, 10, 1);
         ((RWComboBox)sv_antennaComboBox).setComboBoxContent("Ant", 0, 4, 1, 0, 1, 0, 1, 1);  
         ((InterfacesListButton)sv_interfacesListButton).initInterfaceList();
@@ -806,7 +805,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         ((RWCheckBox)sv_blankerCheckBox).enableCap(radioData, "(?ism).*^Set functions:.*?\\sNB\\s", false);
         ((RWCheckBox)sv_anfCheckBox).enableCap(radioData, "(?ism).*^Set functions:.*?\\sANF\\s", false);
         ((RWCheckBox)sv_apfCheckBox).enableCap(radioData, "(?ism).*^Set functions:.*?\\sAPF\\s", false);
-        ((RWComboBox)sv_dspComboBox).enableCap(radioData, "(?ism).*^Set level:.*?NR\\(", true);
+        ((DspSlider)sv_dspSlider).enableIfCapable(radioData);
         ((RWCheckBox)sv_enableVoxCheckBox).enableCap(radioData, "(?ism).*^Set functions:.*?\\sVOX\\s", false);
         ((RWCheckBox)sv_dspCheckBox).enableCap(radioData, "(?ism).*^Set level:.*?NR\\(", false);
         ((RWCheckBox)sv_compressionCheckBox).enableCap(radioData,"(?ism).*^Set functions:.*?\\sCOMP\\s", false);
@@ -1515,13 +1514,13 @@ final public class JRX_TX extends javax.swing.JFrame implements
         sv_anfCheckBox = new RWCheckBox(this,"U","ANF");
         sv_dspCheckBox = new RWCheckBox(this,"U","NR");
         jLabel13 = new javax.swing.JLabel();
-        sv_dspComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,"L","NR");
         jLabel14 = new javax.swing.JLabel();
         sv_ifShiftComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,"L","IF");
         jLabel15 = new javax.swing.JLabel();
         sv_ifFilterListButton = new components.IfFilterListButton(this);
         sv_attenuatorCheckBox = new AttenuatorCheckBox(this);
         sv_preampCheckBox = new PreampCheckBox(this);
+        sv_dspSlider = new DspSlider(this);
         dstarPanel = new javax.swing.JPanel();
         keyerPanel = new javax.swing.JPanel();
         sv_cwSpeedSlider = new CwSpeedSlider(this);
@@ -1852,10 +1851,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
 
         jLabel13.setText("I F Width");
 
-        sv_dspComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        sv_dspComboBox.setToolTipText("DSP Noise Reduction (❃)");
-
-        jLabel14.setLabelFor(sv_dspComboBox);
         jLabel14.setText("DSP Level");
 
         sv_ifShiftComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -1870,37 +1865,36 @@ final public class JRX_TX extends javax.swing.JFrame implements
 
         sv_preampCheckBox.setText("PreAmp");
 
+        sv_dspSlider.setMajorTickSpacing(10);
+        sv_dspSlider.setPaintTicks(true);
+        sv_dspSlider.setValue(10);
+
         javax.swing.GroupLayout ifControlsPanelLayout = new javax.swing.GroupLayout(ifControlsPanel);
         ifControlsPanel.setLayout(ifControlsPanelLayout);
         ifControlsPanelLayout.setHorizontalGroup(
             ifControlsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(ifControlsPanelLayout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(ifControlsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(ifControlsPanelLayout.createSequentialGroup()
-                        .addGroup(ifControlsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(ifControlsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(ifControlsPanelLayout.createSequentialGroup()
-                                .addComponent(sv_ifFilterListButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(6, 6, 6)
+                                .addComponent(sv_dspSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(57, 57, 57))
+                                .addComponent(jLabel14))
+                            .addComponent(sv_preampCheckBox)
                             .addGroup(ifControlsPanelLayout.createSequentialGroup()
-                                .addGroup(ifControlsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(ifControlsPanelLayout.createSequentialGroup()
-                                        .addComponent(sv_dspComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(jLabel14))
-                                    .addGroup(ifControlsPanelLayout.createSequentialGroup()
-                                        .addComponent(sv_ifShiftComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(jLabel15))
-                                    .addGroup(ifControlsPanelLayout.createSequentialGroup()
-                                        .addContainerGap()
-                                        .addComponent(sv_preampCheckBox)))
-                                .addGap(169, 169, 169)))
+                                .addComponent(sv_ifShiftComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel15))
+                            .addGroup(ifControlsPanelLayout.createSequentialGroup()
+                                .addComponent(sv_ifFilterListButton, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
                         .addComponent(verticalListPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(ifControlsPanelLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(sv_attenuatorCheckBox)))
+                    .addComponent(sv_attenuatorCheckBox))
                 .addGap(245, 245, 245))
         );
         ifControlsPanelLayout.setVerticalGroup(
@@ -1911,21 +1905,23 @@ final public class JRX_TX extends javax.swing.JFrame implements
                     .addComponent(verticalListPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(ifControlsPanelLayout.createSequentialGroup()
                         .addGroup(ifControlsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel13)
-                            .addComponent(sv_ifFilterListButton))
+                            .addComponent(sv_ifFilterListButton)
+                            .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(ifControlsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(sv_dspComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel14))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(ifControlsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(sv_ifShiftComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel15))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(sv_preampCheckBox)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(ifControlsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(ifControlsPanelLayout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addComponent(jLabel14))
+                            .addComponent(sv_dspSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(14, 14, 14)
+                        .addGroup(ifControlsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel15)
+                            .addComponent(sv_ifShiftComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(sv_preampCheckBox)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(sv_attenuatorCheckBox)
-                .addContainerGap())
+                .addGap(35, 35, 35))
         );
 
         operationDetailsTabbedPane.addTab("I F Controls", ifControlsPanel);
@@ -3125,7 +3121,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
     protected javax.swing.JCheckBox sv_ctcssSquelchCheckBox;
     public javax.swing.JSlider sv_cwSpeedSlider;
     protected javax.swing.JCheckBox sv_dspCheckBox;
-    protected javax.swing.JComboBox sv_dspComboBox;
+    public javax.swing.JSlider sv_dspSlider;
     public javax.swing.JButton sv_dwellTimeListButton;
     protected javax.swing.JCheckBox sv_enableVoxCheckBox;
     protected javax.swing.JCheckBox sv_fbkinCheckBox;
