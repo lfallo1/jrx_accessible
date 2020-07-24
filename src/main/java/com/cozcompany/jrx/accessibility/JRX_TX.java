@@ -479,6 +479,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 }
                 setComErrorIcon();               
                 readRadioControls(false);
+                ((SwrIndicator)swrIndicator).updateSwr();
             }
             if (slowRadio || scanStateMachine.scanTimer != null) {
 //                timerUpdateFreq();
@@ -1506,6 +1507,9 @@ final public class JRX_TX extends javax.swing.JFrame implements
         sv_txCtcssCheckBox = new RWCheckBox(this,"U","TONE");
         sv_ctcssListButton = new components.CtcssListButton(this);
         sv_tunerCheckBox = new javax.swing.JCheckBox();
+        swrIndicator = new SwrIndicator(this);
+        pttCheckBox = new RWCheckBox(this, "T", "");
+        ;
         ifControlsPanel = new javax.swing.JPanel();
         verticalListPanel = new javax.swing.JPanel();
         sv_rawSigCheckBox = new RWCheckBox(this,null,null);
@@ -1731,6 +1735,20 @@ final public class JRX_TX extends javax.swing.JFrame implements
 
         sv_tunerCheckBox.setText("TUNER");
 
+        swrIndicator.setBackground(new java.awt.Color(255, 255, 255));
+        swrIndicator.setFont(new java.awt.Font("Lucida Grande", 1, 14)); // NOI18N
+        swrIndicator.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        swrIndicator.setText("SWR  1.00");
+        swrIndicator.setOpaque(true);
+
+        pttCheckBox.setText("PTT");
+        pttCheckBox.setToolTipText("Push to Talk");
+        pttCheckBox.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                pttCheckBoxStateChanged(evt);
+            }
+        });
+
         javax.swing.GroupLayout transmitterPanelLayout = new javax.swing.GroupLayout(transmitterPanel);
         transmitterPanel.setLayout(transmitterPanelLayout);
         transmitterPanelLayout.setHorizontalGroup(
@@ -1738,39 +1756,50 @@ final public class JRX_TX extends javax.swing.JFrame implements
             .addGroup(transmitterPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(transmitterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(transmitterPanelLayout.createSequentialGroup()
-                        .addComponent(sv_antennaComboBox, 0, 160, Short.MAX_VALUE)
+                        .addComponent(sv_txCtcssCheckBox)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, transmitterPanelLayout.createSequentialGroup()
+                        .addComponent(sv_antennaComboBox, 0, 166, Short.MAX_VALUE)
                         .addGap(64, 64, 64))
                     .addGroup(transmitterPanelLayout.createSequentialGroup()
-                        .addGroup(transmitterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(sv_txCtcssCheckBox)
-                            .addComponent(sv_ctcssListButton, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(sv_ctcssListButton, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))))
             .addGroup(transmitterPanelLayout.createSequentialGroup()
                 .addGap(16, 16, 16)
                 .addComponent(sv_rfPowerSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(sv_tunerCheckBox)
-                .addContainerGap())
+                .addComponent(swrIndicator, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(transmitterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(pttCheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(transmitterPanelLayout.createSequentialGroup()
+                        .addComponent(sv_tunerCheckBox)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         transmitterPanelLayout.setVerticalGroup(
             transmitterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(transmitterPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(transmitterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(transmitterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(sv_tunerCheckBox))
-                    .addComponent(sv_rfPowerSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(transmitterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(sv_rfPowerSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(transmitterPanelLayout.createSequentialGroup()
+                        .addGroup(transmitterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, false)
+                            .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE)
+                            .addComponent(swrIndicator, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(pttCheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(sv_tunerCheckBox)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(transmitterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(transmitterPanelLayout.createSequentialGroup()
+                        .addGap(6, 6, 6)
                         .addComponent(sv_antennaComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(sv_txCtcssCheckBox)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(sv_ctcssListButton))
@@ -3001,6 +3030,10 @@ final public class JRX_TX extends javax.swing.JFrame implements
 
     }//GEN-LAST:event_cwSendTextActionPerformed
 
+    private void pttCheckBoxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_pttCheckBoxStateChanged
+        ((SwrIndicator)swrIndicator).updateSwr();
+    }//GEN-LAST:event_pttCheckBoxStateChanged
+
     /**
      * @param args the command line arguments
      */
@@ -3086,6 +3119,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
     private javax.swing.JTabbedPane operationDetailsTabbedPane;
     private javax.swing.JTabbedPane overallTabbedPane;
     private javax.swing.JButton pasteMemButton;
+    private javax.swing.JCheckBox pttCheckBox;
     private javax.swing.JPanel radioPanel;
     protected javax.swing.JInternalFrame recieverGroupBox;
     private javax.swing.JLabel rfGainLabel;
@@ -3152,6 +3186,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
     protected javax.swing.JCheckBox sv_volumeExitCheckBox;
     protected javax.swing.JSlider sv_volumeSlider;
     protected javax.swing.JSlider sv_voxLevelSlider;
+    public javax.swing.JLabel swrIndicator;
     private javax.swing.JPanel transmitterPanel;
     private javax.swing.JButton tuneComsButton;
     private javax.swing.JPanel txVfoPanel;

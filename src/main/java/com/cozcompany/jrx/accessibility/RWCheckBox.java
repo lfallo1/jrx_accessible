@@ -74,6 +74,10 @@ public class RWCheckBox extends JCheckBox implements ActionListener, ControlInte
             }
         }
     }
+    
+    public boolean getState() {
+        return state;
+    }
 
     @Override
     public double getConvertedValue() {
