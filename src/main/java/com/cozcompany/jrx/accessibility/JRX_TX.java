@@ -234,7 +234,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         ((CtcssListButton)sv_ctcssListButton).initialize();
         ((IfFilterListButton)sv_ifFilterListButton).initialize();
         ((ModesListButton)sv_modesListButton).initialize();
-
+        addComponentListener((VfoDisplayControl)vfoDisplayControl);
         
         // Why does the shortCut key M not work ????????
         muteCheckBox.setText("Mute"); // Do this manually, GUI uses deprecated call to setLabel()
@@ -2759,6 +2759,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         });
 
         vfoDisplayControl.setBorder(null);
+        vfoDisplayControl.setResizable(true);
         vfoDisplayControl.setVisible(true);
 
         rxVfoPanel.setBackground(new java.awt.Color(0, 0, 0));
@@ -2772,7 +2773,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         );
         rxVfoPanelLayout.setVerticalGroup(
             rxVfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 126, Short.MAX_VALUE)
+            .addGap(0, 117, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout vfoDisplayControlLayout = new javax.swing.GroupLayout(vfoDisplayControl.getContentPane());
@@ -2785,9 +2786,9 @@ final public class JRX_TX extends javax.swing.JFrame implements
         );
         vfoDisplayControlLayout.setVerticalGroup(
             vfoDisplayControlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, vfoDisplayControlLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(rxVfoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(vfoDisplayControlLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(rxVfoPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -2795,6 +2796,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         rxVfoPanel.getAccessibleContext().setAccessibleDescription("VFO A audio description");
 
         vfoGroup.setBorder(null);
+        vfoGroup.setResizable(true);
         vfoGroup.setVisible(true);
 
         vfoFrequencyA.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
@@ -2818,19 +2820,19 @@ final public class JRX_TX extends javax.swing.JFrame implements
         vfoGroupLayout.setHorizontalGroup(
             vfoGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(vfoGroupLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(vfoFrequencyA, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(211, 211, 211)
+                .addComponent(vfoFrequencyA)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(vfoFrequencyB, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(vfoFrequencyB)
                 .addGap(210, 210, 210))
         );
         vfoGroupLayout.setVerticalGroup(
             vfoGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(vfoGroupLayout.createSequentialGroup()
                 .addGroup(vfoGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(vfoFrequencyB, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(vfoFrequencyA, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(vfoFrequencyB)
+                    .addComponent(vfoFrequencyA))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout radioPanelLayout = new javax.swing.GroupLayout(radioPanel);
@@ -2842,23 +2844,23 @@ final public class JRX_TX extends javax.swing.JFrame implements
                     .addComponent(sv_interfacesListButton, javax.swing.GroupLayout.PREFERRED_SIZE, 328, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(signalProgressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 703, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(radioPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(radioPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, radioPanelLayout.createSequentialGroup()
+                .addGroup(radioPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(radioPanelLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(vfoGroup))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, radioPanelLayout.createSequentialGroup()
+                        .addContainerGap()
                         .addGroup(radioPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(overallTabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 749, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(radioPanelLayout.createSequentialGroup()
                                 .addComponent(ledPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(sv_radioNamesListButton, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(radioPanelLayout.createSequentialGroup()
-                        .addComponent(vfoGroup)
-                        .addContainerGap())))
-            .addGroup(radioPanelLayout.createSequentialGroup()
-                .addGap(12, 12, 12)
-                .addComponent(vfoDisplayControl)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, radioPanelLayout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addComponent(vfoDisplayControl)))
                 .addContainerGap())
         );
         radioPanelLayout.setVerticalGroup(
@@ -2868,7 +2870,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 .addGroup(radioPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(radioPanelLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(ledPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(ledPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE))
                     .addGroup(radioPanelLayout.createSequentialGroup()
                         .addGap(6, 6, 6)
                         .addGroup(radioPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -2877,9 +2879,9 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(overallTabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 498, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(vfoDisplayControl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(vfoGroup, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(vfoDisplayControl)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(vfoGroup, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -2901,7 +2903,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(radioPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(radioPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();

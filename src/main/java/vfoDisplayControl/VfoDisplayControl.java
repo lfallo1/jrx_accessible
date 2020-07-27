@@ -19,6 +19,9 @@ import java.awt.KeyboardFocusManager;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.awt.event.HierarchyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
@@ -68,7 +71,7 @@ import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
  * @author Coz
  */
 final public class VfoDisplayControl extends GroupBox 
-        implements PropertyChangeListener , ActionListener {
+        implements PropertyChangeListener , ActionListener, ComponentListener {
     
     protected ArrayList<DecadeDigit> freqDigits = null;
     protected ArrayList<BarnDoor> barnDoors = null;
@@ -593,7 +596,7 @@ final public class VfoDisplayControl extends GroupBox
         //System.out.println("ftf accessible description :"+ftfDesc);               
     }       
 
-    public void vfoDisplayResized(java.awt.event.HierarchyEvent evt) {                                   
+    public void vfoDisplayResized(java.awt.event.ComponentEvent evt) {                                   
         adjustSize(this);
     }                                  
     
@@ -629,5 +632,23 @@ final public class VfoDisplayControl extends GroupBox
                     JOptionPane.PLAIN_MESSAGE);            
         }
     } 
+
+
+    @Override
+    public void componentResized(ComponentEvent e) {
+        vfoDisplayResized(e); 
+    }
+
+    @Override
+    public void componentMoved(ComponentEvent e) {
+    }
+
+    @Override
+    public void componentShown(ComponentEvent e) {
+    }
+
+    @Override
+    public void componentHidden(ComponentEvent e) {
+    }
     
 }
