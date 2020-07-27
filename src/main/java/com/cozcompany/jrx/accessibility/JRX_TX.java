@@ -81,7 +81,7 @@ import vfoDisplayControl.GroupBox;
 final public class JRX_TX extends javax.swing.JFrame implements 
         ListSelectionListener, ItemListener , ActionListener {
 
-    final String appVersion = "5.0.15";
+    final String appVersion = "5.0.16";
     final String appName;
     final String programName;
     public final String LINE_SEP;
@@ -165,8 +165,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
     public JRadioButtonMenuItem menuItemDuplexPlus;
     public JRadioButtonMenuItem menuItemDuplexMinus;
     public JRadioButtonMenuItem menuItemSplit; 
-    public JTextField frequencyVfoA;
-    public JTextField frequencyVfoB;
     Preferences prefs;
 
     //dependencies
@@ -210,11 +208,9 @@ final public class JRX_TX extends javax.swing.JFrame implements
         baseFont = new Font(Font.MONOSPACED, Font.PLAIN, getFont().getSize());
         setFont(baseFont);                
         // Must create/initialize vfoDisplay before scan functions.
-        frequencyVfoA = new JTextField("VFO A  0000.000000");
-        frequencyVfoB = new JTextField("VFO B  0000.000000");
-        vfoTabbedPane.setTabComponentAt(0, frequencyVfoA);
-        vfoTabbedPane.setTabComponentAt(1, frequencyVfoB);
-        vfoDisplay = (VfoDisplayControl)jInternalFrame1;
+        vfoFrequencyA.setText("VFO A  0000.000000");
+        vfoFrequencyB.setText("VFO B  0000.000000");
+        vfoDisplay = (VfoDisplayControl)vfoDisplayControl;
         vfoState = setUpVfoComponents(vfoDisplay);
         rxVfoPanel.setVisible(true);
         scanStateMachine = new ScanStateMachine(this);       
@@ -252,7 +248,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
     }
 
 
-    public VfoStateInterface setUpVfoComponents(VfoDisplayControl vfoGroup) {
+    public VfoStateInterface setUpVfoComponents(VfoDisplayControl vfoControl) {
         // Create an Prefernces object for access to this user's preferences.
         prefs = Preferences.userNodeForPackage(this.getClass());
         // Use the Mac OSX menuBar at the top of the screen.
@@ -261,7 +257,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         // Add an exclusive interface to the Vfo selector so that only one thread
         // at a time gains access.
         vfoState = new VfoStateInterface(this, 
-                menuItemA, menuItemB, frequencyVfoA, frequencyVfoB );
+                menuItemA, menuItemB, vfoFrequencyA, vfoFrequencyB );
  
       
         // @todo Add this later with stored frequency of the selected vfo.
@@ -281,21 +277,21 @@ final public class JRX_TX extends javax.swing.JFrame implements
             vfoState.setVfoASelected();
         }        
         // Must instantiate components before initialization of VfoDisplayControl.     
-        vfoGroup.setupPanes();                      
+        vfoControl.setupPanes();                      
         noVfoDialog = false;
         
         
         
         // Cause the ones digit ftf to get the focus when the JFrame gets focus.                              
         JFormattedTextField textField;
-        Vector<Component> order = vfoGroup.getTraversalOrder();
+        Vector<Component> order = vfoControl.getTraversalOrder();
         textField = (JFormattedTextField) order.get(0);
          this.addWindowFocusListener(new WindowAdapter() {
             public void windowGainedFocus(WindowEvent e) {
                 textField.requestFocusInWindow();
             }
         });
-        vfoGroup.setFocusable(true);       
+        vfoControl.setFocusable(true);       
         String infoStr  = "<html>VFO Display Digits can be <br>"+
                                 "adjusted using up/down <br>"+
                                 "arrows, left click and the<br>"+
@@ -536,10 +532,10 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 writeRadioControls();
             } else {
                 // Get the radio VFO settings and write them to application controls.
-                vfoDisplayControl.VfoStateInterface.vfoChoice  choice = vfoState.getRxVfo();
+                VfoStateInterface.vfoChoice  choice = vfoState.getRxVfo();
                 long valueA = vfoState.getVfoAFrequency();
                 long valueB = vfoState.getVfoBFrequency();
-                if (choice == vfoDisplayControl.VfoStateInterface.vfoChoice.VFOA) {
+                if (choice == VfoStateInterface.vfoChoice.VFOA) {
                     vfoDisplay.frequencyToDigits(valueA);
                 } else {
                     vfoDisplay.frequencyToDigits(valueB);
@@ -1596,12 +1592,13 @@ final public class JRX_TX extends javax.swing.JFrame implements
         comErrorIconLabel = new javax.swing.JLabel();
         dcdIconLabel = new javax.swing.JLabel();
         signalProgressBar = new javax.swing.JProgressBar();
-        vfoTabbedPane = new javax.swing.JTabbedPane();
-        rxVfoPanel = new javax.swing.JPanel();
-        jInternalFrame1 = new VfoDisplayControl(this);
-        txVfoPanel = new javax.swing.JPanel();
         sv_radioNamesListButton = new RadioNamesListButton(this);
         sv_interfacesListButton = new InterfacesListButton(this);
+        vfoDisplayControl = new VfoDisplayControl(this);
+        rxVfoPanel = new javax.swing.JPanel();
+        vfoGroup = new GroupBox();
+        vfoFrequencyA = new javax.swing.JTextField();
+        vfoFrequencyB = new javax.swing.JTextField();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu3 = new javax.swing.JMenu();
 
@@ -2426,10 +2423,10 @@ final public class JRX_TX extends javax.swing.JFrame implements
             scanPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(scanPanelLayout.createSequentialGroup()
                 .addComponent(channelsTabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 681, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 6, Short.MAX_VALUE))
+                .addGap(0, 47, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, scanPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(scannerPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 675, Short.MAX_VALUE)
+                .addComponent(scannerPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         scanPanelLayout.setVerticalGroup(
@@ -2699,7 +2696,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
             appSettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(appSettingsPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(firstSettingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 675, Short.MAX_VALUE)
+                .addComponent(firstSettingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 716, Short.MAX_VALUE)
                 .addContainerGap())
         );
         appSettingsPanelLayout.setVerticalGroup(
@@ -2745,61 +2742,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
         signalProgressBar.setValue(-50);
         signalProgressBar.setStringPainted(true);
 
-        vfoTabbedPane.setToolTipText("Visual tool tip for VFO tabbed pane");
-        vfoTabbedPane.setAlignmentY(0.0F);
-
-        rxVfoPanel.setBackground(new java.awt.Color(0, 0, 0));
-        rxVfoPanel.setToolTipText(" VFO A visual tool tip");
-
-        jInternalFrame1.setBorder(null);
-        jInternalFrame1.setVisible(true);
-
-        javax.swing.GroupLayout jInternalFrame1Layout = new javax.swing.GroupLayout(jInternalFrame1.getContentPane());
-        jInternalFrame1.getContentPane().setLayout(jInternalFrame1Layout);
-        jInternalFrame1Layout.setHorizontalGroup(
-            jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 676, Short.MAX_VALUE)
-        );
-        jInternalFrame1Layout.setVerticalGroup(
-            jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 126, Short.MAX_VALUE)
-        );
-
-        javax.swing.GroupLayout rxVfoPanelLayout = new javax.swing.GroupLayout(rxVfoPanel);
-        rxVfoPanel.setLayout(rxVfoPanelLayout);
-        rxVfoPanelLayout.setHorizontalGroup(
-            rxVfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(rxVfoPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jInternalFrame1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        rxVfoPanelLayout.setVerticalGroup(
-            rxVfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(rxVfoPanelLayout.createSequentialGroup()
-                .addComponent(jInternalFrame1)
-                .addContainerGap())
-        );
-
-        vfoTabbedPane.addTab("VFO  A", null, rxVfoPanel, "VFO A control and display.  Use arrow keys to change values and traverse digits.");
-        rxVfoPanel.getAccessibleContext().setAccessibleName("VFO A ");
-        rxVfoPanel.getAccessibleContext().setAccessibleDescription("VFO A audio description");
-
-        javax.swing.GroupLayout txVfoPanelLayout = new javax.swing.GroupLayout(txVfoPanel);
-        txVfoPanel.setLayout(txVfoPanelLayout);
-        txVfoPanelLayout.setHorizontalGroup(
-            txVfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 688, Short.MAX_VALUE)
-        );
-        txVfoPanelLayout.setVerticalGroup(
-            txVfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-
-        vfoTabbedPane.addTab("VFO B ", null, txVfoPanel, "VFO B audio tool tip");
-        txVfoPanel.getAccessibleContext().setAccessibleName("V F O B display ");
-        txVfoPanel.getAccessibleContext().setAccessibleDescription("Use arrow keys to change value or traverse digits.");
-
         sv_radioNamesListButton.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
         sv_radioNamesListButton.setText("RADIO ICOM IC-7100 ...");
         sv_radioNamesListButton.addActionListener(new java.awt.event.ActionListener() {
@@ -2816,28 +2758,108 @@ final public class JRX_TX extends javax.swing.JFrame implements
             }
         });
 
+        vfoDisplayControl.setBorder(null);
+        vfoDisplayControl.setVisible(true);
+
+        rxVfoPanel.setBackground(new java.awt.Color(0, 0, 0));
+        rxVfoPanel.setToolTipText(" VFO A visual tool tip");
+
+        javax.swing.GroupLayout rxVfoPanelLayout = new javax.swing.GroupLayout(rxVfoPanel);
+        rxVfoPanel.setLayout(rxVfoPanelLayout);
+        rxVfoPanelLayout.setHorizontalGroup(
+            rxVfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        rxVfoPanelLayout.setVerticalGroup(
+            rxVfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 126, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout vfoDisplayControlLayout = new javax.swing.GroupLayout(vfoDisplayControl.getContentPane());
+        vfoDisplayControl.getContentPane().setLayout(vfoDisplayControlLayout);
+        vfoDisplayControlLayout.setHorizontalGroup(
+            vfoDisplayControlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(vfoDisplayControlLayout.createSequentialGroup()
+                .addComponent(rxVfoPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        vfoDisplayControlLayout.setVerticalGroup(
+            vfoDisplayControlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, vfoDisplayControlLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(rxVfoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        rxVfoPanel.getAccessibleContext().setAccessibleName("VFO A ");
+        rxVfoPanel.getAccessibleContext().setAccessibleDescription("VFO A audio description");
+
+        vfoGroup.setBorder(null);
+        vfoGroup.setVisible(true);
+
+        vfoFrequencyA.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
+        vfoFrequencyA.setText("VFO A 1234123123");
+        vfoFrequencyA.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                vfoFrequencyAActionPerformed(evt);
+            }
+        });
+
+        vfoFrequencyB.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
+        vfoFrequencyB.setText("VFO B 1234123123");
+        vfoFrequencyB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                vfoFrequencyBActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout vfoGroupLayout = new javax.swing.GroupLayout(vfoGroup.getContentPane());
+        vfoGroup.getContentPane().setLayout(vfoGroupLayout);
+        vfoGroupLayout.setHorizontalGroup(
+            vfoGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(vfoGroupLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(vfoFrequencyA, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(vfoFrequencyB, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(210, 210, 210))
+        );
+        vfoGroupLayout.setVerticalGroup(
+            vfoGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(vfoGroupLayout.createSequentialGroup()
+                .addGroup(vfoGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(vfoFrequencyB, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(vfoFrequencyA, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout radioPanelLayout = new javax.swing.GroupLayout(radioPanel);
         radioPanel.setLayout(radioPanelLayout);
         radioPanelLayout.setHorizontalGroup(
             radioPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(radioPanelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(radioPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(vfoTabbedPane, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(radioPanelLayout.createSequentialGroup()
-                        .addGroup(radioPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(overallTabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 708, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(radioPanelLayout.createSequentialGroup()
-                                .addComponent(ledPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(sv_radioNamesListButton, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
-            .addGroup(radioPanelLayout.createSequentialGroup()
                 .addGroup(radioPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(sv_interfacesListButton, javax.swing.GroupLayout.PREFERRED_SIZE, 328, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(signalProgressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 703, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(radioPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(radioPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(radioPanelLayout.createSequentialGroup()
+                        .addGroup(radioPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(overallTabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 749, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(radioPanelLayout.createSequentialGroup()
+                                .addComponent(ledPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(sv_radioNamesListButton, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(radioPanelLayout.createSequentialGroup()
+                        .addComponent(vfoGroup)
+                        .addContainerGap())))
+            .addGroup(radioPanelLayout.createSequentialGroup()
+                .addGap(12, 12, 12)
+                .addComponent(vfoDisplayControl)
+                .addContainerGap())
         );
         radioPanelLayout.setVerticalGroup(
             radioPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2854,12 +2876,17 @@ final public class JRX_TX extends javax.swing.JFrame implements
                             .addComponent(sv_interfacesListButton))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(overallTabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 498, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(vfoDisplayControl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(vfoTabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(vfoGroup, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
-        vfoTabbedPane.getAccessibleContext().setAccessibleName("VFO tabbed pane");
-        vfoTabbedPane.getAccessibleContext().setAccessibleDescription("VFO tabbed pane audio description");
+        vfoDisplayControl.getAccessibleContext().setAccessibleName("V F O Display Control");
+        vfoDisplayControl.getAccessibleContext().setAccessibleDescription("Use arrow keys to navigate");
+        vfoGroup.getAccessibleContext().setAccessibleName("V F O Group shows V F O A and V F O B");
+        vfoGroup.getAccessibleContext().setAccessibleDescription("Read only display");
 
         jMenu3.setText("VFO Operations");
         jMenuBar1.add(jMenu3);
@@ -2870,7 +2897,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(radioPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(radioPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -3034,6 +3061,14 @@ final public class JRX_TX extends javax.swing.JFrame implements
         ((SwrIndicator)swrIndicator).updateSwr();
     }//GEN-LAST:event_pttCheckBoxStateChanged
 
+    private void vfoFrequencyAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vfoFrequencyAActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_vfoFrequencyAActionPerformed
+
+    private void vfoFrequencyBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vfoFrequencyBActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_vfoFrequencyBActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -3087,7 +3122,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
     private javax.swing.JPanel firstSettingsPanel;
     private javax.swing.JButton helpButton;
     private javax.swing.JPanel ifControlsPanel;
-    private javax.swing.JInternalFrame jInternalFrame1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -3189,9 +3223,11 @@ final public class JRX_TX extends javax.swing.JFrame implements
     public javax.swing.JLabel swrIndicator;
     private javax.swing.JPanel transmitterPanel;
     private javax.swing.JButton tuneComsButton;
-    private javax.swing.JPanel txVfoPanel;
     private javax.swing.JPanel verticalListPanel;
-    private javax.swing.JTabbedPane vfoTabbedPane;
+    public javax.swing.JInternalFrame vfoDisplayControl;
+    public javax.swing.JTextField vfoFrequencyA;
+    public javax.swing.JTextField vfoFrequencyB;
+    public javax.swing.JInternalFrame vfoGroup;
     // End of variables declaration//GEN-END:variables
 
    @Override
