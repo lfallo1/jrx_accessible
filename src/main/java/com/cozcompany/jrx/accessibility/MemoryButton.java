@@ -48,10 +48,10 @@ import javax.swing.JSlider;
 final public class MemoryButton extends JButton implements MouseListener {
 
     JRX_TX parent;
-    String label;
+    final String label;  // Coz This value never changes.
     Timer defineButtonTimer = null;
     MouseEvent mouseEvent = null;
-    int timeout = 1000;
+    final int TIMEOUT = 1000;
     boolean defineButton = false;
     int skipDuringScan = 0;
     String visualTip = "<span color=\"green\">Click: read</span><br/>"+
@@ -157,9 +157,9 @@ final public class MemoryButton extends JButton implements MouseListener {
     }
     /**
      * This timer task determines if a mouse button was held down longer than the 
-     * timeout value and if so, it stores the current Vfo frequency and operating
-     * parameters as a memory channel for a left-click or it erases the memory
-     * channel with a right-click.
+ TIMEOUT value and if so, it stores the current Vfo frequency and operating
+ parameters as a memory channel for a left-click or it erases the memory
+ channel with a right-click.
      */
     private class DefineButton extends TimerTask {
 
@@ -188,7 +188,7 @@ final public class MemoryButton extends JButton implements MouseListener {
         setForeground(Color.red);
         defineButton = false;
         defineButtonTimer = new java.util.Timer();
-        defineButtonTimer.schedule(new DefineButton(), timeout);
+        defineButtonTimer.schedule(new DefineButton(), TIMEOUT);
         parent.getScopePanel().stopSweep(false);
     }
 
