@@ -1,0 +1,7 @@
+IC-706 Testing with version 20200614 backend:
+
+o) CW and CW-R are both reported as CW mode.
+o) So the modes reported are : AM, FM, LSB, USB, CW, RTTY, WFM
+o) V ? gives these choices:  VFOA VFOB MEM
+o) E 28 sets radio to memory channel 28
+ 

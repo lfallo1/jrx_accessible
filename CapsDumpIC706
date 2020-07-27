@@ -1,0 +1,329 @@
+TheUnofOfTowson:Desktop Coz$ rigctl -m 3009 -vv -r /dev/tty.wchusbserial1410
+Opened rig model 3009, 'IC-706'
+
+Rig command: f
+Frequency: 3563000
+
+Rig command: ?
+Commands (some may not be available for this rig):
+F: set_freq        (Frequency)         f: get_freq        ()
+M: set_mode        (Mode,Passband)     m: get_mode        ()
+I: set_split_freq  (TX Frequency)      i: get_split_freq  ()
+X: set_split_mode  (TX Mode,TX Passband) x: get_split_mode  ()
+K: set_split_freq_mode(TX Frequency,TX Mode,TX Passband)              k: get_split_freq_mode()
+S: set_split_vfo   (Split,TX VFO)      s: get_split_vfo   ()
+N: set_ts          (Tuning Step)       n: get_ts          ()
+L: set_level       (Level,Level Value) l: get_level       (Level)
+U: set_func        (Func,Func Status)  u: get_func        (Func)
+P: set_parm        (Parm,Parm Value)   p: get_parm        (Parm)
+G: vfo_op          (Mem/VFO Op)        g: scan            (Scan Fct,Scan Channel)
+A: set_trn         (Transceive)        a: get_trn         ()
+R: set_rptr_shift  (Rptr Shift)        r: get_rptr_shift  ()
+O: set_rptr_offs   (Rptr Offset)       o: get_rptr_offs   ()
+C: set_ctcss_tone  (CTCSS Tone)        c: get_ctcss_tone  ()
+D: set_dcs_code    (DCS Code)          d: get_dcs_code    ()
+?: set_ctcss_sql   (CTCSS Sql)         ?: get_ctcss_sql   ()
+?: set_dcs_sql     (DCS Sql)           ?: get_dcs_sql     ()
+V: set_vfo         (VFO)               v: get_vfo         ()
+T: set_ptt         (PTT)               t: get_ptt         ()
+E: set_mem         (Memory#)           e: get_mem         ()
+H: set_channel     (Channel)           h: get_channel     (Channel,Read Only)
+B: set_bank        (Bank)              _: get_info        ()
+J: set_rit         (RIT)               j: get_rit         ()
+Z: set_xit         (XIT)               z: get_xit         ()
+Y: set_ant         (Antenna,Option)    y: get_ant         (AntCurr)
+?: set_powerstat   (Power Status)      ?: get_powerstat   ()
+?: send_dtmf       (Digits)            ?: recv_dtmf       ()
+*: reset           (Reset)             w: send_cmd        (Cmd)
+W: send_cmd_rx     (Cmd,Reply)         b: send_morse      (Morse)
+?: send_voice_mem  (Voice Mem#)        ?: get_dcd         ()
+?: set_twiddle     (Timeout (secs))    ?: get_twiddle     ()
+?: set_cache       (Timeout (msecs))   ?: get_cache       ()
+2: power2mW        (Power [0.0..1.0],Frequency,Mode)             4: mW2power        (Power mW,Frequency,Mode)
+1: dump_caps       ()                  3: dump_conf       ()
+?: dump_state      ()                  ?: chk_vfo         ()
+?: set_vfo_opt     (Status)            ?: halt            ()
+?: pause           (Seconds)           
+
+In interactive mode prefix long command names with '\', e.g. '\dump_state'
+
+The special command '-' is used to read further commands from standard input
+Commands and arguments read from standard input must be white space separated,
+comments are allowed, comments start with the # character and continue to the
+end of the line.
+
+Rig command: 1
+Caps dump for model: 3009
+Model name:	IC-706
+Mfg name:	Icom
+Backend version:	20200614.0
+Backend copyright:	LGPL
+Backend status:	Untested
+Rig type:	Mobile
+PTT type:	None
+DCD type:	None
+Port type:	RS-232
+Serial speed: 300..19200 bauds, 8N1 
+Write delay: 0mS, timeout 1000mS, 3 retry
+Post Write delay: 0mS
+Has targetable VFO: N
+Has transceive: Y
+Announce: 0x0
+Max RIT: -0.0kHz/+0.0kHz
+Max XIT: -0.0kHz/+0.0kHz
+Max IF-SHIFT: -0.0kHz/+0.0kHz
+Preamp: 10dB
+Attenuator: 20dB
+CTCSS: None
+DCS: None
+Get functions: 
+Set functions: 
+Get level: 
+Set level: 
+Extra levels:
+Get parameters: 
+Set parameters: 
+Extra parameters:
+Mode list: AM CW USB LSB RTTY FM WFM 
+VFO list: VFOA VFOB MEM 
+VFO Ops: CPY XCHG FROM_VFO TO_VFO MCL 
+Scan Ops: 
+Number of banks:	0
+Memory name desc size:	0
+Memories: None
+TX ranges #1 for TBD:
+RX ranges #1 for TBD:
+TX ranges #2 for TBD:
+	1800000 Hz - 1999999 Hz
+		VFO list: VFOA VFOB MEM 
+		Mode list: AM CW USB LSB RTTY FM 
+		Antenna list: ANT_NONE
+		Low power: 5 W, High power: 100 W
+	1800000 Hz - 1999999 Hz
+		VFO list: VFOA VFOB MEM 
+		Mode list: AM 
+		Antenna list: ANT_NONE
+		Low power: 2 W, High power: 40 W
+	3500000 Hz - 3999999 Hz
+		VFO list: VFOA VFOB MEM 
+		Mode list: AM CW USB LSB RTTY FM 
+		Antenna list: ANT_NONE
+		Low power: 5 W, High power: 100 W
+	3500000 Hz - 3999999 Hz
+		VFO list: VFOA VFOB MEM 
+		Mode list: AM 
+		Antenna list: ANT_NONE
+		Low power: 2 W, High power: 40 W
+	7000000 Hz - 7300000 Hz
+		VFO list: VFOA VFOB MEM 
+		Mode list: AM CW USB LSB RTTY FM 
+		Antenna list: ANT_NONE
+		Low power: 5 W, High power: 100 W
+	7000000 Hz - 7300000 Hz
+		VFO list: VFOA VFOB MEM 
+		Mode list: AM 
+		Antenna list: ANT_NONE
+		Low power: 2 W, High power: 40 W
+	10100000 Hz - 10150000 Hz
+		VFO list: VFOA VFOB MEM 
+		Mode list: AM CW USB LSB RTTY FM 
+		Antenna list: ANT_NONE
+		Low power: 5 W, High power: 100 W
+	10100000 Hz - 10150000 Hz
+		VFO list: VFOA VFOB MEM 
+		Mode list: AM 
+		Antenna list: ANT_NONE
+		Low power: 2 W, High power: 40 W
+	14000000 Hz - 14350000 Hz
+		VFO list: VFOA VFOB MEM 
+		Mode list: AM CW USB LSB RTTY FM 
+		Antenna list: ANT_NONE
+		Low power: 5 W, High power: 100 W
+	14000000 Hz - 14350000 Hz
+		VFO list: VFOA VFOB MEM 
+		Mode list: AM 
+		Antenna list: ANT_NONE
+		Low power: 2 W, High power: 40 W
+	18068000 Hz - 18168000 Hz
+		VFO list: VFOA VFOB MEM 
+		Mode list: AM CW USB LSB RTTY FM 
+		Antenna list: ANT_NONE
+		Low power: 5 W, High power: 100 W
+	18068000 Hz - 18168000 Hz
+		VFO list: VFOA VFOB MEM 
+		Mode list: AM 
+		Antenna list: ANT_NONE
+		Low power: 2 W, High power: 40 W
+	21000000 Hz - 21450000 Hz
+		VFO list: VFOA VFOB MEM 
+		Mode list: AM CW USB LSB RTTY FM 
+		Antenna list: ANT_NONE
+		Low power: 5 W, High power: 100 W
+	21000000 Hz - 21450000 Hz
+		VFO list: VFOA VFOB MEM 
+		Mode list: AM 
+		Antenna list: ANT_NONE
+		Low power: 2 W, High power: 40 W
+	24890000 Hz - 24990000 Hz
+		VFO list: VFOA VFOB MEM 
+		Mode list: AM CW USB LSB RTTY FM 
+		Antenna list: ANT_NONE
+		Low power: 5 W, High power: 100 W
+	24890000 Hz - 24990000 Hz
+		VFO list: VFOA VFOB MEM 
+		Mode list: AM 
+		Antenna list: ANT_NONE
+		Low power: 2 W, High power: 40 W
+	28000000 Hz - 29700000 Hz
+		VFO list: VFOA VFOB MEM 
+		Mode list: AM CW USB LSB RTTY FM 
+		Antenna list: ANT_NONE
+		Low power: 5 W, High power: 100 W
+	28000000 Hz - 29700000 Hz
+		VFO list: VFOA VFOB MEM 
+		Mode list: AM 
+		Antenna list: ANT_NONE
+		Low power: 2 W, High power: 40 W
+	50000000 Hz - 54000000 Hz
+		VFO list: VFOA VFOB MEM 
+		Mode list: AM CW USB LSB RTTY FM 
+		Antenna list: ANT_NONE
+		Low power: 5 W, High power: 100 W
+	50000000 Hz - 54000000 Hz
+		VFO list: VFOA VFOB MEM 
+		Mode list: AM 
+		Antenna list: ANT_NONE
+		Low power: 2 W, High power: 40 W
+	144000000 Hz - 148000000 Hz
+		VFO list: VFOA VFOB MEM 
+		Mode list: AM CW USB LSB RTTY FM 
+		Antenna list: ANT_NONE
+		Low power: 5 W, High power: 20 W
+	144000000 Hz - 148000000 Hz
+		VFO list: VFOA VFOB MEM 
+		Mode list: AM 
+		Antenna list: ANT_NONE
+		Low power: 2 W, High power: 8 W
+RX ranges #2 for TBD:
+	30000 Hz - 199999999 Hz
+		VFO list: VFOA VFOB MEM 
+		Mode list: AM CW USB LSB RTTY FM WFM 
+		Antenna list: ANT_NONE
+TX ranges #3 for TBD:
+RX ranges #3 for TBD:
+TX ranges #4 for TBD:
+RX ranges #4 for TBD:
+TX ranges #5 for TBD:
+RX ranges #5 for TBD:
+TX ranges #1 status for:TBD 	OK (0)
+RX ranges #1 status for TBD:	OK (0)
+TX ranges #2 status for TBD:	OK (0)
+RX ranges #2 status for TBD:	OK (0)
+TX ranges #3 status for TBD:	OK (0)
+RX ranges #3 status for TBD:	OK (0)
+TX ranges #4 status for TBD:	OK (0)
+RX ranges #4 status for TBD:	OK (0)
+TX ranges #5 status for TBD:	OK (0)
+RX ranges #5 status for TBD:	OK (0)
+Tuning steps:
+	1 Hz:   	CW USB LSB RTTY 
+	10 Hz:   	AM CW USB LSB RTTY FM WFM 
+	100 Hz:   	AM CW USB LSB RTTY FM WFM 
+	1 kHz:   	AM CW USB LSB RTTY FM WFM 
+	5 kHz:   	AM CW USB LSB RTTY FM WFM 
+	9 kHz:   	AM CW USB LSB RTTY FM WFM 
+	10 kHz:   	AM CW USB LSB RTTY FM WFM 
+	12.5 kHz:   	AM CW USB LSB RTTY FM WFM 
+	20 kHz:   	AM CW USB LSB RTTY FM WFM 
+	25 kHz:   	AM CW USB LSB RTTY FM WFM 
+	100 kHz:   	AM CW USB LSB RTTY FM WFM 
+	1 MHz:   	AM FM WFM 
+Tuning steps status:	OK (0)
+Filters:
+	2.4 kHz:   	CW USB LSB RTTY 
+	8 kHz:   	AM 
+	2.4 kHz:   	AM 
+	15 kHz:   	FM 
+	8 kHz:   	FM 
+	230 kHz:   	WFM 
+Bandwidths:
+	AM	Normal: 8 kHz,	Narrow: 2.4 kHz,	Wide: 0 Hz
+	CW	Normal: 2.4 kHz,	Narrow: 0 Hz,	Wide: 0 Hz
+	USB	Normal: 2.4 kHz,	Narrow: 0 Hz,	Wide: 0 Hz
+	LSB	Normal: 2.4 kHz,	Narrow: 0 Hz,	Wide: 0 Hz
+	RTTY	Normal: 2.4 kHz,	Narrow: 0 Hz,	Wide: 0 Hz
+	FM	Normal: 15 kHz,	Narrow: 8 kHz,	Wide: 0 Hz
+	WFM	Normal: 230 kHz,	Narrow: 0 Hz,	Wide: 0 Hz
+Has priv data:	Y
+Has Init:	Y
+Has Cleanup:	Y
+Has Open:	Y
+Has Close:	Y
+Can set Conf:	N
+Can get Conf:	N
+Can set Frequency:	Y
+Can get Frequency:	Y
+Can set Mode:	Y
+Can get Mode:	Y
+Can set VFO:	Y
+Can get VFO:	N
+Can set PTT:	N
+Can get PTT:	N
+Can get DCD:	N
+Can set Repeater Duplex:	Y
+Can get Repeater Duplex:	N
+Can set Repeater Offset:	N
+Can get Repeater Offset:	N
+Can set Split Freq:	Y
+Can get Split Freq:	Y
+Can set Split Mode:	Y
+Can get Split Mode:	Y
+Can set Split VFO:	Y
+Can get Split VFO:	N
+Can set Tuning Step:	Y
+Can get Tuning Step:	N
+Can set RIT:	N
+Can get RIT:	N
+Can set XIT:	N
+Can get XIT:	N
+Can set CTCSS:	N
+Can get CTCSS:	N
+Can set DCS:	N
+Can get DCS:	N
+Can set CTCSS Squelch:	N
+Can get CTCSS Squelch:	N
+Can set DCS Squelch:	N
+Can get DCS Squelch:	N
+Can set Power Stat:	N
+Can get Power Stat:	N
+Can Reset:	N
+Can get Ant:	N
+Can set Ant:	N
+Can set Transceive:	E
+Can get Transceive:	N
+Can set Func:	N
+Can get Func:	N
+Can set Level:	N
+Can get Level:	N
+Can set Param:	N
+Can get Param:	N
+Can send DTMF:	N
+Can recv DTMF:	N
+Can send Morse:	N
+Can send Voice:	N
+Can decode Events:	Y
+Can set Bank:	N
+Can set Mem:	Y
+Can get Mem:	N
+Can set Channel:	E
+Can get Channel:	E
+Can ctl Mem/VFO:	Y
+Can Scan:	Y
+Can get Info:	N
+Can get power2mW:	N
+Can get mW2power:	N
+
+Overall backend warnings: 0
+
+Rig command: 
+
