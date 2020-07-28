@@ -38,6 +38,16 @@ public class SwrIndicator extends RWIndicator
         String valueString = String.format("SWR  %3.2f", currentSwr);
         this.setText(valueString);
     }
+    /**
+     * Given the rigcaps reply, determine if this control capability exists.
+     * @param source 
+     * @return boolean true when capability exists.
+     */
+    public boolean enableIfCapable(String source){
+        String search = "(?ism).*^Get level:.*?SWR\\(";
+        boolean hasLevelValue = true; // This control has Level Value:
+        return enableCap(source, search, hasLevelValue);
+    }    
     
     @Override
     public void focusGained(FocusEvent e) {

@@ -811,6 +811,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         ((RWSlider)sv_compressionSlider).enableCap(radioData, "(?ism).*^Set level:.*?COMP\\(", true);
         sv_tunerCheckBox.setEnabled(false);   // Not implemented yet.
         int radioCode = ((RadioNamesListButton)sv_radioNamesListButton).getSelectedRadioCode();
+        ((SwrIndicator)swrIndicator).enableIfCapable(radioData);
         RigCapsCorrections.correct(this, radioCode);
         String s = sendRadioCom("\\get_dcd", 0, false);
         dcdCapable = (s != null && s.matches("\\d+"));
@@ -2337,7 +2338,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         gridBagConstraints.insets = new java.awt.Insets(0, 1, 0, 1);
         buttonPanel2.add(copyMemButton, gridBagConstraints);
 
-        pasteMemButton.setText("PASTE to Clipboard");
+        pasteMemButton.setText("PASTE from Clipboard");
         pasteMemButton.setToolTipText("Paste JRX memory buttons from clipboard");
         pasteMemButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -2374,7 +2375,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
             .addGroup(memoryStoragePanelLayout.createSequentialGroup()
                 .addGap(90, 90, 90)
                 .addComponent(buttonPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(72, Short.MAX_VALUE))
+                .addContainerGap(55, Short.MAX_VALUE))
             .addGroup(memoryStoragePanelLayout.createSequentialGroup()
                 .addComponent(memoryScrollPane)
                 .addContainerGap())

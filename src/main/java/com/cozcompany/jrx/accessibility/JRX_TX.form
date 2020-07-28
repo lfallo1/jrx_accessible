@@ -1411,7 +1411,7 @@
                               <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace min="-2" pref="90" max="-2" attributes="0"/>
                                   <Component id="buttonPanel2" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace pref="72" max="32767" attributes="0"/>
+                                  <EmptySpace pref="55" max="32767" attributes="0"/>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="memoryScrollPane" max="32767" attributes="0"/>
@@ -1480,7 +1480,7 @@
                             </Component>
                             <Component class="javax.swing.JButton" name="pasteMemButton">
                               <Properties>
-                                <Property name="text" type="java.lang.String" value="PASTE to Clipboard"/>
+                                <Property name="text" type="java.lang.String" value="PASTE from Clipboard"/>
                                 <Property name="toolTipText" type="java.lang.String" value="Paste JRX memory buttons from clipboard"/>
                               </Properties>
                               <Events>
