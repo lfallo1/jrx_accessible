@@ -5,6 +5,7 @@
  */
 package com.cozcompany.jrx.accessibility;
 
+import java.awt.Dimension;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileWriter;
@@ -19,8 +20,6 @@ import java.util.List;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -59,8 +58,7 @@ public class ChannelChart {
         tableScrollPane = new javax.swing.JScrollPane();
         tableScrollPane.setViewportView(freqTable);
         appFrame.memoryPanel.add(tableScrollPane, "tableCard");
-        appFrame.pout("memoryPanel dims : " + appFrame.memoryPanel.getSize());
-        
+        appFrame.pout("memoryPanel dims : " + appFrame.memoryPanel.getSize());       
     }
 
     public void init() {
@@ -70,8 +68,7 @@ public class ChannelChart {
         }
         defaultFreqFile = new File(freqDirectory + FILE_SEP + "default.tsv");
         writeFreqTable();
-        populateFreqTable();
-        
+        populateFreqTable();        
     }
     
     private void populateFreqTable() {
@@ -127,6 +124,10 @@ public class ChannelChart {
         } catch (Exception e) {
             e.printStackTrace(System.out);
         }
+        // Restrict scroll pane to fit within the containing panel.
+        Dimension panelSize = appFrame.memoryPanel.getSize();
+        Dimension limitedSize = new Dimension((panelSize.width-60),(panelSize.height-5));
+        tableScrollPane.setPreferredSize(limitedSize);
     }
     
     public String getValue(int row, int col) {
@@ -165,6 +166,4 @@ public class ChannelChart {
             e.printStackTrace(System.out);
         }
     }
-    
-    
 }

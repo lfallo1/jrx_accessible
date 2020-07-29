@@ -20,6 +20,7 @@
 
 package com.cozcompany.jrx.accessibility;
 
+import components.RWListButton;
 import java.awt.Rectangle;
 import java.io.File;
 import java.io.PrintWriter;
@@ -27,6 +28,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Scanner;
 import java.util.TreeMap;
 import javax.swing.JCheckBox;
@@ -88,6 +90,7 @@ final public class ConfigManager {
                 // the change to "limit 2" allows values to contain equals signs
                 String[] lFields = item.split(" = ",2);
                 if (lFields.length > 1) {
+                    //System.out.println("read() " + lFields[0] + " and " + lFields[1]);
                     readWriteField(lFields[0].trim(), lFields[1].trim());
                 }
             }
@@ -97,10 +100,13 @@ final public class ConfigManager {
     public void write() {
         StringBuilder sb = new StringBuilder();
         for (Map.Entry<String, Field> e : fields.entrySet()) {
-            String s = String.format("%s = %s%s", e.getKey(), readWriteField(e.getKey(), null), lineSep);
+            String s = String.format("%s = %s%s", e.getKey(), 
+                            readWriteField(e.getKey(), null), lineSep);
             sb.append(s);
+            //System.out.println("write() s "+s);
         }
         writeTextFile(initPath, sb.toString());
+        
     }
 
     private int minmax(int n, int low, int high) {
@@ -108,7 +114,16 @@ final public class ConfigManager {
         n = Math.max(n, low);
         return n;
     }
-
+    /**
+     * Read or Write the selected value from or to a control.  THIS IS NOT
+     * THE CONVENTIONAL SENSE OF READ OR WRITE TO PERSISTENT STORAGE.  When
+     * "write" is true, the value is actually read from persistence and written
+     * to the class instance.  When "write" is false, the value is read from
+     * the class instance and written to persistent storage.
+     * @param name
+     * @param value
+     * @return 
+     */
     String readWriteField(String name, String value) {
         try {
             Class pc = parent.getClass();
@@ -117,10 +132,16 @@ final public class ConfigManager {
             Object obj = f.get(parent); // get the class instance
             String classType = f.getType().toString();
             classType = classType.replaceFirst(".*\\.(.*)", "$1");
-            //System.out.println("name: " + name + ", classtype: " + classType);
-            boolean write = (value != null);
+//            System.out.println("readWriteField() name: " + name + ", classtype: " 
+//                    + classType );
+            boolean write = true;
+            if (Objects.isNull(value)) {
+                write = false;
+            } else if  (value.contains("null")) {
+                write = false;                
+            }
             if (write) {
-                value = value.trim();
+                    value = value.trim();
             }
             switch (classType) {
                 case ("int"):
@@ -207,6 +228,16 @@ final public class ConfigManager {
                         box.setSelectedIndex(n);
                     } else {
                         value = "" + box.getSelectedIndex();
+                    }
+                    break;
+                case ("JButton"): // Handle RWListButton
+                    RWListButton listButton = (RWListButton) obj;
+                    if (write) {
+                        int n = Integer.parseInt(value);
+                        n = minmax(n, 0, listButton.getItemCount());
+                        listButton.setSelectedIndex(n);
+                    } else {
+                        value = "" + listButton.getSelectedIndex();
                     }
                     break;
                 case ("JSpinner"):

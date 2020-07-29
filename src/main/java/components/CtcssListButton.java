@@ -135,7 +135,23 @@ public class CtcssListButton extends RWListButton {
                 n += 1;
             }
         }
-    int index = getSelectedIndex();
-    setSelectedIndex(index); // Sets the button title too.
+        int index = getSelectedIndex();
+        setSelectedIndex(index); // Sets the button title too.
     }
+    
+    
+    @Override
+    public void readConvertedValue() {
+        localInhibit = true;
+        double value = readValueNum();
+        localInhibit = false;
+        // No conversion is necessary.
+        // Look up value in map.
+        int index = super.useMapDouble.get(value/10.0);
+        setSelectedIndex(index); // Sets the button title too.       
+    }
+
+
+
+
 }

@@ -267,7 +267,7 @@ public class RWListButton extends JButton  implements
                         n += 1;
                     }
                     for (String ss : array) {
-                        is = String.format(tag + " %s", ss);  //@TODO Coz remove tag.
+                        is = String.format(tag + " %s", ss); 
                         if (numeric) {
                             if (ss.matches(".*?[0-9.+-]+.*")) {
                                 ss = ss.replaceFirst(".*?([0-9.+-]+).*","$1");
