@@ -1563,6 +1563,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         memoryScrollPane = new javax.swing.JScrollPane();
         memoryButtonsPanel = new javax.swing.JPanel();
         memoryPanel = new javax.swing.JPanel();
+        channelPanel = new javax.swing.JPanel();
         jrxScopePanel = new javax.swing.JPanel();
         scopePanel = new javax.swing.JPanel();
         scopeDisplayPanel = new SweepScope(this);
@@ -2386,15 +2387,17 @@ final public class JRX_TX extends javax.swing.JFrame implements
         memoryStoragePanel.getAccessibleContext().setAccessibleName("Memory Storage Tab");
         memoryStoragePanel.getAccessibleContext().setAccessibleDescription("Settings are stored on the host computer.");
 
+        channelPanel.setLayout(new java.awt.CardLayout());
+
         javax.swing.GroupLayout memoryPanelLayout = new javax.swing.GroupLayout(memoryPanel);
         memoryPanel.setLayout(memoryPanelLayout);
         memoryPanelLayout.setHorizontalGroup(
             memoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 810, Short.MAX_VALUE)
+            .addComponent(channelPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         memoryPanelLayout.setVerticalGroup(
             memoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 219, Short.MAX_VALUE)
+            .addComponent(channelPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         channelsTabbedPane.addTab("Favorite SWL Channels", null, memoryPanel, "A list of popular SWL frequencies");
@@ -3101,6 +3104,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel afGainLabel;
     private javax.swing.JPanel appSettingsPanel;
+    public javax.swing.JPanel channelPanel;
     public javax.swing.JTabbedPane channelsTabbedPane;
     protected javax.swing.JLabel comErrorIconLabel;
     private javax.swing.JButton copyButton;

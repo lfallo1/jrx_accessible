@@ -6,6 +6,7 @@
 package com.cozcompany.jrx.accessibility;
 
 import java.awt.Dimension;
+import java.awt.Rectangle;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileWriter;
@@ -57,8 +58,10 @@ public class ChannelChart {
         freqTable.setModel(model);
         tableScrollPane = new javax.swing.JScrollPane();
         tableScrollPane.setViewportView(freqTable);
-        appFrame.memoryPanel.add(tableScrollPane, "tableCard");
-        appFrame.pout("memoryPanel dims : " + appFrame.memoryPanel.getSize());       
+        appFrame.channelPanel.add(tableScrollPane, "tableCard");
+        appFrame.pout("memoryPanel dims : " + appFrame.memoryPanel.getSize());
+        Rectangle visibleRect = appFrame.channelPanel.getVisibleRect();
+        boolean visible = appFrame.channelPanel.isVisible();
     }
 
     public void init() {
@@ -128,6 +131,7 @@ public class ChannelChart {
         Dimension panelSize = appFrame.memoryPanel.getSize();
         Dimension limitedSize = new Dimension((panelSize.width-60),(panelSize.height-5));
         tableScrollPane.setPreferredSize(limitedSize);
+        appFrame.channelPanel.setVisible(true);
     }
     
     public String getValue(int row, int col) {
