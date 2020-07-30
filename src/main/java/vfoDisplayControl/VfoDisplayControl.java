@@ -116,8 +116,11 @@ final public class VfoDisplayControl extends GroupBox
      */
     public void setupPanes() {
         VfoDisplayControl display = this;
-        //Rectangle frameBounds = display.getBounds();
-        //Dimension frameSize = display.getSize();
+        Rectangle frameBounds = display.getBounds();
+        Dimension frameSize = display.getSize();
+        Container contentPane = display.getContentPane();
+        Rectangle contentRect = contentPane.getBounds();
+                
         setupGlassPane(display);
         setupContentPane(display);
 
@@ -138,7 +141,8 @@ final public class VfoDisplayControl extends GroupBox
         Container contentPane = display.getContentPane();
         Rectangle contentBounds = contentPane.getBounds();
         
-        contentPane.setLayout(null);
+        //contentPane.setLayout(null);  IT GETS SET TO FLOW-LAYOUT LATER.
+        //contentPane.setLayout(new FlowLayout());
         display.setGlassPane(new JPanel());
         glassPane = (JPanel) display.getGlassPane();       
         glassPane.setLayout(new FlowLayout());

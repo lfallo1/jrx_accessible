@@ -26,7 +26,7 @@ import javax.swing.*;
  */
 public class BarnDoor extends JPanel {
     private GeometryCollection bag;   
-    private  Color outlineColor = Color.DARK_GRAY;
+    private  Color outlineColor = Color.GRAY;
     private  Color fillColor = Color.BLACK;
     private  boolean hasFill = false;
     private  Dimension prefSize;
@@ -94,49 +94,6 @@ public class BarnDoor extends JPanel {
         bag.draw(g);
     }
    
-    /**
-     * 
-     * @deprecated 
-     *
-    */
-    public void addShapes() {
-        setOpaque(true);
-        // Painting coordinates are positive going to the right and down from
-        // the top left corner of the space.
-        // Fill the complete space occupied by the textField.
-        Rectangle bounds = new Rectangle(0, 0, prefSize.width, prefSize.height);
-        FilledRectangle filledRect =  new FilledRectangle(bounds, fillColor); 
-        bag.addGeometry((Geometry) filledRect);
-           
-        // Draw the upper button outline rectangle with inset of 5 percent of the 
-        // fieldWidth.
-        int inset = prefSize.width/20;
-        int boxHeight = (prefSize.height/2)-(2*inset);
-        int boxWidth = prefSize.width-(2*inset);
-        Rectangle upperBoxRect = new Rectangle(inset,inset,boxWidth,boxHeight);
-        OutlineRectangle upperBox = new OutlineRectangle( upperBoxRect, outlineColor);
-        bag.addGeometry((Geometry) upperBox);
-        // Draw the lower outline rectangle.        
-        Rectangle lowerBoxRect = new Rectangle(inset, inset+prefSize.height/2, 
-                boxWidth, boxHeight);
-        OutlineRectangle lowerBox = new OutlineRectangle(lowerBoxRect, outlineColor);
-        bag.addGeometry((Geometry)lowerBox);
-               
-        // Draw the upper arrow triangle outline at 5 percent inset.
-        int Tinset = 2*inset;
-        boxWidth = boxWidth - (2*inset);
-        boxHeight = boxHeight - (2*inset);
-        Rectangle upArrowRect = new Rectangle( Tinset, Tinset, boxWidth, boxHeight);
-        UpwardOutlineTriangle upTriangle = 
-                new UpwardOutlineTriangle(upArrowRect, outlineColor);
-        bag.addGeometry(upTriangle);
-        // Draw the lower arrow triangle outline.
-        Rectangle downArrowRect = new Rectangle( Tinset, Tinset+prefSize.height/2,
-                    boxWidth, boxHeight);
-        DownwardOutlineTriangle downTriangle = 
-                new DownwardOutlineTriangle(downArrowRect, outlineColor);
-        bag.addGeometry(downTriangle);
 
-    }
 }
 
