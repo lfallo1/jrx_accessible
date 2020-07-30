@@ -23,6 +23,8 @@ import components.AgcListButton;
 import components.CtcssListButton;
 import components.RWListButton;
 import java.awt.Color;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Timer;
@@ -45,10 +47,11 @@ import javax.swing.JSlider;
  * 
  * @author lutusp
  */
-final public class MemoryButton extends JButton implements MouseListener {
+final public class MemoryButton extends JButton 
+        implements MouseListener, FocusListener {
 
     JRX_TX parent;
-    final String label;  // Coz This value never changes.
+    final String label;  // Coz This value never changes for this button.
     Timer defineButtonTimer = null;
     MouseEvent mouseEvent = null;
     final int TIMEOUT = 1000;
@@ -58,7 +61,7 @@ final public class MemoryButton extends JButton implements MouseListener {
             "<span color=\"blue\">Right-click: toggle skip in memory scan</span>"+
             "<br/><span color=\"red\">Click and hold 1 sec.: write</span>"+
             "<br/><span color=\"purple\">Right-click and hold 1 sec: erase</span>";
-    String audibleTip = "Left Click to set VFO frequency. " +
+    String audibleTip = " Left Click to set VFO frequency. " +
                 "Right click to toggle SKIP in memory scan. "+
                 "Click and hold one second to store current VFO and mode. "+
                 "Right click and hold one second to erase.";
@@ -89,7 +92,6 @@ final public class MemoryButton extends JButton implements MouseListener {
         STATE_BLACK = Color.black;
         STATE_GRAY = Color.darkGray;
         setToolTipText(visualTip);
-        getAccessibleContext().setAccessibleDescription(audibleTip);
         setup();
         reset();
         updateState();
@@ -117,6 +119,7 @@ final public class MemoryButton extends JButton implements MouseListener {
 
     protected void updateState(Color foreground) {
         setForeground((frequency >= 0) ? (skipDuringScan != 0)?Color.blue:foreground : Color.gray);
+        setAccessibleDescription();
     }
     
     protected void updateState() {
@@ -135,8 +138,8 @@ final public class MemoryButton extends JButton implements MouseListener {
                 stateColorString = "RED";
             else if (foreColor == STATE_BLUE)
                 stateColorString = "BLUE";
-            else 
-                stateColorString = "UNKNOWN"; 
+            else if (foreColor == STATE_GRAY)
+                stateColorString = "GRAY"; 
         } else {
             // Button is not enabled.  Color is GRAY.
             stateColorString = "GRAY";
@@ -150,10 +153,40 @@ final public class MemoryButton extends JButton implements MouseListener {
         String ms = parent.getMode();       
         String freq = (frequency >= 0) ? String.format("%.6f MHz %s", 
                 (double) frequency / 1e6, ms) : "Undefined";
-        // Change accessibleDescription.
-        getAccessibleContext().setAccessibleDescription("button is "+
-                getStateString() +" "+ freq + audibleTip);
         return String.format("<html>%s<br> %s</html>", freq, visualTip);
+    }
+
+    @Override
+    public void focusGained(FocusEvent e) {
+    }
+    /**
+     * Add the name of the button to the memory number and
+     * add the color, frequency and mode.
+     * @param e 
+     */
+    
+    public void setAccessibleDescription() {
+        StringBuilder name = new StringBuilder("");
+        name.append(label);
+        if (getStateString().equals("GRAY")) {
+            name.append(" color is GRAY, button is not programmed. ");
+        } else {
+            name.append(" color ");
+            name.append(getStateString());
+            name.append(" frequency ");
+            Double freq = ((double)frequency)/1.e6;
+            name.append(freq.toString());
+            name.append(" megahertz, mode index is ");  // COZ DESIGN ISSUE.  FIX....
+            //String modeItem = ((RWListButton)parent.sv_modesListButton).getItemForIndex(mode);
+            name.append(mode + " ");
+        }
+        // Change accessibleDescription.
+        getAccessibleContext().setAccessibleDescription(
+                name.toString() + audibleTip);
+    }
+
+    @Override
+    public void focusLost(FocusEvent e) {
     }
     /**
      * This timer task determines if a mouse button was held down longer than the 
