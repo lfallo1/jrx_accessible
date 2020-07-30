@@ -20,7 +20,7 @@ public class RWIndicator extends JLabel
     JRX_TX parent;
     String token;
     String prefix;
-    boolean isEnabled = true;
+    boolean isEnabled = false;
     boolean commOK = false;
     double errorValue = 1e100;
     double oldValue = -1;

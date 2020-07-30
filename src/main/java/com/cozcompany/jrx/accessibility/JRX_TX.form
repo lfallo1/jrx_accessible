@@ -257,7 +257,7 @@
                                               <Component id="sv_tunerCheckBox" min="-2" max="-2" attributes="0"/>
                                               <Component id="sv_antennaComboBox" alignment="0" min="-2" pref="161" max="-2" attributes="0"/>
                                           </Group>
-                                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                          <EmptySpace min="0" pref="194" max="32767" attributes="0"/>
                                       </Group>
                                   </Group>
                               </Group>
@@ -267,9 +267,9 @@
                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                   <Component id="jLabel8" min="-2" pref="133" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="swrIndicator" min="-2" pref="86" max="-2" attributes="0"/>
-                                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                                  <Component id="pttCheckBox" pref="247" max="32767" attributes="0"/>
+                                  <Component id="swrIndicator" max="32767" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="pttCheckBox" min="-2" pref="222" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -543,7 +543,7 @@
                               <Font name="Lucida Grande" size="14" style="1"/>
                             </Property>
                             <Property name="horizontalAlignment" type="int" value="0"/>
-                            <Property name="text" type="java.lang.String" value="SWR  1.00"/>
+                            <Property name="text" type="java.lang.String" value="SWR  unknown"/>
                             <Property name="opaque" type="boolean" value="true"/>
                           </Properties>
                           <AuxValues>

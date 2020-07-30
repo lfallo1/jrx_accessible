@@ -29,14 +29,17 @@ public class SwrIndicator extends RWIndicator
         setYLow(1.000);
         setYHigh(100.000);       
         this.addFocusListener(this);
+        this.setText("SWR unkown");
     }
 
     public void updateSwr() {
         double currentSwr = readValue();
-        if (currentSwr > 3.0) setForeground(Color.RED);
-        else setForeground(Color.BLACK);
-        String valueString = String.format("SWR  %3.2f", currentSwr);
-        this.setText(valueString);
+        if (isEnabled()) {
+            if (currentSwr > 3.0) setForeground(Color.RED);
+            else setForeground(Color.BLACK);
+            String valueString = String.format("SWR  %3.2f", currentSwr);
+            this.setText(valueString);
+        }
     }
     /**
      * Given the rigcaps reply, determine if this control capability exists.

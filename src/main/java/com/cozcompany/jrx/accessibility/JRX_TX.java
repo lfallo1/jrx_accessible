@@ -1737,7 +1737,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         swrIndicator.setBackground(new java.awt.Color(255, 255, 255));
         swrIndicator.setFont(new java.awt.Font("Lucida Grande", 1, 14)); // NOI18N
         swrIndicator.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        swrIndicator.setText("SWR  1.00");
+        swrIndicator.setText("SWR  unknown");
         swrIndicator.setOpaque(true);
 
         pttCheckBox.setText("PTT");
@@ -1765,16 +1765,16 @@ final public class JRX_TX extends javax.swing.JFrame implements
                             .addComponent(sv_ctcssListButton, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(sv_tunerCheckBox)
                             .addComponent(sv_antennaComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                        .addGap(0, 194, Short.MAX_VALUE))))
             .addGroup(transmitterPanelLayout.createSequentialGroup()
                 .addGap(16, 16, 16)
                 .addComponent(sv_rfPowerSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(swrIndicator, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(pttCheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, 247, Short.MAX_VALUE))
+                .addComponent(swrIndicator, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pttCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         transmitterPanelLayout.setVerticalGroup(
             transmitterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
