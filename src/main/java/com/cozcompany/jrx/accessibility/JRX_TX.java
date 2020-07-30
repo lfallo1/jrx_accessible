@@ -108,7 +108,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
     int sv_hamrigRetries = 3;
     int sv_hamrigTimeout = 400;
     boolean sv_hamrigUseCustomSettings = false;
-    int memoryButtonTotal = 200;
+
     int hamlibPort = 4532;
     String hamlibHost = "127.0.0.1";
     Socket hamlibSocket = null;
@@ -746,7 +746,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
         ((StepPeriodListButton)sv_stepPeriodListButton).init();
         ((DwellTimeListButton)sv_dwellTimeListButton).init();
         //scanDude.initScanValues(sv_scopeStepComboBox, 12, sv_scopeSpeedComboBox, 0);
-        memoryButtonsPanel.setBackground(new Color(128, 200, 220));
         
         scannerPanel.setBackground(new Color(240, 240, 220));
         scopeControlLeftPanel.setBackground(new Color(240, 240, 220));
@@ -2361,9 +2360,9 @@ final public class JRX_TX extends javax.swing.JFrame implements
         scanUpButton.getAccessibleContext().setAccessibleName("START SCAN UPWARDS");
 
         memoryButtonsPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
-        memoryButtonsPanel.setMaximumSize(new java.awt.Dimension(741, 218));
+        memoryButtonsPanel.setMaximumSize(new java.awt.Dimension(741, 600));
         memoryButtonsPanel.setMinimumSize(new java.awt.Dimension(40, 40));
-        memoryButtonsPanel.setPreferredSize(new java.awt.Dimension(741, 218));
+        memoryButtonsPanel.setPreferredSize(new java.awt.Dimension(741, 600));
         memoryButtonsPanel.setLayout(new java.awt.GridLayout(1, 0));
         memoryScrollPane.setViewportView(memoryButtonsPanel);
 
@@ -2372,15 +2371,14 @@ final public class JRX_TX extends javax.swing.JFrame implements
         memoryStoragePanelLayout.setHorizontalGroup(
             memoryStoragePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(memoryStoragePanelLayout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(memoryScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 808, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 2, Short.MAX_VALUE))
         );
         memoryStoragePanelLayout.setVerticalGroup(
             memoryStoragePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(memoryStoragePanelLayout.createSequentialGroup()
-                .addComponent(memoryScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 1, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, memoryStoragePanelLayout.createSequentialGroup()
+                .addGap(0, 1, Short.MAX_VALUE)
+                .addComponent(memoryScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         channelsTabbedPane.addTab("Memory ", null, memoryStoragePanel, "Memory Storage ");

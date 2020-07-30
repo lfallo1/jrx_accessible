@@ -20,6 +20,7 @@
 
 package com.cozcompany.jrx.accessibility;
 
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -43,6 +44,7 @@ final public class MemoryCollection {
     TreeMap<String, MemoryButton> buttonMap;
     String sv_mostRecentButton = "";
     String filePath;
+    final public static int MEMORY_BUTTONS_QTY = 200;
     
 
     public MemoryCollection(JRX_TX p) {
@@ -50,6 +52,7 @@ final public class MemoryCollection {
         header = "Mnnn = Freq,Mode,Bandwidth,AGC,CTCSS,StepIndex,NB,Preamp,Antenna,Attenuator,Skip";
     }
     protected void readMemoryButtons() {
+        parent.memoryButtonsPanel.setBackground(new Color(128, 200, 220));
         layoutButtons(parent.memoryButtonsPanel);
         readButtonsFromFile(filePath, buttonMap);
     }
@@ -88,7 +91,7 @@ final public class MemoryCollection {
         buttonMap = new TreeMap<>();
         panel.removeAll();
         panel.setLayout(new GridLayout(20, 20));
-        for (int i = 1; i <= parent.memoryButtonTotal; i++) {
+        for (int i = 1; i <= MEMORY_BUTTONS_QTY; i++) {
             String lbl = String.format("M%03d", i);
             MemoryButton mb = new MemoryButton(lbl, parent);
             panel.add(mb);

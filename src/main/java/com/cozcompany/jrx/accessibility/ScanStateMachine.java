@@ -214,7 +214,7 @@ final public class ScanStateMachine {
     protected boolean setMemoryScanParams() {
         if (parent.validSetup()) {
             buttonScanList = parent.memoryCollection.
-                    getScanButtons(parent.memoryButtonTotal);
+                    getScanButtons(MemoryCollection.MEMORY_BUTTONS_QTY);
             if (buttonScanList != null) {
                 int sz = buttonScanList.size();
                 if (sz >= 2) {
