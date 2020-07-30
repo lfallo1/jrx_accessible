@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.cozcompany</groupId>
     <artifactId>jrx-accessibility</artifactId>
-    <version>5.0.16</version>
+    <version>5.0.17</version>
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -29,5 +29,5 @@
             </plugin>
         </plugins>
     </build>
-    <description>The SCAN tab is completely functional with ListButtons now.</description>
+    <description>Have the short fat version.  Things are broken....we have fought the GUI doll and lost.</description>
 </project>

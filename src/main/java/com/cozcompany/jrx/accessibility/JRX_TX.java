@@ -81,7 +81,7 @@ import vfoDisplayControl.GroupBox;
 final public class JRX_TX extends javax.swing.JFrame implements 
         ListSelectionListener, ItemListener , ActionListener {
 
-    final String appVersion = "5.0.16";
+    final String appVersion = "5.0.17";
     final String appName;
     final String programName;
     public final String LINE_SEP;
