@@ -139,19 +139,30 @@ public class CtcssListButton extends RWListButton {
         setSelectedIndex(index); // Sets the button title too.
     }
     
-    
+    /**
+     * readConvertedValue() overrides RWListButton because the values are not 
+     * scaled except for multiplied by 10 when sent to rig and divided by 10
+     * when received from rig.
+     * 
+     * When there is a receive error the value is returned as zero.
+     */
     @Override
     public void readConvertedValue() {
-        localInhibit = true;
-        double value = readValueNum();
-        localInhibit = false;
-        // No conversion is necessary.
-        // Look up value in map.
-        int index = super.useMapDouble.get(value/10.0);
-        setSelectedIndex(index); // Sets the button title too.       
+        if (commOK) {
+            localInhibit = true;
+            double value = readValueNum();
+            localInhibit = false;
+            if (value > 0.0) { 
+                try {
+                // No conversion is necessary... (well divide by ten).
+                // Look up value in map.
+                int index = super.useMapDouble.get(value/10.0);
+                setSelectedIndex(index); // Sets the button title too. 
+                } catch (Exception ex) {
+                    // When tone value is not in the map :
+                    System.out.println("CtcssListButton:readConvertedValue() exception " + ex);
+                }
+            }
+        }
     }
-
-
-
-
 }

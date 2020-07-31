@@ -10,6 +10,11 @@ import java.util.ArrayList;
 /**
  * Class to keep rig communications state and alert observers about state 
  * change.
+ * "online" -  means that we are able to talk to a real radio or we are talking to
+ * a HAMLIB dummy radio.
+ * 
+ * "offline" - means that we are unable to talk to a real radio.
+ * 
  * @author Coz
  */
 public class RigComms {

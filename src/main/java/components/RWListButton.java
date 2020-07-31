@@ -146,8 +146,10 @@ public class RWListButton extends JButton  implements
         } else {
             selectedIndex = index;
             setButtonText(item);
-        }
-        
+        }        
+    }
+    public String getItemForIndex(int index){
+        return reverseDisplayMap.get(index);    
     }
     /**
      * The RWListButton uses the disp strings in the Dialog list, 

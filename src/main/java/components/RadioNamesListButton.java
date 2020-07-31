@@ -68,13 +68,27 @@ public class RadioNamesListButton extends RWListButton {
         String radioName = radioNames.get(rigCode);
         return (radioName != null);        
     }
-    
+    /**
+     * getSelectedRadioCode() is called on startup, and when it is a dummy radio,
+     * the intefaceSelection control must be disabled.  There is no radio 
+     * connected to this computer.
+     * 
+     * @return 
+     */
     public int getSelectedRadioCode() {
         String radio = getSelectedItem();
-        return getRadioCode(radio);
-        
+        int code = getRadioCode(radio);
+        if (code < 10) {
+            // We are using a dummy/network radio in HAMLIB. There is no radio.
+            // Disable the interfaceSelection.
+            parent.sv_interfacesListButton.setEnabled(false);
+        } else {
+            parent.sv_interfacesListButton.setEnabled(true);
+        }        
+        return code;       
     }
     
+    @Override
     public void setSelectedItem(String rigName) {
         Integer index = displayMap.get(rigName);
         if (index != null) {
@@ -83,8 +97,50 @@ public class RadioNamesListButton extends RWListButton {
         } else {
             System.out.println("in setSelectedItem() for rigName: "+ rigName +
                     " , Not a valid rigName.");
-        }        
+        }
+        int code = getRadioCode(rigName);
+        if (code < 10) {
+            // We are using a dummy/network radio in HAMLIB. There is no radio.
+            // Disable the interfaceSelection.
+            parent.sv_interfacesListButton.setEnabled(false);
+        } else {
+            parent.sv_interfacesListButton.setEnabled(true);
+        }
     }
+    
+    
+    /**
+     * Set the selected item based on the given display string while the localInhibit
+     * is enabled.
+     * 
+     * This method is called from the action handler when a selection is made.  
+     * When a dummy rig or network rig is selected, there is no physical radio so
+     * disable the comms interfaceDevice selection control.
+     * 
+     * @param rigName the displayed radio name.
+     */
+    @Override
+    public void inhibitSetItem(String rigName) {
+        int code = getRadioCode(rigName);
+        if (code < 10) {
+            // We are using a dummy/network radio in HAMLIB. There is no radio.
+            // Disable the interfaceSelection.
+            parent.sv_interfacesListButton.setEnabled(false);
+        } else {
+            parent.sv_interfacesListButton.setEnabled(true);
+            int index = 0;
+            try {
+                localInhibit = true;
+                index = useMap.get(rigName);
+                setSelectedIndex(index);
+            } catch (Exception e) {
+                System.out.println("inhibitSetItem had exception : " + e + " and index = "  + index);
+            } finally {
+                localInhibit = false;
+            }
+        }
+    }
+    
     /**
      * Read a list of supported radios from hamlib backend and insert into 
      * radioCodes TreeMap; then
