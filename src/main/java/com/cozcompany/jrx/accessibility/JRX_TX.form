@@ -1282,13 +1282,11 @@
                                   <Group type="102" alignment="0" attributes="0">
                                       <Component id="scanIconLabel" min="-2" pref="17" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="scanDownButton" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                       <Component id="scanStopButton" min="-2" pref="126" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="scanUpButton" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                      <Component id="sv_squelchCheckBox" min="-2" max="-2" attributes="0"/>
+                                      <Component id="scanUpButton" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="sv_squelchCheckBox" min="-2" pref="286" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
                                       <Component id="sv_scanStepListButton" min="-2" pref="206" max="-2" attributes="0"/>
@@ -1320,16 +1318,15 @@
                                   <Component id="pasteMemButton" alignment="3" min="-2" pref="24" max="-2" attributes="0"/>
                               </Group>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="scanDownButton" alignment="3" min="-2" pref="18" max="-2" attributes="0"/>
-                                      <Component id="scanStopButton" alignment="3" min="-2" pref="18" max="-2" attributes="0"/>
-                                      <Component id="scanUpButton" alignment="3" min="-2" pref="20" max="-2" attributes="0"/>
-                                      <Component id="sv_squelchCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="eraseMemButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  </Group>
+                                  <Component id="eraseMemButton" min="-2" max="-2" attributes="0"/>
                                   <Group type="102" attributes="0">
-                                      <EmptySpace min="4" pref="4" max="-2" attributes="0"/>
-                                      <Component id="scanIconLabel" min="-2" pref="14" max="-2" attributes="0"/>
+                                      <EmptySpace min="2" pref="2" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="3" attributes="0">
+                                          <Component id="scanIconLabel" alignment="3" min="-2" pref="14" max="-2" attributes="0"/>
+                                          <Component id="scanStopButton" alignment="3" min="-2" pref="18" max="-2" attributes="0"/>
+                                          <Component id="scanUpButton" alignment="3" min="-2" pref="20" max="-2" attributes="0"/>
+                                          <Component id="sv_squelchCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      </Group>
                                   </Group>
                               </Group>
                               <EmptySpace max="32767" attributes="0"/>
@@ -1374,19 +1371,6 @@
                         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
                       </AuxValues>
                     </Component>
-                    <Component class="javax.swing.JButton" name="scanDownButton">
-                      <Properties>
-                        <Property name="text" type="java.lang.String" value="Start Scan Down"/>
-                        <Property name="toolTipText" type="java.lang.String" value="Scan down"/>
-                      </Properties>
-                      <AccessibilityProperties>
-                        <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="START SCAN DOWNWARDS"/>
-                      </AccessibilityProperties>
-                      <Events>
-                        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="scanDownButtonMouseClicked"/>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="scanDownActionHandler"/>
-                      </Events>
-                    </Component>
                     <Component class="javax.swing.JButton" name="scanStopButton">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="Stop Scan"/>
@@ -1413,7 +1397,7 @@
                     <Component class="javax.swing.JCheckBox" name="sv_squelchCheckBox">
                       <Properties>
                         <Property name="selected" type="boolean" value="true"/>
-                        <Property name="text" type="java.lang.String" value="Pause ON Squelch Open"/>
+                        <Property name="text" type="java.lang.String" value="VoiceOver announce ON Squelch Open"/>
                         <Property name="toolTipText" type="java.lang.String" value="Pause on squelch active"/>
                       </Properties>
                       <AuxValues>

@@ -471,7 +471,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 if (getSignalStrength()) {
                     // Signal Strength is supported and unsuccessful.
                     setSMeter();
-                    squelchScheme.getSquelch(false);
+                    squelchScheme.getSquelch();
                 }
                 setComErrorIcon();               
                 readRadioControls(false);
@@ -507,7 +507,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
      * for rig communication or startup.  The interface list is subject to change
      * based on what kind of interface has been plugged in.
      */
-    private void initialize() {
+    public void initialize() {
         if (!inhibit) {
             oldRadioFrequency = -1;
             dcdIconLabel.setText("");
@@ -1197,7 +1197,9 @@ final public class JRX_TX extends javax.swing.JFrame implements
      */
     public String sendRadioCom(String s, int localDebug, boolean writeMode) {
         String result = null;
-        int countBefore = vfoState.lock.getWriteHoldCount();
+        int writeHoldCount = vfoState.lock.getWriteHoldCount();
+        int queueLength = vfoState.lock.getQueueLength();
+        int readHoldCount = vfoState.lock.getReadHoldCount();
         try {            
             vfoState.lock.writeLock().lock();            
             if (validSetup() && hamlibDaemon != null && hamlibSocket != null && s != null) {
@@ -1229,7 +1231,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         }
         // Debug info to System.out for accumulated locks.
         int countAfter = vfoState.lock.getWriteHoldCount();
-        boolean plusLocks = ((countAfter - countBefore) > 0);           
+        boolean plusLocks = ((countAfter - writeHoldCount) > 0);           
         if (vfoState.lock.isWriteLockedByCurrentThread() && plusLocks ) {
             pout("sendRadioCom() comms is writeLocked by current" +
                     " thread; count = "+countAfter);                           
@@ -1549,7 +1551,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
         sv_stepPeriodListButton = new StepPeriodListButton(this);
         sv_dwellTimeListButton = new DwellTimeListButton(this);
         scanIconLabel = new javax.swing.JLabel();
-        scanDownButton = new javax.swing.JButton();
         scanStopButton = new javax.swing.JButton();
         scanUpButton = new javax.swing.JButton();
         sv_squelchCheckBox = new RWCheckBox(this,null,null);
@@ -2224,19 +2225,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
         scanIconLabel.setText("x");
         scanIconLabel.setToolTipText("Scan Led turns green when scanning.");
 
-        scanDownButton.setText("Start Scan Down");
-        scanDownButton.setToolTipText("Scan down");
-        scanDownButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                scanDownButtonMouseClicked(evt);
-            }
-        });
-        scanDownButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                scanDownActionHandler(evt);
-            }
-        });
-
         scanStopButton.setText("Stop Scan");
         scanStopButton.setToolTipText("Halt scan");
         scanStopButton.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -2264,7 +2252,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         });
 
         sv_squelchCheckBox.setSelected(true);
-        sv_squelchCheckBox.setText("Pause ON Squelch Open");
+        sv_squelchCheckBox.setText("VoiceOver announce ON Squelch Open");
         sv_squelchCheckBox.setToolTipText("Pause on squelch active");
 
         copyMemButton.setFont(new java.awt.Font("Lucida Grande", 0, 10)); // NOI18N
@@ -2309,13 +2297,11 @@ final public class JRX_TX extends javax.swing.JFrame implements
                     .addGroup(scannerPanelLayout.createSequentialGroup()
                         .addComponent(scanIconLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(scanDownButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(scanStopButton, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(scanUpButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(sv_squelchCheckBox))
+                        .addComponent(scanUpButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(sv_squelchCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(scannerPanelLayout.createSequentialGroup()
                         .addComponent(sv_scanStepListButton, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -2340,19 +2326,17 @@ final public class JRX_TX extends javax.swing.JFrame implements
                     .addComponent(copyMemButton)
                     .addComponent(pasteMemButton, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(scannerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(scannerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(scanDownButton, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(scanStopButton, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(scanUpButton, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(sv_squelchCheckBox)
-                        .addComponent(eraseMemButton))
+                    .addComponent(eraseMemButton)
                     .addGroup(scannerPanelLayout.createSequentialGroup()
-                        .addGap(4, 4, 4)
-                        .addComponent(scanIconLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(2, 2, 2)
+                        .addGroup(scannerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(scanIconLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(scanStopButton, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(scanUpButton, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(sv_squelchCheckBox))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        scanDownButton.getAccessibleContext().setAccessibleName("START SCAN DOWNWARDS");
         scanUpButton.getAccessibleContext().setAccessibleName("START SCAN UPWARDS");
 
         memoryButtonsPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
@@ -2894,10 +2878,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
         scanStateMachine.stopScan(true);
     }//GEN-LAST:event_scanStopButtonMouseClicked
 
-    private void scanDownButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_scanDownButtonMouseClicked
-        scanStateMachine.startScan(-1);
-    }//GEN-LAST:event_scanDownButtonMouseClicked
-
     private void sv_anfCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sv_anfCheckBoxActionPerformed
         enableDSP();
     }//GEN-LAST:event_sv_anfCheckBoxActionPerformed
@@ -2972,26 +2952,22 @@ final public class JRX_TX extends javax.swing.JFrame implements
     }//GEN-LAST:event_sv_modesListButtonActionPerformed
 
     private void sv_radioNamesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sv_radioNamesActionPerformed
-        if (!inhibit) initialize(); 
-        String selectionStr = ((RadioNamesListButton)sv_radioNamesListButton).getSelectedItem();
-        sv_radioNamesListButton.getAccessibleContext().setAccessibleDescription("Selection is "+selectionStr);
-
+//        if (!inhibit) initialize(); 
+//        String selectionStr = ((RadioNamesListButton)sv_radioNamesListButton).getSelectedItem();
+//        sv_radioNamesListButton.getAccessibleContext().setAccessibleDescription("Selection is "+selectionStr);
+//
     }//GEN-LAST:event_sv_radioNamesActionPerformed
 
     private void sv_interfacesListButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sv_interfacesListButtonActionPerformed
-        if (!inhibit) initialize(); 
-        String selectionStr = ((RWListButton)sv_interfacesListButton).getSelectedItem();
-        ((RWListButton)sv_interfacesListButton).setButtonText(selectionStr);
-        sv_interfacesListButton.getAccessibleContext().setAccessibleDescription("Selection is "+selectionStr);                                                  
+//        if (!inhibit) initialize(); 
+//        String selectionStr = ((RWListButton)sv_interfacesListButton).getSelectedItem();
+//        ((RWListButton)sv_interfacesListButton).setButtonText(selectionStr);
+//        sv_interfacesListButton.getAccessibleContext().setAccessibleDescription("Selection is "+selectionStr);                                                  
     }//GEN-LAST:event_sv_interfacesListButtonActionPerformed
 
     private void startScanUpHandler(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startScanUpHandler
         scanStateMachine.startScan(1);
     }//GEN-LAST:event_startScanUpHandler
-
-    private void scanDownActionHandler(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_scanDownActionHandler
-        scanStateMachine.startScan(-1);
-    }//GEN-LAST:event_scanDownActionHandler
 
     private void sv_fbkinActionHandler(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sv_fbkinActionHandler
         // TODO add your handling code here:
@@ -3112,7 +3088,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
     protected javax.swing.JInternalFrame recieverGroupBox;
     private javax.swing.JLabel rfGainLabel;
     private javax.swing.JPanel rttyPanel;
-    private javax.swing.JButton scanDownButton;
     private javax.swing.JButton scanHelpButton;
     protected javax.swing.JLabel scanIconLabel;
     private javax.swing.JPanel scanPanel;

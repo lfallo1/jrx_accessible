@@ -14,7 +14,7 @@ import javax.swing.Icon;
  * synthetic squelch slider so that the two have NO interaction except that 
  * when one is enabled, the other is disabled.
  * 
- * WARNING: Squelch scheme is disabled at debug levels 2 and higher.... WHY?
+ * 
  * @author Coz
  */
 public class SquelchScheme {
@@ -30,18 +30,12 @@ public class SquelchScheme {
         appFrame = frame;
         
     }
-    /**
-     * Returns true when squelch is open.
-     * @return 
-     */
-    public boolean isSquelchOpen() {
-        return (squelchOpen == SquelchOpen.OPEN);
-    }
     
     public void setSquelchScheme() {
         // sv_synthSquelchCheckBox.setEnabled(!dcdCapable);
-        appFrame.sv_synthSquelchCheckBox.setEnabled(true);
-        useJRXSquelch = appFrame.sv_synthSquelchCheckBox.isSelected();// && !dcdCapable;
+        appFrame.sv_synthSquelchCheckBox.setEnabled(false); // disable this feature.
+        useJRXSquelch = false;
+        //useJRXSquelch = appFrame.sv_synthSquelchCheckBox.isSelected();// && !dcdCapable;
         // reset squelch state to default
         ((RWSlider)appFrame.sv_squelchSlider).enableCap(appFrame.radioData, "(?ism).*^Set level:.*?SQL\\(", true);
         if (useJRXSquelch) {
@@ -76,7 +70,7 @@ public class SquelchScheme {
         }
         ((RWSlider) appFrame.sv_squelchSlider).writeValue(true);
         ((RWSlider) appFrame.sv_volumeSlider).writeValue(true);
-        getSquelch(true);
+        getSquelch();
         appFrame.scanDude.updateScanControls();
     }
     
@@ -97,33 +91,28 @@ public class SquelchScheme {
 
     /**
      * Read the radio current carrier detect to see if squelch is broken by a
-     * received signal and set global variable squelchOpen as a result.
+     * received signal.  Set a local state variable based on sqOpen.
      * 
-     * @param force 
+     * @return true when squelch is Open.
      */
-    protected void getSquelch(boolean force) {
-        int sqOpen = appFrame.iErrorValue;
-        if (appFrame.dcdCapable && !useJRXSquelch) {
-            // Coz -- I don't understand why high debug levels cripples the squelch value.
-            //if (appFrame.comArgs.debug < 2) {
-                String s = appFrame.sendRadioCom("\\get_dcd", 1, false);
-                if (s != null) {
-                    sqOpen = s.trim().equals("1") ? 1 : 0;
-                }
-            //}
-        } else if (!useJRXSquelch) {
-            sqOpen = 1;
+    public boolean getSquelch() {
+        boolean sqOpen = false;
+        if (appFrame.dcdCapable ) {
+            String s = appFrame.sendRadioCom("\\get_dcd", 1, false);
+            if (s != null) {
+                sqOpen = s.trim().equals("1") ? true : false;
+            } 
         } else {
             double sv = ((ControlInterface) appFrame.sv_squelchSlider).getConvertedValue();
             sv = appFrame.ntrp(0, 1, appFrame.squelchLow, appFrame.squelchHigh, sv);
-            sqOpen = (appFrame.signalStrength > sv) ? 1 : 0;
+            sqOpen = (appFrame.signalStrength > sv) ? true : false;
         }
         //appFrame.pout("sqOpen: " + sqOpen + ", squelchOpen: " + squelchOpen.ordinal());
-        if ((sqOpen != appFrame.iErrorValue && sqOpen != squelchOpen.ordinal()) || force) {
-            appFrame.pout("JRX wants to put audio gain full scale.  WHY?  sqOpen2: " + sqOpen);
-            squelchOpen = SquelchOpen.values()[sqOpen];
-            // WHY SET THE AUDIO GAIN TO FULL SCALE?  @TODO COZ commented out.
-            //appFrame.setVolume(squelchOpen == SquelchOpen.OPEN); 
+        if ( sqOpen ) {
+            squelchOpen = SquelchOpen.values()[1];
+        } else {
+            squelchOpen = SquelchOpen.values()[0];
         }
-    }   
+        return sqOpen;
+    }
 }

@@ -11,6 +11,8 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
+import javax.swing.JCheckBox;
+import javax.swing.JOptionPane;
 import vfoDisplayControl.VfoDisplayControl;
 
 /**
@@ -36,6 +38,10 @@ final public class ScanStateMachine {
     ArrayList<MemoryButton> buttonScanList = null;
     ArrayList<TuneData> tableScanList = null;
     boolean buttonScanMode = false;
+    boolean sqOpen = false;
+    boolean oldSqOpen = false;
+    boolean hasStepped = false;
+   
 
     public ScanStateMachine(JRX_TX p) {
         vfoDisplayS = p.vfoDisplay;
@@ -287,17 +293,31 @@ final public class ScanStateMachine {
             // acquire ss and set ss meter
             parent.getSignalStrength();
             parent.setSMeter();
-            // open/close squelch
-            parent.squelchScheme.getSquelch(false);
-            boolean sqopen = parent.squelchScheme.testSquelch();
-            if (sqopen) {
-                lastOpenSquelchTime = System.currentTimeMillis();
+            boolean voiceOver = ((JCheckBox)parent.sv_squelchCheckBox).isSelected();
+            oldSqOpen = sqOpen;
+            sqOpen = parent.squelchScheme.getSquelch();
+            // Set squelch open time based on first transition from closed to open
+            // after stepping though channels.
+            if (sqOpen && !oldSqOpen && hasStepped) {
+                lastOpenSquelchTime = System.currentTimeMillis(); // returns long milliseconds.
+                hasStepped = false;
+                if (voiceOver) {
+                    voiceOverAnnounce();
+                }
             }
+            System.out.println("lastOpenSquelchTime "+ lastOpenSquelchTime);
+            double dwellPeriod = ((DwellTimeListButton)parent.sv_dwellTimeListButton).getTimeStep();
+            System.out.println("dwellPeriod "+ dwellPeriod);
             double dwellTime = lastOpenSquelchTime + 
                     ((DwellTimeListButton)parent.sv_dwellTimeListButton).
                             getTimeStep();
+            System.out.println("dwellTime "+ dwellTime);
             double now = System.currentTimeMillis();
-            if (now >= dwellTime && !sqopen && scanTimer != null) {
+            System.out.println("now "+ now);
+            
+            //boolean sqopen = parent.squelchScheme.getSquelch();
+            if (now >= dwellTime  && scanTimer != null) {
+                hasStepped = true;
                 if (programScan) {
                     // Scanning through group of memory buttons.
                     long freq = getNextScanFrequency();
@@ -335,5 +355,45 @@ final public class ScanStateMachine {
                         vfoDisplayS.getFreq(), dt));
             }            
         }
+    }
+            
+            
+    private void voiceOverAnnounce() {        
+        String announce;
+        if (buttonScanMode) {
+            // Scanning memory buttons.
+            if (programScan) {
+                // Scanning through a group of memory buttons.
+                // Announce button label and frequency.
+                MemoryButton mb = buttonScanList.get(scanMemoryIndex);
+                double mhz = ((double)mb.frequency)/1.e6;
+                announce = String.format("%s freq %f", mb.label, mhz);
+            } else {
+                // Scanning in steps between two memory buttons.
+                // Announce frequency for step scan.
+                long freq = vfoDisplayS.getFreq();
+                double mhz = ((double)freq)/1.e6;
+                announce = String.format("Step freq %f", mhz);
+            }
+        } else {
+            // Scanning channel chart.
+            if (programScan) {
+                // Scanning through a group of channels.
+                // Announce channel label and frequency.
+                long freq = tableScanList.get(scanMemoryIndex).freq;
+                double mhz = ((double)freq)/1.e6;
+                announce = String.format("Channel freq %f",  mhz);
+            } else {
+                // Scanning in steps between two memory buttons.
+                // Announce frequency for step scan.
+                long freq = vfoDisplayS.getFreq();
+                double mhz = ((double)freq)/1.e6;
+                announce = String.format("Step freq %f", mhz);
+            }
+        }
+        JOptionPane.showMessageDialog(parent,
+                "Squelch Open VoiceOver Dialog",
+                announce,  // VoiceOver reads only this line.
+                JOptionPane.PLAIN_MESSAGE);
     }
 }
