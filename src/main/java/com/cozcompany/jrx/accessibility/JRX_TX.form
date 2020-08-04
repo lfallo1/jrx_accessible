@@ -514,7 +514,7 @@
                           </Properties>
                           <AuxValues>
                             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new RWCheckBox(this,&quot;U&quot;,&quot;TONE&quot;);"/>
-                            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
                           </AuxValues>
                         </Component>
                         <Component class="javax.swing.JButton" name="sv_ctcssListButton">
@@ -1158,7 +1158,7 @@
                       </Events>
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new RWCheckBox(this,&quot;U&quot;,&quot;TSQL&quot;);"/>
-                        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
                       </AuxValues>
                     </Component>
                     <Component class="javax.swing.JButton" name="sv_modesListButton">

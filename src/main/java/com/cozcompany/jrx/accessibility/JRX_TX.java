@@ -890,17 +890,10 @@ final public class JRX_TX extends javax.swing.JFrame implements
     }
 
 
-    protected boolean validSetup() {
+    public boolean validSetup() {
         return (!inhibit);
     }
 
-    public String getMode() {
-        String s = null;
-        if (validSetup()) {
-            s = (String) ((RWListButton)sv_modesListButton).getSelectedItem();
-        }
-        return s;
-    }
     
     /**
      * Run a command line command an retrieve the response.
@@ -3102,7 +3095,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
     protected javax.swing.JCheckBox sv_compressionCheckBox;
     protected javax.swing.JSlider sv_compressionSlider;
     protected javax.swing.JButton sv_ctcssListButton;
-    protected javax.swing.JCheckBox sv_ctcssSquelchCheckBox;
+    public javax.swing.JCheckBox sv_ctcssSquelchCheckBox;
     public javax.swing.JSlider sv_cwSpeedSlider;
     protected javax.swing.JCheckBox sv_dspCheckBox;
     public javax.swing.JSlider sv_dspSlider;
@@ -3132,7 +3125,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
     public javax.swing.JCheckBox sv_synthSquelchCheckBox;
     protected javax.swing.JComboBox<String> sv_timerIntervalComboBox;
     protected javax.swing.JCheckBox sv_tunerCheckBox;
-    protected javax.swing.JCheckBox sv_txCtcssCheckBox;
+    public javax.swing.JCheckBox sv_txCtcssCheckBox;
     protected javax.swing.JCheckBox sv_volumeExitCheckBox;
     protected javax.swing.JSlider sv_volumeSlider;
     protected javax.swing.JSlider sv_voxLevelSlider;

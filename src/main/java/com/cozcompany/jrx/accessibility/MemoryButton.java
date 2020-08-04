@@ -21,6 +21,7 @@ package com.cozcompany.jrx.accessibility;
 
 import components.AgcListButton;
 import components.CtcssListButton;
+import components.ModesListButton;
 import components.RWListButton;
 import java.awt.Color;
 import java.awt.event.FocusEvent;
@@ -150,7 +151,7 @@ final public class MemoryButton extends JButton
     
     @Override
     public String getToolTipText(MouseEvent event) {
-        String ms = parent.getMode();       
+        String ms = ((ModesListButton)parent.sv_modesListButton).getMode();       
         String freq = (frequency >= 0) ? String.format("%.6f MHz %s", 
                 (double) frequency / 1e6, ms) : "Undefined";
         return String.format("<html>%s<br> %s</html>", freq, visualTip);

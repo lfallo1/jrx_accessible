@@ -29,7 +29,7 @@ public class SwrIndicator extends RWIndicator
         setYLow(1.000);
         setYHigh(100.000);       
         this.addFocusListener(this);
-        this.setText("SWR unkown");
+        this.setText("SWR unknown");
     }
 
     public void updateSwr() {
@@ -50,7 +50,7 @@ public class SwrIndicator extends RWIndicator
     public boolean enableIfCapable(String source){
         String search = "(?ism).*^Get level:.*?SWR\\(";
         boolean hasLevelValue = true; // This control has Level Value:
-        this.setText("SWR unkown");
+        this.setText("SWR unknown");
         return enableCap(source, search, hasLevelValue);
     }    
     

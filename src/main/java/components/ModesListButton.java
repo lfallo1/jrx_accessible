@@ -11,7 +11,10 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
- *
+ * Other controls rely on the MODE setting for their own state.  An example is
+ * CTCSS tone only applies to FM.  It is an error when requested in D-STAR mode.
+ * The IF bandwidth changes with the MODE setting on most radios.
+ * 
  * @author Coz
  */
 public class ModesListButton extends RWListButton {
@@ -55,6 +58,10 @@ public class ModesListButton extends RWListButton {
                      ((IfFilterListButton) parent.sv_ifFilterListButton).getFilterBW());               
             int index = getSelectedIndex();
             strSelection = reverseUseMap.get(index);
+            boolean ctcssToneEnabled =  (strSelection.equals("FM"));
+            // enable/disable CTCSS tone TX check box
+            parent.sv_txCtcssCheckBox.setEnabled(ctcssToneEnabled);
+            parent.sv_ctcssSquelchCheckBox.setEnabled(ctcssToneEnabled);            
             if (strSelection != null) {
                 if (!strSelection.equals(oldStrSelection) || 
                         !strFilter.equals(oldFilter)) {
@@ -84,6 +91,21 @@ public class ModesListButton extends RWListButton {
             }
         }
     }
+
+
+    /**
+     * This method is called for every control during initialize()... on startup\
+     * and whenever the radio or interface is changed.
+     * @param all is not used.
+     */
+    @Override
+    public void selectiveReadValue(boolean all) {
+        if (isEnabled() && commOK) {
+            readConvertedValue();
+        }
+    }
+
+
     
     /** Override RWListButton method to simplify.
      *  Mode is never numeric.
@@ -102,6 +124,29 @@ public class ModesListButton extends RWListButton {
             }                 
         }
         localInhibit = false;
+    }
+    /**
+     * Set the selected item based on the given display string while the localInhibit
+     * is enabled.
+     * @param str the display string.
+     */
+    @Override
+    public void inhibitSetItem(String str) {
+        int index = 0;
+        boolean ctcssToneEnabled = (str.equals("FM"));
+        // enable/disable CTCSS tone TX check box
+        parent.sv_txCtcssCheckBox.setEnabled(ctcssToneEnabled);
+        parent.sv_ctcssSquelchCheckBox.setEnabled(ctcssToneEnabled);
+        try {
+            localInhibit = true;
+            //String search = ".*"
+            index = useMap.get(str);
+            setSelectedIndex(index);
+        } catch (Exception e) {
+            System.out.println("inhibitSetItem had exception : " + e + " and index = "  + index);
+        } finally {
+            localInhibit = false;
+        }
     }
     
     @Override
@@ -146,5 +191,14 @@ public class ModesListButton extends RWListButton {
         }
         setListButtonIndex(index);
         parent.inhibit = old_inhibit;
-    }    
+    }
+
+    public String getMode() {
+        String s = null;
+        if (parent.validSetup()) {
+            s = (String)getSelectedItem();
+        }
+        return s;
+    }
+    
 }

@@ -490,7 +490,13 @@ public class RWListButton extends JButton  implements
             localInhibit = false;
         }
     }
-    
+
+
+    /**
+     * This method is called for every control during initialize()... on startup\
+     * and whenever the radio or interface is changed.
+     * @param all 
+     */
     @Override
     public void selectiveReadValue(boolean all) {
         if (isEnabled() && commOK) {
