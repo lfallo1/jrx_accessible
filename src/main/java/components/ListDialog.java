@@ -132,9 +132,13 @@ public class ListDialog extends JDialog {
 
         pack();
     }
-    
+    /**
+     * Repopulate the choice list.
+    */
     public void setNewData(String[] newData) {
         list.setListData(newData);
+        // Make this fail-safe.  Do not allow out-of-bounds index.
+        if (initialIndex >= newData.length) initialIndex = 0;
         list.setSelectedIndex(initialIndex);
         value = ((String)newData[initialIndex]);
         list.setSelectedValue(value, true);         

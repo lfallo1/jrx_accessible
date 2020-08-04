@@ -74,5 +74,42 @@ public class InterfacesListButton extends RWListButton {
             setButtonText(item);
         }
     }
+    /**
+     * Set the selected item based on the given display string while the localInhibit
+     * is enabled.
+     * @param s the display string.
+     */
+    @Override
+    public void inhibitSetItem(String s) {
+        int index = 0;
+        try {
+            localInhibit = true;
+            index = displayMap.get(s);
+            setSelectedIndex(index);
+        } catch (Exception e) {
+            System.out.println("inhibitSetItem had exception : " + e + " and index = "  + index);
+        } finally {
+            localInhibit = false;
+        }
+    }
+    
+    @Override
+    public void writeValueStr() {
+        // Comms could be not OK.  This change could establish comms.
+        if (!parent.inhibit) {
+            int index = getSelectedIndex();
+            strSelection = reverseDisplayMap.get(index);
+            if (strSelection != null) {
+//                if (!strSelection.equals(oldStrSelection) ) {
+                    String com = String.format("%s %s %s ", 
+                        prefix.toUpperCase(), token, strSelection);
+                    parent.sendRadioCom(com, 0, true);
+                    oldStrSelection = strSelection;
+//                }
+                // This is a new interface.  Call parent.initialize().... to start fresh.
+                if (!parent.inhibit) parent.initialize();                    
+            }
+        }
+    }
 
 }

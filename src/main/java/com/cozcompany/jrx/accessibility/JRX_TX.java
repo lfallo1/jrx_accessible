@@ -509,6 +509,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
      */
     public void initialize() {
         if (!inhibit) {
+            pout("Begin initialize(), not inhibit.");
             oldRadioFrequency = -1;
             dcdIconLabel.setText("");
             dcdIconLabel.setIcon(greenLed);
@@ -598,9 +599,8 @@ final public class JRX_TX extends javax.swing.JFrame implements
         speedIconLabel.setText("");
         speedIconLabel.setIcon(slowRadio ? redLed : greenLed);
         speedIconLabel.setToolTipText(slowRadio ? "Slow radio coms" : "Fast radio coms");
-        if (comArgs.debug >= 0) {
-            pout("radio com ms delay: " + dt);
-        }
+        pout("radio com ms delay: " + dt);
+
     }
 
     private void setDefaultComboContent() {
@@ -725,9 +725,8 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 System.exit(0);
             }
             hamlibExecPath = "\"" + hamlibExecPath + "\"";
-            if (comArgs.debug >= 0) {
-                pout("have windows exec: " + hamlibExecPath);
-            }
+            pout("have windows exec: " + hamlibExecPath);
+
         } else {
             hamlibExecPath = fileHelpers.findAbsolutePath(hamlibExecPath);
         }
@@ -967,7 +966,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
      */
     private void setupHamlibDaemon() {
         if (!inhibit) {
-            closeConnection();
+            closeConnection();  // Hangs here on initialize the second time...
             String interfaceName = null;
             String rigName = null;
             int rigCode = -1;
@@ -1035,10 +1034,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
                             interfaceName
                     };
                 }
-
-                if (comArgs.debug >= 0) {
-                    pout("setup daemon with: " + rigName + "," + rigCode + "," + interfaceName);
-                }
+                pout("setup daemon with: " + rigName + "," + rigCode + "," + interfaceName);
                 try {
                     hamlibDaemon = new ProcessBuilder(com).redirectErrorStream(true).start();
                     
@@ -1053,13 +1049,9 @@ final public class JRX_TX extends javax.swing.JFrame implements
                             hamlib_os = hamlibSocket.getOutputStream();
                             connected = true;// hamlibSocket.isConnected();
                             rigComms.setOnline();
-                            if (comArgs.debug >= 0) {
-                                pout("socket connected: " + connected);
-                            }
-                        } catch (Exception e) {
-                            if (comArgs.debug >= 0) {
-                                pout("fail connect " + e.getMessage());
-                            }
+                            pout("socket connected: " + connected);                            
+                        } catch (Exception e) {                           
+                            pout("fail connect " + e.getMessage());
                             waitMS(500);
                             if (n-- <= 0) {
                                 tellUser("Error: Cannot connect to Hamlib Daemon process.");
@@ -1084,7 +1076,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
         boolean connected = false;
         String result = null;
         int n = 2;
-        int localDebug = 0;
         while (!connected && n >= 0) {
             try {
                 hamlibSocket = new Socket(hamlibHost, hamlibPort);
@@ -1103,14 +1094,10 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 // Send a Quit command to rigctld via tcp port output stream.
                 String s = "q";
                 hamlib_os.write((s + LINE_SEP).getBytes());
-                hamlib_os.flush();
-                if (comArgs.debug >= localDebug) {
-                    pout("sendradiocom   emit: [" + s + "]");
-                }
+                hamlib_os.flush();                
+                pout("sendradiocom   emit: [" + s + "]");
                 result = readInputStream(hamlib_is);
-                if (comArgs.debug >= localDebug) {
-                    pout("sendradiocom result: [" + result.replaceAll("[\r\n]", " ") + "]");
-                }
+                pout("sendradiocom result: [" + result.replaceAll("[\r\n]", " ") + "]");
                 // close streams
                 hamlibSocket.shutdownInput(); 
                 hamlibSocket.shutdownOutput();         
@@ -1267,10 +1254,10 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 periodicTimer.cancel();
                 periodicTimer = null;
             }
-            if (this.sv_volumeExitCheckBox.isSelected()) {
-                setVolumeDirect(0.0);
-            }
-            squelchOnExit();
+//            if (this.sv_volumeExitCheckBox.isSelected()) {
+//                setVolumeDirect(0.0);
+//            }
+//            squelchOnExit();
             if (hamlibSocket != null) {
                 hamlibSocket.close();
                 waitMS(100);
@@ -1279,6 +1266,17 @@ final public class JRX_TX extends javax.swing.JFrame implements
         } catch (Exception e) {
             e.printStackTrace(System.out);
         }
+        // Kill the Hamlib daemon.
+        for (int tries=0; tries < 2; tries++){
+            try {
+                hamlibDaemon.destroy();
+                waitMS(1000); // Sometimes its hard to kill this guy.               
+            }
+            catch (Exception e) {
+                pout("closeApp failed to terminate hamlibDaemon with exception "+e);
+            }
+        }
+
     }
 
 
@@ -1438,17 +1436,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         config.write();
         memoryCollection.writeMemoryButtons();
         closeConnection();
-        // Kill the Hamlib daemon.
-        for (int tries=0; tries < 2; tries++){
-            try {
-                hamlibDaemon.destroy();
-                waitMS(1000); // Sometimes its hard to kill this guy.               
-            }
-            catch (Exception e) {
-                pout("closeApp failed to terminate hamlibDaemon with exception "+e);
-            }
-        }
-        System.exit(0);
+         System.exit(0);
     }
 
     public String gcFromTimeMS(long timeMS) {
@@ -1467,7 +1455,8 @@ final public class JRX_TX extends javax.swing.JFrame implements
         long t = System.currentTimeMillis();
         Time et = new Time(t);
         double dt = (t - oldTime) / 1000.0;
-        System.out.println(String.format("%s : %06f : %s", gcFromNow(), dt, s));
+        if (comArgs.debug >= 0) 
+            System.out.println(String.format("%s : %06f : %s", gcFromNow(), dt, s));
         oldTime = t;
     }
 
@@ -2251,9 +2240,8 @@ final public class JRX_TX extends javax.swing.JFrame implements
             }
         });
 
-        sv_squelchCheckBox.setSelected(true);
         sv_squelchCheckBox.setText("VoiceOver announce ON Squelch Open");
-        sv_squelchCheckBox.setToolTipText("Pause on squelch active");
+        sv_squelchCheckBox.setToolTipText("VoiceOver announce on squelch open");
 
         copyMemButton.setFont(new java.awt.Font("Lucida Grande", 0, 10)); // NOI18N
         copyMemButton.setText("COPY");
@@ -2295,12 +2283,12 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 .addContainerGap()
                 .addGroup(scannerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(scannerPanelLayout.createSequentialGroup()
-                        .addComponent(scanIconLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(scanStopButton, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(scanUpButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(scanIconLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(scanStopButton, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(scanUpButton, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
                         .addComponent(sv_squelchCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(scannerPanelLayout.createSequentialGroup()
                         .addComponent(sv_scanStepListButton, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -2330,10 +2318,10 @@ final public class JRX_TX extends javax.swing.JFrame implements
                     .addGroup(scannerPanelLayout.createSequentialGroup()
                         .addGap(2, 2, 2)
                         .addGroup(scannerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(scanIconLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(scanStopButton, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(scanUpButton, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(sv_squelchCheckBox))))
+                            .addComponent(scanIconLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(scanStopButton, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(scanUpButton, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(sv_squelchCheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 

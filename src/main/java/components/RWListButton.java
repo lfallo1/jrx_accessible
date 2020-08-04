@@ -81,7 +81,8 @@ public class RWListButton extends JButton  implements
      */
     public void initialize() {
         if (firstTimeThrough) {
-            addActionListener(this);
+            ActionListener cursorControl = CursorController.createListener(this, this);
+            addActionListener(cursorControl);
             parent.rigComms.addObserver(this);
             firstTimeThrough = false;
         } 
@@ -318,13 +319,17 @@ public class RWListButton extends JButton  implements
                 "SWEEP STEP".equals(dialog.labelTxt)||
                 "DWELL TIME".equals(dialog.labelTxt)||
                 "STEP PERIOD".equals(dialog.labelTxt)){
-                // This is app setting and radio is not aware of this component.
+                // This is internal app setting. 
+                // Radio is not aware of this component.            
+                ((RWListButton)dialog.buttonComp).setButtonText(dialog.value);
+                dialog.setVisible(false); // close dialog.  
+
             } else {
                 ((RWListButton)dialog.buttonComp).inhibitSetItem(dialog.value);
-                ((RWListButton)dialog.buttonComp).writeValue(true);
+                ((RWListButton)dialog.buttonComp).setButtonText(dialog.value);
+                dialog.setVisible(false);  // close dialog.
+                writeValue(true);   // Could experience comms timeout here.  Coz PUT UP HOUR GLASS...?
             }
-            ((RWListButton)dialog.buttonComp).setButtonText(dialog.value);
-            dialog.setVisible(false);   
         } else if ("Cancel".equals(evt.getActionCommand())) {
             dialog.setVisible(false);   
         } else if ( "SCAN STEP".equals(name) ||
@@ -333,11 +338,10 @@ public class RWListButton extends JButton  implements
                     "STEP PERIOD".equals(name)) {
             return;
         } else {
-            action(evt);
+            // This case happens on a button release.
+            //action(evt);
         }                        
     }    
-    
-    
     
     private void action(ActionEvent evt) {
         writeValue(true);

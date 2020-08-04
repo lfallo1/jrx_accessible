@@ -37,6 +37,7 @@ public class SwrIndicator extends RWIndicator
         if (isEnabled()) {
             if (currentSwr > 3.0) setForeground(Color.RED);
             else setForeground(Color.BLACK);
+            if (currentSwr > 100.) currentSwr = 100.0;
             String valueString = String.format("SWR  %3.2f", currentSwr);
             this.setText(valueString);
         }
@@ -49,6 +50,7 @@ public class SwrIndicator extends RWIndicator
     public boolean enableIfCapable(String source){
         String search = "(?ism).*^Get level:.*?SWR\\(";
         boolean hasLevelValue = true; // This control has Level Value:
+        this.setText("SWR unkown");
         return enableCap(source, search, hasLevelValue);
     }    
     

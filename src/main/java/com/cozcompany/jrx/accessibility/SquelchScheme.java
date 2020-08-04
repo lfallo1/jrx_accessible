@@ -64,10 +64,7 @@ public class SquelchScheme {
 //                        useJRXSquelch ? appFrame.yellowLed : appFrame.redLed);
         appFrame.dcdIconLabel.setToolTipText(dcdLedDescription);
         appFrame.dcdIconLabel.getAccessibleContext().setAccessibleDescription(dcdLedDescription);
-
-        if (appFrame.comArgs.debug >= 0) {
-            appFrame.pout("DCD capable: " + appFrame.dcdCapable);
-        }
+        appFrame.pout("DCD capable: " + appFrame.dcdCapable);
         ((RWSlider) appFrame.sv_squelchSlider).writeValue(true);
         ((RWSlider) appFrame.sv_volumeSlider).writeValue(true);
         getSquelch();

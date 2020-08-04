@@ -305,17 +305,11 @@ final public class ScanStateMachine {
                     voiceOverAnnounce();
                 }
             }
-            System.out.println("lastOpenSquelchTime "+ lastOpenSquelchTime);
             double dwellPeriod = ((DwellTimeListButton)parent.sv_dwellTimeListButton).getTimeStep();
-            System.out.println("dwellPeriod "+ dwellPeriod);
             double dwellTime = lastOpenSquelchTime + 
                     ((DwellTimeListButton)parent.sv_dwellTimeListButton).
                             getTimeStep();
-            System.out.println("dwellTime "+ dwellTime);
             double now = System.currentTimeMillis();
-            System.out.println("now "+ now);
-            
-            //boolean sqopen = parent.squelchScheme.getSquelch();
             if (now >= dwellTime  && scanTimer != null) {
                 hasStepped = true;
                 if (programScan) {

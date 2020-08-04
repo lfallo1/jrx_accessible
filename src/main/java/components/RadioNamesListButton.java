@@ -124,8 +124,9 @@ public class RadioNamesListButton extends RWListButton {
         int code = getRadioCode(rigName);
         if (code < 10) {
             // We are using a dummy/network radio in HAMLIB. There is no radio.
-            // Disable the interfaceSelection.
+            // Disable the interfaceSelection.  Set selection to zero, the title.
             parent.sv_interfacesListButton.setEnabled(false);
+            ((RWListButton)parent.sv_interfacesListButton).setListButtonIndex(0);
         } else {
             parent.sv_interfacesListButton.setEnabled(true);
             int index = 0;
@@ -137,6 +138,23 @@ public class RadioNamesListButton extends RWListButton {
                 System.out.println("inhibitSetItem had exception : " + e + " and index = "  + index);
             } finally {
                 localInhibit = false;
+            }
+        }
+    }
+    @Override
+    public void writeValueStr() {
+        if (commOK && !parent.inhibit) {
+            int index = getSelectedIndex();
+            strSelection = reverseUseMap.get(index);
+            if (strSelection != null) {
+                if (!strSelection.equals(oldStrSelection) ) {
+                    String com = String.format("%s %s %s ", 
+                        prefix.toUpperCase(), token, strSelection);
+                    parent.sendRadioCom(com, 0, true);
+                    oldStrSelection = strSelection;
+                }
+                // This is a new rig.  Call parent.initialize()...to start fresh.
+                if (!parent.inhibit) parent.initialize();                    
             }
         }
     }
