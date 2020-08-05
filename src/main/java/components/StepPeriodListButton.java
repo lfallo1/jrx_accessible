@@ -19,7 +19,7 @@ import javax.swing.JComboBox;
  */
 public class StepPeriodListButton extends RWListButton {
     public Map<String, Integer> timeSteps = null;
-    final Integer INITIAL_SPEED_INDEX = 5;
+    final Integer INITIAL_SPEED_INDEX = 1;
     public StepPeriodListButton(JRX_TX parent) {
         super(parent, "", "", "STEP PERIOD", "CHOOSE A SCAN SPEED");
         super.numericMode = true;
@@ -28,13 +28,13 @@ public class StepPeriodListButton extends RWListButton {
 
     public void init() {
         double bv;
-        double[] msteps = new double[]{1, 2, 5};
+        double[] msteps = new double[]{1, 1.5, 2, 3.5, 5, 7.5 };
         String sl;
         initialize();
         removeAllItems();
         timeSteps = new TreeMap<>();
-        bv = 1;
-        for (int p = 0; p <= 4; p++) {
+        bv = 100;
+        for (int p = 0; p < 3; p++) {
             for (double lv : msteps) {
                 double v = bv * lv;
                 if (v >= 1000) {
