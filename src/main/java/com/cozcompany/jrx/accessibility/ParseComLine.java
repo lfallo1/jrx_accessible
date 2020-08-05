@@ -115,4 +115,8 @@ final public class ParseComLine {
         System.out.println(help);
         System.exit(0);
     }
+    
+    public boolean runTimer() {
+        return runTimer;
+    }
 }

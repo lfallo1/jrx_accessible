@@ -30,6 +30,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.TreeMap;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -66,6 +67,13 @@ final public class MemoryButton extends JButton
                 "Right click to toggle SKIP in memory scan. "+
                 "Click and hold one second to store current VFO and mode. "+
                 "Right click and hold one second to erase.";
+    
+    public enum radioModes    { AM,  CW,  USB,  LSB, RTTY,  FM,  CWR,  RTTYR,   PKTLSB,   PKTUSB,   PKTFM,  PKTAM,   D_STAR };
+    public String modeStr[] = {"AM","CW","USB","LSB","RTTY","FM","CWR","RTTYR", "PKTLSB", "PKTUSB", "PKTFM", "PKTAM", "D-STAR"};
+    
+    public TreeMap<String, Integer> displayMap;
+    public TreeMap<Integer, String> reverseDisplayMap;
+    
     long frequency = -1;
     int mode;
     int filter;
@@ -100,6 +108,10 @@ final public class MemoryButton extends JButton
 
     private void setup() {
         addMouseListener(this);
+//        for(int index=0; index < modeStr.length; index++) {
+//            displayMap.put(modeStr[index], index);
+//            reverseDisplayMap.put(index, modeStr[index]);
+//        }
     }
 
     protected void setButtonColor(Color col) {
@@ -269,7 +281,6 @@ final public class MemoryButton extends JButton
                 p("MemoryButton:updateIfNeeded() exception :"+ ex);
             }
         }
-
     }
 
     

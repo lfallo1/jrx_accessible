@@ -32,6 +32,7 @@ import components.ScanStepListButton;
 import components.StepPeriodListButton;
 import components.DwellTimeListButton;
 import components.PreampCheckBox;
+import components.TimerIntervalListButton;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.*;
@@ -49,7 +50,6 @@ import java.net.URISyntaxException;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.Timer;
 import java.util.prefs.Preferences;
 import java.util.regex.Pattern;
 import javax.accessibility.AccessibleContext;
@@ -88,13 +88,13 @@ final public class JRX_TX extends javax.swing.JFrame implements
     String userDir;
     String userPath;
     
-    Timer periodicTimer;
+    
     public ParseComLine comArgs = null;
     ImageIcon redLed, greenLed, blueLed, yellowLed;
-    ScanStateMachine scanStateMachine;
+    public ScanStateMachine scanStateMachine;
     ArrayList<String> interfaceNames = null;
     ChannelChart chart;
-    SquelchScheme squelchScheme;
+    public SquelchScheme squelchScheme;
     public RigComms rigComms; // Singleton
    
     Map<String, Double> filters = null;
@@ -135,7 +135,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
     int defHeight = 770;
     
     MemoryCollection memoryCollection;
-    boolean slowRadio = false;
+    public boolean slowRadio = false;
     int readBufferLen = 2048;
     byte[] readBuffer;
     boolean dcdCapable = false;
@@ -405,29 +405,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
         menu.add(menuItemSplit);
     }
  
-
-    private void startCyclicalTimer() {
-        if (comArgs.runTimer) {
-            if (periodicTimer != null) {
-                periodicTimer.cancel();
-            }
-            // This is not a java swing Timer.
-            periodicTimer = new java.util.Timer();
-            resetTimer();
-        }
-    }
-    /**
-     * Get a delay interval from the sv_timerIntervalComboBox and schedule a
-     * TimerTask (PeriodicEvents) after the given interval; technically this
-     * method RESTARTS the timer (as opposed to resetting the timer).
-     */
-    protected void resetTimer() {
-        long delay = (long) ((RWComboBox) sv_timerIntervalComboBox).getConvertedValue();
-        //p("delay: " + delay);
-        if (delay > 0 && periodicTimer != null) {
-            periodicTimer.schedule(new PeriodicEvents(), delay);
-        }
-    }
 /////////////////////////////////////////////////////////////////////////////////
     /**
      * Handle list selection event from SWL ChannelChart and write the freq and
@@ -461,30 +438,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
 /////////////////////////////////////////////////////////////////////////////////
     
     /**
-     * The control loop for dynamic behavior.
-     */
-    class PeriodicEvents extends TimerTask {
-
-        @Override
-        public void run() {
-            if (!getScopePanel().isRunning() && scanStateMachine.scanTimer == null) {                
-                if (getSignalStrength()) {
-                    // Signal Strength is supported and unsuccessful.
-                    setSMeter();
-                    squelchScheme.getSquelch();
-                }
-                setComErrorIcon();               
-                readRadioControls(false);
-                ((SwrIndicator)swrIndicator).updateSwr();
-            }
-            if (slowRadio || scanStateMachine.scanTimer != null) {
-//                timerUpdateFreq();
-//                timerSetSliders();  //@TODO Coz fix this.
-            }
-            resetTimer();
-        }
-    }
-    /**
      * Determine the state of the comms Led and set it appropriately.
      * On detecting an error in reply text, comError is set to 2 by the radio
      * comms method; then the comError variable is checked
@@ -492,7 +445,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
      * the comms Led.  So you need two good comms in a row to set the led green.
      * 
      */
-    private void setComErrorIcon() {
+    public void setComErrorIcon() {
         if (comError > 0) {
             if ((comError -= 1) > 0) {
                 comErrorIconLabel.setIcon(this.redLed);
@@ -556,14 +509,14 @@ final public class JRX_TX extends javax.swing.JFrame implements
             }
             squelchScheme.setRadioSquelch();
             readRadioControls(true);  // Side effect : Reads frequency from radio
-            startCyclicalTimer();
+            ((TimerIntervalListButton)sv_timerIntervalListButton).startCyclicalTimer();
             measureSpeed(); // Writes frequency to radio.
             setComErrorIcon();            
             memoryScrollPane.getVerticalScrollBar().setUnitIncrement(8);
         }
     }
 
-    private void readRadioControls(boolean all) {
+    public void readRadioControls(boolean all) {
         if (all || this.sv_syncCheckBox.isSelected()) {
             readFrequency();
             for (ControlInterface cont : controlList) {
@@ -676,32 +629,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         Pattern p = Pattern.compile("(?i).*?" + hamlibExecPath + "\\.exe.*");
         return recurseSearch(f, p);
     }
-    /**
-     * Initialize the sv_timerIntervalComboBox with ingenius algorithm to make
-     * steps { 10ms,20ms,50ms,100ms,.....5s,10s,50s,OFF }.
-     * @param timebox 
-     */
-    private void initTimeValues(RWComboBox timebox) {
-        timebox.removeAllItems();
-        double[] msteps = new double[]{1, 2, 5};
-        String sl;
-        double bv = 10;
-        for (int p = 0; p <= 3; p++) {
-            for (double lv : msteps) {
-                double v = bv * lv;
-                if (v >= 1000) {
-                    sl = String.format("%d s", (int) (v / 1000));
-                } else {
-                    sl = String.format("%d ms", (int) v);
-                }
-                timebox.addListItem(sl, v, "" + v);
-            }
-            bv *= 10;
-        }
-        timebox.addListItem("Off", 0, "0");
-        timebox.setSelectedIndex(5);
-    }
-
+ 
 
     private void setupControls() {
         sv_frame = this;
@@ -738,7 +666,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         ((InterfacesListButton)sv_interfacesListButton).initInterfaceList();
         ((RadioNamesListButton)sv_radioNamesListButton).getSupportedRadios();
         memoryCollection.readMemoryButtons();
-        initTimeValues((RWComboBox) sv_timerIntervalComboBox);
+        ((TimerIntervalListButton) sv_timerIntervalListButton).initTimeValues();
 
         ((ScanStepListButton)sv_scanStepListButton).init();
         ((StepPeriodListButton)sv_stepPeriodListButton).init();
@@ -1219,8 +1147,10 @@ final public class JRX_TX extends javax.swing.JFrame implements
         return result;
     }
     
-
-
+    /**
+     * deprecated because JRX squelch is not implemented.
+     * @param squelchOpen 
+     */
     protected void setVolume(boolean squelchOpen) {
         //p("setvolume " + squelchOpen);
         double volume = ((ControlInterface) this.sv_volumeSlider).getConvertedValue();
@@ -1243,14 +1173,10 @@ final public class JRX_TX extends javax.swing.JFrame implements
 
     private void closeConnection() {
         try {
-            if (periodicTimer != null) {
-                periodicTimer.cancel();
-                periodicTimer = null;
+            ((TimerIntervalListButton)sv_timerIntervalListButton).cancelTimer();
+            if (this.sv_volumeExitCheckBox.isSelected()) {
+                setVolumeDirect(0.0);
             }
-//            if (this.sv_volumeExitCheckBox.isSelected()) {
-//                setVolumeDirect(0.0);
-//            }
-//            squelchOnExit();
             if (hamlibSocket != null) {
                 hamlibSocket.close();
                 waitMS(100);
@@ -1273,7 +1199,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
     }
 
 
-    protected SweepScope getScopePanel() {
+    public SweepScope getScopePanel() {
         return (SweepScope) scopeDisplayPanel;
     }
     /**
@@ -1292,7 +1218,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         return raw;
     }
 
-    protected boolean getSignalStrength() {
+   public boolean getSignalStrength() {
         if (signalStrengthErrorCount > 2) return false;
         try {
             // Do not perform operation for high debug levels
@@ -1331,7 +1257,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         return 9 + x / 6.0;
     }
 
-    protected void setSMeter() {
+    public void setSMeter() {
         if (validSetup()) {
             try {
                 double ss = signalStrength;
@@ -1418,10 +1344,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
     private void closeApp() {
         getScopePanel().stopSweep(false);
         scanStateMachine.stopScan(false);
-        if (periodicTimer != null) {
-            periodicTimer.cancel();
-            periodicTimer = null;
-        }
+        ((TimerIntervalListButton)sv_timerIntervalListButton).cancelTimer();
         if (scanStateMachine.scanTimer != null) {
             scanStateMachine.scanTimer.cancel();
             scanStateMachine.scanTimer = null;
@@ -1429,7 +1352,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         config.write();
         memoryCollection.writeMemoryButtons();
         closeConnection();
-         System.exit(0);
+        System.exit(0);
     }
 
     public String gcFromTimeMS(long timeMS) {
@@ -1565,10 +1488,10 @@ final public class JRX_TX extends javax.swing.JFrame implements
         sv_jrxToRadioButton = new javax.swing.JRadioButton();
         sv_radioToJrxButton = new javax.swing.JRadioButton();
         sv_syncCheckBox = new javax.swing.JCheckBox();
-        sv_timerIntervalComboBox = new com.cozcompany.jrx.accessibility.RWComboBox(this,null,null);
         jLabel2 = new javax.swing.JLabel();
         sv_volumeExitCheckBox = new javax.swing.JCheckBox();
         tuneComsButton = new javax.swing.JButton();
+        sv_timerIntervalListButton = new TimerIntervalListButton(this);
         ledPanel = new javax.swing.JPanel();
         signalProgressBar = new javax.swing.JProgressBar();
         sv_radioNamesListButton = new RadioNamesListButton(this);
@@ -2555,24 +2478,19 @@ final public class JRX_TX extends javax.swing.JFrame implements
         });
 
         jrxRadioButtonGroup.add(sv_jrxToRadioButton);
-        sv_jrxToRadioButton.setSelected(true);
         sv_jrxToRadioButton.setText("JRX->Radio");
         sv_jrxToRadioButton.setToolTipText("At startup, JRX sets the radio's controls");
 
         jrxRadioButtonGroup.add(sv_radioToJrxButton);
+        sv_radioToJrxButton.setSelected(true);
         sv_radioToJrxButton.setText("Radio->JRX");
         sv_radioToJrxButton.setToolTipText("At startup, the radio sets JRX's controls");
 
         sv_syncCheckBox.setText("Sync App with radio");
         sv_syncCheckBox.setToolTipText("<html>Dynamically synchronize JRX<br/>controls with radio controls");
 
-        sv_timerIntervalComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        sv_timerIntervalComboBox.setToolTipText("Control/event update timer interval (❃)");
-
-        jLabel2.setLabelFor(sv_timerIntervalComboBox);
         jLabel2.setText("Screen update Interval");
 
-        sv_volumeExitCheckBox.setSelected(true);
         sv_volumeExitCheckBox.setText("Volume down on exit");
         sv_volumeExitCheckBox.setToolTipText("<html>Turn down the radio volume<br/>when JRX exits");
 
@@ -2584,44 +2502,45 @@ final public class JRX_TX extends javax.swing.JFrame implements
             }
         });
 
+        sv_timerIntervalListButton.setText("Interval  100 msec");
+
         javax.swing.GroupLayout firstSettingsPanelLayout = new javax.swing.GroupLayout(firstSettingsPanel);
         firstSettingsPanel.setLayout(firstSettingsPanelLayout);
         firstSettingsPanelLayout.setHorizontalGroup(
             firstSettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(firstSettingsPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(firstSettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(firstSettingsPanelLayout.createSequentialGroup()
-                        .addComponent(sv_radioToJrxButton, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(firstSettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(firstSettingsPanelLayout.createSequentialGroup()
-                                .addGap(168, 168, 168)
-                                .addComponent(sv_volumeExitCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 351, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(firstSettingsPanelLayout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(helpButton))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(firstSettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(firstSettingsPanelLayout.createSequentialGroup()
                         .addGroup(firstSettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(firstSettingsPanelLayout.createSequentialGroup()
-                                .addGap(6, 6, 6)
-                                .addComponent(sv_timerIntervalComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(sv_jrxToRadioButton, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(sv_jrxToRadioButton, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(44, 44, 44))
+                            .addComponent(sv_radioToJrxButton, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(35, 35, 35))
+                    .addGroup(firstSettingsPanelLayout.createSequentialGroup()
+                        .addComponent(sv_timerIntervalListButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(firstSettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(tuneComsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(sv_syncCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                .addGroup(firstSettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(helpButton)
+                    .addGroup(firstSettingsPanelLayout.createSequentialGroup()
+                        .addComponent(sv_syncCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(sv_volumeExitCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(tuneComsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(124, 124, 124))
         );
         firstSettingsPanelLayout.setVerticalGroup(
             firstSettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(firstSettingsPanelLayout.createSequentialGroup()
                 .addGap(2, 2, 2)
                 .addGroup(firstSettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(sv_timerIntervalComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
                     .addComponent(sv_syncCheckBox)
-                    .addComponent(sv_volumeExitCheckBox))
+                    .addComponent(sv_volumeExitCheckBox)
+                    .addComponent(sv_timerIntervalListButton))
                 .addGap(1, 1, 1)
                 .addGroup(firstSettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(sv_jrxToRadioButton)
@@ -2630,10 +2549,8 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 .addGroup(firstSettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(sv_radioToJrxButton)
                     .addComponent(helpButton))
-                .addContainerGap(239, Short.MAX_VALUE))
+                .addContainerGap(237, Short.MAX_VALUE))
         );
-
-        firstSettingsPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel2, sv_timerIntervalComboBox});
 
         sv_syncCheckBox.getAccessibleContext().setAccessibleDescription("Dynamically synchronize App controls with radio controls");
 
@@ -2643,7 +2560,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
             appSettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(appSettingsPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(firstSettingsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(firstSettingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 816, Short.MAX_VALUE)
                 .addContainerGap())
         );
         appSettingsPanelLayout.setVerticalGroup(
@@ -3123,7 +3040,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
     public javax.swing.JButton sv_stepPeriodListButton;
     protected javax.swing.JCheckBox sv_syncCheckBox;
     public javax.swing.JCheckBox sv_synthSquelchCheckBox;
-    protected javax.swing.JComboBox<String> sv_timerIntervalComboBox;
+    public javax.swing.JButton sv_timerIntervalListButton;
     protected javax.swing.JCheckBox sv_tunerCheckBox;
     public javax.swing.JCheckBox sv_txCtcssCheckBox;
     protected javax.swing.JCheckBox sv_volumeExitCheckBox;

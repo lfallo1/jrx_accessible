@@ -1809,7 +1809,7 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="firstSettingsPanel" max="32767" attributes="0"/>
+                          <Component id="firstSettingsPanel" pref="816" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -1831,38 +1831,35 @@
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
+                              <EmptySpace max="32767" attributes="0"/>
+                              <Group type="103" groupAlignment="1" max="-2" attributes="0">
                                   <Group type="102" attributes="0">
-                                      <Component id="sv_radioToJrxButton" min="-2" pref="291" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" attributes="0">
-                                          <Group type="102" attributes="0">
-                                              <EmptySpace min="-2" pref="168" max="-2" attributes="0"/>
-                                              <Component id="sv_volumeExitCheckBox" min="-2" pref="351" max="-2" attributes="0"/>
-                                          </Group>
                                           <Group type="102" alignment="0" attributes="0">
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="helpButton" min="-2" max="-2" attributes="0"/>
+                                              <Component id="sv_jrxToRadioButton" min="-2" pref="291" max="-2" attributes="0"/>
+                                              <EmptySpace min="-2" pref="44" max="-2" attributes="0"/>
                                           </Group>
+                                          <Component id="sv_radioToJrxButton" alignment="0" min="-2" pref="291" max="-2" attributes="0"/>
                                       </Group>
+                                      <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
                                   </Group>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
-                                              <Component id="sv_timerIntervalComboBox" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jLabel2" min="-2" pref="146" max="-2" attributes="0"/>
-                                          </Group>
-                                          <Component id="sv_jrxToRadioButton" alignment="0" min="-2" pref="291" max="-2" attributes="0"/>
-                                      </Group>
+                                  <Group type="102" attributes="0">
+                                      <Component id="sv_timerIntervalListButton" max="32767" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="tuneComsButton" min="-2" pref="152" max="-2" attributes="0"/>
-                                          <Component id="sv_syncCheckBox" min="-2" pref="176" max="-2" attributes="0"/>
-                                      </Group>
+                                      <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
                                   </Group>
                               </Group>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="helpButton" min="-2" max="-2" attributes="0"/>
+                                  <Group type="102" attributes="0">
+                                      <Component id="sv_syncCheckBox" min="-2" pref="207" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="sv_volumeExitCheckBox" min="-2" pref="179" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Component id="tuneComsButton" min="-2" pref="152" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace min="-2" pref="124" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -1871,10 +1868,10 @@
                           <Group type="102" attributes="0">
                               <EmptySpace min="2" pref="2" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="2" attributes="0">
-                                  <Component id="sv_timerIntervalComboBox" linkSize="27" alignment="2" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jLabel2" linkSize="27" alignment="2" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel2" alignment="2" min="-2" max="-2" attributes="0"/>
                                   <Component id="sv_syncCheckBox" alignment="2" min="-2" max="-2" attributes="0"/>
                                   <Component id="sv_volumeExitCheckBox" alignment="2" min="-2" max="-2" attributes="0"/>
+                                  <Component id="sv_timerIntervalListButton" alignment="2" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
@@ -1886,7 +1883,7 @@
                                   <Component id="sv_radioToJrxButton" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="helpButton" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace pref="239" max="32767" attributes="0"/>
+                              <EmptySpace pref="237" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -1907,7 +1904,6 @@
                         <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
                           <ComponentRef name="jrxRadioButtonGroup"/>
                         </Property>
-                        <Property name="selected" type="boolean" value="true"/>
                         <Property name="text" type="java.lang.String" value="JRX-&gt;Radio"/>
                         <Property name="toolTipText" type="java.lang.String" value="At startup, JRX sets the radio&apos;s controls"/>
                       </Properties>
@@ -1920,6 +1916,7 @@
                         <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
                           <ComponentRef name="jrxRadioButtonGroup"/>
                         </Property>
+                        <Property name="selected" type="boolean" value="true"/>
                         <Property name="text" type="java.lang.String" value="Radio-&gt;JRX"/>
                         <Property name="toolTipText" type="java.lang.String" value="At startup, the radio sets JRX&apos;s controls"/>
                       </Properties>
@@ -1939,35 +1936,16 @@
                         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
                       </AuxValues>
                     </Component>
-                    <Component class="javax.swing.JComboBox" name="sv_timerIntervalComboBox">
-                      <Properties>
-                        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                          <StringArray count="4">
-                            <StringItem index="0" value="Item 1"/>
-                            <StringItem index="1" value="Item 2"/>
-                            <StringItem index="2" value="Item 3"/>
-                            <StringItem index="3" value="Item 4"/>
-                          </StringArray>
-                        </Property>
-                        <Property name="toolTipText" type="java.lang.String" value="Control/event update timer interval (&#x2743;)"/>
-                      </Properties>
-                      <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new com.cozcompany.jrx.accessibility.RWComboBox(this,null,null);"/>
-                        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
-                        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
-                      </AuxValues>
-                    </Component>
                     <Component class="javax.swing.JLabel" name="jLabel2">
                       <Properties>
                         <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
-                          <ComponentRef name="sv_timerIntervalComboBox"/>
+                          <ComponentRef name="default"/>
                         </Property>
                         <Property name="text" type="java.lang.String" value="Screen update Interval"/>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JCheckBox" name="sv_volumeExitCheckBox">
                       <Properties>
-                        <Property name="selected" type="boolean" value="true"/>
                         <Property name="text" type="java.lang.String" value="Volume down on exit"/>
                         <Property name="toolTipText" type="java.lang.String" value="&lt;html&gt;Turn down the radio volume&lt;br/&gt;when JRX exits"/>
                       </Properties>
@@ -1983,6 +1961,15 @@
                       <Events>
                         <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tuneComsButtonMouseClicked"/>
                       </Events>
+                    </Component>
+                    <Component class="javax.swing.JButton" name="sv_timerIntervalListButton">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="Interval  100 msec"/>
+                      </Properties>
+                      <AuxValues>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new TimerIntervalListButton(this)"/>
+                        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+                      </AuxValues>
                     </Component>
                   </SubComponents>
                 </Container>

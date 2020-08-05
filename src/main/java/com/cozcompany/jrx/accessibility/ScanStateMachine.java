@@ -65,6 +65,10 @@ final public class ScanStateMachine {
             return tableScanList.get(scanMemoryIndex).freq;
         }
     }
+    
+    public Timer getScanTimer() {
+        return scanTimer;        
+    }
 
     protected boolean validState() {
         return parent.dcdCapable || parent.squelchScheme.useJRXSquelch;

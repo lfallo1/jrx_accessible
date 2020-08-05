@@ -53,6 +53,7 @@ public class RWListButton extends JButton  implements
     double yValueHigh = 1;
     String valueLabel = "";
     public String[] choices = { "choiceOne", "choiceTwo"}; // temporary list for ctor
+    //public String[] choices;
     
 
     public RWListButton(JRX_TX aParent, String pre, String aToken, 
@@ -318,12 +319,12 @@ public class RWListButton extends JButton  implements
             if ("SCAN STEP".equals(dialog.labelTxt) || 
                 "SWEEP STEP".equals(dialog.labelTxt)||
                 "DWELL TIME".equals(dialog.labelTxt)||
+                "TIMER INTERVAL".equals(dialog.labelTxt) ||
                 "STEP PERIOD".equals(dialog.labelTxt)){
                 // This is internal app setting. 
                 // Radio is not aware of this component.            
                 ((RWListButton)dialog.buttonComp).setButtonText(dialog.value);
                 dialog.setVisible(false); // close dialog.  
-
             } else {
                 ((RWListButton)dialog.buttonComp).inhibitSetItem(dialog.value);
                 ((RWListButton)dialog.buttonComp).setButtonText(dialog.value);
@@ -334,9 +335,10 @@ public class RWListButton extends JButton  implements
             dialog.setVisible(false);   
         } else if ( "SCAN STEP".equals(name) ||
                     "SWEEP STEP".equals(name) || 
-                    "DWELL TIME".equals(name) || 
+                    "DWELL TIME".equals(name) ||
+                    "TIMER INTERVAL".equals(name) ||
                     "STEP PERIOD".equals(name)) {
-            return;
+            // do nothing.
         } else {
             // This case happens on a button release.
             //action(evt);
