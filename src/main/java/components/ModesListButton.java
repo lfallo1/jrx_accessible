@@ -132,6 +132,7 @@ public class ModesListButton extends RWListButton {
      */
     @Override
     public void inhibitSetItem(String str) {
+        if ( str == null ) return;
         int index = 0;
         boolean ctcssToneEnabled = (str.equals("FM"));
         // enable/disable CTCSS tone TX check box
@@ -148,6 +149,28 @@ public class ModesListButton extends RWListButton {
             localInhibit = false;
         }
     }
+    /**
+     * Override setSelectedIndex because it is called by memoryButton and
+     * bypasses checks for other settings that depend on mode; it has no 
+     * check for out of bounds index which can easily happen with current design.
+     * @param index 
+     */
+    @Override
+    public void setSelectedIndex(int index) {
+        int size = reverseDisplayMap.size();
+        if (index < size && index >= 0) {        
+            String displayedValue = reverseDisplayMap.get(index);
+            inhibitSetItem(displayedValue);
+            setButtonText(displayedValue);
+        } else {
+            // Only the second arg (title) is read by voiceOver.            
+            JOptionPane.showMessageDialog(parent,
+                    "Memory Mode stored index is out of range for radio.", 
+                    "Memory Mode stored index is out of range for radio.", 
+                    JOptionPane.WARNING_MESSAGE);           
+        }
+    }
+
     
     @Override
     public void setGenericScale(
@@ -155,11 +178,12 @@ public class ModesListButton extends RWListButton {
             String search,
             boolean offOption,
             boolean numeric) {
-        setup();
+        
         boolean old_inhibit = parent.inhibit;
         parent.inhibit = true;
         int index = getSelectedIndex();
         if (parent.radioData != null) {
+            setup();  // Remove all the list items.
             try {
                 String s = parent.radioData.replaceFirst(search, "$1");
                 if (parent.comArgs.debug >= 1) {
@@ -188,8 +212,12 @@ public class ModesListButton extends RWListButton {
             } catch (Exception e) {
                 e.printStackTrace(System.out);
             }
+        } else {
+            // There is no radio data.  Assume we are using DUMMY radio.
+            // So there are default "demo" choices in the modesListButton.
+            //  placeholderData(valueLabel);
         }
-        setListButtonIndex(index);
+        setListButtonIndex(index);        
         parent.inhibit = old_inhibit;
     }
 

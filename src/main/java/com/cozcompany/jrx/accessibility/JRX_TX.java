@@ -1857,6 +1857,9 @@ final public class JRX_TX extends javax.swing.JFrame implements
                         .addGap(82, 82, 82))))
         );
 
+        sv_dspSlider.getAccessibleContext().setAccessibleName("D S P level");
+        sv_dspSlider.getAccessibleContext().setAccessibleDescription("Digital Signal Processing Level");
+
         operationDetailsTabbedPane.addTab("I F Controls", ifControlsPanel);
         ifControlsPanel.getAccessibleContext().setAccessibleName("I F Controls");
         ifControlsPanel.getAccessibleContext().setAccessibleDescription("Various dsp and receiver controls.");
@@ -2143,7 +2146,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
             }
         });
 
-        scanUpButton.setText("Start Scan Up");
+        scanUpButton.setText("Start Scan ");
         scanUpButton.setToolTipText("Scan up");
         scanUpButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {

@@ -830,6 +830,10 @@
                             <Property name="paintTicks" type="boolean" value="true"/>
                             <Property name="value" type="int" value="10"/>
                           </Properties>
+                          <AccessibilityProperties>
+                            <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="D S P level"/>
+                            <Property name="AccessibleContext.accessibleDescription" type="java.lang.String" value="Digital Signal Processing Level"/>
+                          </AccessibilityProperties>
                           <AuxValues>
                             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DspSlider(this);"/>
                             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
@@ -1383,7 +1387,7 @@
                     </Component>
                     <Component class="javax.swing.JButton" name="scanUpButton">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="Start Scan Up"/>
+                        <Property name="text" type="java.lang.String" value="Start Scan "/>
                         <Property name="toolTipText" type="java.lang.String" value="Scan up"/>
                       </Properties>
                       <AccessibilityProperties>
