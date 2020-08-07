@@ -160,7 +160,11 @@ public class ModesListButton extends RWListButton {
         int size = reverseDisplayMap.size();
         if (index < size && index >= 0) {        
             String displayedValue = reverseDisplayMap.get(index);
-            inhibitSetItem(displayedValue);
+            boolean ctcssToneEnabled = (displayedValue.equals("FM"));
+            // Enable/disable CTCSS tone TX check box.
+            parent.sv_txCtcssCheckBox.setEnabled(ctcssToneEnabled);
+            parent.sv_ctcssSquelchCheckBox.setEnabled(ctcssToneEnabled);
+            selectedIndex = index;
             setButtonText(displayedValue);
         } else {
             // Only the second arg (title) is read by voiceOver.            

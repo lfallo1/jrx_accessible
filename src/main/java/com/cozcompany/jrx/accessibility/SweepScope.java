@@ -19,8 +19,8 @@
 // ***************************************************************************
 package com.cozcompany.jrx.accessibility;
 
-import components.RWListButton;
-import components.ScanStepListButton;
+import components.StepFrequencyListButton;
+import components.StepPeriodListButton;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.JPanel;
+import vfoDisplayControl.VfoDisplayControl;
 
 /**
  *
@@ -41,6 +42,7 @@ import javax.swing.JPanel;
 final public class SweepScope extends JPanel implements MouseMotionListener {
 
     JRX_TX parent;
+    VfoDisplayControl vfoDisplayS;
     final ArrayList<Pair<Double>> scopeData;
     ArrayList<MemoryButton> scanLimits;
     double xgmin, xgmax;
@@ -59,6 +61,7 @@ final public class SweepScope extends JPanel implements MouseMotionListener {
     int repaints = 0;
     String toolTip = "";
     String help = "\n(To set a sweep range, click the upper or lower button\nof a pair of memory buttons)";
+    Beep tone;
 
     public SweepScope(JRX_TX p) {
         parent = p;
@@ -81,6 +84,7 @@ final public class SweepScope extends JPanel implements MouseMotionListener {
     private void setDefaults() {
         ymin = parent.squelchLow;
         ymax = parent.squelchHigh;
+        vfoDisplayS = parent.vfoDisplay;
         repaint();
     }
 
@@ -134,17 +138,22 @@ final public class SweepScope extends JPanel implements MouseMotionListener {
         paintTimer = new java.util.Timer();
         paintTimer.scheduleAtFixedRate(new PaintEvents(false), 100, 500);
         setParams();
+        
     }
-
+    
     class SweepEvents extends TimerTask {
 
         @Override
         public void run() {
             if (running) {
                 double y = parent.freqStrength(currentFreq);
+                vfoDisplayS.frequencyToDigits(currentFreq);
                 if (y == -1e30) {
                     y = old_y;
                 }
+                // Output a tone for each signal strength reading.
+                int freqHz = parent.intrp(ymax, ymin, 2000., 60., y);
+                tone = new Beep(freqHz, (int)(scanSpeedMs*.8) , .5); 
                 old_y = y;
                 if (currentFreq >= 0) {
                     synchronized (scopeData) {
@@ -193,10 +202,10 @@ final public class SweepScope extends JPanel implements MouseMotionListener {
     private void setScanParams() {
         scopeData.clear();
         if (parent.validSetup()) {
-            String ss = (String)((RWComboBox)parent.sv_scopeStepComboBox).getSelectedItem();
-            scanStep = ((ScanStepListButton)parent.sv_scanStepListButton).getScanStep();
-            String ts = (String) parent.sv_scopeSpeedComboBox.getSelectedItem();
-            scanSpeedMs = parent.scanDude.timeSteps.get(ts);
+            scanStep = ((StepFrequencyListButton)parent.sv_scopeStepListButton).getScanStep();
+            //scanStep = ((StepFrequencyListButton)parent.sv_scanStepListButton).getScanStep();
+            scanSpeedMs = (int)((StepPeriodListButton)parent.sv_scopeSpeedListButton).getTimeStep();
+            
         }
     }
 

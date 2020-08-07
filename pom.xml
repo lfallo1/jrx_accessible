@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.cozcompany</groupId>
     <artifactId>jrx-accessibility</artifactId>
-    <version>5.0.18</version>
+    <version>5.0.19</version>
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -29,5 +29,5 @@
             </plugin>
         </plugins>
     </build>
-    <description>All the bugs introduced in the Short Fat version have been fixed plus a couple more fixes.</description>
+    <description>A week's worth of fixes and added sound for the Scope Sweep.</description>
 </project>

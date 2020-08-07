@@ -21,13 +21,14 @@ import javax.swing.event.ChangeListener;
 public class DspSlider extends RWSlider implements MouseWheelListener, ChangeListener, KeyListener {
     JRX_TX myParent;
     int INITIAL_VALUE; // percent
+    AccessibleContext context;
 
     public DspSlider(JRX_TX aParent) {
         super(aParent, "L", "NR", 10);
         myParent = aParent;
         INITIAL_VALUE = 10;
-        AccessibleContext context = getAccessibleContext();
-        context.setAccessibleName("Noise Reduction Level");
+        context = getAccessibleContext();
+        context.setAccessibleName("D S P Noise Reduction Level");
         context.setAccessibleDescription("Adjusts from 0 to 100 percent");
         setupOnce();        
     }
@@ -69,7 +70,8 @@ public class DspSlider extends RWSlider implements MouseWheelListener, ChangeLis
             level = getValue();
             level -= 0.05;
             setValue((int)level);            
-        }        
+        }
+        context.setAccessibleDescription("D S P Level is "+ level*100 + " percent.");        
     }
 
     @Override

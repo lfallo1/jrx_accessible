@@ -21,7 +21,7 @@ public class StepPeriodListButton extends RWListButton {
     public Map<String, Integer> timeSteps = null;
     final Integer INITIAL_SPEED_INDEX = 1;
     public StepPeriodListButton(JRX_TX parent) {
-        super(parent, "", "", "STEP PERIOD", "CHOOSE A SCAN SPEED");
+        super(parent, "", "", "STEP PERIOD", "CHOOSE A PERIOD");
         super.numericMode = true;
         
     }

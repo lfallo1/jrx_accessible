@@ -5,7 +5,7 @@
 package com.cozcompany.jrx.accessibility;
 
 import components.DwellTimeListButton;
-import components.ScanStepListButton;
+import components.StepFrequencyListButton;
 import components.StepPeriodListButton;
 import java.awt.Color;
 import java.util.ArrayList;
@@ -200,7 +200,7 @@ final public class ScanStateMachine {
                     }
                 }
             }
-            scanStep = ((ScanStepListButton)parent.sv_scanStepListButton).
+            scanStep = ((StepFrequencyListButton)parent.sv_scanStepListButton).
                     getScanStep();
             scanSpeedMS = ((StepPeriodListButton)parent.sv_stepPeriodListButton).
                     getTimeStep();
@@ -246,7 +246,7 @@ final public class ScanStateMachine {
                             scanEndFreq = temp;
                         }
                     }
-                    scanStep = ((ScanStepListButton)parent.
+                    scanStep = ((StepFrequencyListButton)parent.
                             sv_scanStepListButton).getScanStep();
                     scanSpeedMS = ((StepPeriodListButton)parent.
                             sv_stepPeriodListButton).getTimeStep();

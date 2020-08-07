@@ -16,7 +16,6 @@ import javax.swing.JComboBox;
  */
 public class ScanController {
     JRX_TX appFrame;
-    Map<String, Integer> timeSteps = null;
 
     
     public ScanController(JRX_TX frame) {

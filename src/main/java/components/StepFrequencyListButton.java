@@ -15,12 +15,12 @@ import java.util.TreeMap;
  * toolTipText: Scan Frequency step size (❃)
  * @author Coz
  */
-public class ScanStepListButton extends RWListButton {
+public class StepFrequencyListButton extends RWListButton {
     Map<String, Double> scanSteps = null;
     final Integer INIT_STEP = 12;
 
-    public ScanStepListButton(JRX_TX parent) {
-        super(parent, "", "", "SCAN STEP", "SELECT SCAN STEP");
+    public StepFrequencyListButton(JRX_TX parent) {
+        super(parent, "", "", "FREQUENCY STEP", "SELECT FREQUENCY STEP");
         super.numericMode = true;
     }
     
@@ -69,9 +69,25 @@ public class ScanStepListButton extends RWListButton {
         index = Math.min(index, scanSteps.size() - 1);
         setSelectedIndex(index);  // Sets button text.
     }
+ 
     
-//    @Override
-//    public void actionPerformed(ActionEvent evt) {
-//        
-//    }
+    /**
+     * Set the selected item based on the given display string while the localInhibit
+     * is enabled.
+     * @param s the display string.
+     */
+    @Override
+    public void inhibitSetItem(String s) {
+        int index = 0;
+        try {
+            localInhibit = true;
+            index = displayMap.get(s);
+            setSelectedIndex(index);
+        } catch (Exception e) {
+            System.out.println("inhibitSetItem had exception : " + e + " and index = "  + index);
+        } finally {
+            localInhibit = false;
+        }
+    }
+
 }
