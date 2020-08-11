@@ -6,6 +6,7 @@
 package com.cozcompany.jrx.accessibility;
 import java.util.List;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 /**
  * Class to keep rig communications state and alert observers about state 
@@ -33,9 +34,14 @@ public class RigComms {
         observers.add(observer);
     }
 
-    public void setOffline() {
+    public void setOffline(JRX_TX parent) {
         this.online = false;
-        notifyObservers("offline");       
+        notifyObservers("offline");
+        // Only the second arg (title) is read by voiceOver.            
+        JOptionPane.showMessageDialog(parent,
+                    "Unable to communicate with the RADIO.", 
+                    "Unable to communicate with the RADIO.", 
+                    JOptionPane.WARNING_MESSAGE);
     }
 
     public void setOnline() {

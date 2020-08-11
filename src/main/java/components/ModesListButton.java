@@ -55,7 +55,9 @@ public class ModesListButton extends RWListButton {
     public void writeValueStr() {
         if (commOK && !parent.inhibit) {
             strFilter = String.format("%.1f", 
-                     ((IfFilterListButton) parent.sv_ifFilterListButton).getFilterBW());               
+                ((IfFilterListButton) parent.sv_ifFilterListButton).getFilterBW());
+            oldFilter = String.format("%.1f", 
+                ((IfFilterListButton) parent.sv_ifFilterListButton).getOldFilterBW());               
             int index = getSelectedIndex();
             strSelection = reverseUseMap.get(index);
             boolean ctcssToneEnabled =  (strSelection.equals("FM"));
@@ -73,16 +75,18 @@ public class ModesListButton extends RWListButton {
                         // Comms error. Radio rejected command.
                         // VoiceOver reads only the third argument, the title.
                         JOptionPane.showMessageDialog(this,
-                            "Radio Rejected Command",
-                            "Mode, freq, BW unsupported.",  
+                            "Radio Rejected Command - Mode, freq, BW unsupported.", 
+                            "Radio Rejected Command - Mode, freq, BW unsupported.", 
                             JOptionPane.PLAIN_MESSAGE);
+                        // Now set the radio back the way it was.
                         com = String.format("%s %s %s %s", 
-                            prefix.toUpperCase(), token, oldStrSelection, oldFilter);                      
+                            prefix.toUpperCase(), token, strSelection, oldFilter);                      
                         parent.sendRadioCom(com, 0, true);
-                        // Set modeComboBox the way it used to be.
-                        Integer oldIndex = displayMap.get("Mode "+oldStrSelection);
-                        if (oldIndex != null)
-                            setSelectedIndex(oldIndex);                       
+                        // Set ifFiterListButton back the way it was.
+                        int oldFilterIndex = ((IfFilterListButton) 
+                                parent.sv_ifFilterListButton).getOldIndex();
+                        ((IfFilterListButton) parent.sv_ifFilterListButton).
+                                setSelectedIndex(oldFilterIndex);
                     } else {
                         oldStrSelection = strSelection;
                         oldFilter = strFilter;
@@ -92,6 +96,25 @@ public class ModesListButton extends RWListButton {
         }
     }
 
+    /**
+     * Method called by memoryButton during scan to set radio mode and IF filter.
+     * @param modeIndex integer index of mode control
+     * @param bwIndex  integer index of bandwidth filter control
+     */
+    public void writeModeAndBw( int modeIndex, int bwIndex) {
+        if (commOK && !parent.inhibit) {
+            strFilter = String.format("%.1f", 
+                ((IfFilterListButton) parent.sv_ifFilterListButton).getFilterBwForIndex(bwIndex));
+            strSelection = reverseUseMap.get(modeIndex);                    
+            if (strSelection != null  && strFilter != null) {
+                String result = null;
+                String com = String.format("%s %s %s %s", 
+                        prefix.toUpperCase(), token, strSelection, strFilter);
+                result = parent.sendRadioCom(com, 0, true); 
+                if (result != null) setSelectedIndex(modeIndex);
+            }
+        }
+    }
 
     /**
      * This method is called for every control during initialize()... on startup\
@@ -149,6 +172,25 @@ public class ModesListButton extends RWListButton {
             localInhibit = false;
         }
     }
+    /**
+     * During a scan, get the mode index for the given mode string.
+     * @param modeStr
+     * @return 
+     */
+    public int getIndexForModeString(String modeStr) {
+        int index;
+        try {
+            localInhibit = true;
+            index = useMap.get(modeStr);
+        } catch (Exception e) {
+            index = 0;
+        } finally {
+            localInhibit = false;
+        }
+        return index;        
+    }
+    
+    
     /**
      * Override setSelectedIndex because it is called by memoryButton and
      * bypasses checks for other settings that depend on mode; it has no 

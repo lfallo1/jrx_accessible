@@ -314,8 +314,10 @@ public class RWListButton extends JButton  implements
     public void actionPerformed(ActionEvent evt) {
         if ("Set".equals(evt.getActionCommand())) {            
             dialog.value = (String)(dialog.list.getSelectedValue());
-            int index = dialog.list.getSelectedIndex();           
+            int index = dialog.list.getSelectedIndex();
+            localInhibit = true;
             ((RWListButton)dialog.buttonComp).setSelectedIndex(index);
+            localInhibit = false;
             if ("FREQUENCY STEP".equals(dialog.labelTxt) || 
                 "DWELL TIME".equals(dialog.labelTxt)||
                 "TIMER INTERVAL".equals(dialog.labelTxt) ||
@@ -325,7 +327,6 @@ public class RWListButton extends JButton  implements
                 ((RWListButton)dialog.buttonComp).setButtonText(dialog.value);
                 dialog.setVisible(false); // close dialog.  
             } else {
-                ((RWListButton)dialog.buttonComp).inhibitSetItem(dialog.value);
                 ((RWListButton)dialog.buttonComp).setButtonText(dialog.value);
                 dialog.setVisible(false);  // close dialog.
                 writeValue(true);   // Could experience comms timeout here.  Coz PUT UP HOUR GLASS...?
@@ -473,7 +474,7 @@ public class RWListButton extends JButton  implements
         localInhibit = false;
     }
     /**
-     * Set the selected item based on the given display string while the localInhibit
+     * Set the selected item based on the given radio value string while the localInhibit
      * is enabled.
      * @param s the display string.
      */
@@ -481,7 +482,6 @@ public class RWListButton extends JButton  implements
         int index = 0;
         try {
             localInhibit = true;
-            //String search = ".*"
             index = useMap.get(s);
             setSelectedIndex(index);
         } catch (Exception e) {

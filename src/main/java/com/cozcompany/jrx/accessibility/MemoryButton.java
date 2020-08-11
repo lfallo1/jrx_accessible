@@ -37,15 +37,66 @@ import javax.swing.JComboBox;
 import javax.swing.JSlider;
 
 /**
- * Each memory button represents an available storage for a VFO frequency and 
- * mode and has an internal state used for scan operations indicated by its 
- * foreground font color.
+ * Each memory button represents an available storage for a VFO frequency, mode,
+ * and other parameters including an internal state used for scan operations 
+ * indicated by its foreground font color:
+ * BLACK - programmed memory
+ * GREEN - currently part of a scan group
+ * BLUE - currently part of a scan group but skipped
+ * RED - currently part of a scan group and selected
+ * GRAY - unprogrammed memory
+ * A 'memory BUTTON' is programmed using the current transceiver control settings
+ * including the VFO frequency and mode.
  * 
- * BLACK -
- * GREEN -
- * BLUE -
- * RED -
- * PURPLE - 
+ * Memory buttons, when left-clicked, immediately set the transceiver controls to
+ * the values persisted by the button, and those controls send the settings to 
+ * the radio.
+ * 
+ * Groups of memory buttons, delimited by unprogrammed buttons, are recognized as
+ * channels to be scanned.
+ * 
+ * A group of two memory buttons is recognized as frequency scan limits where the
+ * range endpoints are the button frequencies and the step size is selected by a 
+ * control.   The Scope tab uses this binary group for the sweep frequency limits.
+ * 
+ * {@code
+ * From Hamlib:rig.h
+ * typedef enum {
+ *         RIG_MODE_NONE =         0,      
+ *         RIG_MODE_AM =           (1<<0), 
+ *         RIG_MODE_CW =           (1<<1), 
+ *         RIG_MODE_USB =          (1<<2), 
+ *         RIG_MODE_LSB =          (1<<3), 
+ *         RIG_MODE_RTTY =         (1<<4), 
+ *         RIG_MODE_FM =           (1<<5), 
+ *         RIG_MODE_WFM =          (1<<6), 
+ *         RIG_MODE_CWR =          (1<<7), 
+ *         RIG_MODE_RTTYR =        (1<<8), 
+ *         RIG_MODE_AMS =          (1<<9), 
+ *         RIG_MODE_PKTLSB =       (1<<10),
+ *         RIG_MODE_PKTUSB =       (1<<11),
+ *         RIG_MODE_PKTFM =        (1<<12),
+ *         RIG_MODE_ECSSUSB =      (1<<13),
+ *         RIG_MODE_ECSSLSB =      (1<<14),
+ *         RIG_MODE_FAX =          (1<<15),
+ *         RIG_MODE_SAM =          (1<<16),
+ *         RIG_MODE_SAL =          (1<<17),
+ *         RIG_MODE_SAH =          (1<<18),
+ *         RIG_MODE_DSB =          (1<<19), 
+ *     RIG_MODE_TESTS_MAX               
+ * } rmode_t;
+ * }
+ * 
+ * Design issues:  
+ * 1) There is no UI access to the actual programmed parameters for a given 
+ * memory button.
+ * 2) Memory buttons save the index into the current radio control.  If you switch
+ * radios, the index can mean something different to the new radio.
+ * 3) There is no ID number of the settings structure persisted to correspond with 
+ * a particular data structure version, which means that there can only be one 
+ * format.  This implies obsolescense of the previous structure.
+ * 
+ * 
  * 
  * @author lutusp
  */
@@ -163,7 +214,7 @@ final public class MemoryButton extends JButton
     
     @Override
     public String getToolTipText(MouseEvent event) {
-        String ms = ((ModesListButton)parent.sv_modesListButton).getMode();       
+        String ms = ((RWListButton)parent.sv_modesListButton).getItemForIndex(mode);    
         String freq = (frequency >= 0) ? String.format("%.6f MHz %s", 
                 (double) frequency / 1e6, ms) : "Undefined";
         return String.format("<html>%s<br> %s</html>", freq, visualTip);
@@ -189,9 +240,9 @@ final public class MemoryButton extends JButton
             name.append(" frequency ");
             Double freq = ((double)frequency)/1.e6;
             name.append(freq.toString());
-            name.append(" megahertz, mode index is ");  // COZ DESIGN ISSUE.  FIX....
-            //String modeItem = ((RWListButton)parent.sv_modesListButton).getItemForIndex(mode);
-            name.append(mode + " ");
+            name.append(" megahertz, mode index is "); 
+            String modeItem = ((RWListButton)parent.sv_modesListButton).getItemForIndex(mode);
+            name.append(modeItem + " ");
         }
         // Change accessibleDescription.
         getAccessibleContext().setAccessibleDescription(
@@ -247,6 +298,7 @@ final public class MemoryButton extends JButton
         }
         if (e.getButton() == MouseEvent.BUTTON1) {
             if (!defineButton) {
+                // Set the radio frequency and mode and bandwidth.
                 readButton();
             }
         }
@@ -304,9 +356,9 @@ final public class MemoryButton extends JButton
             parent.memoryCollection.sv_mostRecentButton = label;
             // always set bandwidth before mode
             updateIfNeeded((RWListButton)(parent.sv_ifFilterListButton), filter);
-            // always set mode before frequency
-            updateIfNeeded((RWListButton)(parent.sv_modesListButton), mode);
+            // Set frequency before mode.  Some frequencies have limited modes.
             parent.vfoState.writeFrequencyToRadioSelectedVfo(frequency);
+            ((ModesListButton)parent.sv_modesListButton).writeModeAndBw( mode, filter);
             parent.vfoDisplay.frequencyToDigits(frequency);
             updateIfNeeded((CtcssListButton)parent.sv_ctcssListButton, ctcss);
             updateIfNeeded((AgcListButton)parent.sv_agcListButton, agc);

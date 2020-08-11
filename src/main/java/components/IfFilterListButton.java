@@ -68,10 +68,27 @@ public class IfFilterListButton extends RWListButton {
 
     public double getFilterBW() {
         int i = getSelectedIndex();
+        return getFilterBwForIndex( i );
+    }
+
+    public double getFilterBwForIndex(int bwIndex) {
+        if (bwIndex >= 0 && bwIndex < reverseUseMap.size()) {
+            return Double.parseDouble(reverseUseMap.get(bwIndex));
+        }
+        return 0;
+    }
+
+    
+    public double getOldFilterBW() {
+        int i = oldIndex;
         if (i >= 0 && i < reverseUseMap.size()) {
             return Double.parseDouble(reverseUseMap.get(i));
         }
         return 0;
+    }
+    
+    public int getOldIndex() {
+        return oldIndex;
     }
     
     /**
@@ -117,6 +134,7 @@ public class IfFilterListButton extends RWListButton {
         if (!parent.inhibit && !localInhibit && token != null && isEnabled()) {
             if (commOK && !parent.inhibit) {
                 ((RWListButton) parent.sv_modesListButton).writeValueStr();
+                oldIndex = getSelectedIndex();
             }
         }
     }
@@ -135,6 +153,7 @@ public class IfFilterListButton extends RWListButton {
             if (fields != null ) {
                 if (fields[1] != null) {
                     inhibitSetItem(fields[1]);
+                    oldIndex = getSelectedIndex();
                 }
             }
         }

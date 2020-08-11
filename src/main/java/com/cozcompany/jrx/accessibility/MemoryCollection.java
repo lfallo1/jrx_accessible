@@ -20,6 +20,7 @@
 
 package com.cozcompany.jrx.accessibility;
 
+import components.RadioNamesListButton;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
@@ -43,44 +44,59 @@ final public class MemoryCollection {
     String header;
     TreeMap<String, MemoryButton> buttonMap;
     String sv_mostRecentButton = "";
-    String filePath;
+    File memoryButtonFile;
     final public static int MEMORY_BUTTONS_QTY = 200;
+    File memoryButtonDirectory;
+    String filePath;
     
 
     public MemoryCollection(JRX_TX p) {
         parent = p;
         header = "Mnnn = Freq,Mode,Bandwidth,AGC,CTCSS,StepIndex,NB,Preamp,Antenna,Attenuator,Skip";
+        
     }
-    protected void readMemoryButtons() {
-        parent.memoryButtonsPanel.setBackground(new Color(128, 200, 220));
-        layoutButtons(parent.memoryButtonsPanel);
+    
+    public void init() {
+        layoutButtons(parent.memoryButtonsPanel); 
+        parent.memoryButtonsPanel.setBackground(new Color(128, 200, 220));    
+
+    }
+    
+    public void readMemoryButtons() {
+        String radioName = ((RadioNamesListButton)parent.sv_radioNamesListButton).getSelectedItem();        
+        filePath = getFilePath( radioName);
         readButtonsFromFile(filePath, buttonMap);
     }
 
-    protected void writeMemoryButtons() {
+    public void writeMemoryButtons() {
         writeButtonsToFile(filePath, buttonMap);
     }
 
-    public void setFilePath(String path) {
-        filePath = path;        
+    private String getFilePath( String radioName ) {        
+        memoryButtonDirectory = new File(parent.userPath + parent.FILE_SEP + "memoryButtons");
+        if (!memoryButtonDirectory.exists()) {
+            memoryButtonDirectory.mkdirs();
+        }
+        String filePath = new String(memoryButtonDirectory + parent.FILE_SEP + radioName +".ini");
+        return filePath;
     }
     
     protected void dispatch(MouseEvent evt) {
         String jb = ((JButton) evt.getSource()).getText();
         switch (jb) {
-            case "CM":
+            case "COPY":
                 writeButtonsToClipboard();
                 break;
-            case "PM":
+            case "PASTE":
                 confirmReadButtonsFromClipboard();
                 break;
-            case "RM":
+            case "RM":   //Future Feature
                 confirmReadButtonsFromRadio();
                 break;
-            case "WM":
+            case "WM":   //Future Feature
                 confirmWriteButtonsToRadio();
                 break;
-            case "EM":
+            case "ERASE":
                 confirmEraseButtons(buttonMap);
                 break;
         }
@@ -124,7 +140,7 @@ final public class MemoryCollection {
             for (String s : data.split(parent.LINE_SEP)) {
                 if (first) {
                     if (!s.equals(header)) {
-                        throw new Exception(String.format("%s contents not a button table for this JRX version.", tag));
+                        throw new Exception(String.format("%s contents not a button table for this JRX_TX version.", tag));
                     }
                     first = false;
                 } else {
@@ -152,7 +168,7 @@ final public class MemoryCollection {
     }
 
     protected void readButtonsFromFile(String filePath, TreeMap<String, MemoryButton> buttonMap) {
-        File f = new File(filePath);
+        File f = new File(filePath);       
         if (f.exists()) {
             String data = parent.readTextFile(filePath, parent.LINE_SEP);
             stringToButtons(data, buttonMap, "file");
@@ -182,7 +198,7 @@ final public class MemoryCollection {
 
     }
     
-    // This isn't possible yet -- Hamlib doesn't support it
+    // This isn't implemented yet.
 
     protected void confirmReadButtonsFromRadio() {
         if (parent.askUser("Okay to read all memory buttons from radio?")) {

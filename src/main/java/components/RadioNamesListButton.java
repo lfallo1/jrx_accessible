@@ -105,6 +105,8 @@ public class RadioNamesListButton extends RWListButton {
             parent.sv_interfacesListButton.setEnabled(false);
         } else {
             parent.sv_interfacesListButton.setEnabled(true);
+            parent.memoryCollection.writeMemoryButtons();
+            parent.memoryCollection.readMemoryButtons();
         }
     }
     

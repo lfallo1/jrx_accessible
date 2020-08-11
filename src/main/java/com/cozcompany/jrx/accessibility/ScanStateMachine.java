@@ -5,6 +5,7 @@
 package com.cozcompany.jrx.accessibility;
 
 import components.DwellTimeListButton;
+import components.ModesListButton;
 import components.StepFrequencyListButton;
 import components.StepPeriodListButton;
 import java.awt.Color;
@@ -49,7 +50,8 @@ final public class ScanStateMachine {
     }
 
     protected void noValidFrequenciesPrompt() {
-        parent.tellUser("<html>No valid memory buttons in range<br/>or all set to <span color=\"blue\">\"skip in memory scan\"</span>");
+        parent.tellUser("<html>No valid memory buttons in range<br/>"+
+            "or all set to <span color=\"blue\">\"skip in memory scan\"</span>");
     }
 
     protected long getScanFrequency() {
@@ -63,6 +65,27 @@ final public class ScanStateMachine {
             return ((mb.skipDuringScan != 0) ? -1 : mb.frequency);
         } else {
             return tableScanList.get(scanMemoryIndex).freq;
+        }
+    }
+    
+    protected int getScanItemMode() {
+        if (buttonScanMode) {
+            MemoryButton mb = buttonScanList.get(scanMemoryIndex); 
+            return mb.mode;
+        } else {
+            String modeStr = tableScanList.get(scanMemoryIndex).mode;
+            int index = ((components.ModesListButton)parent.sv_modesListButton).
+                    getIndexForModeString(modeStr);
+            return index;            
+        }
+    }
+
+    protected int getScanItemFilter() {
+        if (buttonScanMode) {
+            MemoryButton mb = buttonScanList.get(scanMemoryIndex); 
+            return mb.filter;
+        } else {
+            return 0;     // There is no set mode for SWL Channels.       
         }
     }
     
@@ -106,12 +129,16 @@ final public class ScanStateMachine {
                             if (freq > scanEndFreq || freq < scanStartFreq) {
                                 parent.vfoState.writeFrequencyToRadioSelectedVfo(scanStartFreq);
                                 vfoDisplayS.frequencyToDigits(scanStartFreq);
+                                                    int mode = getScanItemMode();
+                                int filter = getScanItemFilter();
+                                ((ModesListButton)parent.sv_modesListButton).
+                                        writeModeAndBw( mode, filter);                    
+
                             }
                             scanStep = Math.abs(scanStep);
                         }
                     }
                     scanTimer = new java.util.Timer();
-                    //scanTimer.scheduleAtFixedRate(new ScanEvents(), 0, (int) scanSpeedMS); // WHY?
                     scanTimer.schedule(new ScanEvents(), 0, (int) scanSpeedMS);
                     parent.scanDude.updateScanControls();
                 }
@@ -123,9 +150,12 @@ final public class ScanStateMachine {
                 if (programScan) {
                     long freq = getNextScanFrequency();
                     parent.vfoState.writeFrequencyToRadioSelectedVfo(freq);
+                    int mode = getScanItemMode();
+                    int filter = getScanItemFilter();
+                    ((ModesListButton)parent.sv_modesListButton).
+                            writeModeAndBw( mode, filter);
                     vfoDisplayS.frequencyToDigits(freq);
                 } else {
-                    //parent.pout("increm scan");
                     // Scanning in steps between two memory buttons.
                     long freq = vfoDisplayS.getFreq() + (long)scanStep;
                     parent.vfoState.writeFrequencyToRadioSelectedVfo(freq);
@@ -319,8 +349,13 @@ final public class ScanStateMachine {
                 if (programScan) {
                     // Scanning through group of memory buttons.
                     long freq = getNextScanFrequency();
-                    parent.vfoState.writeFrequencyToRadioSelectedVfo(freq);
                     vfoDisplayS.frequencyToDigits(freq);
+                    parent.vfoState.writeFrequencyToRadioSelectedVfo(freq);
+                    int mode = getScanItemMode();
+                    int filter = getScanItemFilter();
+                    ((ModesListButton)parent.sv_modesListButton).
+                            writeModeAndBw( mode, filter);
+                    
                 } else {
                     // Scanning in steps between two memory buttons.
                     long freq = vfoDisplayS.getFreq() + (long)scanStep;

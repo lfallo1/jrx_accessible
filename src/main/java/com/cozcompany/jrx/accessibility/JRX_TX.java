@@ -81,7 +81,7 @@ import vfoDisplayControl.GroupBox;
 final public class JRX_TX extends javax.swing.JFrame implements 
         ListSelectionListener, ItemListener , ActionListener {
 
-    final String appVersion = "5.0.19";
+    final String appVersion = "5.1.0";
     final String appName;
     final String programName;
     public final String LINE_SEP;
@@ -128,13 +128,13 @@ final public class JRX_TX extends javax.swing.JFrame implements
     Font digitsFont;
     Font baseFont;
     final String FILE_SEP = System.getProperty("file.separator");
-    String buttonFilePath;
+    String buttonFileDirectory;
     int signalStrengthErrorCount = 0;
    
     int defWidth = 890;
     int defHeight = 770;
     
-    MemoryCollection memoryCollection;
+    public MemoryCollection memoryCollection;
     public boolean slowRadio = false;
     int readBufferLen = 2048;
     byte[] readBuffer;
@@ -199,9 +199,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
 
         userDir = System.getProperty("user.home");
         userPath = userDir + FILE_SEP + "." + appName;
-        buttonFilePath = userPath + FILE_SEP + "memoryButtons.ini";
-        memoryCollection.setFilePath(buttonFilePath);
-        new File(userPath).mkdirs();
         
         initComponents();       
         digitsFont = new Font(Font.MONOSPACED, Font.PLAIN, 30);
@@ -419,6 +416,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         try {
             ListSelectionModel lsm = (ListSelectionModel) e.getSource();
             if (!lsm.isSelectionEmpty()) {
+                Integer index = null;
                 scanStateMachine.stopScan(false);
                 int row = lsm.getMinSelectionIndex();
                 String mode = chart.getValue(row, 2);
@@ -426,8 +424,17 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 vfoState.writeFrequencyToRadioSelectedVfo((long)(freq*1e6 + 0.5));
                 vfoDisplay.frequencyToDigits((long) (freq * 1e6 + 0.5));
                 RWListButton modeListButton = (RWListButton) sv_modesListButton;
-                mode = "Mode " + mode.toUpperCase();
-                Integer index = modeListButton.displayMap.get(mode);
+                if (freq < 137.0) {
+                    // ID-51 only allows AM in this range.
+                    int code = ((RWListButton)sv_radioNamesListButton).getSelectedIndex();
+                    if (3084 == code) {
+                        mode = "AM";
+                        index = 0;
+                    }
+                } else {                    
+                    mode = mode.toUpperCase();
+                    index = modeListButton.displayMap.get(mode);
+                }
                 if (index != null) ((RWListButton)sv_modesListButton).setSelectedIndex(index);
                 modeListButton.writeValue(true);
             }
@@ -449,9 +456,11 @@ final public class JRX_TX extends javax.swing.JFrame implements
         if (comError > 0) {
             if ((comError -= 1) > 0) {
                 comErrorIconLabel.setIcon(this.redLed);
+                rigComms.setOffline(this);
             }
         } else {
             comErrorIconLabel.setIcon(this.greenLed);
+            rigComms.setOnline();
         }
     }
 
@@ -665,9 +674,8 @@ final public class JRX_TX extends javax.swing.JFrame implements
         ((RWComboBox)sv_antennaComboBox).setComboBoxContent("Ant", 0, 4, 1, 0, 1, 0, 1, 1);  
         ((InterfacesListButton)sv_interfacesListButton).initInterfaceList();
         ((RadioNamesListButton)sv_radioNamesListButton).getSupportedRadios();
-        memoryCollection.readMemoryButtons();
         ((TimerIntervalListButton) sv_timerIntervalListButton).initTimeValues();
-
+        memoryCollection.init();
         ((StepFrequencyListButton)sv_scanStepListButton).init();
         ((StepPeriodListButton)sv_stepPeriodListButton).init();
         ((DwellTimeListButton)sv_dwellTimeListButton).init();
@@ -736,6 +744,8 @@ final public class JRX_TX extends javax.swing.JFrame implements
         ((RWCheckBox)sv_ctcssSquelchCheckBox).enableCap(radioData,"(?ism).*^Set functions:.*?\\sTSQL\\s", false); 
         ((RWCheckBox)sv_fbkinCheckBox).enableCap(radioData, "(?ism).*^Set functions:.*?\\sFBKIN\\s", false);
         ((RWSlider)sv_compressionSlider).enableCap(radioData, "(?ism).*^Set level:.*?COMP\\(", true);
+        ((RWSlider)sv_cwSpeedSlider).enableCap(radioData, "(?ism).*^Set level:.*?KEYSPD\\(", true);
+        ((RWSlider)sv_cwToneSlider).enableCap(radioData, "(?ism).*^Set level:.*?CWPITCH\\(", true);
         sv_tunerCheckBox.setEnabled(false);   // Not implemented yet.
         int radioCode = ((RadioNamesListButton)sv_radioNamesListButton).getSelectedRadioCode();
         ((SwrIndicator)swrIndicator).enableIfCapable(radioData);
@@ -977,12 +987,14 @@ final public class JRX_TX extends javax.swing.JFrame implements
                             waitMS(500);
                             if (n-- <= 0) {
                                 tellUser("Error: Cannot connect to Hamlib Daemon process.");
-                                rigComms.setOffline();
+                                rigComms.setOffline(this);
                             }
                         }
                     }
                     // Now get radio capability data and set up drop-down lists.
                     getRigCaps();
+                    // Radio name has been chosen, read the memoryButtons for this radio.
+                    memoryCollection.readMemoryButtons();
                 } catch (Exception e) {
                     e.printStackTrace(System.out);
                 }
@@ -1432,7 +1444,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         dstarPanel = new javax.swing.JPanel();
         keyerPanel = new javax.swing.JPanel();
         sv_cwSpeedSlider = new CwSpeedSlider(this);
-        jSlider2 = new CwSideToneSlider(this);
+        sv_cwToneSlider = new CwSideToneSlider(this);
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -1876,13 +1888,13 @@ final public class JRX_TX extends javax.swing.JFrame implements
         sv_cwSpeedSlider.setPaintTicks(true);
         sv_cwSpeedSlider.setValue(15);
 
-        jSlider2.setMajorTickSpacing(300);
-        jSlider2.setMaximum(900);
-        jSlider2.setMinimum(300);
-        jSlider2.setMinorTickSpacing(100);
-        jSlider2.setPaintLabels(true);
-        jSlider2.setPaintTicks(true);
-        jSlider2.setValue(600);
+        sv_cwToneSlider.setMajorTickSpacing(300);
+        sv_cwToneSlider.setMaximum(900);
+        sv_cwToneSlider.setMinimum(300);
+        sv_cwToneSlider.setMinorTickSpacing(100);
+        sv_cwToneSlider.setPaintLabels(true);
+        sv_cwToneSlider.setPaintTicks(true);
+        sv_cwToneSlider.setValue(600);
 
         jLabel6.setText("CW Speed WPM");
 
@@ -1912,7 +1924,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
                 .addGroup(keyerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(cwSendText)
                     .addGroup(keyerPanelLayout.createSequentialGroup()
-                        .addComponent(jSlider2, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(sv_cwToneSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 607, Short.MAX_VALUE))
                     .addGroup(keyerPanelLayout.createSequentialGroup()
@@ -1940,7 +1952,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
                         .addComponent(sv_fbkinCheckBox)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(keyerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jSlider2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(sv_cwToneSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
                 .addComponent(jLabel3)
@@ -2435,7 +2447,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
                     .addGroup(scopeControlLeftPanelLayout.createSequentialGroup()
                         .addComponent(scopeStartStopButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(3, 3, 3)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(scopeControlLeftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(scopeControlLeftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(copyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 23, Short.MAX_VALUE)
@@ -2460,7 +2471,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
         jrxScopePanel.getAccessibleContext().setAccessibleName("Band scope ");
         jrxScopePanel.getAccessibleContext().setAccessibleDescription("Visual sweep display of selected band.");
 
-        helpButton.setText("HELP");
+        helpButton.setText("JRX HOME PAGE");
         helpButton.setToolTipText("Visit the JRX Home Page");
         helpButton.setActionCommand("Help");
         helpButton.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -2514,12 +2525,13 @@ final public class JRX_TX extends javax.swing.JFrame implements
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addGroup(firstSettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(helpButton)
                     .addGroup(firstSettingsPanelLayout.createSequentialGroup()
                         .addComponent(sv_syncCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(sv_volumeExitCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(tuneComsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(firstSettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(helpButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(tuneComsButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE)))
                 .addGap(124, 124, 124))
         );
         firstSettingsPanelLayout.setVerticalGroup(
@@ -2956,7 +2968,6 @@ final public class JRX_TX extends javax.swing.JFrame implements
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem1;
-    public javax.swing.JSlider jSlider2;
     private javax.swing.ButtonGroup jrxRadioButtonGroup;
     private javax.swing.JPanel jrxScopePanel;
     private javax.swing.JPanel keyerPanel;
@@ -3003,6 +3014,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
     protected javax.swing.JButton sv_ctcssListButton;
     public javax.swing.JCheckBox sv_ctcssSquelchCheckBox;
     public javax.swing.JSlider sv_cwSpeedSlider;
+    public javax.swing.JSlider sv_cwToneSlider;
     protected javax.swing.JCheckBox sv_dspCheckBox;
     public javax.swing.JSlider sv_dspSlider;
     public javax.swing.JButton sv_dwellTimeListButton;
