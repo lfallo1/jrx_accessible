@@ -277,7 +277,7 @@ public class VfoStateInterface {
                     value = 0;                
                 } else {
                     try {
-                        value = Long.parseLong(sf);
+                        value = Long.parseLong(sf.replaceAll("[^\\d.]", ""));
                     }
                     catch ( NumberFormatException numEx ) {
                         value = 0;                   

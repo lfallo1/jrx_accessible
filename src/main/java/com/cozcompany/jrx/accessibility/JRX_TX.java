@@ -971,7 +971,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
                     hamlibDaemon = new ProcessBuilder(com).redirectErrorStream(true).start();
                     
                     boolean connected = false;
-                    int n = 5;
+                    int n = 10;
                     while (!connected && n >= 0) {
                         try {
                             hamlibSocket = new Socket(hamlibHost, hamlibPort);
@@ -984,7 +984,7 @@ final public class JRX_TX extends javax.swing.JFrame implements
                             pout("socket connected: " + connected);                            
                         } catch (Exception e) {                           
                             pout("fail connect " + e.getMessage());
-                            waitMS(500);
+                            waitMS(1000);
                             if (n-- <= 0) {
                                 tellUser("Error: Cannot connect to Hamlib Daemon process.");
                                 rigComms.setOffline(this);
